@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Materi Bimbingan Konseling (BK) Kelas IX SMP Kurikulum Deep Learning. Lengkap mencakup bidang Pribadi, Sosial, Belajar, dan Karier dengan 24 topik kematangan diri dan perencanaan masa depan.">
+    <meta name="keywords" content="materi BK kelas IX, bimbingan konseling SMP, kurikulum deep learning, ketahanan mental resilience, pengambilan keputusan remaja, peer pressure, kesiapan ujian, pemilihan SMA SMK, perencanaan karier">
+    <meta name="author" content="Tim BK SMP">
+    <meta property="og:title" content="Materi Bimbingan Konseling Kelas IX - Kurikulum Deep Learning">
+    <meta property="og:description" content="Panduan lengkap 24 materi BK kelas IX SMP: Pribadi, Sosial, Belajar, dan Karier.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="id_ID">
+    <title>Materi Bimbingan Konseling Kelas IX | Kurikulum Deep Learning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Materi Bimbingan Konseling Kelas IX",
+      "description": "Materi BK kelas IX SMP dengan pendekatan Deep Learning mencakup bidang Pribadi, Sosial, Belajar, dan Karier.",
+      "provider": {
+        "@type": "Organization",
+        "name": "SMP",
+        "sameAs": ""
+      },
+      "educationalLevel": "Kelas IX SMP",
+      "inLanguage": "id"
+    }
+    </script>
+
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #3730A3;
+            --secondary: #EC4899;
+            --accent: #F59E0B;
+            --pribadi: #8B5CF6;
+            --sosial: #06B6D4;
+            --belajar: #10B981;
+            --karier: #F97316;
+            --dark: #1F2937;
+            --light: #F9FAFB;
+            --gray: #6B7280;
+            --white: #FFFFFF;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 40px rgba(79, 70, 229, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #F3F4F6 0%, #E0E7FF 100%);
+            color: var(--dark);
+            line-height: 1.7;
+            scroll-behavior: smooth;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 80px 20px 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 30px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* OVERVIEW SECTION */
+        .overview {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: var(--shadow);
+            margin-top: -60px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .overview h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-dark);
+            font-size: 2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .overview h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .overview p {
+            font-size: 1.05rem;
+            color: var(--gray);
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .overview .highlight {
+            background: linear-gradient(120deg, #FEF3C7 0%, #FDE68A 100%);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 5px solid var(--accent);
+            margin-top: 25px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        /* SECTION TITLE */
+        .section-title {
+            text-align: center;
+            margin: 60px 0 40px;
+            transition: all 0.4s ease;
+        }
+
+        .section-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.3rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            font-size: 1.05rem;
+        }
+
+        /* BIDANG GRID */
+        .bidang-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+            transition: all 0.5s ease;
+        }
+
+        .bidang-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 35px 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            border: 3px solid transparent;
+        }
+
+        .bidang-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--card-color);
+        }
+
+        .bidang-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .bidang-card.active {
+            border-color: var(--card-color);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .bidang-card.active::after {
+            content: '✓ AKTIF';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--card-color);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .bidang-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            background: var(--card-color);
+            color: var(--white);
+        }
+
+        .bidang-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .bidang-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .bidang-card .count {
+            display: inline-block;
+            background: var(--card-color);
+            color: var(--white);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .card-pribadi { --card-color: var(--pribadi); }
+        .card-sosial { --card-color: var(--sosial); }
+        .card-belajar { --card-color: var(--belajar); }
+        .card-karier { --card-color: var(--karier); }
+
+        /* RESET BUTTON */
+        .reset-btn {
+            display: none;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 14px 32px;
+            border-radius: 50px;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+            transition: all 0.3s ease;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reset-btn.show {
+            display: inline-flex;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(79, 70, 229, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* DETAIL SECTION */
+        .detail-section {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 50px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border-top: 6px solid var(--section-color);
+            transition: all 0.5s ease;
+            animation: slideIn 0.5s ease;
+        }
+
+        .detail-section.hidden {
+            display: none;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .detail-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--section-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .detail-section .section-desc {
+            color: var(--gray);
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .sub-bidang-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+        }
+
+        .sub-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+            padding: 18px 22px;
+            border-radius: 14px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sub-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--section-color);
+            transition: left 0.4s ease;
+            z-index: 0;
+        }
+
+        .sub-btn:hover::before {
+            left: 0;
+        }
+
+        .sub-btn span,
+        .sub-btn .arrow {
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .sub-btn:hover {
+            color: var(--white);
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .sub-btn .arrow {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* ACTIVE INDICATOR */
+        .active-indicator {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #EEF2FF 0%, #FCE7F3 100%);
+            border-radius: 12px;
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+
+        .active-indicator.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        /* EMBED LINK SECTION */
+        .embed-section {
+            background: linear-gradient(135deg, #1F2937 0%, #374151 100%);
+            color: var(--white);
+            border-radius: 24px;
+            padding: 50px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .embed-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .embed-section p {
+            opacity: 0.85;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .embed-code {
+            background: #111827;
+            padding: 25px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-align: left;
+            overflow-x: auto;
+            border: 1px solid #374151;
+            color: #A7F3D0;
+        }
+
+        .embed-code .tag { color: #F472B6; }
+        .embed-code .attr { color: #FCD34D; }
+        .embed-code .val { color: #60A5FA; }
+
+        /* FOOTER */
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        footer p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        footer .heart {
+            color: var(--secondary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .overview, .detail-section, .embed-section {
+                padding: 30px 20px;
+            }
+            .hero {
+                padding: 60px 20px 80px;
+            }
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <header class="hero">
+        <div class="hero-content">
+            <span class="badge">🎓 Kurikulum Deep Learning • Kelas IX SMP</span>
+            <h1>Materi Bimbingan Konseling Kelas IX</h1>
+            <p>Panduan lengkap 24 topik materi BK untuk membantu siswa mencapai kematangan diri, ketahanan mental, dan perencanaan masa depan menjelang transisi ke jenjang pendidikan menengah atas.</p>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="container">
+
+        <!-- OVERVIEW SECTION -->
+        <section class="overview" id="overview">
+            <h2>Gambaran Umum Materi</h2>
+            <p>Materi Bimbingan Konseling (BK) Kelas IX mencakup <strong>4 bidang utama</strong>, yaitu <strong>Pribadi, Sosial, Belajar, dan Karier</strong>, dengan tingkat kedalaman yang meningkat seiring kenaikan kelas.</p>
+            <p>Pada kelas IX, fokus utama materi adalah <strong>Kematangan & Perencanaan Masa Depan</strong>. Materi di kelas ini berorientasi pada kesiapan siswa menghadapi ujian, transisi ke jenjang SMA/SMK/MA, dan pengambilan keputusan mandiri. Contoh 24 topik materi yang umum disusun meliputi berbagai aspek kematangan remaja akhir yang disesuaikan dengan pendekatan <em>Deep Learning</em>—pembelajaran mendalam yang menekankan pada refleksi, pemaknaan, dan aplikasi nyata dalam kehidupan sehari-hari.</p>
+            <div class="highlight">
+                💡 <strong>Catatan:</strong> Klik salah satu card bidang di bawah untuk menampilkan sub-bidang materi lengkap. Setiap topik dirancang dengan pendekatan <em>student-centered</em>, berbasis masalah kontekstual, dan dilengkapi asesmen autentik untuk mendukung Profil Pelajar Pancasila.
+            </div>
+        </section>
+
+        <!-- BIDANG OVERVIEW -->
+        <div class="section-title" id="bidang-title">
+            <h2>Empat Bidang Pengembangan</h2>
+            <p>Klik salah satu card bidang untuk menampilkan sub-bidang materi</p>
+        </div>
+
+        <!-- ACTIVE INDICATOR -->
+        <div class="active-indicator" id="activeIndicator">
+            🎯 Menampilkan: <strong id="activeBidangName">-</strong>
+        </div>
+
+        <!-- RESET BUTTON -->
+        <button class="reset-btn" id="resetBtn" onclick="resetFilter()">
+            <span>↺</span> Tampilkan Semua Bidang
+        </button>
+
+        <div class="bidang-grid" id="bidangGrid">
+            <div class="bidang-card card-pribadi" data-category="pribadi" onclick="filterBidang('pribadi', 'Bidang Pribadi', this)">
+                <div class="bidang-icon">🧘</div>
+                <h3>Bidang Pribadi</h3>
+                <p>Kematangan diri, ketahanan mental, dan pengambilan keputusan bertanggung jawab.</p>
+                <span class="count">6 Topik</span>
+            </div>
+            <div class="bidang-card card-sosial" data-category="sosial" onclick="filterBidang('sosial', 'Bidang Sosial', this)">
+                <div class="bidang-icon">🤝</div>
+                <h3>Bidang Sosial</h3>
+                <p>Penolakan tekanan teman sebaya, kepemimpinan, dan kewargaan digital.</p>
+                <span class="count">6 Topik</span>
+            </div>
+            <div class="bidang-card card-belajar" data-category="belajar" onclick="filterBidang('belajar', 'Bidang Belajar', this)">
+                <div class="bidang-icon">📚</div>
+                <h3>Bidang Belajar</h3>
+                <p>Kesiapan ujian, strategi belajar intensif, dan transisi jenjang pendidikan.</p>
+                <span class="count">6 Topik</span>
+            </div>
+            <div class="bidang-card card-karier" data-category="karier" onclick="filterBidang('karier', 'Bidang Karier', this)">
+                <div class="bidang-icon">🚀</div>
+                <h3>Bidang Karier</h3>
+                <p>Pemilihan SMA/SMK/MA, portofolio prestasi, dan rencana aksi karier.</p>
+                <span class="count">6 Topik</span>
+            </div>
+        </div>
+
+        <!-- DETAIL BIDANG PRIBADI -->
+        <section class="detail-section hidden" id="detail-pribadi" data-category="pribadi" style="--section-color: var(--pribadi);">
+            <h2>🧘 Bidang Pribadi</h2>
+            <p class="section-desc">Fokus pada kematangan psikologis, ketahanan mental, dan pengambilan keputusan bertanggung jawab menjelang dewasa awal.</p>
+            <div class="sub-bidang-grid">
+                <a href="https://example.com/ix/pengambilan-keputusan" target="_blank" class="sub-btn">
+                    <span>Pengambilan Keputusan Bertanggung Jawab</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/ketahanan-mental-resilience" target="_blank" class="sub-btn">
+                    <span>Ketahanan Mental (Resilience) Remaja</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/regulasi-emosi-matang" target="_blank" class="sub-btn">
+                    <span>Regulasi Emosi & Kematangan Psikologis</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/konsep-diri-aktualisasi" target="_blank" class="sub-btn">
+                    <span>Konsep Diri & Aktualisasi Diri</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/manajemen-stres-coping" target="_blank" class="sub-btn">
+                    <span>Manajemen Stres Lanjutan & Coping Strategy</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/identitas-online-positif" target="_blank" class="sub-btn">
+                    <span>Etika Digital & Identitas Online Positif</span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- DETAIL BIDANG SOSIAL -->
+        <section class="detail-section hidden" id="detail-sosial" data-category="sosial" style="--section-color: var(--sosial);">
+            <h2>🤝 Bidang Sosial</h2>
+            <p class="section-desc">Mengembangkan kemampuan menolak tekanan negatif, kepemimpinan, dan tanggung jawab sosial di masyarakat.</p>
+            <div class="sub-bidang-grid">
+                <a href="https://example.com/ix/komunikasi-negosiasi" target="_blank" class="sub-btn">
+                    <span>Komunikasi Asertif & Negosiasi</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/peer-pressure-penolakan" target="_blank" class="sub-btn">
+                    <span>Tekanan Teman Sebaya & Penolakan Asertif</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/pergaulan-bebas-napza" target="_blank" class="sub-btn">
+                    <span>Bahaya Pergaulan Bebas & NAPZA</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/mediasi-peer-to-peer" target="_blank" class="sub-btn">
+                    <span>Manajemen Konflik & Mediasi Peer-to-Peer</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/kepemimpinan-tanggung-jawab" target="_blank" class="sub-btn">
+                    <span>Kepemimpinan & Tanggung Jawab Sosial</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/kewargaan-digital" target="_blank" class="sub-btn">
+                    <span>Etika Bermedia Sosial & Kewargaan Digital</span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- DETAIL BIDANG BELAJAR -->
+        <section class="detail-section hidden" id="detail-belajar" data-category="belajar" style="--section-color: var(--belajar);">
+            <h2>📚 Bidang Belajar</h2>
+            <p class="section-desc">Membangun kesiapan ujian, strategi belajar intensif, dan transisi mulus ke jenjang pendidikan menengah atas.</p>
+            <div class="sub-bidang-grid">
+                <a href="https://example.com/ix/strategi-belajar-intensif" target="_blank" class="sub-btn">
+                    <span>Strategi Belajar Intensif & Retrieval Practice</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/manajemen-stres-ujian" target="_blank" class="sub-btn">
+                    <span>Manajemen Stres Akademik Menjelang Ujian</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/kesiapan-ujian-sekolah" target="_blank" class="sub-btn">
+                    <span>Kesiapan Penilaian Akhir & Ujian Sekolah</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/goal-setting-pascasmp" target="_blank" class="sub-btn">
+                    <span>Goal Setting PascasMP (SMA/SMK/MA)</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/literasi-digital-riset" target="_blank" class="sub-btn">
+                    <span>Literasi Digital & Riset Mandiri</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/transisi-jenjang-atas" target="_blank" class="sub-btn">
+                    <span>Transisi Belajar ke Jenjang Menengah Atas</span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- DETAIL BIDANG KARIER -->
+        <section class="detail-section hidden" id="detail-karier" data-category="karier" style="--section-color: var(--karier);">
+            <h2>🚀 Bidang Karier</h2>
+            <p class="section-desc">Pemantapan minat-bakat, eksplorasi jalur SMA/SMK/MA/MAK, dan penyusunan rencana aksi karier yang matang.</p>
+            <div class="sub-bidang-grid">
+                <a href="https://example.com/ix/pemantapan-minat-bakat" target="_blank" class="sub-btn">
+                    <span>Pemantapan Minat-Bakat & Nilai Karier</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/eksplorasi-jalur-sma-smk" target="_blank" class="sub-btn">
+                    <span>Eksplorasi Jalur SMA/SMK/MA/MAK</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/peta-profesi-masa-depan" target="_blank" class="sub-btn">
+                    <span>Peta Profesi & Dunia Kerja Masa Depan</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/keterampilan-abad21-kerja" target="_blank" class="sub-btn">
+                    <span>Keterampilan Abad 21 & Kesiapan Kerja</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/portofolio-cv-remaja" target="_blank" class="sub-btn">
+                    <span>Penyusunan Portofolio & CV Remaja</span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="https://example.com/ix/rencana-aksi-karier" target="_blank" class="sub-btn">
+                    <span>Rencana Aksi Karier & Refleksi PascasMP</span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- EMBED LINK SECTION -->
+        <section class="embed-section">
+            <h2>🔗 Kode Penyematan Link HTML</h2>
+            <p>Setiap sub-bidang di atas dapat disematkan menuju halaman materi lengkapnya. Gunakan format HTML berikut untuk menyematkan link pada setiap tombol sub-bidang:</p>
+            <div class="embed-code">
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"URL_HALAMAN_MATERI"</span> <span class="attr">target</span>=<span class="val">"_blank"</span> <span class="attr">class</span>=<span class="val">"sub-btn"</span><span class="tag">&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;span&gt;</span>Nama Sub-Bidang<span class="tag">&lt;/span&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="val">"arrow"</span><span class="tag">&gt;</span>→<span class="tag">&lt;/span&gt;</span><br>
+<span class="tag">&lt;/a&gt;</span>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 Materi Bimbingan Konseling Kelas IX | Dibuat dengan <span class="heart">❤</span> untuk Pendidikan Indonesia</p>
+        <p style="margin-top: 10px; font-size: 0.85rem;">Kurikulum Deep Learning • Profil Pelajar Pancasila</p>
+    </footer>
+
+    <script>
+        // Fungsi untuk filter bidang
+        function filterBidang(category, bidangName, element) {
+            // Reset semua card
+            document.querySelectorAll('.bidang-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Aktifkan card yang diklik
+            element.classList.add('active');
+            
+            // Sembunyikan semua detail section
+            document.querySelectorAll('.detail-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Tampilkan hanya detail section yang sesuai
+            const targetSection = document.getElementById('detail-' + category);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+                
+                // Smooth scroll ke detail section
+                setTimeout(() => {
+                    targetSection.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                }, 100);
+            }
+            
+            // Tampilkan indikator aktif
+            const indicator = document.getElementById('activeIndicator');
+            document.getElementById('activeBidangName').textContent = bidangName;
+            indicator.classList.add('show');
+            
+            // Tampilkan tombol reset
+            document.getElementById('resetBtn').classList.add('show');
+            
+            // Update section title
+            document.querySelector('#bidang-title h2').textContent = 'Sub-Bidang ' + bidangName;
+            document.querySelector('#bidang-title p').textContent = 'Klik tombol sub-bidang untuk membuka materi lengkap';
+        }
+
+        // Fungsi untuk reset filter (tampilkan semua)
+        function resetFilter() {
+            // Reset semua card
+            document.querySelectorAll('.bidang-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Sembunyikan semua detail section
+            document.querySelectorAll('.detail-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Sembunyikan indikator dan tombol reset
+            document.getElementById('activeIndicator').classList.remove('show');
+            document.getElementById('resetBtn').classList.remove('show');
+            
+            // Kembalikan section title
+            document.querySelector('#bidang-title h2').textContent = 'Empat Bidang Pengembangan';
+            document.querySelector('#bidang-title p').textContent = 'Klik salah satu card bidang untuk menampilkan sub-bidang materi';
+            
+            // Scroll ke overview
+            document.getElementById('overview').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
+
+        // Tambahkan efek hover sound-like feedback (visual)
+        document.querySelectorAll('.bidang-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s ease';
+            });
+        });
+    </script>
+
+</body>
+</html>
