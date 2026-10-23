@@ -1009,27 +1009,53 @@ margin: 0 auto;
 <div class="shield-desc">Developer Tools dan tindakan tidak sah terdeteksi. Tutup DevTools untuk melanjutkan.</div>
 <button class="shield-close" onclick="closeShield()">Saya Mengerti</button>
 </div>
-<div id="welcome-overlay" role="dialog" aria-modal="true" aria-label="Selamat datang di Platform BK SMP Negeri 56 Jakarta">
+<div id="welcome-overlay"
+     data-welcome-duration="5000"
+     role="dialog"
+     aria-modal="true"
+     aria-label="Selamat datang di Platform BK SMP Negeri 56 Jakarta">
+
   <div class="welcome-box">
-    <div class="welcome-logo" aria-hidden="true">🎓</div>
+    <div class="welcome-logo" aria-hidden="true">
+  <img src="https://cdn.phototourl.com/member/2026-10-23-989e1f1b-e1cc-4700-a022-b79a5336361e.png" alt="Welcome Logo" style="display: block; margin: 0 auto; width: 250px; height: 250px; object-fit: contain;">
+</div>
 
-    <h1 class="welcome-title">SELAMAT DATANG DI PLATFORM DIGITAL BIMBINGAN &amp; KONSELING SMP NEGERI 56 JAKARTA</h1>
+    <h1 class="welcome-title">
+      SELAMAT DATANG DI PLATFORM DIGITAL BIMBINGAN &amp; KONSELING SMP NEGERI 56 JAKARTA
+    </h1>
 
-    <div class="welcome-sub">Bimbingan • Konseling • Refleksi • Asesmen • Analisis</div>
+    <div class="welcome-sub">
+      Bimbingan • Konseling • Refleksi • Asesmen • Analisis
+    </div>
 
-    <div class="welcome-bar" aria-hidden="true"><span></span></div>
+    <div class="welcome-bar" aria-hidden="true">
+      <span></span>
+    </div>
 
-    <div class="welcome-note" id="welcome-note">Memuat platform... 10 detik</div>
+    <div class="welcome-note" id="welcome-note">
+      Memuat platform...
+    </div>
   </div>
 
   <script>
   (function () {
-    var WELCOME_DURATION = 10000;
+    var overlay = document.getElementById('welcome-overlay');
+    if (!overlay) return;
+
+    var duration = parseInt(overlay.getAttribute('data-welcome-duration') || '15000', 15);
+    var seconds = Math.max(1, Math.round(duration / 1000));
+
+    var bar = overlay.querySelector('.welcome-bar span');
+    if (bar) {
+      bar.style.animation = 'welcomeProgress ' + seconds + 's linear forwards';
+    }
+
+    var note = document.getElementById('welcome-note');
+    if (note) {
+      note.textContent = 'Memuat platform... ' + seconds + ' detik';
+    }
 
     function hideWelcome() {
-      var overlay = document.getElementById('welcome-overlay');
-      if (!overlay) return;
-
       overlay.classList.add('hidden');
       document.body.style.overflow = '';
 
@@ -1042,35 +1068,23 @@ margin: 0 auto;
       } catch (e) {}
     }
 
-    function startWelcome() {
-      var overlay = document.getElementById('welcome-overlay');
-      if (!overlay) return;
+    var left = seconds;
 
-      overlay.style.display = 'flex';
-      overlay.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
+    var countdown = setInterval(function () {
+      left--;
 
-      var note = document.getElementById('welcome-note');
-      var left = 10;
+      if (note) {
+        note.textContent = left > 0
+          ? 'Memuat platform... ' + left + ' detik'
+          : 'Memuat platform...';
+      }
 
-      var countdown = setInterval(function () {
-        left--;
-        if (note) {
-          note.textContent = left > 0 ? 'Memuat platform... ' + left + ' detik' : 'Memuat platform...';
-        }
-        if (left <= 0) {
-          clearInterval(countdown);
-        }
-      }, 1000);
+      if (left <= 0) {
+        clearInterval(countdown);
+      }
+    }, 1000);
 
-      setTimeout(hideWelcome, WELCOME_DURATION);
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', startWelcome);
-    } else {
-      startWelcome();
-    }
+    setTimeout(hideWelcome, duration);
   })();
   </script>
 </div>
