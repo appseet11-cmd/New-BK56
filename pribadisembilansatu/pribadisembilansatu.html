@@ -1402,5 +1402,163 @@ loadHomeLink();
     <button class="settings-btn" onclick="toggleHomePanel(event)" title="Atur link tujuan">⚙</button>
   </a>
 </div>
+<!-- ============ PATCH UNIVERSAL: PERMANENT EMBED STORAGE ============ -->
+<script>
+(function() {
+    'use strict';
+
+    // ============ KONFIGURASI ============
+    const STORAGE_PREFIX = 'bk56_embed_';   // Ganti jika ingin namespace berbeda per halaman
+    const TYPES = ['ppt', 'doc', 'pdf', 'mp4'];
+    const MAX_SLOTS = 4;
+
+    // ============ HELPER: KEY STORAGE ============
+    function storageKey(type, slotNum) {
+        return `${STORAGE_PREFIX}${type}_${slotNum}`;
+    }
+
+    // ============ HELPER: REBUILD EMBED DARI FILE ID (TANPA TOAST) ============
+    function rebuildEmbedFromId(type, slotNum, fileId) {
+        const typeIcons  = { ppt: '📊', doc: '📄', pdf: '📕', mp4: '🎬' };
+        const typeLabels = { ppt: 'PPT', doc: 'DOC', pdf: 'PDF', mp4: 'MP4' };
+
+        const container = document.getElementById(`embed-${type}`);
+        if (!container) return;
+
+        // Hapus item lama jika ada (hindari duplikat)
+        const existing = container.querySelector(`[data-slot="${slotNum}"]`);
+        if (existing) existing.remove();
+
+        // Hapus empty-state jika ada
+        const emptyState = container.querySelector('.empty-state');
+        if (emptyState) emptyState.remove();
+
+        const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+        const item = document.createElement('div');
+        item.className = 'embedded-item';
+        item.dataset.slot = slotNum;
+
+        let embedContent = '';
+        if (type === 'mp4') {
+            embedContent = `
+                <video controls controlsList="nodownload" preload="metadata">
+                    <source src="https://drive.google.com/uc?export=download&id=${fileId}" type="video/mp4">
+                    Browser Anda tidak mendukung video player.
+                </video>`;
+        } else {
+            embedContent = `<iframe src="${embedUrl}" allow="autoplay" allowfullscreen></iframe>`;
+        }
+
+        item.innerHTML = `
+            <div class="embedded-item-header">
+                <span>${typeIcons[type]} ${typeLabels[type]} #${slotNum}</span>
+                <button class="close-embed" onclick="removeEmbedded('${type}', ${slotNum})" title="Hapus">✕</button>
+            </div>
+            ${embedContent}`;
+
+        container.appendChild(item);
+
+        // Tandai slot sebagai filled
+        const slot = document.getElementById(`slot-${type}-${slotNum}`);
+        if (slot) {
+            slot.classList.add('filled');
+            const input = slot.querySelector('input');
+            if (input) input.value = `https://drive.google.com/file/d/${fileId}/view`;
+        }
+    }
+
+    // ============ LOAD SEMUA EMBED TERSIMPAN SAAT HALAMAN DIMUAT ============
+    function loadAllSavedEmbeds() {
+        TYPES.forEach(type => {
+            for (let i = 1; i <= MAX_SLOTS; i++) {
+                const fileId = localStorage.getItem(storageKey(type, i));
+                if (fileId) {
+                    rebuildEmbedFromId(type, i, fileId);
+                }
+            }
+        });
+        console.log('[Patch] Semua embed tersimpan berhasil dimuat dari localStorage.');
+    }
+
+    // ============ MONKEY-PATCH: embedFile ============
+    if (typeof window.embedFile === 'function') {
+        const _originalEmbedFile = window.embedFile;
+        window.embedFile = function(type, slotNum) {
+            // Panggil fungsi asli dulu (akan validasi, buat DOM, tampilkan toast)
+            _originalEmbedFile(type, slotNum);
+
+            // Setelah berhasil, ambil fileId dari input dan simpan
+            const slot  = document.getElementById(`slot-${type}-${slotNum}`);
+            if (!slot) return;
+            const input = slot.querySelector('input');
+            if (!input || !input.value.trim()) return;
+
+            // Gunakan extractFileId bawaan halaman
+            if (typeof window.extractFileId === 'function') {
+                const fileId = window.extractFileId(input.value.trim());
+                if (fileId) {
+                    localStorage.setItem(storageKey(type, slotNum), fileId);
+                    console.log(`[Patch] Tersimpan: ${type} #${slotNum} → ${fileId}`);
+                }
+            }
+        };
+    }
+
+    // ============ MONKEY-PATCH: removeEmbedded ============
+    if (typeof window.removeEmbedded === 'function') {
+        const _originalRemove = window.removeEmbedded;
+        window.removeEmbedded = function(type, slotNum) {
+            // Hapus dari localStorage DULU
+            localStorage.removeItem(storageKey(type, slotNum));
+            console.log(`[Patch] Dihapus dari storage: ${type} #${slotNum}`);
+            // Panggil fungsi asli (akan hapus DOM)
+            _originalRemove(type, slotNum);
+        };
+    }
+
+    // ============ MONKEY-PATCH: clearFile ============
+    if (typeof window.clearFile === 'function') {
+        const _originalClear = window.clearFile;
+        window.clearFile = function(type, slotNum) {
+            // Hapus dari localStorage
+            localStorage.removeItem(storageKey(type, slotNum));
+            console.log(`[Patch] Direset dari storage: ${type} #${slotNum}`);
+            // Panggil fungsi asli
+            _originalClear(type, slotNum);
+        };
+    }
+
+    // ============ JALANKAN SAAT DOM SIAP ============
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadAllSavedEmbeds);
+    } else {
+        // DOM sudah siap (script ditempatkan di akhir body)
+        loadAllSavedEmbeds();
+    }
+
+    // ============ OPSIONAL: Tombol "Hapus Semua" (bonus) ============
+    window.clearAllEmbeds = function() {
+        if (!confirm('Yakin ingin menghapus SEMUA file yang telah disematkan?')) return;
+        TYPES.forEach(type => {
+            for (let i = 1; i <= MAX_SLOTS; i++) {
+                localStorage.removeItem(storageKey(type, i));
+                const slot = document.getElementById(`slot-${type}-${i}`);
+                if (slot) {
+                    slot.classList.remove('filled');
+                    const input = slot.querySelector('input');
+                    if (input) input.value = '';
+                }
+                const item = document.querySelector(`#embed-${type} [data-slot="${i}"]`);
+                if (item) item.remove();
+            }
+        });
+        if (typeof window.showToast === 'function') {
+            window.showToast('Semua file telah dihapus dari penyimpanan.', 'warning');
+        }
+    };
+
+})();
+</script>
+<!-- ============ END PATCH UNIVERSAL ============ -->
 </body>
 </html>
