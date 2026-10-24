@@ -238,6 +238,9 @@
 --main-nav-height: 48px;
 --sub-nav-height: 46px;
 --total-sticky-height: 94px;
+/* ⭐ VARIABEL JARAK SPASI LOGO */
+--logo-gap-1sp: 0px;   /* 1 spasi = jarak logo ke judul */
+--logo-gap-2sp: 2px;  /* 2 spasi = jarak logo ke tepi atas */
 }
 /* ⭐ PERUBAHAN UTAMA: scroll-behavior: auto untuk INSTANT JUMP (tanpa scroll halus) */
 html { scroll-behavior: auto; scroll-padding-top: calc(var(--total-sticky-height) + 20px); }
@@ -378,14 +381,13 @@ white-space: nowrap;
 background: var(--secondary);
 }
 /* === ⭐ SUB NAV (BK PAGE) - STICKY DI BAWAH MAIN NAV === */
-/* Menu Beranda BK, Platform BK, dll TETAP TERLIHAT saat scroll */
 .sub-nav {
 background: var(--light);
 border-bottom: 2px solid var(--secondary);
 overflow-x: auto;
 -webkit-overflow-scrolling: touch;
 position: sticky;
-top: var(--main-nav-height); /* Menempel tepat di bawah main-nav */
+top: var(--main-nav-height);
 z-index: 1000;
 box-shadow: 0 2px 5px rgba(0,0,0,0.08);
 height: var(--sub-nav-height);
@@ -841,6 +843,11 @@ font-size: 0.8rem;
 .section { padding: 40px 20px; }
 .form-row { grid-template-columns: 1fr; }
 .breadcrumb { padding: 12px 20px; }
+/* ⭐ Logo BK56 di-hero diperkecil di mobile agar proporsional */
+#hero-title::before {
+width: 500px;
+height: 500px;
+}
 }
 /* === ACCESSIBILITY === */
 a:focus-visible, button:focus-visible, input:focus-visible,
@@ -848,36 +855,44 @@ select:focus-visible, textarea:focus-visible, summary:focus-visible {
 outline: 3px solid var(--accent);
 outline-offset: 2px;
 }
+
+/* =========================================================
+   ⭐ POSISI LOGO BK56 — DENGAN PENGATURAN JARAK SPASI
+   - Logo di ATAS judul, posisi CENTER
+   - Jarak logo ke tepi atas (hero) = 2 spasi (20px)
+   - Jarak logo ke judul tulisan = 1 spasi (8px)
+   ========================================================= */
 #hero-title {
-  position: relative;       /* Wajib: agar logo bisa diposisikan di dalamnya */
-  padding-left: 48px;       /* Ruang kosong di kiri untuk menampung logo */
-  line-height: 1.3;         /* Tinggi baris normal */
-  margin-bottom: 16px;      /* Jarak ke paragraf di bawahnya */
-  margin-top: 0;
+display: flex;
+flex-direction: column;   /* Susun logo di atas, teks di bawah */
+align-items: center;      /* Center horizontal */
+justify-content: center;
+text-align: center;       /* Teks judul ikut rata tengah */
+line-height: 1.3;
+margin-bottom: 16px;
+margin-top: 0;
 }
 
-/* Ini adalah bagian yang menyuntikkan logo */
+/* Logo BK56 — blok di atas judul & di-center dengan jarak spasi */
 #hero-title::before {
-  content: '';              /* WAJIB ADA! Tanpa ini, logo tidak akan muncul */
-  position: absolute;       /* Keluar dari aliran teks */
-  left: 0;                  /* Tempel di kiri */
-  top: 50%;                 /* Mulai dari tengah vertikal */
-  transform: translateY(-50%); /* Geser ke atas 50% agar benar-benar di tengah */
-  
-  /* Pengaturan Ukuran Logo */
-  width: 300px;              /* Ubah angka ini untuk membesarkan/mengecilkan */
-  height: 300px;             /* Harus sama dengan width agar proporsional */
-  
-  /* Memanggil Gambar */
-  background-image: url('https://cdn.phototourl.com/member/2026-10-18-4ed81563-0d76-4175-80c6-e0efbbbbd475.png'); 
-  background-size: contain; /* Agar logo utuh tidak terpotong */
-  background-repeat: no-repeat;
-  background-position: center;
+content: '';
+display: block;
+width: 300px;
+height: 300px;
+/* ⭐ PENGATURAN JARAK SPASI */
+margin-top: var(--logo-gap-2sp);     /* 2 spasi (20px) ke tepi atas */
+margin-bottom: var(--logo-gap-1sp);  /* 1 spasi (8px) ke judul tulisan */
+margin-left: auto;
+margin-right: auto;                  /* Center horizontal */
+background-image: url('https://cdn.phototourl.com/member/2026-10-18-4ed81563-0d76-4175-80c6-e0efbbbbd475.png');
+background-size: contain;
+background-repeat: no-repeat;
+background-position: center;
 }
 
 .hero-description {
-  margin-top: 0;
-  line-height: 1.6;
+margin-top: 0;
+line-height: 1.6;
 }
 </style>
 </head>
@@ -967,7 +982,7 @@ Butuh bantuan PPDB? <a href="https://www.smpn56jakarta.sch.id/ppdb" target="_sel
 <section class="hero" id="beranda" aria-labelledby="hero-title">
 <h2 id="hero-title">Unit Bimbingan & Konseling SMPN 56 Jakarta</h2>
 <p class="hero-description">
-  Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Belajar, dan Karir — sesuai Kurikulum Merdeka untuk mewujudkan Profil Pelajar Pancasila.
+Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Belajar, dan Karir — sesuai Kurikulum Merdeka untuk mewujudkan Profil Pelajar Pancasila.
 </p>
 <div class="hero-buttons">
 <a href="#konseling-online" class="btn btn-primary">📝 Ajukan Konseling Online</a>
@@ -978,9 +993,9 @@ Butuh bantuan PPDB? <a href="https://www.smpn56jakarta.sch.id/ppdb" target="_sel
 <section class="section" id="platform" style="background: var(--white);" aria-labelledby="platform-title">
 <header class="section-title">
 <h2 id="platform-title">
-    <a href="arsip-lama/index.html" class="btn btn-primary" style="font-size: 1.1rem;">
-        🖥️ Platform BK Digital Team BK SMP 56 Jakarta
-    </a>
+<a href="arsip-lama/index.html" class="btn btn-primary" style="font-size: 1.1rem;">
+🖥️ Platform BK Digital Team BK SMP 56 Jakarta
+</a>
 </h2>
 <p>Akses platform bimbingan konseling digital SMPN 56 Jakarta</p>
 </header>
@@ -1567,7 +1582,6 @@ alert('✅ Pengajuan konseling berhasil dikirim!\nTim BK SMPN 56 Jakarta akan me
 this.reset();
 });
 // === ⭐ INSTANT JUMP (TANPA SCROLL) UNTUK SUB-NAV ===
-// Menangani klik menu sub-nav agar LANGSUNG LOMPAT ke section tujuan
 document.querySelectorAll('.sub-nav ul li a').forEach(function(link) {
 link.addEventListener('click', function(e) {
 var targetId = this.getAttribute('href');
@@ -1575,15 +1589,12 @@ if (targetId && targetId.startsWith('#')) {
 var targetElement = document.querySelector(targetId);
 if (targetElement) {
 e.preventDefault();
-// Hitung tinggi sticky nav (94px) + offset 20px
 var stickyHeight = 94 + 20;
 var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - stickyHeight;
-// ⭐ INSTANT JUMP - langsung lompat tanpa animasi scroll
 window.scrollTo({
 top: targetPosition,
 behavior: 'instant'
 });
-// Update active menu
 document.querySelectorAll('.sub-nav ul li a').forEach(function(a) {
 a.classList.remove('active');
 });
