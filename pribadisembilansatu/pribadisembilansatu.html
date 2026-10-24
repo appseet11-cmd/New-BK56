@@ -1234,137 +1234,6 @@
             const emptyState = container.querySelector('.empty-state');
             if (emptyState) emptyState.remove();
         };
-        // ============ FLOATING HOME BUTTON — LINK PERMANEN DI HTML ============
-const HOME_LINK_KEY = 'floatingHomeLink_pribadi9_topik1';
-
-function loadHomeLink() {
-  const btn = document.getElementById('floatingHomeBtn');
-  const input = document.getElementById('homeLinkInput');
-  const currentDisplay = document.getElementById('currentLinkDisplay');
-  const currentText = document.getElementById('currentLinkText');
-  const defaultText = document.getElementById('defaultLinkText');
-  
-  if (!btn) return;
-  
-  // Ambil link default permanen dari HTML
-  const defaultLink = btn.getAttribute('data-default-link') || '';
-  if (defaultText) defaultText.textContent = defaultLink || '(belum diatur di HTML)';
-  
-  // Cek apakah ada override di localStorage
-  const overrideLink = localStorage.getItem(HOME_LINK_KEY);
-  
-  if (overrideLink) {
-    btn.dataset.activeLink = overrideLink;
-    if (input) input.value = overrideLink;
-    if (currentDisplay && currentText) {
-      currentText.textContent = overrideLink;
-      currentDisplay.style.display = 'block';
-    }
-  } else {
-    btn.dataset.activeLink = defaultLink;
-    if (input) input.value = defaultLink;
-    if (currentDisplay) currentDisplay.style.display = 'none';
-  }
-}
-
-function saveHomeLink() {
-  const input = document.getElementById('homeLinkInput');
-  const url = input.value.trim();
-  const btn = document.getElementById('floatingHomeBtn');
-  const defaultLink = btn.getAttribute('data-default-link') || '';
-  
-  if (!url) {
-    showToast('Silakan masukkan URL terlebih dahulu!', 'warning');
-    return;
-  }
-  
-  // Jika URL sama dengan default, cukup reset
-  if (url === defaultLink) {
-    resetHomeLink();
-    return;
-  }
-  
-  // Validasi format URL
-  if (!/^https?:\/\/.+/i.test(url) && !url.startsWith('/') && !url.startsWith('#')) {
-    showToast('Format URL tidak valid. Gunakan http:// atau https://', 'error');
-    return;
-  }
-  
-  localStorage.setItem(HOME_LINK_KEY, url);
-  btn.dataset.activeLink = url;
-  
-  const currentDisplay = document.getElementById('currentLinkDisplay');
-  const currentText = document.getElementById('currentLinkText');
-  if (currentDisplay && currentText) {
-    currentText.textContent = url;
-    currentDisplay.style.display = 'block';
-  }
-  
-  showToast('Link override berhasil disimpan!', 'success');
-  toggleHomePanel(null, true);
-}
-
-function resetHomeLink() {
-  localStorage.removeItem(HOME_LINK_KEY);
-  const btn = document.getElementById('floatingHomeBtn');
-  const input = document.getElementById('homeLinkInput');
-  const currentDisplay = document.getElementById('currentLinkDisplay');
-  const defaultLink = btn.getAttribute('data-default-link') || '';
-  
-  if (input) input.value = defaultLink;
-  if (btn) btn.dataset.activeLink = defaultLink;
-  if (currentDisplay) currentDisplay.style.display = 'none';
-  
-  showToast('Link dikembalikan ke default (permanen di HTML).', 'success');
-  toggleHomePanel(null, true);
-}
-
-function toggleHomePanel(event, forceClose = false) {
-  if (event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-  const panel = document.getElementById('floatingHomePanel');
-  if (!panel) return;
-  if (forceClose) {
-    panel.classList.remove('show');
-    return;
-  }
-  panel.classList.toggle('show');
-}
-
-function navigateHome(event) {
-  // Jika klik di tombol settings, jangan navigasi
-  if (event && event.target.closest('.settings-btn')) return;
-  if (event) event.preventDefault();
-  
-  const btn = document.getElementById('floatingHomeBtn');
-  const activeLink = btn ? btn.dataset.activeLink : '';
-  const defaultLink = btn ? btn.getAttribute('data-default-link') : '';
-  const finalLink = activeLink || defaultLink;
-  
-  if (!finalLink) {
-    showToast('Link belum diatur. Edit data-default-link di HTML.', 'warning');
-    toggleHomePanel(null);
-    return;
-  }
-  
-  window.location.href = finalLink;
-}
-
-// Tutup panel saat klik di luar area floating button
-document.addEventListener('click', function(e) {
-  const wrapper = document.getElementById('floatingHomeWrapper');
-  const panel = document.getElementById('floatingHomePanel');
-  if (wrapper && panel && panel.classList.contains('show')) {
-    if (!wrapper.contains(e.target)) {
-      panel.classList.remove('show');
-    }
-  }
-});
-
-// Load link saat halaman dimuat
-loadHomeLink();
     </script>
 <!-- ============ FLOATING HOME BUTTON (UNIVERSAL) ============ -->
 <div class="floating-home-wrapper" id="floatingHomeWrapper">
@@ -1585,5 +1454,198 @@ loadHomeLink();
 })();
 </script>
 <!-- ============ END PATCH UNIVERSAL v4 ============ -->
+<!-- ============ PATCH FINAL: PERMANENT EMBED DENGAN MUTATION OBSERVER ============ -->
+<script>
+(function() {
+    'use strict';
+
+    // ============ KONFIGURASI ============
+    const STORAGE_PREFIX = 'bk56_embed_';
+    const TYPES = ['ppt', 'doc', 'pdf', 'mp4'];
+    const MAX_SLOTS = 4;
+
+    const typeLabels = { ppt: 'PPT', doc: 'DOC', pdf: 'PDF', mp4: 'MP4' };
+    const typeIcons  = { ppt: '📊', doc: '📄', pdf: '📕', mp4: '🎬' };
+
+    function storageKey(type, slotNum) {
+        return `${STORAGE_PREFIX}${type}_${slotNum}`;
+    }
+
+    // ============ ⭐ MUTATION OBSERVER: DETEKSI PERUBAHAN DOM ============
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            // Deteksi node yang ditambahkan
+            mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === 1) { // Element node
+                    // Cek apakah ini .embedded-item baru
+                    if (node.classList && node.classList.contains('embedded-item')) {
+                        saveEmbedFromDOM(node);
+                    }
+                    // Cek apakah ada .embedded-item di dalamnya
+                    if (node.querySelectorAll) {
+                        const items = node.querySelectorAll('.embedded-item');
+                        items.forEach(saveEmbedFromDOM);
+                    }
+                }
+            });
+
+            // Deteksi node yang dihapus
+            mutation.removedNodes.forEach(function(node) {
+                if (node.nodeType === 1) {
+                    if (node.classList && node.classList.contains('embedded-item')) {
+                        removeEmbedFromStorage(node);
+                    }
+                    if (node.querySelectorAll) {
+                        const items = node.querySelectorAll('.embedded-item');
+                        items.forEach(removeEmbedFromStorage);
+                    }
+                }
+            });
+        });
+    });
+
+    // ============ SIMPAN EMBED DARI DOM KE LOCALSTORAGE ============
+    function saveEmbedFromDOM(item) {
+        const slotNum = item.dataset.slot;
+        if (!slotNum) return;
+
+        // Determine type dari parent container
+        const container = item.parentElement;
+        if (!container) return;
+        const containerId = container.id; // embed-ppt, embed-doc, dll
+        const type = containerId.replace('embed-', '');
+
+        // Extract fileId dari iframe atau video
+        let fileId = null;
+        const iframe = item.querySelector('iframe');
+        if (iframe) {
+            const src = iframe.getAttribute('src');
+            const match = src.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+            if (match) fileId = match[1];
+        }
+
+        const video = item.querySelector('video source');
+        if (video && !fileId) {
+            const src = video.getAttribute('src');
+            const match = src.match(/id=([a-zA-Z0-9_-]+)/);
+            if (match) fileId = match[1];
+        }
+
+        if (fileId) {
+            localStorage.setItem(storageKey(type, slotNum), fileId);
+            console.log(`[Patch Final] 💾 Tersimpan: ${type} #${slotNum} → ${fileId}`);
+        }
+    }
+
+    // ============ HAPUS EMBED DARI LOCALSTORAGE ============
+    function removeEmbedFromStorage(item) {
+        const slotNum = item.dataset.slot;
+        if (!slotNum) return;
+
+        const container = item.parentElement;
+        if (!container) return;
+        const containerId = container.id;
+        const type = containerId.replace('embed-', '');
+
+        localStorage.removeItem(storageKey(type, slotNum));
+        console.log(`[Patch Final] 🗑 Dihapus dari storage: ${type} #${slotNum}`);
+    }
+
+    // Mulai observasi DOM
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+    // ============ REBUILD EMBED DARI FILE ID (saat load halaman) ============
+    function rebuildEmbed(type, slotNum, fileId) {
+        const container = document.getElementById(`embed-${type}`);
+        if (!container) return;
+
+        // Hapus empty state
+        const emptyState = container.querySelector('.empty-state');
+        if (emptyState) emptyState.remove();
+
+        // Hapus item lama (hindari duplikat)
+        const existing = container.querySelector(`[data-slot="${slotNum}"]`);
+        if (existing) existing.remove();
+
+        // ⭐ SEMUA PAKAI IFRAME — termasuk MP4!
+        const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+
+        const item = document.createElement('div');
+        item.className = 'embedded-item';
+        item.dataset.slot = slotNum;
+        item.innerHTML = `
+            <div class="embedded-item-header">
+                <span>${typeIcons[type]} ${typeLabels[type]} #${slotNum}</span>
+                <button class="close-embed" onclick="removeEmbedded('${type}', ${slotNum})" title="Hapus">✕</button>
+            </div>
+            <iframe 
+                src="${embedUrl}" 
+                allow="autoplay; encrypted-media; fullscreen" 
+                allowfullscreen
+                style="width:100%; height:380px; border:none; background:#000; display:block;">
+            </iframe>
+        `;
+        container.appendChild(item);
+
+        // Tandai slot filled + isi input
+        const slot = document.getElementById(`slot-${type}-${slotNum}`);
+        if (slot) {
+            slot.classList.add('filled');
+            const input = slot.querySelector('input');
+            if (input) input.value = `https://drive.google.com/file/d/${fileId}/view`;
+        }
+    }
+
+    // ============ LOAD SEMUA EMBED TERSIMPAN SAAT HALAMAN DIMUAT ============
+    function loadAllSavedEmbeds() {
+        let total = 0;
+        TYPES.forEach(type => {
+            for (let i = 1; i <= MAX_SLOTS; i++) {
+                const fileId = localStorage.getItem(storageKey(type, i));
+                if (fileId) {
+                    rebuildEmbed(type, i, fileId);
+                    total++;
+                }
+            }
+        });
+        if (total > 0) {
+            console.log(`[Patch Final] ✓ ${total} embed berhasil dimuat dari penyimpanan permanen.`);
+        }
+    }
+
+    // ============ JALANKAN SAAT DOM SIAP ============
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadAllSavedEmbeds);
+    } else {
+        loadAllSavedEmbeds();
+    }
+
+    // ============ BONUS: Hapus Semua ============
+    window.clearAllEmbeds = function() {
+        if (!confirm('Yakin ingin menghapus SEMUA file yang telah disematkan?')) return;
+        TYPES.forEach(type => {
+            for (let i = 1; i <= MAX_SLOTS; i++) {
+                localStorage.removeItem(storageKey(type, i));
+                const slot = document.getElementById(`slot-${type}-${i}`);
+                if (slot) {
+                    slot.classList.remove('filled');
+                    const input = slot.querySelector('input');
+                    if (input) input.value = '';
+                }
+                const item = document.querySelector(`#embed-${type} [data-slot="${i}"]`);
+                if (item) item.remove();
+            }
+        });
+        if (typeof showToast === 'function') {
+            showToast('Semua file telah dihapus dari penyimpanan.', 'warning');
+        }
+    };
+
+})();
+</script>
+<!-- ============ END PATCH FINAL ============ -->
 </body>
 </html>
