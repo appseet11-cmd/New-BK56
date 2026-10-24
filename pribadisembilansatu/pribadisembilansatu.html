@@ -29,6 +29,105 @@
       "educationalLevel": "Kelas IX SMP",
       "inLanguage": "id"
     }
+    // ============ FLOATING HOME BUTTON — UNIVERSAL ============
+const HOME_LINK_KEY = 'floatingHomeLink_pribadi9_topik1';
+
+function loadHomeLink() {
+  const saved = localStorage.getItem(HOME_LINK_KEY);
+  const btn = document.getElementById('floatingHomeBtn');
+  const input = document.getElementById('homeLinkInput');
+  const display = document.getElementById('currentLinkDisplay');
+  const displayText = document.getElementById('currentLinkText');
+  if (saved) {
+    btn.dataset.link = saved;
+    if (input) input.value = saved;
+    if (display && displayText) {
+      displayText.textContent = saved;
+      display.style.display = 'block';
+    }
+  } else {
+    btn.dataset.link = '';
+    if (display) display.style.display = 'none';
+  }
+}
+
+function saveHomeLink() {
+  const input = document.getElementById('homeLinkInput');
+  const url = input.value.trim();
+  if (!url) {
+    showToast('Silakan masukkan URL terlebih dahulu!', 'warning');
+    return;
+  }
+  // Validasi format URL
+  if (!/^https?:\/\/.+/i.test(url) && !url.startsWith('/') && !url.startsWith('#')) {
+    showToast('Format URL tidak valid. Gunakan http:// atau https://', 'error');
+    return;
+  }
+  localStorage.setItem(HOME_LINK_KEY, url);
+  const btn = document.getElementById('floatingHomeBtn');
+  btn.dataset.link = url;
+  const display = document.getElementById('currentLinkDisplay');
+  const displayText = document.getElementById('currentLinkText');
+  if (display && displayText) {
+    displayText.textContent = url;
+    display.style.display = 'block';
+  }
+  showToast('Link halaman utama berhasil disimpan!', 'success');
+  toggleHomePanel(null, true);
+}
+
+function clearHomeLink() {
+  localStorage.removeItem(HOME_LINK_KEY);
+  const input = document.getElementById('homeLinkInput');
+  const btn = document.getElementById('floatingHomeBtn');
+  const display = document.getElementById('currentLinkDisplay');
+  if (input) input.value = '';
+  if (btn) btn.dataset.link = '';
+  if (display) display.style.display = 'none';
+  showToast('Link halaman utama telah dihapus.', 'warning');
+}
+
+function toggleHomePanel(event, forceClose = false) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const panel = document.getElementById('floatingHomePanel');
+  if (!panel) return;
+  if (forceClose) {
+    panel.classList.remove('show');
+    return;
+  }
+  panel.classList.toggle('show');
+}
+
+function navigateHome(event) {
+  // Jika klik di tombol settings, jangan navigasi
+  if (event && event.target.closest('.settings-btn')) return;
+  if (event) event.preventDefault();
+  const btn = document.getElementById('floatingHomeBtn');
+  const link = btn ? btn.dataset.link : '';
+  if (!link) {
+    showToast('Link belum diatur. Klik ikon ⚙ untuk menyematkan link.', 'warning');
+    toggleHomePanel(null);
+    return;
+  }
+  window.location.href = link;
+}
+
+// Tutup panel saat klik di luar area floating button
+document.addEventListener('click', function(e) {
+  const wrapper = document.getElementById('floatingHomeWrapper');
+  const panel = document.getElementById('floatingHomePanel');
+  if (wrapper && panel && panel.classList.contains('show')) {
+    if (!wrapper.contains(e.target)) {
+      panel.classList.remove('show');
+    }
+  }
+});
+
+// Load link tersimpan saat halaman dimuat
+loadHomeLink();
     </script>
 
     <style>
@@ -1647,5 +1746,25 @@
 })();
 </script>
 <!-- ============ END PATCH FINAL ============ -->
+<!-- ============ FLOATING HOME BUTTON (UNIVERSAL) ============ -->
+<div class="floating-home-wrapper" id="floatingHomeWrapper">
+  <div class="floating-home-panel" id="floatingHomePanel">
+    <h4>🔗 Sematkan Link Halaman Utama</h4>
+    <p>Tempelkan URL tujuan tombol ini. Link akan tersimpan otomatis di browser Anda (localStorage) dan dapat digunakan di halaman lain selama domain sama.</p>
+    <div class="current-link" id="currentLinkDisplay" style="display:none;">
+      <strong>Link aktif:</strong> <span id="currentLinkText"></span>
+    </div>
+    <input type="text" id="homeLinkInput" placeholder="https://contoh.com/halaman-utama">
+    <div class="panel-actions">
+      <button class="btn-save" onclick="saveHomeLink()">💾 Simpan</button>
+      <button class="btn-clear-link" onclick="clearHomeLink()">🗑 Hapus</button>
+    </div>
+  </div>
+  <a href="#" class="floating-home-btn" id="floatingHomeBtn" onclick="navigateHome(event)" title="Back">
+    <span class="icon-home">🏠</span>
+    <span>Back</span>
+    <button class="settings-btn" onclick="toggleHomePanel(event)" title="Atur link tujuan">⚙</button>
+  </a>
+</div>
 </body>
 </html>
