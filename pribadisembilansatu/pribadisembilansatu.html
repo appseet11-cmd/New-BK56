@@ -1402,7 +1402,7 @@ loadHomeLink();
     <button class="settings-btn" onclick="toggleHomePanel(event)" title="Atur link tujuan">⚙</button>
   </a>
 </div>
-<!-- ============ PATCH UNIVERSAL v2: PERMANENT EMBED + VIDEO PASTI PUTAR ============ -->
+<!-- ============ PATCH UNIVERSAL v3: OVERRIDE TOTAL + VIDEO PASTI PUTAR ============ -->
 <script>
 (function() {
     'use strict';
@@ -1412,37 +1412,109 @@ loadHomeLink();
     const TYPES = ['ppt', 'doc', 'pdf', 'mp4'];
     const MAX_SLOTS = 4;
 
-    // ============ HELPER ============
+    const typeLabels = { ppt: 'PPT', doc: 'DOC', pdf: 'PDF', mp4: 'MP4' };
+    const typeIcons  = { ppt: '📊', doc: '📄', pdf: '📕', mp4: '🎬' };
+
     function storageKey(type, slotNum) {
         return `${STORAGE_PREFIX}${type}_${slotNum}`;
     }
 
-    // ============ BUILDER: IFREAM PREVIEW (UNTUK SEMUA JENIS FILE TERMASUK MP4) ============
-    function buildIframeEmbed(fileId) {
+    // ============ OVERRIDE TOTAL: embedFile ============
+    // Mengganti fungsi asli 100% — semua jenis file (termasuk MP4) pakai iframe preview
+    window.embedFile = function(type, slotNum) {
+        const slot = document.getElementById(`slot-${type}-${slotNum}`);
+        if (!slot) return;
+        const input = slot.querySelector('input');
+        const url = input.value.trim();
+
+        if (!url) {
+            if (typeof showToast === 'function') showToast('Silakan tempelkan link Google Drive terlebih dahulu!', 'warning');
+            input.focus();
+            return;
+        }
+
+        const fileId = (typeof extractFileId === 'function') ? extractFileId(url) : null;
+        if (!fileId) {
+            if (typeof showToast === 'function') showToast('Link tidak valid! Pastikan link dari Google Drive.', 'error');
+            return;
+        }
+
+        // ⭐ KUNCI UTAMA: SEMUA JENIS FILE PAKAI IFRAME PREVIEW
+        // Termasuk MP4! URL /preview adalah cara resmi Google — PASTI berhasil diputar
         const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
-        return `<iframe 
-            src="${embedUrl}" 
-            allow="autoplay; encrypted-media; fullscreen" 
-            allowfullscreen
-            style="width:100%; height:380px; border:none; background:#000; display:block;">
-        </iframe>`;
-    }
-
-    // ============ REBUILD EMBED DARI FILE ID (SAAT LOAD HALAMAN) ============
-    function rebuildEmbedFromId(type, slotNum, fileId) {
-        const typeIcons  = { ppt: '📊', doc: '📄', pdf: '📕', mp4: '🎬' };
-        const typeLabels = { ppt: 'PPT', doc: 'DOC', pdf: 'PDF', mp4: 'MP4' };
-
         const container = document.getElementById(`embed-${type}`);
         if (!container) return;
 
-        // Hapus empty-state
+        // Hapus item lama jika ada (hindari duplikat)
+        const existingItem = container.querySelector(`[data-slot="${slotNum}"]`);
+        if (existingItem) existingItem.remove();
+
+        // Hapus empty state
         const emptyState = container.querySelector('.empty-state');
         if (emptyState) emptyState.remove();
 
-        // Hapus item lama (hindari duplikat)
+        const item = document.createElement('div');
+        item.className = 'embedded-item';
+        item.dataset.slot = slotNum;
+
+        // ⭐ SEMUA PAKAI IFRAME — termasuk MP4!
+        item.innerHTML = `
+            <div class="embedded-item-header">
+                <span>${typeIcons[type]} ${typeLabels[type]} #${slotNum}</span>
+                <button class="close-embed" onclick="removeEmbedded('${type}', ${slotNum})" title="Hapus">✕</button>
+            </div>
+            <iframe 
+                src="${embedUrl}" 
+                allow="autoplay; encrypted-media; fullscreen" 
+                allowfullscreen
+                style="width:100%; height:380px; border:none; background:#000; display:block;">
+            </iframe>
+        `;
+
+        container.appendChild(item);
+        slot.classList.add('filled');
+
+        // 💾 SIMPAN PERMANEN ke localStorage
+        localStorage.setItem(storageKey(type, slotNum), fileId);
+        console.log(`[Patch v3] 💾 Tersimpan: ${type} #${slotNum} → ${fileId}`);
+
+        if (typeof showToast === 'function') {
+            showToast(`File ${typeLabels[type]} #${slotNum} berhasil disematkan!`, 'success');
+        }
+
+        setTimeout(() => {
+            item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+    };
+
+    // ============ OVERRIDE: removeEmbedded (hapus dari storage juga) ============
+    const _origRemove = window.removeEmbedded;
+    window.removeEmbedded = function(type, slotNum) {
+        localStorage.removeItem(storageKey(type, slotNum));
+        console.log(`[Patch v3] 🗑 Dihapus dari storage: ${type} #${slotNum}`);
+        if (typeof _origRemove === 'function') _origRemove(type, slotNum);
+    };
+
+    // ============ OVERRIDE: clearFile (hapus dari storage juga) ============
+    const _origClear = window.clearFile;
+    window.clearFile = function(type, slotNum) {
+        localStorage.removeItem(storageKey(type, slotNum));
+        console.log(`[Patch v3] 🧹 Direset dari storage: ${type} #${slotNum}`);
+        if (typeof _origClear === 'function') _origClear(type, slotNum);
+    };
+
+    // ============ REBUILD EMBED DARI FILE ID (saat load halaman) ============
+    function rebuildEmbed(type, slotNum, fileId) {
+        const container = document.getElementById(`embed-${type}`);
+        if (!container) return;
+
+        const emptyState = container.querySelector('.empty-state');
+        if (emptyState) emptyState.remove();
+
         const existing = container.querySelector(`[data-slot="${slotNum}"]`);
         if (existing) existing.remove();
+
+        const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
 
         const item = document.createElement('div');
         item.className = 'embedded-item';
@@ -1452,11 +1524,15 @@ loadHomeLink();
                 <span>${typeIcons[type]} ${typeLabels[type]} #${slotNum}</span>
                 <button class="close-embed" onclick="removeEmbedded('${type}', ${slotNum})" title="Hapus">✕</button>
             </div>
-            ${buildIframeEmbed(fileId)}
+            <iframe 
+                src="${embedUrl}" 
+                allow="autoplay; encrypted-media; fullscreen" 
+                allowfullscreen
+                style="width:100%; height:380px; border:none; background:#000; display:block;">
+            </iframe>
         `;
         container.appendChild(item);
 
-        // Tandai slot filled + isi input
         const slot = document.getElementById(`slot-${type}-${slotNum}`);
         if (slot) {
             slot.classList.add('filled');
@@ -1465,85 +1541,24 @@ loadHomeLink();
         }
     }
 
-    // ============ LOAD SEMUA EMBED TERSIMPAN ============
+    // ============ LOAD SEMUA EMBED TERSIMPAN SAAT HALAMAN DIMUAT ============
     function loadAllSavedEmbeds() {
         let total = 0;
         TYPES.forEach(type => {
             for (let i = 1; i <= MAX_SLOTS; i++) {
                 const fileId = localStorage.getItem(storageKey(type, i));
                 if (fileId) {
-                    rebuildEmbedFromId(type, i, fileId);
+                    rebuildEmbed(type, i, fileId);
                     total++;
                 }
             }
         });
-        if (total > 0) console.log(`[Patch v2] ✓ ${total} embed dimuat dari penyimpanan permanen.`);
+        if (total > 0) {
+            console.log(`[Patch v3] ✓ ${total} embed berhasil dimuat dari penyimpanan permanen.`);
+        }
     }
 
-    // ============ MONKEY-PATCH: embedFile ============
-    if (typeof window.embedFile === 'function') {
-        const _original = window.embedFile;
-        window.embedFile = function(type, slotNum) {
-            // Panggil fungsi asli (validasi, buat DOM, toast)
-            _original(type, slotNum);
-
-            // Ambil fileId & simpan ke localStorage
-            const slot = document.getElementById(`slot-${type}-${slotNum}`);
-            if (!slot) return;
-            const input = slot.querySelector('input');
-            if (!input || !input.value.trim()) return;
-
-            if (typeof window.extractFileId === 'function') {
-                const fileId = window.extractFileId(input.value.trim());
-                if (fileId) {
-                    localStorage.setItem(storageKey(type, slotNum), fileId);
-                    console.log(`[Patch v2] 💾 Tersimpan: ${type} #${slotNum} → ${fileId}`);
-                }
-            }
-
-            // ⭐ KUNCI UTAMA: GANTI konten <video> dengan <iframe> preview (khusus MP4)
-            // Fungsi asli membuat <video> dengan URL yang diblokir CORS → kita ganti dengan iframe
-            if (type === 'mp4') {
-                const item = document.querySelector(`#embed-mp4 [data-slot="${slotNum}"]`);
-                if (item) {
-                    const videoTag = item.querySelector('video');
-                    if (videoTag) {
-                        videoTag.replaceWith(
-                            Object.assign(document.createElement('div'), {
-                                innerHTML: buildIframeEmbed(fileId)
-                            }).firstChild
-                        );
-                        // Atau lebih simpel:
-                        const temp = document.createElement('div');
-                        temp.innerHTML = buildIframeEmbed(fileId);
-                        videoTag.replaceWith(temp.firstChild);
-                    }
-                }
-            }
-        };
-    }
-
-    // ============ MONKEY-PATCH: removeEmbedded ============
-    if (typeof window.removeEmbedded === 'function') {
-        const _original = window.removeEmbedded;
-        window.removeEmbedded = function(type, slotNum) {
-            localStorage.removeItem(storageKey(type, slotNum));
-            console.log(`[Patch v2] 🗑 Dihapus: ${type} #${slotNum}`);
-            _original(type, slotNum);
-        };
-    }
-
-    // ============ MONKEY-PATCH: clearFile ============
-    if (typeof window.clearFile === 'function') {
-        const _original = window.clearFile;
-        window.clearFile = function(type, slotNum) {
-            localStorage.removeItem(storageKey(type, slotNum));
-            console.log(`[Patch v2] 🧹 Direset: ${type} #${slotNum}`);
-            _original(type, slotNum);
-        };
-    }
-
-    // ============ JALANKAN ============
+    // ============ JALANKAN SAAT DOM SIAP ============
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', loadAllSavedEmbeds);
     } else {
@@ -1566,13 +1581,13 @@ loadHomeLink();
                 if (item) item.remove();
             }
         });
-        if (typeof window.showToast === 'function') {
-            window.showToast('Semua file telah dihapus dari penyimpanan.', 'warning');
+        if (typeof showToast === 'function') {
+            showToast('Semua file telah dihapus dari penyimpanan.', 'warning');
         }
     };
 
 })();
 </script>
-<!-- ============ END PATCH UNIVERSAL v2 ============ -->
+<!-- ============ END PATCH UNIVERSAL v3 ============ -->
 </body>
 </html>
