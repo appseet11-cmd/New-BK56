@@ -689,54 +689,54 @@
             .toast { left: 20px; right: 20px; bottom: 20px; }
             .back-top { left: 20px; bottom: 20px; }
         }
-        /* ============ FLOATING HOME BUTTON (UNIVERSAL) ============ */
+        /* ============ FLOATING HOME BUTTON (UNIVERSAL) - RAMPING ============ */
 .floating-home-wrapper {
   position: fixed;
-  right: 30px;
-  bottom: 30px;
+  right: 20px;
+  bottom: 20px;
   z-index: 998;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 12px;
+  gap: 8px;
   font-family: 'Poppins', sans-serif;
 }
 .floating-home-btn {
   background: linear-gradient(135deg, var(--pribadi) 0%, var(--pribadi-dark) 100%);
   color: var(--white);
-  padding: 14px 22px;
+  padding: 9px 14px;
   border-radius: 50px;
   border: none;
-  font-size: 0.9rem;
+  font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
   transition: all 0.3s ease;
   text-decoration: none;
   position: relative;
 }
 .floating-home-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(99, 102, 241, 0.55);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.45);
 }
-.floating-home-btn .icon-home { font-size: 1.2rem; }
+.floating-home-btn .icon-home { font-size: 0.95rem; }
 .floating-home-btn .settings-btn {
   background: rgba(255,255,255,0.22);
   border: none;
   color: var(--white);
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   transition: all 0.3s ease;
-  margin-left: 4px;
+  margin-left: 2px;
 }
 .floating-home-btn .settings-btn:hover {
   background: rgba(255,255,255,0.4);
@@ -744,14 +744,14 @@
 }
 .floating-home-panel {
   background: var(--white);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.22);
-  width: 360px;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  width: 280px;
   max-width: calc(100vw - 40px);
   display: none;
   animation: slideUpPanel 0.3s ease;
-  border: 2px solid var(--pribadi-light);
+  border: 2px solid var(--pribadi);
 }
 .floating-home-panel.show { display: block; }
 @keyframes slideUpPanel {
@@ -760,26 +760,26 @@
 }
 .floating-home-panel h4 {
   color: var(--pribadi-dark);
-  margin-bottom: 8px;
-  font-size: 1rem;
+  margin-bottom: 6px;
+  font-size: 0.88rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 .floating-home-panel p {
   color: var(--gray);
-  font-size: 0.8rem;
-  margin-bottom: 12px;
-  line-height: 1.5;
+  font-size: 0.72rem;
+  margin-bottom: 10px;
+  line-height: 1.45;
 }
 .floating-home-panel input {
   width: 100%;
-  padding: 11px 14px;
+  padding: 8px 11px;
   border: 1.5px solid #D1D5DB;
-  border-radius: 10px;
+  border-radius: 8px;
   font-family: 'Poppins', sans-serif;
-  font-size: 0.85rem;
-  margin-bottom: 12px;
+  font-size: 0.78rem;
+  margin-bottom: 10px;
   transition: all 0.3s ease;
   background: var(--white);
 }
@@ -791,20 +791,20 @@
 .floating-home-panel .link-info {
   background: var(--pribadi-light);
   color: var(--pribadi-dark);
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: 0.78rem;
-  margin-bottom: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  margin-bottom: 10px;
   word-break: break-all;
-  border-left: 4px solid var(--pribadi);
-  line-height: 1.5;
+  border-left: 3px solid var(--pribadi);
+  line-height: 1.4;
 }
 .floating-home-panel .link-info strong {
   display: block;
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
+  letter-spacing: 0.4px;
+  margin-bottom: 3px;
   opacity: 0.8;
 }
 .floating-home-panel .link-info.default {
@@ -812,23 +812,23 @@
   color: #92400E;
   border-left-color: var(--accent);
 }
-.floating-home-panel .panel-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.floating-home-panel .panel-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 .floating-home-panel .btn-save,
 .floating-home-panel .btn-reset-link {
   flex: 1;
-  min-width: 120px;
-  padding: 10px 14px;
+  min-width: 100px;
+  padding: 7px 10px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   font-family: 'Poppins', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
 }
 .floating-home-panel .btn-save {
   background: var(--pribadi);
@@ -837,7 +837,7 @@
 .floating-home-panel .btn-save:hover {
   background: var(--pribadi-dark);
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
 }
 .floating-home-panel .btn-reset-link {
   background: #FEF3C7;
@@ -847,16 +847,28 @@
   background: var(--accent);
   color: var(--white);
 }
+
+/* RESPONSIVE - TOMBOL MELAYANG */
 @media (max-width: 768px) {
   .floating-home-wrapper {
-    right: 20px;
-    bottom: 95px;
+    right: 14px;
+    bottom: 14px;
   }
   .floating-home-btn {
-    padding: 12px 18px;
-    font-size: 0.82rem;
+    padding: 8px 12px;
+    font-size: 0.72rem;
+    gap: 6px;
   }
-  .floating-home-panel { width: calc(100vw - 40px); }
+  .floating-home-btn .icon-home { font-size: 0.88rem; }
+  .floating-home-btn .settings-btn {
+    width: 20px;
+    height: 20px;
+    font-size: 0.68rem;
+  }
+  .floating-home-panel {
+    width: calc(100vw - 28px);
+    padding: 12px;
+  }
 }
     </style>
 </head>
