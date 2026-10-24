@@ -14,154 +14,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
-    
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Course",
-      "name": "Ketahanan Mental (Resilience) Remaja",
-      "description": "Materi BK Kelas IX - Ketahanan Mental (Resilience) Remaja dengan penyematan file Google Drive.",
-      "provider": {
-        "@type": "Organization",
-        "name": "SMPN 56 Jakarta",
-        "sameAs": ""
-      },
-      "educationalLevel": "Kelas IX SMP",
-      "inLanguage": "id"
-    }
-    // ============ FLOATING HOME BUTTON — LINK PERMANEN DI HTML ============
-const HOME_LINK_KEY = 'floatingHomeLink_pribadi9_topik1';
-
-function loadHomeLink() {
-  const btn = document.getElementById('floatingHomeBtn');
-  const input = document.getElementById('homeLinkInput');
-  const currentDisplay = document.getElementById('currentLinkDisplay');
-  const currentText = document.getElementById('currentLinkText');
-  const defaultText = document.getElementById('defaultLinkText');
-  
-  if (!btn) return;
-  
-  // Ambil link default permanen dari HTML
-  const defaultLink = btn.getAttribute('data-default-link') || '';
-  if (defaultText) defaultText.textContent = defaultLink || '(belum diatur di HTML)';
-  
-  // Cek apakah ada override di localStorage
-  const overrideLink = localStorage.getItem(HOME_LINK_KEY);
-  
-  if (overrideLink) {
-    btn.dataset.activeLink = overrideLink;
-    if (input) input.value = overrideLink;
-    if (currentDisplay && currentText) {
-      currentText.textContent = overrideLink;
-      currentDisplay.style.display = 'block';
-    }
-  } else {
-    btn.dataset.activeLink = defaultLink;
-    if (input) input.value = defaultLink;
-    if (currentDisplay) currentDisplay.style.display = 'none';
-  }
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "Ketahanan Mental (Resilience) Remaja",
+  "description": "Materi BK Kelas IX - Ketahanan Mental (Resilience) Remaja dengan penyematan file Google Drive.",
+  "provider": {
+    "@type": "Organization",
+    "name": "SMPN 56 Jakarta",
+    "sameAs": ""
+  },
+  "educationalLevel": "Kelas IX SMP",
+  "inLanguage": "id"
 }
-
-function saveHomeLink() {
-  const input = document.getElementById('homeLinkInput');
-  const url = input.value.trim();
-  const btn = document.getElementById('floatingHomeBtn');
-  const defaultLink = btn.getAttribute('data-default-link') || '';
-  
-  if (!url) {
-    showToast('Silakan masukkan URL terlebih dahulu!', 'warning');
-    return;
-  }
-  
-  // Jika URL sama dengan default, cukup reset
-  if (url === defaultLink) {
-    resetHomeLink();
-    return;
-  }
-  
-  // Validasi format URL
-  if (!/^https?:\/\/.+/i.test(url) && !url.startsWith('/') && !url.startsWith('#')) {
-    showToast('Format URL tidak valid. Gunakan http:// atau https://', 'error');
-    return;
-  }
-  
-  localStorage.setItem(HOME_LINK_KEY, url);
-  btn.dataset.activeLink = url;
-  
-  const currentDisplay = document.getElementById('currentLinkDisplay');
-  const currentText = document.getElementById('currentLinkText');
-  if (currentDisplay && currentText) {
-    currentText.textContent = url;
-    currentDisplay.style.display = 'block';
-  }
-  
-  showToast('Link override berhasil disimpan!', 'success');
-  toggleHomePanel(null, true);
-}
-
-function resetHomeLink() {
-  localStorage.removeItem(HOME_LINK_KEY);
-  const btn = document.getElementById('floatingHomeBtn');
-  const input = document.getElementById('homeLinkInput');
-  const currentDisplay = document.getElementById('currentLinkDisplay');
-  const defaultLink = btn.getAttribute('data-default-link') || '';
-  
-  if (input) input.value = defaultLink;
-  if (btn) btn.dataset.activeLink = defaultLink;
-  if (currentDisplay) currentDisplay.style.display = 'none';
-  
-  showToast('Link dikembalikan ke default (permanen di HTML).', 'success');
-  toggleHomePanel(null, true);
-}
-
-function toggleHomePanel(event, forceClose = false) {
-  if (event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-  const panel = document.getElementById('floatingHomePanel');
-  if (!panel) return;
-  if (forceClose) {
-    panel.classList.remove('show');
-    return;
-  }
-  panel.classList.toggle('show');
-}
-
-function navigateHome(event) {
-  // Jika klik di tombol settings, jangan navigasi
-  if (event && event.target.closest('.settings-btn')) return;
-  if (event) event.preventDefault();
-  
-  const btn = document.getElementById('floatingHomeBtn');
-  const activeLink = btn ? btn.dataset.activeLink : '';
-  const defaultLink = btn ? btn.getAttribute('data-default-link') : '';
-  const finalLink = activeLink || defaultLink;
-  
-  if (!finalLink) {
-    showToast('Link belum diatur. Edit data-default-link di HTML.', 'warning');
-    toggleHomePanel(null);
-    return;
-  }
-  
-  window.location.href = finalLink;
-}
-
-// Tutup panel saat klik di luar area floating button
-document.addEventListener('click', function(e) {
-  const wrapper = document.getElementById('floatingHomeWrapper');
-  const panel = document.getElementById('floatingHomePanel');
-  if (wrapper && panel && panel.classList.contains('show')) {
-    if (!wrapper.contains(e.target)) {
-      panel.classList.remove('show');
-    }
-  }
-});
-
-// Load link saat halaman dimuat
-loadHomeLink();
-    </script>
-
+</script>
     <style>
         :root {
             --primary: #1E40AF;
@@ -1001,6 +868,22 @@ loadHomeLink();
     padding: 12px;
   }
 }
+/* FIX: anchor di dalam pill tombol melayang */
+.floating-home-btn .home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--white);
+  text-decoration: none;
+  line-height: 1;
+}
+.floating-home-btn .settings-btn { flex: 0 0 auto; }
+
+/* Agar toast tidak menutupi tombol melayang */
+.toast { bottom: 88px; }
+@media (max-width: 768px) {
+  .toast { bottom: 78px; left: 20px; right: 20px; }
+}
     </style>
 </head>
 <body>
@@ -1366,40 +1249,43 @@ loadHomeLink();
             if (emptyState) emptyState.remove();
         };
     </script>
-<!-- ============ FLOATING HOME BUTTON (UNIVERSAL) ============ -->
+<!-- ============ FLOATING HOME BUTTON (FIXED) ============ -->
 <div class="floating-home-wrapper" id="floatingHomeWrapper">
-  <div class="floating-home-panel" id="floatingHomePanel">
+
+  <div class="floating-home-panel" id="floatingHomePanel" role="dialog" aria-label="Pengaturan tombol kembali">
     <h4>🔗 Pengaturan Tombol Kembali</h4>
-    <p>Anda dapat mengubah link tujuan sementara untuk browser ini, atau kembalikan ke link default yang tersemat permanen di HTML.</p>
-    
-    <div class="link-info default" id="defaultLinkDisplay">
+    <p>Ubah link tujuan untuk browser ini, atau kembalikan ke link default yang permanen di HTML.</p>
+
+    <div class="link-info default">
       <strong>🔒 Link Default (Permanen di HTML)</strong>
       <span id="defaultLinkText">—</span>
     </div>
-    
+
     <div class="link-info" id="currentLinkDisplay" style="display:none;">
       <strong>🔗 Link Aktif Saat Ini (Override)</strong>
       <span id="currentLinkText">—</span>
     </div>
-    
-    <input type="text" id="homeLinkInput" placeholder="Tempel link baru untuk override...">
-    
+
+    <input type="text" id="homeLinkInput" placeholder="Tempel link baru untuk override..."
+           autocomplete="off" spellcheck="false">
+
     <div class="panel-actions">
-      <button class="btn-save" onclick="saveHomeLink()">💾 Simpan Override</button>
-      <button class="btn-reset-link" onclick="resetHomeLink()">🔄 Reset ke Default</button>
+      <button type="button" class="btn-save" id="homeSaveBtn">💾 Simpan Override</button>
+      <button type="button" class="btn-reset-link" id="homeResetBtn">🔄 Reset ke Default</button>
     </div>
   </div>
-  
-  <!-- ⬇️ GANTI URL DI data-default-link DENGAN LINK HALAMAN UTAMA ANDA ⬇️ -->
-  <a href="#" 
-     class="floating-home-btn" 
-     id="floatingHomeBtn" 
-     data-default-link="https://appseet11-cmd.github.io/New-BK56/"onclick="navigateHome(event)" 
-     title="Back">
-    <span class="icon-home">🏠</span>
-    <span>Back</span>
-    <button class="settings-btn" onclick="toggleHomePanel(event)" title="Atur link tujuan">⚙</button>
-  </a>
+
+  <!-- PENTING: anchor dan button SEJAJAR, bukan button di dalam anchor -->
+  <div class="floating-home-btn" id="floatingHomeBtn"
+       data-default-link="https://appseet11-cmd.github.io/New-BK56/sembilan/sembilan.html">
+    <a href="#" class="home-link" id="homeLinkAnchor" title="Kembali ke halaman utama">
+      <span class="icon-home">🏠</span>
+      <span>Back</span>
+    </a>
+    <button type="button" class="settings-btn" id="homeSettingsBtn"
+            aria-label="Atur link tujuan" aria-expanded="false" aria-controls="floatingHomePanel">⚙</button>
+  </div>
+
 </div>
 <!-- ============ PATCH FINAL: PERMANENT EMBED DENGAN MUTATION OBSERVER ============ -->
 <script>
@@ -1777,5 +1663,127 @@ loadHomeLink();
 })();
 </script>
 <!-- ============ END PATCH UNIVERSAL v4 ============ -->
+ <!-- ============ FLOATING HOME BUTTON — SCRIPT VALID ============ -->
+<script>
+(function () {
+  'use strict';
+
+  const HOME_LINK_KEY = 'floatingHomeLink_pribadi9_topik2';
+
+  const wrapper    = document.getElementById('floatingHomeWrapper');
+  const holder     = document.getElementById('floatingHomeBtn');
+  const anchor     = document.getElementById('homeLinkAnchor');
+  const settings   = document.getElementById('homeSettingsBtn');
+  const panel      = document.getElementById('floatingHomePanel');
+  const input      = document.getElementById('homeLinkInput');
+  const saveBtn    = document.getElementById('homeSaveBtn');
+  const resetBtn   = document.getElementById('homeResetBtn');
+  const defaultTxt = document.getElementById('defaultLinkText');
+  const curDisplay = document.getElementById('currentLinkDisplay');
+  const curTxt     = document.getElementById('currentLinkText');
+
+  if (!wrapper || !holder || !anchor || !panel) return;
+
+  const defaultLink = (holder.getAttribute('data-default-link') || '').trim();
+
+  function notify(msg, type) {
+    if (typeof window.showToast === 'function') window.showToast(msg, type || 'success');
+  }
+
+  function setPanel(open) {
+    panel.classList.toggle('show', open);
+    settings.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  function applyLink(link, isOverride) {
+    holder.dataset.activeLink = link;
+    anchor.href = link || '#';
+    if (input) input.value = link;
+
+    if (defaultTxt) defaultTxt.textContent = defaultLink || '(belum diatur di HTML)';
+
+    if (curDisplay && curTxt) {
+      curTxt.textContent = link || '—';
+      curDisplay.style.display = isOverride ? 'block' : 'none';
+    }
+  }
+
+  function loadHomeLink() {
+    let override = null;
+    try { override = localStorage.getItem(HOME_LINK_KEY); } catch (e) {}
+    applyLink(override || defaultLink, !!override);
+  }
+
+  function validUrl(url) {
+    return /^https?:\/\/[^\s]+$/i.test(url) || url.startsWith('/') || url.startsWith('#');
+  }
+
+  function saveLink() {
+    const url = (input.value || '').trim();
+
+    if (!url) { notify('Silakan masukkan URL terlebih dahulu!', 'warning'); input.focus(); return; }
+    if (!validUrl(url)) {
+      notify('Format URL tidak valid. Gunakan http:// atau https://', 'error');
+      input.focus(); return;
+    }
+    if (url === defaultLink) { resetLink(); return; }
+
+    try { localStorage.setItem(HOME_LINK_KEY, url); } catch (e) {}
+    applyLink(url, true);
+    notify('Link override berhasil disimpan!', 'success');
+    setPanel(false);
+  }
+
+  function resetLink() {
+    try { localStorage.removeItem(HOME_LINK_KEY); } catch (e) {}
+    applyLink(defaultLink, false);
+    notify('Link dikembalikan ke default (permanen di HTML).', 'success');
+    setPanel(false);
+  }
+
+  // Navigasi HANYA dari anchor, tidak terpengaruh tombol settings
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const link = (anchor.getAttribute('href') || '').trim();
+
+    if (!link || link === '#') {
+      notify('Link belum diatur. Edit data-default-link di HTML.', 'warning');
+      setPanel(true);
+      return;
+    }
+    window.location.assign(link);
+  });
+
+  settings.addEventListener('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const open = !panel.classList.contains('show');
+    setPanel(open);
+    if (open && input) input.focus();
+  });
+
+  if (saveBtn)  saveBtn.addEventListener('click', saveLink);
+  if (resetBtn) resetBtn.addEventListener('click', resetLink);
+
+  if (input) {
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); saveLink(); }
+    });
+  }
+
+  // Klik di luar panel -> tutup
+  document.addEventListener('click', function (e) {
+    if (panel.classList.contains('show') && !wrapper.contains(e.target)) setPanel(false);
+  });
+
+  // Tombol Escape -> tutup
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') setPanel(false);
+  });
+
+  // INISIALISASI SETELAH ELEMEN ADA (bukan di head)
+  loadHomeLink();
+})();
+</script>
 </body>
 </html>
