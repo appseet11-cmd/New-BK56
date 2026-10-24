@@ -689,7 +689,7 @@
             .toast { left: 20px; right: 20px; bottom: 20px; }
             .back-top { left: 20px; bottom: 20px; }
         }
-    /* ============ FLOATING HOME BUTTON (UNIVERSAL) ============ */
+        /* ============ FLOATING HOME BUTTON (UNIVERSAL) ============ */
 .floating-home-wrapper {
   position: fixed;
   right: 30px;
@@ -747,7 +747,7 @@
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.22);
-  width: 340px;
+  width: 360px;
   max-width: calc(100vw - 40px);
   display: none;
   animation: slideUpPanel 0.3s ease;
@@ -788,20 +788,35 @@
   border-color: var(--pribadi);
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
-.floating-home-panel .current-link {
+.floating-home-panel .link-info {
   background: var(--pribadi-light);
   color: var(--pribadi-dark);
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 0.75rem;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.78rem;
   margin-bottom: 12px;
   word-break: break-all;
-  border-left: 3px solid var(--pribadi);
+  border-left: 4px solid var(--pribadi);
+  line-height: 1.5;
 }
-.floating-home-panel .panel-actions { display: flex; gap: 8px; }
+.floating-home-panel .link-info strong {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  opacity: 0.8;
+}
+.floating-home-panel .link-info.default {
+  background: #FEF3C7;
+  color: #92400E;
+  border-left-color: var(--accent);
+}
+.floating-home-panel .panel-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .floating-home-panel .btn-save,
-.floating-home-panel .btn-clear-link {
+.floating-home-panel .btn-reset-link {
   flex: 1;
+  min-width: 120px;
   padding: 10px 14px;
   border: none;
   border-radius: 10px;
@@ -824,18 +839,18 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
 }
-.floating-home-panel .btn-clear-link {
-  background: #FEE2E2;
-  color: var(--pdf);
+.floating-home-panel .btn-reset-link {
+  background: #FEF3C7;
+  color: #92400E;
 }
-.floating-home-panel .btn-clear-link:hover {
-  background: var(--pdf);
+.floating-home-panel .btn-reset-link:hover {
+  background: var(--accent);
   color: var(--white);
 }
 @media (max-width: 768px) {
   .floating-home-wrapper {
     right: 20px;
-    bottom: 95px; /* Di atas tombol back-top */
+    bottom: 95px;
   }
   .floating-home-btn {
     padding: 12px 18px;
@@ -1207,62 +1222,89 @@
             const emptyState = container.querySelector('.empty-state');
             if (emptyState) emptyState.remove();
         };
-        // ============ FLOATING HOME BUTTON — UNIVERSAL ============
+        // ============ FLOATING HOME BUTTON — LINK PERMANEN DI HTML ============
 const HOME_LINK_KEY = 'floatingHomeLink_pribadi9_topik1';
 
 function loadHomeLink() {
-  const saved = localStorage.getItem(HOME_LINK_KEY);
   const btn = document.getElementById('floatingHomeBtn');
   const input = document.getElementById('homeLinkInput');
-  const display = document.getElementById('currentLinkDisplay');
-  const displayText = document.getElementById('currentLinkText');
-  if (saved) {
-    btn.dataset.link = saved;
-    if (input) input.value = saved;
-    if (display && displayText) {
-      displayText.textContent = saved;
-      display.style.display = 'block';
+  const currentDisplay = document.getElementById('currentLinkDisplay');
+  const currentText = document.getElementById('currentLinkText');
+  const defaultText = document.getElementById('defaultLinkText');
+  
+  if (!btn) return;
+  
+  // Ambil link default permanen dari HTML
+  const defaultLink = btn.getAttribute('data-default-link') || '';
+  if (defaultText) defaultText.textContent = defaultLink || '(belum diatur di HTML)';
+  
+  // Cek apakah ada override di localStorage
+  const overrideLink = localStorage.getItem(HOME_LINK_KEY);
+  
+  if (overrideLink) {
+    btn.dataset.activeLink = overrideLink;
+    if (input) input.value = overrideLink;
+    if (currentDisplay && currentText) {
+      currentText.textContent = overrideLink;
+      currentDisplay.style.display = 'block';
     }
   } else {
-    btn.dataset.link = '';
-    if (display) display.style.display = 'none';
+    btn.dataset.activeLink = defaultLink;
+    if (input) input.value = defaultLink;
+    if (currentDisplay) currentDisplay.style.display = 'none';
   }
 }
 
 function saveHomeLink() {
   const input = document.getElementById('homeLinkInput');
   const url = input.value.trim();
+  const btn = document.getElementById('floatingHomeBtn');
+  const defaultLink = btn.getAttribute('data-default-link') || '';
+  
   if (!url) {
     showToast('Silakan masukkan URL terlebih dahulu!', 'warning');
     return;
   }
+  
+  // Jika URL sama dengan default, cukup reset
+  if (url === defaultLink) {
+    resetHomeLink();
+    return;
+  }
+  
   // Validasi format URL
   if (!/^https?:\/\/.+/i.test(url) && !url.startsWith('/') && !url.startsWith('#')) {
     showToast('Format URL tidak valid. Gunakan http:// atau https://', 'error');
     return;
   }
+  
   localStorage.setItem(HOME_LINK_KEY, url);
-  const btn = document.getElementById('floatingHomeBtn');
-  btn.dataset.link = url;
-  const display = document.getElementById('currentLinkDisplay');
-  const displayText = document.getElementById('currentLinkText');
-  if (display && displayText) {
-    displayText.textContent = url;
-    display.style.display = 'block';
+  btn.dataset.activeLink = url;
+  
+  const currentDisplay = document.getElementById('currentLinkDisplay');
+  const currentText = document.getElementById('currentLinkText');
+  if (currentDisplay && currentText) {
+    currentText.textContent = url;
+    currentDisplay.style.display = 'block';
   }
-  showToast('Link halaman utama berhasil disimpan!', 'success');
+  
+  showToast('Link override berhasil disimpan!', 'success');
   toggleHomePanel(null, true);
 }
 
-function clearHomeLink() {
+function resetHomeLink() {
   localStorage.removeItem(HOME_LINK_KEY);
-  const input = document.getElementById('homeLinkInput');
   const btn = document.getElementById('floatingHomeBtn');
-  const display = document.getElementById('currentLinkDisplay');
-  if (input) input.value = '';
-  if (btn) btn.dataset.link = '';
-  if (display) display.style.display = 'none';
-  showToast('Link halaman utama telah dihapus.', 'warning');
+  const input = document.getElementById('homeLinkInput');
+  const currentDisplay = document.getElementById('currentLinkDisplay');
+  const defaultLink = btn.getAttribute('data-default-link') || '';
+  
+  if (input) input.value = defaultLink;
+  if (btn) btn.dataset.activeLink = defaultLink;
+  if (currentDisplay) currentDisplay.style.display = 'none';
+  
+  showToast('Link dikembalikan ke default (permanen di HTML).', 'success');
+  toggleHomePanel(null, true);
 }
 
 function toggleHomePanel(event, forceClose = false) {
@@ -1283,14 +1325,19 @@ function navigateHome(event) {
   // Jika klik di tombol settings, jangan navigasi
   if (event && event.target.closest('.settings-btn')) return;
   if (event) event.preventDefault();
+  
   const btn = document.getElementById('floatingHomeBtn');
-  const link = btn ? btn.dataset.link : '';
-  if (!link) {
-    showToast('Link belum diatur. Klik ikon ⚙ untuk menyematkan link.', 'warning');
+  const activeLink = btn ? btn.dataset.activeLink : '';
+  const defaultLink = btn ? btn.getAttribute('data-default-link') : '';
+  const finalLink = activeLink || defaultLink;
+  
+  if (!finalLink) {
+    showToast('Link belum diatur. Edit data-default-link di HTML.', 'warning');
     toggleHomePanel(null);
     return;
   }
-  window.location.href = link;
+  
+  window.location.href = finalLink;
 }
 
 // Tutup panel saat klik di luar area floating button
@@ -1304,24 +1351,40 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Load link tersimpan saat halaman dimuat
+// Load link saat halaman dimuat
 loadHomeLink();
     </script>
 <!-- ============ FLOATING HOME BUTTON (UNIVERSAL) ============ -->
 <div class="floating-home-wrapper" id="floatingHomeWrapper">
   <div class="floating-home-panel" id="floatingHomePanel">
-    <h4>🔗 Sematkan Link Halaman Utama</h4>
-    <p>Tempelkan URL tujuan tombol ini. Link akan tersimpan otomatis di browser Anda (localStorage) dan dapat digunakan di halaman lain selama domain sama.</p>
-    <div class="current-link" id="currentLinkDisplay" style="display:none;">
-      <strong>Link aktif:</strong> <span id="currentLinkText"></span>
+    <h4>🔗 Pengaturan Tombol Kembali</h4>
+    <p>Anda dapat mengubah link tujuan sementara untuk browser ini, atau kembalikan ke link default yang tersemat permanen di HTML.</p>
+    
+    <div class="link-info default" id="defaultLinkDisplay">
+      <strong>🔒 Link Default (Permanen di HTML)</strong>
+      <span id="defaultLinkText">—</span>
     </div>
-    <input type="text" id="homeLinkInput" placeholder="https://appseet11-cmd.github.io/New-BK56/sembilan/sembilan.html">
+    
+    <div class="link-info" id="currentLinkDisplay" style="display:none;">
+      <strong>🔗 Link Aktif Saat Ini (Override)</strong>
+      <span id="currentLinkText">—</span>
+    </div>
+    
+    <input type="text" id="homeLinkInput" placeholder="Tempel link baru untuk override...">
+    
     <div class="panel-actions">
-      <button class="btn-save" onclick="saveHomeLink()">💾 Simpan</button>
-      <button class="btn-clear-link" onclick="clearHomeLink()">🗑 Hapus</button>
+      <button class="btn-save" onclick="saveHomeLink()">💾 Simpan Override</button>
+      <button class="btn-reset-link" onclick="resetHomeLink()">🔄 Reset ke Default</button>
     </div>
   </div>
-  <a href="#" class="floating-home-btn" id="floatingHomeBtn" onclick="navigateHome(event)" title="Back">
+  
+  <!-- ⬇️ GANTI URL DI data-default-link DENGAN LINK HALAMAN UTAMA ANDA ⬇️ -->
+  <a href="#" 
+     class="floating-home-btn" 
+     id="floatingHomeBtn" 
+     data-default-link="https://appseet11-cmd.github.io/New-BK56/sembilan/sembilan.html"
+    onclick="navigateHome(event)" 
+     title="Back">
     <span class="icon-home">🏠</span>
     <span>Back</span>
     <button class="settings-btn" onclick="toggleHomePanel(event)" title="Atur link tujuan">⚙</button>
