@@ -593,13 +593,26 @@ text-align: center;
 .bidang-header h3 { font-size: 1.2rem; margin-top: 8px; }
 .bidang-header .icon { font-size: 2.2rem; }
 .bidang-body { padding: 22px; }
-.bidang-body ul { list-style: none; }
+
+/* =========================================================
+⭐ TOMBOL LAYANAN — ELEGANT & NATURAL (MIRIP LIST AWAL)
+- Tampilan seperti bullet list biasa
+- Tetap aktif sebagai link (klikable)
+- Hover: warna berubah lembut + panah muncul halus
+- Tidak kaku, transisi smooth
+========================================================= */
+.bidang-body ul {
+list-style: none;
+display: flex;
+flex-direction: column;
+}
 .bidang-body ul li {
-padding: 7px 0 7px 15px;
+padding: 10px 0 10px 15px;
 border-bottom: 1px solid #eee;
 font-size: 0.88rem;
 color: #555;
 position: relative;
+transition: border-color 0.3s ease;
 }
 .bidang-body ul li::before {
 content: '•';
@@ -607,8 +620,62 @@ position: absolute;
 left: 0;
 color: var(--secondary);
 font-weight: bold;
+transition: color 0.3s ease, transform 0.3s ease;
 }
 .bidang-body ul li:last-child { border-bottom: none; }
+
+/* Hover pada li: bullet berubah warna aksen */
+.bidang-body ul li:hover::before {
+color: var(--accent);
+transform: scale(1.3);
+}
+.bidang-body ul li:hover {
+border-bottom-color: transparent;
+}
+
+/* Link tombol — tampil natural seperti teks biasa */
+.bidang-body ul li a.layanan-btn {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 10px;
+width: 100%;
+color: #555;
+text-decoration: none;
+font-size: 0.88rem;
+font-weight: 400;
+line-height: 1.5;
+cursor: pointer;
+transition: color 0.3s ease;
+}
+
+/* Panah di kanan — awalnya transparan */
+.bidang-body ul li a.layanan-btn::after {
+content: '→';
+font-size: 0.9rem;
+color: var(--secondary);
+opacity: 0;
+transform: translateX(-6px);
+transition: opacity 0.3s ease, transform 0.3s ease;
+flex-shrink: 0;
+}
+
+/* Hover pada link: warna berubah + panah muncul */
+.bidang-body ul li a.layanan-btn:hover {
+color: var(--secondary);
+}
+.bidang-body ul li a.layanan-btn:hover::after {
+opacity: 1;
+transform: translateX(0);
+}
+
+/* Focus state untuk accessibility */
+.bidang-body ul li a.layanan-btn:focus-visible {
+outline: 2px dashed var(--accent);
+outline-offset: 3px;
+border-radius: 4px;
+}
+
 /* === TABLE === */
 .table-container {
 background: var(--white);
@@ -848,6 +915,10 @@ font-size: 0.8rem;
 width: 500px;
 height: 500px;
 }
+/* ⭐ Tombol layanan di mobile: font sedikit lebih kecil */
+.bidang-body ul li a.layanan-btn {
+font-size: 0.84rem;
+}
 }
 /* === ACCESSIBILITY === */
 a:focus-visible, button:focus-visible, input:focus-visible,
@@ -855,13 +926,12 @@ select:focus-visible, textarea:focus-visible, summary:focus-visible {
 outline: 3px solid var(--accent);
 outline-offset: 2px;
 }
-
 /* =========================================================
-   ⭐ POSISI LOGO BK56 — DENGAN PENGATURAN JARAK SPASI
-   - Logo di ATAS judul, posisi CENTER
-   - Jarak logo ke tepi atas (hero) = 2 spasi (20px)
-   - Jarak logo ke judul tulisan = 1 spasi (8px)
-   ========================================================= */
+⭐ POSISI LOGO BK56 — DENGAN PENGATURAN JARAK SPASI
+- Logo di ATAS judul, posisi CENTER
+- Jarak logo ke tepi atas (hero) = 2 spasi (20px)
+- Jarak logo ke judul tulisan = 1 spasi (8px)
+========================================================= */
 #hero-title {
 display: flex;
 flex-direction: column;   /* Susun logo di atas, teks di bawah */
@@ -872,7 +942,6 @@ line-height: 1.3;
 margin-bottom: 16px;
 margin-top: 0;
 }
-
 /* Logo BK56 — blok di atas judul & di-center dengan jarak spasi */
 #hero-title::before {
 content: '';
@@ -889,7 +958,6 @@ background-size: contain;
 background-repeat: no-repeat;
 background-position: center;
 }
-
 .hero-description {
 margin-top: 0;
 line-height: 1.6;
@@ -1096,13 +1164,17 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </article>
 </div>
 </article>
-<!-- Bidang Layanan -->
+<!-- ================================================================
+⭐ BIDANG LAYANAN — TOMBOL ELEGANT MIRIP LIST AWAL
+================================================================= -->
 <section class="section" id="bidang-layanan" aria-labelledby="bidang-title">
 <header class="section-title">
 <h2 id="bidang-title">4 Bidang Layanan BK</h2>
 <p>Sesuai panduan operasional BK Kemendikbudristek</p>
 </header>
 <div class="bidang-grid">
+
+<!-- ====== BIDANG PRIBADI ====== -->
 <article class="bidang-card">
 <header class="bidang-header pribadi">
 <div class="icon" aria-hidden="true">🧠</div>
@@ -1110,15 +1182,17 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </header>
 <div class="bidang-body">
 <ul>
-<li>Pengenalan & penerimaan diri</li>
-<li>Pengembangan sikap & kebiasaan baik</li>
-<li>Kesadaran & tanggung jawab</li>
-<li>Kemampuan mengambil keputusan</li>
-<li>Kematangan emosi & spiritual</li>
-<li>Pola hidup sehat</li>
+<li><a class="layanan-btn" href="pribadi/pengenalan-penerimaan-diri.html" target="_self">Pengenalan &amp; penerimaan diri</a></li>
+<li><a class="layanan-btn" href="pribadi/pengembangan-sikap-kebiasaan.html" target="_self">Pengembangan sikap &amp; kebiasaan baik</a></li>
+<li><a class="layanan-btn" href="pribadi/kesadaran-tanggung-jawab.html" target="_self">Kesadaran &amp; tanggung jawab</a></li>
+<li><a class="layanan-btn" href="pribadi/kemampuan-ambil-keputusan.html" target="_self">Kemampuan mengambil keputusan</a></li>
+<li><a class="layanan-btn" href="pribadi/kematangan-emosi-spiritual.html" target="_self">Kematangan emosi &amp; spiritual</a></li>
+<li><a class="layanan-btn" href="pribadi/pola-hidup-sehat.html" target="_self">Pola hidup sehat</a></li>
 </ul>
 </div>
 </article>
+
+<!-- ====== BIDANG SOSIAL ====== -->
 <article class="bidang-card">
 <header class="bidang-header sosial">
 <div class="icon" aria-hidden="true">🤝</div>
@@ -1126,15 +1200,17 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </header>
 <div class="bidang-body">
 <ul>
-<li>Komunikasi efektif</li>
-<li>Hubungan sosial yang sehat</li>
-<li>Empati & toleransi</li>
-<li>Kerjasama & gotong royong</li>
-<li>Menghargai perbedaan</li>
-<li>Penyelesaian konflik</li>
+<li><a class="layanan-btn" href="sosial/komunikasi-efektif.html" target="_self">Komunikasi efektif</a></li>
+<li><a class="layanan-btn" href="sosial/hubungan-sosial-sehat.html" target="_self">Hubungan sosial yang sehat</a></li>
+<li><a class="layanan-btn" href="sosial/empati-toleransi.html" target="_self">Empati &amp; toleransi</a></li>
+<li><a class="layanan-btn" href="sosial/kerjasama-gotong-royong.html" target="_self">Kerjasama &amp; gotong royong</a></li>
+<li><a class="layanan-btn" href="sosial/menghargai-perbedaan.html" target="_self">Menghargai perbedaan</a></li>
+<li><a class="layanan-btn" href="sosial/penyelesaian-konflik.html" target="_self">Penyelesaian konflik</a></li>
 </ul>
 </div>
 </article>
+
+<!-- ====== BIDANG BELAJAR ====== -->
 <article class="bidang-card">
 <header class="bidang-header belajar">
 <div class="icon" aria-hidden="true">📚</div>
@@ -1142,15 +1218,17 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </header>
 <div class="bidang-body">
 <ul>
-<li>Motivasi belajar</li>
-<li>Keterampilan & strategi belajar</li>
-<li>Sikap positif terhadap belajar</li>
-<li>Literasi & numerasi</li>
-<li>Pengelolaan waktu</li>
-<li>Minat & kegemaran belajar</li>
+<li><a class="layanan-btn" href="belajar/motivasi-belajar.html" target="_self">Motivasi belajar</a></li>
+<li><a class="layanan-btn" href="belajar/keterampilan-strategi-belajar.html" target="_self">Keterampilan &amp; strategi belajar</a></li>
+<li><a class="layanan-btn" href="belajar/sikap-positif-belajar.html" target="_self">Sikap positif terhadap belajar</a></li>
+<li><a class="layanan-btn" href="belajar/literasi-numerasi.html" target="_self">Literasi &amp; numerasi</a></li>
+<li><a class="layanan-btn" href="belajar/pengelolaan-waktu.html" target="_self">Pengelolaan waktu</a></li>
+<li><a class="layanan-btn" href="belajar/minat-kegemaran-belajar.html" target="_self">Minat &amp; kegemaran belajar</a></li>
 </ul>
 </div>
 </article>
+
+<!-- ====== BIDANG KARIR ====== -->
 <article class="bidang-card">
 <header class="bidang-header karir">
 <div class="icon" aria-hidden="true">💼</div>
@@ -1158,15 +1236,16 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </header>
 <div class="bidang-body">
 <ul>
-<li>Pengenalan dunia kerja</li>
-<li>Minat & bakat karir</li>
-<li>Perencanaan karir masa depan</li>
-<li>Pendidikan lanjutan (SMA/SMK/MA)</li>
-<li>Sikap positif terhadap kerja</li>
-<li>Pengambilan keputusan karir</li>
+<li><a class="layanan-btn" href="karir/pengenalan-dunia-kerja.html" target="_self">Pengenalan dunia kerja</a></li>
+<li><a class="layanan-btn" href="karir/minat-bakat-karir.html" target="_self">Minat &amp; bakat karir</a></li>
+<li><a class="layanan-btn" href="karir/perencanaan-karir-masa-depan.html" target="_self">Perencanaan karir masa depan</a></li>
+<li><a class="layanan-btn" href="karir/pendidikan-lanjutan.html" target="_self">Pendidikan lanjutan (SMA/SMK/MA)</a></li>
+<li><a class="layanan-btn" href="karir/sikap-positif-kerja.html" target="_self">Sikap positif terhadap kerja</a></li>
+<li><a class="layanan-btn" href="karir/pengambilan-keputusan-karir.html" target="_self">Pengambilan keputusan karir</a></li>
 </ul>
 </div>
 </article>
+
 </div>
 </section>
 <!-- Jenis Layanan -->
