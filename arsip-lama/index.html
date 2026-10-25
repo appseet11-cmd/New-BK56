@@ -1504,11 +1504,74 @@ aria-label="Buka Suara Aspirasi & Aduan Siswa">
 <span class="feature-link">Suarakan Sekarang →</span>
 </article>
 </section>
+<!-- ========== PATCH: TOMBOL WEBSITE SMPN 56 - START ========== -->
+<style>
+.breadcrumb {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+}
+.breadcrumb-left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.breadcrumb-web-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #0b1e54 0%, #1a369c 100%);
+  color: #fff !important;
+  border: none;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 12px rgba(11,30,84,0.25);
+  white-space: nowrap;
+}
+.breadcrumb-web-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(11,30,84,0.4);
+  filter: brightness(1.15);
+}
+.breadcrumb-web-btn .web-icon {
+  font-size: 15px;
+}
+@media (max-width: 768px) {
+  .breadcrumb {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .breadcrumb-left {
+    justify-content: center;
+  }
+  .breadcrumb-web-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}
+</style>
 <nav class="breadcrumb" aria-label="Breadcrumb" id="breadcrumb">
-<a href="#" onclick="go('home'); return false;">🏠 Beranda</a>
-<span>›</span>
-<span class="current" id="breadcrumb-current">Platform BK Digital</span>
+  <div class="breadcrumb-left">
+    <a href="#" onclick="go('home'); return false;">🏠 Beranda</a>
+    <span>›</span>
+    <span class="current" id="breadcrumb-current">Platform BK Digital</span>
+  </div>
+  <a href=" https://appseet11-cmd.github.io/New-BK56/" target="_blank" rel="noopener noreferrer" class="breadcrumb-web-btn" aria-label="Buka Website Resmi SMPN 56 Jakarta">
+    <span class="web-icon">🌐</span>
+    Website BK SMPN 56 Jakarta
+  </a>
 </nav>
+<!-- ========== PATCH: TOMBOL WEBSITE SMPN 56 - END ========== -->
 <nav class="navbar" role="navigation" aria-label="Menu Utama">
 <button class="hamburger" onclick="toggleMobile()" aria-label="Buka menu navigasi" aria-expanded="false">☰ Menu</button>
 <div class="nav-wrap" id="navWrap">
