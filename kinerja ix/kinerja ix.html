@@ -21,6 +21,9 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(1
 .btn-secondary{background:#5f6368}.btn-warning{background:#f9ab00;color:#222}.btn-info{background:#00897b}
 .btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.2)}.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
 .btn-small{padding:6px 12px;font-size:12px}
+/* ===== TOMBOL BERANDA - UNGU ELEKTRIK ===== */
+.btn-beranda{background:#8B00FF}
+.btn-beranda:hover{background:#9D2BFF;box-shadow:0 4px 12px rgba(139,0,255,.4)}
 input[type=password],input[type=text]{padding:10px 14px;border:2px solid #ddd;border-radius:8px;font-size:14px;margin:6px}
 input[type=text]{width:300px;max-width:90%}input:focus{border-color:#1a73e8;outline:none}
 .info-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#e8f0fe;padding:12px 16px;border-radius:8px;margin-bottom:14px}
@@ -54,7 +57,7 @@ tr:hover td{background:#f5f8ff}
 <div class="container">
 <div id="loginScreen" class="card login-box">
 <h2>Silakan Login</h2><p class="muted" style="margin-bottom:16px">Pilih peran Anda untuk mengakses laporan</p>
-<div><button class="btn btn-guru" onclick="showLogin('gurubk')">👨‍🏫 Guru BK</button><button class="btn btn-kepsek" onclick="showLogin('kepsek')">👔 Kepala Sekolah</button></div>
+<div><button class="btn btn-guru" onclick="showLogin('gurubk')">‍🏫 Guru BK</button><button class="btn btn-kepsek" onclick="showLogin('kepsek')">👔 Kepala Sekolah</button></div>
 <div id="passwordBox" class="hidden" style="margin-top:20px">
 <p id="roleLabel" style="font-weight:600;color:#1a73e8;margin-bottom:8px"></p>
 <input type="password" id="passwordInput" placeholder="Masukkan password" onkeypress="if(event.key==='Enter')doLogin()"><br>
@@ -66,6 +69,8 @@ tr:hover td{background:#f5f8ff}
 <div class="info-bar">
 <div>👤 <span class="who" id="roleDisplay"></span><span class="versi" id="versiLabel">v?</span></div>
 <div>
+<!-- ===== TOMBOL BERANDA (UNGUELEKTRIK) ===== -->
+<button class="btn btn-beranda btn-small" onclick="goBeranda()">🏠 Beranda</button>
 <button class="btn btn-info btn-small" onclick="testPing()">🧪 Tes Koneksi</button>
 <button class="btn btn-warning btn-small" onclick="doRekap()">🔄 Rekap Ulang</button>
 <button class="btn btn-info btn-small" onclick="doDiagnosa()">🩺 Diagnosa</button>
@@ -74,7 +79,7 @@ tr:hover td{background:#f5f8ff}
 </div>
 </div>
 <div class="card">
-<h3 style="color:#1a73e8;margin-bottom:14px">🔍 Cari Laporan (NIS / Nama Siswa)</h3>
+<h3 style="color:#1a73e8;margin-bottom:14px"> Cari Laporan (NIS / Nama Siswa)</h3>
 <div class="search-box">
 <input type="text" id="nisInput" placeholder="Ketik NIS atau nama siswa" onkeypress="if(event.key==='Enter')cariNIS()">
 <button class="btn btn-primary" onclick="cariNIS()">🔎 Cari</button>
@@ -90,11 +95,29 @@ ISI URL INI dengan URL /exec dari deploy Apps Script Anda.
 Contoh: https://script.google.com/macros/s/AKfycbxxxx/exec
 ============================================================ */
 var API_URL = 'https://script.google.com/macros/s/AKfycbyioGQJvaDkhsK8JpSwSqhHYlOKtw7HrStqpVoPNrfpajoLNMgJCh3eKnGHCEamFgEtDw/exec';
+
+/* ============================================================
+🏠 URL TUJUAN TOMBOL BERANDA
+Ganti URL di bawah ini dengan link halaman beranda Anda.
+Contoh: 'beranda.html' atau 'https://situsanda.com/beranda'
+============================================================ */
+var BERANDA_URL = 'https://appseet11-cmd.github.io/New-BK56/';
 /* ============================================================ */
+
 var currentRole=null, selectedRole=null;
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
 document.addEventListener('click', function(ev){ var t=ev.target.closest ? ev.target.closest('.clip') : null; if(t){ t.classList.toggle('open'); } });
+
+/* ===== FUNGSI TOMBOL BERANDA ===== */
+function goBeranda(){
+if(!BERANDA_URL || BERANDA_URL.trim()===''){
+alert('⚠️ URL Beranda belum disematkan! Silakan edit variabel BERANDA_URL di script.');
+return;
+}
+window.location.href = BERANDA_URL;
+}
+
 /* ===== JSONP caller (bebas CORS => bisa double-click file ini) ===== */
 function jsonp(action, params, timeout){
 return new Promise(function(resolve,reject){
@@ -123,7 +146,7 @@ b.className='bad'; b.textContent='🔴 '+e.message;
 });
 /* ===== LOGIN ===== */
 function showLogin(role){ selectedRole=role;
-document.getElementById('roleLabel').innerText=(role==='gurubk')?'👨‍🏫 Login Guru BK':'👔 Login Kepala Sekolah';
+document.getElementById('roleLabel').innerText=(role==='gurubk')?'‍🏫 Login Guru BK':' Login Kepala Sekolah';
 document.getElementById('passwordBox').classList.remove('hidden');
 document.getElementById('passwordInput').value=''; document.getElementById('passwordInput').focus();
 document.getElementById('loginAlert').innerHTML='';
@@ -152,7 +175,7 @@ document.getElementById('hasilCari').innerHTML=''; document.getElementById('nisI
 function testPing(){ var h=document.getElementById('hasilCari'),l=document.getElementById('loaderCari');
 l.innerHTML='<div class="loader"></div>Menguji...'; h.innerHTML='';
 jsonp('ping',{},15000).then(function(res){ l.innerHTML='';
-if(!res){ h.innerHTML='<div class="alert alert-warn mono">⚠️ ping kosong.</div>'; return; }
+if(!res){ h.innerHTML='<div class="alert alert-warn mono">️ ping kosong.</div>'; return; }
 h.innerHTML='<div class="alert '+(res.success?'alert-success':'alert-error')+' mono">✅ Backend hidup.<br>versi : '+esc(res.versi)+'<br>waktu : '+esc(res.waktu)+'<br>pesan : '+esc(res.message)+'</div>';
 }).catch(function(e){ l.innerHTML=''; h.innerHTML='<div class="alert alert-error mono">❌ '+esc(e.message)+'</div>'; });
 }
@@ -185,7 +208,7 @@ h.innerHTML='<div class="alert '+(res.success?'alert-success':'alert-error')+' m
 function renderHasil(arr){ if(!arr||arr.length===0)return''; var html='';
 for(var k=0;k<arr.length;k++){ var it=arr[k], rows=it.rows||[], heads=it.headers||[];
 var badge=(it.mode==='contains')?'<span class="badge">match sebagian</span>':'';
-html+='<div class="sheet-block"><div class="sheet-header"><span>📄 '+esc(it.namaSheet)+badge+'</span><span>'+rows.length+' baris</span></div><div class="sheet-body">';
+html+='<div class="sheet-block"><div class="sheet-header"><span> '+esc(it.namaSheet)+badge+'</span><span>'+rows.length+' baris</span></div><div class="sheet-body">';
 if(heads.length===0){ html+='<p class="muted">Sheet kosong.</p>'; }
 else if(rows.length===0){ html+='<p class="muted">Tidak ada baris cocok.</p>'; }
 else { html+='<table><thead><tr>'; for(var c=0;c<heads.length;c++)html+='<th>'+esc(heads[c])+'</th>'; html+='</tr></thead><tbody>';
@@ -208,7 +231,7 @@ l.innerHTML='<div class="loader"></div>Mencari...'; h.innerHTML='';
 jsonp('cari',{nis:v},30000).then(function(res){ l.innerHTML='';
 if(!res){ h.innerHTML='<div class="alert alert-error">Backend kosong.</div>'; return; }
 if(!res.success){ h.innerHTML='<div class="alert alert-error">'+esc(res.message)+'</div>'; return; }
-if(!res.found){ h.innerHTML='<div class="alert alert-info">ℹ️ '+esc(res.message)+'</div>'; return; }
+if(!res.found){ h.innerHTML='<div class="alert alert-info">️ '+esc(res.message)+'</div>'; return; }
 h.innerHTML='<div class="alert alert-success">✅ Ditemukan untuk "<b>'+esc(res.nis)+'</b>" di '+res.data.length+' laporan:</div>'+renderHasil(res.data);
 }).catch(function(e){ l.innerHTML=''; h.innerHTML='<div class="alert alert-error mono">❌ '+esc(e.message)+'</div>'; });
 }
@@ -219,7 +242,7 @@ jsonp('semua',{},60000).then(function(res){ l.innerHTML='';
 if(!res){ h.innerHTML='<div class="alert alert-error">Backend kosong.</div>'; return; }
 if(!res.success){ h.innerHTML='<div class="alert alert-error">'+esc(res.message)+'</div>'; return; }
 if(!res.data||res.data.length===0){ h.innerHTML='<div class="alert alert-info">'+esc(res.message||'Belum ada laporan yang berisi data. Isi sheet sumber, lalu klik Rekap Ulang.')+'</div>'; return; }
-var infoKosong = res.kosongDilewati ? ' <span class="muted">(⚠️ '+res.kosongDilewati+' sheet kosong tidak ditampilkan)</span>' : '';
+var infoKosong = res.kosongDilewati ? ' <span class="muted">(️ '+res.kosongDilewati+' sheet kosong tidak ditampilkan)</span>' : '';
 h.innerHTML='<div class="alert alert-success">📚 Menampilkan <b>'+res.data.length+'</b> sheet laporan yang berisi data.'+infoKosong+'</div>'+renderHasil(res.data);
 }).catch(function(e){ l.innerHTML=''; h.innerHTML='<div class="alert alert-error mono">❌ '+esc(e.message)+'</div>'; });
 }
