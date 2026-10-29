@@ -593,7 +593,6 @@ text-align: center;
 .bidang-header h3 { font-size: 1.2rem; margin-top: 8px; }
 .bidang-header .icon { font-size: 2.2rem; }
 .bidang-body { padding: 22px; }
-
 /* =========================================================
 ⭐ TOMBOL LAYANAN — ELEGANT & NATURAL (MIRIP LIST AWAL)
 - Tampilan seperti bullet list biasa
@@ -623,7 +622,6 @@ font-weight: bold;
 transition: color 0.3s ease, transform 0.3s ease;
 }
 .bidang-body ul li:last-child { border-bottom: none; }
-
 /* Hover pada li: bullet berubah warna aksen */
 .bidang-body ul li:hover::before {
 color: var(--accent);
@@ -632,7 +630,6 @@ transform: scale(1.3);
 .bidang-body ul li:hover {
 border-bottom-color: transparent;
 }
-
 /* Link tombol — tampil natural seperti teks biasa */
 .bidang-body ul li a.layanan-btn {
 display: flex;
@@ -648,7 +645,6 @@ line-height: 1.5;
 cursor: pointer;
 transition: color 0.3s ease;
 }
-
 /* Panah di kanan — awalnya transparan */
 .bidang-body ul li a.layanan-btn::after {
 content: '→';
@@ -659,7 +655,6 @@ transform: translateX(-6px);
 transition: opacity 0.3s ease, transform 0.3s ease;
 flex-shrink: 0;
 }
-
 /* Hover pada link: warna berubah + panah muncul */
 .bidang-body ul li a.layanan-btn:hover {
 color: var(--secondary);
@@ -668,14 +663,12 @@ color: var(--secondary);
 opacity: 1;
 transform: translateX(0);
 }
-
 /* Focus state untuk accessibility */
 .bidang-body ul li a.layanan-btn:focus-visible {
 outline: 2px dashed var(--accent);
 outline-offset: 3px;
 border-radius: 4px;
 }
-
 /* === TABLE === */
 .table-container {
 background: var(--white);
@@ -962,6 +955,15 @@ background-position: center;
 margin-top: 0;
 line-height: 1.6;
 }
+/* =========================================================
+⭐ TAMBAHAN: WARNA HEADER UNTUK LAPORAN KINERJA BK
+- Kls VII  : Ungu (purple)
+- Kls VIII : Teal (hijau-biru)
+- Kls IX   : Magenta/Pink
+========================================================= */
+.bidang-header.kinerja-vii   { background: linear-gradient(135deg, #8e44ad, #6c3483); }
+.bidang-header.kinerja-viii  { background: linear-gradient(135deg, #16a085, #0e6655); }
+.bidang-header.kinerja-ix    { background: linear-gradient(135deg, #c0392b, #922b21); }
 </style>
 </head>
 <body>
@@ -992,7 +994,7 @@ onerror="this.parentElement.innerHTML='<span style=\'font-size:1.5rem;font-weigh
 </div>
 </div>
 <address class="school-contact" style="font-style: normal;">
-<a href="tel:+62213902023">📞 (021) 7803516</a>
+<a href="tel:+62213902023"> (021) 7803516</a>
 <a href="mailto:info@smpn56jkt.sch.id">✉️ info@smpn56jkt.sch.id</a>
 <a href="https://www.smpn56jakarta.sch.id/" target="_self">🌐smpn56jkt.sch.id</a>
 </address>
@@ -1024,6 +1026,7 @@ onerror="this.parentElement.innerHTML='<span style=\'font-size:1.5rem;font-weigh
 <li><a href="#jadwal" data-section="jadwal">Jadwal</a></li>
 <li><a href="#faq" data-section="faq">FAQ</a></li>
 <li><a href="#konseling-online" data-section="konseling-online">Konseling Online</a></li>
+<li><a href="#laporan-kinerja" data-section="laporan-kinerja">Laporan Kinerja</a></li>
 <li><a href="#footer" data-section="footer">Footer</a></li>
 </ul>
 </nav>
@@ -1053,7 +1056,7 @@ Butuh bantuan PPDB? <a href="https://www.smpn56jakarta.sch.id/ppdb" target="_sel
 Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Belajar, dan Karir — sesuai Kurikulum Merdeka untuk mewujudkan Profil Pelajar Pancasila.
 </p>
 <div class="hero-buttons">
-<a href="#konseling-online" class="btn btn-primary">📝 Ajukan Konseling Online</a>
+<a href="#konseling-online" class="btn btn-primary"> Ajukan Konseling Online</a>
 <a href="https://www.smpn56jakarta.sch.id/kesiswaan" target="_self" class="btn btn-outline">🏫 Kembali ke Portal Kesiswaan</a>
 </div>
 </section>
@@ -1087,7 +1090,7 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 <a href="https://appseet11-cmd.github.io/New-BK56/tujuh/tujuh.html" style="color:var(--secondary);font-weight:600;">Lihat Materi →</a>
 </article>
 <article class="card">
-<div class="card-icon" aria-hidden="true">📚</div>
+<div class="card-icon" aria-hidden="true"></div>
 <h3>Materi BK Digital Kelas VIII</h3>
 <p>Akses materi bimbingan dalam format digital kapan saja.</p>
 <a href="https://appseet11-cmd.github.io/New-BK56/delapan/delapan.html" style="color:var(--secondary);font-weight:600;">Lihat Materi →</a>
@@ -1099,7 +1102,7 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 <a href="https://appseet11-cmd.github.io/New-BK56/sembilan/sembilan.html" style="color:var(--secondary);font-weight:600;">Lihat Materi →</a>
 </article>
 <article class="card">
-<div class="card-icon" aria-hidden="true">💬</div>
+<div class="card-icon" aria-hidden="true"></div>
 <h3>Kotak Suara Siswa</h3>
 <p>Sampaikan aspirasi, saran, dan keluhan secara anonim.</p>
 <a href=" https://appseet11-cmd.github.io/New-BK56/suara/suara.html" style="color:var(--secondary);font-weight:600;">Kirim Suara →</a>
@@ -1127,7 +1130,7 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </div>
 <div class="cards-grid">
 <article class="card">
-<div class="card-icon" aria-hidden="true">👨‍🏫</div>
+<div class="card-icon" aria-hidden="true">‍🏫</div>
 <h3>Tim Konselor Kami</h3>
 <ul>
 <li>Koordinator BK: Sotya Palupi, S.Pd, MM</li>
@@ -1140,7 +1143,7 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </p>
 </article>
 <article class="card">
-<div class="card-icon" aria-hidden="true">🎯</div>
+<div class="card-icon" aria-hidden="true"></div>
 <h3>Tujuan Layanan BK</h3>
 <ul>
 <li>Mengembangkan potensi diri secara optimal</li>
@@ -1151,7 +1154,7 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </article>
 <article class="card">
-<div class="card-icon" aria-hidden="true">⚖️</div>
+<div class="card-icon" aria-hidden="true">️</div>
 <h3>Prinsip Layanan BK</h3>
 <ul>
 <li>Kerahasiaan — data siswa dilindungi</li>
@@ -1173,11 +1176,10 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 <p>Sesuai panduan operasional BK Kemendikbudristek</p>
 </header>
 <div class="bidang-grid">
-
 <!-- ====== BIDANG PRIBADI ====== -->
 <article class="bidang-card">
 <header class="bidang-header pribadi">
-<div class="icon" aria-hidden="true">🧠</div>
+<div class="icon" aria-hidden="true"></div>
 <h3>Bidang Pribadi</h3>
 </header>
 <div class="bidang-body">
@@ -1191,11 +1193,10 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
 <!-- ====== BIDANG SOSIAL ====== -->
 <article class="bidang-card">
 <header class="bidang-header sosial">
-<div class="icon" aria-hidden="true">🤝</div>
+<div class="icon" aria-hidden="true"></div>
 <h3>Bidang Sosial</h3>
 </header>
 <div class="bidang-body">
@@ -1209,7 +1210,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
 <!-- ====== BIDANG BELAJAR ====== -->
 <article class="bidang-card">
 <header class="bidang-header belajar">
@@ -1227,7 +1227,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
 <!-- ====== BIDANG KARIR ====== -->
 <article class="bidang-card">
 <header class="bidang-header karir">
@@ -1245,7 +1244,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
 </div>
 </section>
 <!-- Jenis Layanan -->
@@ -1301,7 +1299,7 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </article>
 <article class="card">
-<div class="card-icon" aria-hidden="true">⚡</div>
+<div class="card-icon" aria-hidden="true"></div>
 <h3>Layanan Responsif</h3>
 <p>Untuk siswa dengan masalah/kebutuhan mendesak.</p>
 <ul>
@@ -1479,6 +1477,133 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </form>
 </div>
 </section>
+<!-- ================================================================
+⭐ TAMBAHAN BARU: BIDANG LAPORAN KINERJA BK
+- Posisi: sebelum section kontak (di atas footer)
+- Tampilan: mirip "4 Bidang Layanan BK"
+- 3 Template: Kls VII, VIII, IX
+- Setiap judul template = tombol link ke file HTML (target="_self")
+================================================================= -->
+<section class="section" id="laporan-kinerja" aria-labelledby="laporan-kinerja-title">
+<header class="section-title">
+<h2 id="laporan-kinerja-title">Bidang Laporan Kinerja BK</h2>
+<p>Dokumentasi & laporan kinerja layanan BK per tingkat kelas</p>
+</header>
+<div class="bidang-grid">
+<!-- ====== LAPORAN KINERJA KELAS VII ====== -->
+<article class="bidang-card">
+<header class="bidang-header kinerja-vii">
+<div class="icon" aria-hidden="true">📘</div>
+<h3>Layanan Kinerja Kls VII</h3>
+</header>
+<div class="bidang-body">
+<ul>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls7.html" target="_self">
+Laporan Kinerja Layanan BK Kelas VII — Tahun Ajaran 2026/2027
+</a>
+</li>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls7.html" target="_self">
+Rekapitulasi Layanan Bimbingan Klasikal Kelas VII
+</a>
+</li>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls7.html" target="_self">
+Data Asesmen Minat & Bakat Siswa Kelas VII
+</a>
+</li>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls7.html" target="_self">
+Program Kerja BK Kelas VII Semester Ganjil & Genap
+</a>
+</li>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls7.html" target="_self">
+Evaluasi & Tindak Lanjut Layanan BK Kelas VII
+</a>
+</li>
+</ul>
+</div>
+</article>
+<!-- ====== LAPORAN KINERJA KELAS VIII ====== -->
+<article class="bidang-card">
+<header class="bidang-header kinerja-viii">
+<div class="icon" aria-hidden="true">📗</div>
+<h3>Layanan Kinerja Kelas VIII</h3>
+</header>
+<div class="bidang-body">
+<ul>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls8.html" target="_self">
+Laporan Kinerja Layanan BK Kelas VIII — Tahun Ajaran 2026/2027
+</a>
+</li>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls8.html" target="_self">
+Rekapitulasi Layanan Bimbingan Klasikal Kelas VIII
+</a>
+</li>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls8.html" target="_self">
+Data Asesmen Minat & Bakat Siswa Kelas VIII
+</a>
+</li>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls8.html" target="_self">
+Program Kerja BK Kelas VIII Semester Ganjil & Genap
+</a>
+</li>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls8.html" target="_self">
+Evaluasi & Tindak Lanjut Layanan BK Kelas VIII
+</a>
+</li>
+</ul>
+</div>
+</article>
+<!-- ====== LAPORAN KINERJA KELAS IX ====== -->
+<article class="bidang-card">
+<header class="bidang-header kinerja-ix">
+<div class="icon" aria-hidden="true">📕</div>
+<h3>Layanan Kinerja Kelas IX</h3>
+</header>
+<div class="bidang-body">
+<ul>
+<li>
+<a class="layanan-btn" href="https://appseet11-cmd.github.io/New-BK56/kinerja ix/kinerja ix.html" target="_self">
+Laporan Kinerja Layanan BK Kelas IX — Tahun Ajaran 2026/2027
+</a>
+</li>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls9.html" target="_self">
+Rekapitulasi Layanan Bimbingan Klasikal Kelas IX
+</a>
+</li>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls9.html" target="_self">
+Data Asesmen Minat, Bakat & Perencanaan Karir Kelas IX
+</a>
+</li>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls9.html" target="_self">
+Program Kerja BK Kelas IX & Persiapan Pendidikan Lanjutan
+</a>
+</li>
+<li>
+<a class="layanan-btn" href="laporan/kinerja-kls9.html" target="_self">
+Evaluasi & Tindak Lanjut Layanan BK Kelas IX
+</a>
+</li>
+</ul>
+</div>
+</article>
+</div>
+<div class="info-box" style="margin-top: 30px;">
+<h4>📋 Keterangan</h4>
+<p>Setiap laporan kinerja BK disusun berdasarkan <strong>Permendikbud No. 111 Tahun 2014</strong> dan panduan <strong>Kurikulum Merdeka</strong>. Laporan mencakup layanan dasar, responsif, perencanaan individual, serta dukungan sistem. Untuk mengakses detail lengkap, silakan klik judul template di atas.</p>
+</div>
+</section>
 <!-- ============ INTEGRATION SECTION ============ -->
 <section class="integration-section" aria-labelledby="integrasi-title">
 <header class="section-title">
@@ -1487,7 +1612,7 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </header>
 <div class="integration-grid">
 <a href="https://www.smpn56jakarta.sch.id/" target="_self" class="integration-link">
-<div class="int-icon">🏫</div>
+<div class="int-icon"></div>
 <h4>Website Resmi Sekolah</h4>
 <p>Portal utama informasi SMPN 56 Jakarta</p>
 <span class="int-arrow">Kunjungi →</span>
@@ -1535,7 +1660,7 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 <span class="int-arrow">Lihat →</span>
 </a>
 <a href="https://www.smpn56jakarta.sch.id/alumni" target="_self" class="integration-link">
-<div class="int-icon">🎓</div>
+<div class="int-icon"></div>
 <h4>Ikatan Alumni</h4>
 <p>Komunitas alumni SMPN 56 Jakarta</p>
 <span class="int-arrow">Gabung →</span>
@@ -1605,13 +1730,14 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 <p style="margin-top: 8px;"><strong>Terakreditasi A</strong></p>
 </section>
 <nav class="footer-section" aria-label="Tautan Sekolah">
-<h3>🔗 Tautan Sekolah</h3>
+<h3> Tautan Sekolah</h3>
 <ul>
 <li><a href="https://www.smpn56jakarta.sch.id/" target="_self">Beranda</a></li>
 <li><a href="https://www.smpn56jakarta.sch.id/profil" target="_self">Profil Sekolah</a></li>
 <li><a href="https://www.smpn56jakarta.sch.id/akademik" target="_self">Akademik</a></li>
 <li><a href="https://www.smpn56jakarta.sch.id/kesiswaan" target="_self">Kesiswaan</a></li>
 <li><a href="https://www.smpn56jakarta.sch.id/bimbingan-konseling" target="_self">Bimbingan Konseling</a></li>
+<li><a href="#laporan-kinerja" target="_self">Laporan Kinerja BK</a></li>
 <li><a href="https://www.smpn56jakarta.sch.id/ppdb" target="_self">PPDB</a></li>
 <li><a href="https://www.smpn56jakarta.sch.id/kontak" target="_self">Kontak</a></li>
 </ul>
@@ -1630,7 +1756,7 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 <section class="footer-section">
 <h3>📱 Media Sosial Resmi</h3>
 <ul>
-<li><a href="https://www.instagram.com/smpn56jkt/" target="_self" rel="noopener">📷 Instagram: @smpn56jkt</a></li>
+<li><a href="https://www.instagram.com/smpn56jkt/" target="_self" rel="noopener"> Instagram: @smpn56jkt</a></li>
 <li><a href="https://www.youtube.com/@smpnegeri56jakarta" target="_self" rel="noopener">▶️ YouTube: SMPN 56 Jakarta</a></li>
 <li><a href="https://facebook.com/smpn56jakarta" target="_self" rel="noopener">👥 Facebook: SMPN 56 Jakarta</a></li>
 <li><a href="https://www.tiktok.com/discover/smp-56-jakarta" target="_self" rel="noopener">🎵 TikTok: @smpn56jkt</a></li>
