@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Absensi Real Time Kelas IX</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100vh; color: #333; }
+    
+    .navbar { 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+      padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; 
+      color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;
+    }
+    .container { max-width: 1900px; margin: 20px auto; padding: 0 20px; }
+    
+    .header-card { 
+      background: white; padding: 20px; border-radius: 12px; 
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; 
+    }
+    .controls { display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end; }
+    .control-group { display: flex; flex-direction: column; gap: 5px; }
+    .control-group label { font-size: 12px; color: #666; font-weight: 600; }
+    input[type="date"], select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+    
+    .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: white; transition: 0.3s; }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary { background: #667eea; }
+    
+    .summary-bar { 
+      background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; 
+      display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .stat-item { text-align: center; }
+    .stat-val { font-size: 24px; font-weight: bold; color: #667eea; }
+    .stat-label { font-size: 12px; color: #888; }
+
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(600px, 1fr)); gap: 20px; }
+    
+    .card { 
+      background: white; border-radius: 12px; overflow: hidden; 
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: 0.3s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    
+    .card-head { 
+      background: #f8f9fa; padding: 12px 15px; border-bottom: 1px solid #eee; 
+      display: flex; justify-content: space-between; align-items: center; 
+    }
+    .card-head strong { color: #2d3748; font-size: 16px; }
+    .card-head small { color: #718096; font-size: 12px; }
+    
+    .card-body { padding: 15px; }
+    
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #f1f3f5; padding: 10px; text-align: left; font-weight: 600; color: #4a5568; }
+    td { padding: 10px; border-bottom: 1px solid #f1f3f5; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    
+    /* Badge Status */
+    .badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; display: inline-block; }
+    .bg-h { background: #c6f6d5; color: #22543d; } /* Hadir */
+    .bg-s { background: #fff0f0; color: #e03131; } /* Sakit */
+    .bg-i { background: #fff9db; color: #f08c00; } /* Izin */
+    .bg-a { background: #ffe3e3; color: #c92a2a; } /* Alfa */
+    .bg-t { background: #e7f5ff; color: #1971c2; } /* Tugas */
+
+    .card-actions {
+      margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;
+      display: flex; gap: 10px;
+    }
+    .btn-link { text-decoration: none; font-size: 12px; padding: 6px 12px; border-radius: 4px; color: white; }
+    .btn-bk { background: #48bb78; }
+    .btn-kep { background: #f56565; }
+
+    .loading { text-align: center; padding: 50px; font-size: 18px; color: #666; }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <h1>🏫 Sistem Rekap Absensi Digital Kelas IX</h1>
+  </div>
+
+  <div class="container">
+    <div class="header-card">
+      <div class="controls">
+        <div class="control-group">
+          <label>Pilih Tanggal</label>
+          <input type="date" id="dateSelect">
+        </div>
+        <div class="control-group">
+          <label>Mode Tampilan</label>
+          <select id="filterMode">
+            <option value="all">👥 Semua Siswa (Termasuk Hadir)</option>
+            <option value="absent">⚠️ Hanya Tidak Hadir (S/I/A/TGS)</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="loadData()">🔄 Muat Data</button>
+      </div>
+    </div>
+
+    <div id="summaryBar" class="summary-bar" style="display:none;"></div>
+    <div id="cardsContainer" class="cards-grid"></div>
+    <div id="loading" class="loading" style="display:none;">Sedang memuat data dari server...</div>
+  </div>
+
+  <script>
+    // ⭐⭐⭐ GANTI URL INI DENGAN URL DEPLOYMENT BACKEND ANDA ⭐⭐⭐
+    const CONST_BACKEND_URL = 'https://script.google.com/macros/s/AKfycbxhj--1Sqlc23VYWnO9YZLwY-Xsxsxpi4rFiRhu3Hf8RDjMdDHkGpPzgIhxLfYwlPI4SA/exec'; 
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('dateSelect').value = new Date().toISOString().split('T')[0];
+    });
+
+    function loadData() {
+      const date = document.getElementById('dateSelect').value;
+      const mode = document.getElementById('filterMode').value;
+      
+      if(!date) return alert("Pilih tanggal terlebih dahulu");
+
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('cardsContainer').innerHTML = '';
+      document.getElementById('summaryBar').style.display = 'none';
+
+      const payload = { action: 'getRekap', date: date, filterMode: mode };
+
+      fetch(CONST_BACKEND_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('loading').style.display = 'none';
+        if (data.success) {
+          renderSummary(data.cards);
+          renderCards(data.cards, data.buttonConfig, mode);
+        } else {
+          alert('Error: ' + data.message);
+        }
+      })
+      .catch(err => {
+        document.getElementById('loading').style.display = 'none';
+        alert('Gagal koneksi ke backend. Pastikan URL benar.');
+        console.error(err);
+      });
+    }
+
+    function renderSummary(cards) {
+      let totalS = 0, totalH = 0, totalA = 0;
+      cards.forEach(c => {
+        totalS += c.totalStudents;
+        totalH += c.summary.H;
+        totalA += (c.summary.S + c.summary.I + c.summary.A + c.summary.TGS);
+      });
+      
+      document.getElementById('summaryBar').innerHTML = `
+        <div class="stat-item"><div class="stat-val">${cards.length}</div><div class="stat-label">Kelas</div></div>
+        <div class="stat-item"><div class="stat-val">${totalS}</div><div class="stat-label">Total Siswa</div></div>
+        <div class="stat-item"><div class="stat-val" style="color:#48bb78">${totalH}</div><div class="stat-label">Hadir</div></div>
+        <div class="stat-item"><div class="stat-val" style="color:#f56565">${totalA}</div><div class="stat-label">Tidak Hadir</div></div>
+      `;
+      document.getElementById('summaryBar').style.display = 'flex';
+    }
+
+    function renderCards(cards, btnConfig, mode) {
+      const container = document.getElementById('cardsContainer');
+      
+      if (cards.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">Tidak ada data kelas ditemukan.</div>';
+        return;
+      }
+
+      cards.forEach(card => {
+        // Logika Filter: Backend sudah mengirim data sesuai mode, kita tampilkan apa adanya.
+        let displayStudents = card.students;
+
+        let rows = displayStudents.map(s => {
+          let badgeClass = 'bg-h';
+          let badgeText = 'Hadir';
+          
+          if (s.status === 'S') { badgeClass = 'bg-s'; badgeText = 'Sakit'; }
+          else if (s.status === 'I') { badgeClass = 'bg-i'; badgeText = 'Izin'; }
+          else if (s.status === 'A') { badgeClass = 'bg-a'; badgeText = 'Alfa'; }
+          else if (s.status === 'TGS') { badgeClass = 'bg-t'; badgeText = 'Tugas'; }
+          
+          return `
+            <tr>
+              <td>${s.nis}</td>
+              <td><strong>${s.nama}</strong></td>
+              <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+              <td>${s.banyakKasus > 0 ? '<span style="color:#ed8936;font-weight:bold">'+s.banyakKasus+' Kasus</span>' : '-'}</td>
+            </tr>`;
+        }).join('');
+
+        const html = `
+          <div class="card">
+            <div class="card-head">
+              <strong>${card.className}</strong>
+              <small>Total: ${card.totalStudents} Siswa</small>
+            </div>
+            <div class="card-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th width="15%">NIS</th>
+                    <th width="35%">Nama</th>
+                    <th width="20%">Status</th>
+                    <th width="30%">Catatan Kasus</th>
+                  </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+              </table>
+              
+              <div class="card-actions">
+                <a href="${btnConfig.guruBK.url}" target="_blank" class="btn-link btn-bk">👨‍🏫 ${btnConfig.guruBK.label}</a>
+                <a href="${btnConfig.kepsek.url}" target="_blank" class="btn-link btn-kep">👔 ${btnConfig.kepsek.label}</a>
+              </div>
+            </div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+      });
+    }
+  </script>
+</body>
+</html>
