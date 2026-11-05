@@ -859,72 +859,100 @@ line-height: 1.6;
 .bidang-header.kinerja-ix    { background: linear-gradient(135deg, #c0392b, #922b21); }
 
 /* =========================================================
+⭐ STYLE BARU: ABSENSI REAL TIME
+========================================================= */
+.bidang-header.absensi-vii { background: linear-gradient(135deg, #2c3e50, #34495e); }
+.bidang-header.absensi-viii { background: linear-gradient(135deg, #2980b9, #3498db); }
+.bidang-header.absensi-ix { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+
+/* Style khusus untuk link judul di header absensi agar terlihat seperti tombol */
+.bidang-header a.header-link {
+    color: white;
+    text-decoration: none;
+    display: block;
+    transition: transform 0.2s;
+}
+.bidang-header a.header-link:hover {
+    transform: scale(1.02);
+    text-decoration: underline;
+}
+.bidang-header a.header-link h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+.bidang-header a.header-link .icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* =========================================================
 ⭐ MODIFIKASI: LAPORAN KINERJA — 5 CARD SEJAJAR
 - Override grid-template-columns agar tepat 5 kolom
 - Perkecil padding, font, dan gap agar muat di layar ≥1100px
 - Responsive: tablet = 3 kolom, mobile = 1 kolom
 ========================================================= */
 #laporan-kinerja .bidang-grid {
-  grid-template-columns: repeat(5, 1fr);
-  gap: 14px;
+grid-template-columns: repeat(5, 1fr);
+gap: 14px;
 }
 #laporan-kinerja .bidang-card {
-  border-radius: 12px;
+border-radius: 12px;
 }
 #laporan-kinerja .bidang-header {
-  padding: 14px 8px;
+padding: 14px 8px;
 }
 #laporan-kinerja .bidang-header .icon {
-  font-size: 1.5rem;
+font-size: 1.5rem;
 }
 #laporan-kinerja .bidang-header h3 {
-  font-size: 0.88rem;
-  line-height: 1.3;
-  margin-top: 6px;
+font-size: 0.88rem;
+line-height: 1.3;
+margin-top: 6px;
 }
 #laporan-kinerja .bidang-header .subtitle {
-  font-size: 0.72rem;
-  font-weight: 600;
-  margin-top: 6px;
-  line-height: 1.3;
-  letter-spacing: 0;
+font-size: 0.72rem;
+font-weight: 600;
+margin-top: 6px;
+line-height: 1.3;
+letter-spacing: 0;
 }
 #laporan-kinerja .bidang-body {
-  padding: 12px 10px;
+padding: 12px 10px;
 }
 #laporan-kinerja .bidang-body ul li {
-  padding: 7px 0 7px 13px;
-  font-size: 0.76rem;
-  line-height: 1.35;
+padding: 7px 0 7px 13px;
+font-size: 0.76rem;
+line-height: 1.35;
 }
 #laporan-kinerja .bidang-body ul li::before {
-  font-size: 0.85rem;
+font-size: 0.85rem;
 }
 #laporan-kinerja .bidang-body ul li a.layanan-btn {
-  font-size: 0.76rem;
-  gap: 6px;
+font-size: 0.76rem;
+gap: 6px;
 }
 #laporan-kinerja .bidang-body ul li a.layanan-btn::after {
-  font-size: 0.78rem;
+font-size: 0.78rem;
 }
-
 /* Tablet: 3 kolom */
 @media (max-width: 1100px) {
-  #laporan-kinerja .bidang-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
-  #laporan-kinerja .bidang-header h3 { font-size: 1rem; }
-  #laporan-kinerja .bidang-header .subtitle { font-size: 0.85rem; }
-  #laporan-kinerja .bidang-body ul li { font-size: 0.85rem; }
-  #laporan-kinerja .bidang-body ul li a.layanan-btn { font-size: 0.85rem; }
+#laporan-kinerja .bidang-grid {
+grid-template-columns: repeat(3, 1fr);
+gap: 18px;
+}
+#laporan-kinerja .bidang-header h3 { font-size: 1rem; }
+#laporan-kinerja .bidang-header .subtitle { font-size: 0.85rem; }
+#laporan-kinerja .bidang-body ul li { font-size: 0.85rem; }
+#laporan-kinerja .bidang-body ul li a.layanan-btn { font-size: 0.85rem; }
 }
 /* Mobile: 1 kolom */
 @media (max-width: 700px) {
-  #laporan-kinerja .bidang-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
+#laporan-kinerja .bidang-grid {
+grid-template-columns: 1fr;
+gap: 20px;
+}
 }
 </style>
 </head>
@@ -984,6 +1012,8 @@ onerror="this.parentElement.innerHTML='<span style=\'font-size:1.5rem;font-weigh
 <li><a href="#jadwal" data-section="jadwal">Jadwal</a></li>
 <li><a href="#faq" data-section="faq">FAQ</a></li>
 <li><a href="#konseling-online" data-section="konseling-online">Konseling Online</a></li>
+<!-- MENU BARU DITAMBAHKAN DI SINI -->
+<li><a href="#absensi-realtime" data-section="absensi-realtime">Absensi Real Time</a></li>
 <li><a href="#laporan-kinerja" data-section="laporan-kinerja">Laporan Kinerja</a></li>
 <li><a href="#footer" data-section="footer">Footer</a></li>
 </ul>
@@ -1416,6 +1446,84 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </form>
 </div>
 </section>
+
+<!-- ========================================== -->
+<!-- SECTION BARU: ABSENSI REAL TIME            -->
+<!-- ========================================== -->
+<section class="section" id="absensi-realtime" aria-labelledby="absensi-title">
+<header class="section-title">
+<h2 id="absensi-title">Absensi Real Time</h2>
+<p>Monitoring kehadiran siswa secara langsung per tingkat kelas</p>
+</header>
+<div class="bidang-grid">
+    
+    <!-- TEMPLATE KELAS VII -->
+    <article class="bidang-card">
+        <header class="bidang-header absensi-vii">
+            <!-- GANTI LINK DI BAWAH INI SESUAI KEINGINAN ANDA -->
+            <a href="https://link-absensi-kelas-vii-anda.com" class="header-link" target="_self">
+                <div class="icon" aria-hidden="true">🕒</div>
+                <h3>Absensi Real Time Kelas VII</h3>
+            </a>
+        </header>
+        <div class="bidang-body">
+            <ul>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas VII-A <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas VII-B <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas VII-C <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas VII-D <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas VII-E <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas VII-F <span>→</span></a></li>
+            </ul>
+        </div>
+    </article>
+
+    <!-- TEMPLATE KELAS VIII -->
+    <article class="bidang-card">
+        <header class="bidang-header absensi-viii">
+            <!-- GANTI LINK DI BAWAH INI SESUAI KEINGINAN ANDA -->
+            <a href="https://link-absensi-kelas-viii-anda.com" class="header-link" target="_self">
+                <div class="icon" aria-hidden="true">🕒</div>
+                <h3>Absensi Real Time Kelas VIII</h3>
+            </a>
+        </header>
+        <div class="bidang-body">
+            <ul>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas VIII-A <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas VIII-B <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas VIII-C <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas VIII-D <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas VIII-E <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas VIII-F <span>→</span></a></li>
+            </ul>
+        </div>
+    </article>
+
+    <!-- TEMPLATE KELAS IX -->
+    <article class="bidang-card">
+        <header class="bidang-header absensi-ix">
+            <!-- GANTI LINK DI BAWAH INI SESUAI KEINGINAN ANDA -->
+            <a href="https://appseet11-cmd.github.io/New-BK56/rekapdigitalabsensi9/" class="header-link" target="_self">
+                <div class="icon" aria-hidden="true">🕒</div>
+                <h3>Absensi Real Time Kelas IX</h3>
+            </a>
+        </header>
+        <div class="bidang-body">
+            <ul>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas IX-A <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas IX-B <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas IX-C <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas IX-D <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas IX-E <span>→</span></a></li>
+                <li><a class="layanan-btn" href="#" target="_self">Kelas IX-F <span>→</span></a></li>
+            </ul>
+        </div>
+    </article>
+
+</div>
+</section>
+<!-- AKHIR SECTION ABSENSI REAL TIME -->
+
 <section class="section" id="laporan-kinerja" aria-labelledby="laporan-kinerja-title">
 <header class="section-title">
 <h2 id="laporan-kinerja-title">Bidang Laporan Kinerja BK</h2>
