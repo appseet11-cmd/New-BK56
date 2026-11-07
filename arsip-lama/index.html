@@ -1145,6 +1145,88 @@ box-shadow:0 8px 20px rgba(0,0,0,0.3);
   font-weight:700 !important;
   letter-spacing:.03em !important;
 }
+/* ===== CSS: Top Bar & Pembersih Browser ===== */
+.top-bar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 12px 20px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+.breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    color: #555;
+    white-space: nowrap;
+}
+.breadcrumb-nav a { color: #1a73e8; text-decoration: none; font-weight: 600; }
+.breadcrumb-nav a:hover { text-decoration: underline; }
+.breadcrumb-nav .separator { color: #999; font-size: 18px; }
+.breadcrumb-nav .current { color: #333; font-weight: 600; }
+
+.cleaner-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.cleaner-stats {
+    font-size: 11px;
+    color: #666;
+    background: #f8f9fa;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
+    line-height: 1.4;
+}
+.cleaner-stats b { color: #333; }
+.cleaner-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.bc-btn {
+    padding: 7px 12px;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+.bc-btn:hover { transform: translateY(-2px); box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
+.bc-local  { background: #4CAF50; }
+.bc-session{ background: #2196F3; }
+.bc-cache  { background: #FF9800; }
+.bc-cookie { background: #9C27B0; }
+.bc-all    { background: linear-gradient(135deg, #f44336, #e91e63); }
+
+/* Style untuk Notifikasi Toast (Dibuat otomatis oleh JS) */
+.bc-toast {
+    position: fixed; top: 20px; right: 20px;
+    padding: 12px 18px; border-radius: 8px;
+    color: #fff; font-weight: 600; font-size: 13px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0; transform: translateX(400px);
+    transition: all 0.3s ease; z-index: 9999;
+}
+.bc-toast.show { opacity: 1; transform: translateX(0); }
+.bc-toast.success { background: #4CAF50; }
+.bc-toast.info    { background: #2196F3; }
+.bc-toast.warning { background: #FF9800; }
+
+/* Responsif untuk Layar Kecil (HP) */
+@media (max-width: 768px) {
+    .top-bar-container { flex-direction: column; align-items: flex-start; }
+    .cleaner-wrapper { width: 100%; justify-content: space-between; }
+}
 </style>
 <!-- ========== MATERI PERMANEN - CSS ========== -->
 <style>
@@ -1340,6 +1422,132 @@ box-shadow: 0 8px 22px rgba(0,0,0,0.3);
   .materi-panel { padding: 14px; }
   .materi-link-item { padding: 8px 10px; }
   .materi-link-url { font-size: 0.75rem; }
+}
+/* ===== SATU BARIS: SEMUA ELEMEN SEJAJAR ===== */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 12px 20px;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: #555;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.breadcrumb a {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 600;
+}
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb .separator { color: #999; }
+.breadcrumb .current { color: #333; font-weight: 600; }
+
+/* Tombol Web BK */
+.web-bk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+}
+.web-bk-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+.web-bk-btn .icon { font-size: 15px; }
+
+/* Info Statistik */
+.cleaner-info {
+  font-size: 12px;
+  color: #666;
+  background: #f8f9fa;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border-left: 3px solid #667eea;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.cleaner-info b { color: #333; }
+
+/* Tombol Pembersih */
+.cleaner-buttons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.cleaner-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.cleaner-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
+.btn-local  { background: #4CAF50; }
+.btn-session{ background: #2196F3; }
+.btn-cache  { background: #FF9800; }
+.btn-cookie { background: #9C27B0; }
+.btn-all    { background: linear-gradient(135deg, #f44336, #e91e63); }
+
+/* Notifikasi */
+.notif {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateX(400px);
+  transition: all 0.3s;
+  z-index: 9999;
+}
+.notif.show { opacity: 1; transform: translateX(0); }
+.notif.success { background: #4CAF50; }
+.notif.info    { background: #2196F3; }
+.notif.warning { background: #FF9800; }
+
+/* Responsive: scroll horizontal di mobile */
+@media (max-width: 900px) {
+  .top-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
 }
 </style>
 <!-- ========== MATERI PERMANEN - CSS [END] ========== -->
@@ -1830,11 +2038,38 @@ Platform pembelajaran Bimbingan Konseling digital terintegrasi yang membantu sis
 <span class="feature-link">Suarakan Sekarang →</span>
 </article>
 </section>
-<nav class="breadcrumb" aria-label="Breadcrumb" id="breadcrumb">
-<a href="#" onclick="go('home'); return false;">🏠 Beranda</a>
-<span>›</span>
-<span class="current" id="breadcrumb-current">Platform BK Digital</span>
-</nav>
+<!-- ===== MULAI: Top Bar & Pembersih Browser ===== -->
+<!-- ===== SATU BARIS: SEMUA ELEMEN ===== -->
+<div class="top-bar">
+  <!-- 1. Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="/">🏠 Beranda</a>
+    <span class="separator">›</span>
+    <span class="current">Platform BK Digital</span>
+  </div>
+
+  <!-- 2. Tombol Web BK -->
+  <a href="https://appseet11-cmd.github.io/New-BK56/" target="_blank" class="web-bk-btn" id="webBkLink">
+    <span class="icon">🌐</span>
+    <span>Web BK SMP Negeri 56 JKT</span>
+  </a>
+
+  <!-- 3. Info Statistik -->
+  <div class="cleaner-info" id="bcStats">Memuat...</div>
+
+  <!-- 4. Tombol Pembersih -->
+  <div class="cleaner-buttons">
+    <button class="cleaner-btn btn-local"   onclick="bcClearLocal()">🗂️ Local</button>
+    <button class="cleaner-btn btn-session"  onclick="bcClearSession()">📋 Session</button>
+    <button class="cleaner-btn btn-cache"    onclick="bcClearCache()">⚡ Cache</button>
+    <button class="cleaner-btn btn-cookie"   onclick="bcClearCookies()">🍪 Cookies</button>
+    <button class="cleaner-btn btn-all"      onclick="bcClearAll()">🗑️ Semua</button>
+  </div>
+</div>
+
+<!-- Notifikasi (letakkan di akhir body) -->
+<div class="notif" id="notif"></div>
+<!-- ===== SELESAI: Top Bar & Pembersih Browser ===== -->
 <nav class="navbar" role="navigation" aria-label="Menu Utama">
 <button class="hamburger" onclick="toggleMobile()" aria-label="Buka menu navigasi" aria-expanded="false">☰ Menu</button>
 <div class="nav-wrap" id="navWrap">
@@ -17751,6 +17986,203 @@ console.log('   ☑️ Floating button aktif di pojok kanan bawah');
 })();
 </script>
 <!-- ================= PATCH RKX-FIX [END] ================= -->
+</script>
+<script>
+// ===== JS: Pembersih Browser =====
+(function() {
+    // Fungsi Notifikasi Toast
+    function bcShowToast(msg, type = 'success') {
+        let toast = document.getElementById('bcToast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'bcToast';
+            toast.className = 'bc-toast';
+            document.body.appendChild(toast);
+        }
+        toast.textContent = msg;
+        toast.className = `bc-toast ${type} show`;
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // Fungsi Update Statistik
+    window.bcUpdateStats = function() {
+        const local = localStorage.length;
+        const session = sessionStorage.length;
+        const cookie = document.cookie ? document.cookie.split(';').filter(c => c.trim()).length : 0;
+        const el = document.getElementById('bcStats');
+        if (!el) return;
+
+        if ('caches' in window) {
+            caches.keys().then(keys => {
+                el.innerHTML = `Local: <b>${local}</b> | Session: <b>${session}</b> | Cache: <b>${keys.length}</b> | Cookie: <b>${cookie}</b>`;
+            });
+        } else {
+            el.innerHTML = `Local: <b>${local}</b> | Session: <b>${session}</b> | Cache: <b>-</b> | Cookie: <b>${cookie}</b>`;
+        }
+    };
+
+    // Fungsi Hapus LocalStorage
+    window.bcClearLocal = function() {
+        const count = localStorage.length;
+        if (count === 0) return bcShowToast('localStorage sudah kosong', 'info');
+        if (!confirm(`Hapus ${count} item dari localStorage?`)) return;
+        localStorage.clear();
+        bcShowToast(`✅ ${count} item localStorage dihapus`, 'success');
+        window.bcUpdateStats();
+    };
+
+    // Fungsi Hapus SessionStorage
+    window.bcClearSession = function() {
+        const count = sessionStorage.length;
+        if (count === 0) return bcShowToast('sessionStorage sudah kosong', 'info');
+        if (!confirm(`Hapus ${count} item dari sessionStorage?`)) return;
+        sessionStorage.clear();
+        bcShowToast(`✅ ${count} item sessionStorage dihapus`, 'success');
+        window.bcUpdateStats();
+    };
+
+    // Fungsi Hapus Cache
+    window.bcClearCache = async function() {
+        if (!('caches' in window)) return bcShowToast('Cache API tidak didukung', 'warning');
+        try {
+            const keys = await caches.keys();
+            if (keys.length === 0) return bcShowToast('Cache sudah kosong', 'info');
+            if (!confirm(`Hapus ${keys.length} cache storage?`)) return;
+            await Promise.all(keys.map(k => caches.delete(k)));
+            bcShowToast(`✅ ${keys.length} cache dihapus`, 'success');
+            window.bcUpdateStats();
+        } catch (e) { bcShowToast('Gagal: ' + e.message, 'warning'); }
+    };
+
+    // Fungsi Hapus Cookies
+    window.bcClearCookies = function() {
+        const cookies = document.cookie.split(';');
+        let count = 0;
+        cookies.forEach(c => {
+            const name = c.split('=')[0].trim();
+            if (name) {
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${location.hostname}`;
+                count++;
+            }
+        });
+        if (count === 0) return bcShowToast('Tidak ada cookie', 'info');
+        bcShowToast(`✅ ${count} cookie dihapus`, 'success');
+        window.bcUpdateStats();
+    };
+
+    // Fungsi Hapus Semua
+    window.bcClearAll = async function() {
+        if (!confirm('⚠️ Hapus SEMUA data browser (Local, Session, Cache, Cookies)?')) return;
+        localStorage.clear();
+        sessionStorage.clear();
+        document.cookie.split(';').forEach(c => {
+            const name = c.split('=')[0].trim();
+            if (name) document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+        });
+        if ('caches' in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map(k => caches.delete(k)));
+        }
+        bcShowToast('✅ Semua data browser dibersihkan!', 'success');
+        window.bcUpdateStats();
+    };
+
+    // Jalankan saat halaman selesai dimuat
+    window.addEventListener('load', window.bcUpdateStats);
+})();
+</script>
+<script>
+const WEB_BK_URL = "https://appseet11-cmd.github.io/New-BK56/";
+
+document.addEventListener('DOMContentLoaded', function() {
+  const webBkLink = document.getElementById('webBkLink');
+  if (webBkLink && WEB_BK_URL) webBkLink.href = WEB_BK_URL;
+  bcUpdateStats();
+});
+
+function bcClearLocal() {
+  const count = localStorage.length;
+  if (count === 0) { showNotif('localStorage sudah kosong', 'info'); return; }
+  if (!confirm(`Hapus ${count} item dari localStorage?`)) return;
+  localStorage.clear();
+  showNotif(`✅ ${count} item localStorage dihapus`, 'success');
+  bcUpdateStats();
+}
+
+function bcClearSession() {
+  const count = sessionStorage.length;
+  if (count === 0) { showNotif('sessionStorage sudah kosong', 'info'); return; }
+  if (!confirm(`Hapus ${count} item dari sessionStorage?`)) return;
+  sessionStorage.clear();
+  showNotif(`✅ ${count} item sessionStorage dihapus`, 'success');
+  bcUpdateStats();
+}
+
+async function bcClearCache() {
+  if (!('caches' in window)) { showNotif('Browser tidak mendukung Cache API', 'warning'); return; }
+  try {
+    const keys = await caches.keys();
+    if (keys.length === 0) { showNotif('Cache sudah kosong', 'info'); return; }
+    if (!confirm(`Hapus ${keys.length} cache storage?`)) return;
+    await Promise.all(keys.map(k => caches.delete(k)));
+    showNotif(`✅ ${keys.length} cache dihapus`, 'success');
+    bcUpdateStats();
+  } catch (e) { showNotif('Gagal: ' + e.message, 'warning'); }
+}
+
+function bcClearCookies() {
+  const cookies = document.cookie.split(';');
+  let count = 0;
+  cookies.forEach(c => {
+    const name = c.split('=')[0].trim();
+    if (name) {
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${location.hostname}`;
+      count++;
+    }
+  });
+  if (count === 0) { showNotif('Tidak ada cookie', 'info'); return; }
+  showNotif(`✅ ${count} cookie dihapus`, 'success');
+  bcUpdateStats();
+}
+
+async function bcClearAll() {
+  if (!confirm('⚠️ Hapus SEMUA data browser?')) return;
+  localStorage.clear();
+  sessionStorage.clear();
+  document.cookie.split(';').forEach(c => {
+    const name = c.split('=')[0].trim();
+    if (name) document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+  });
+  if ('caches' in window) {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(k => caches.delete(k)));
+  }
+  showNotif('✅ Semua data browser dibersihkan!', 'success');
+  bcUpdateStats();
+}
+
+function bcUpdateStats() {
+  const local = localStorage.length;
+  const session = sessionStorage.length;
+  const cookie = document.cookie ? document.cookie.split(';').filter(c => c.trim()).length : 0;
+  const el = document.getElementById('bcStats');
+  if ('caches' in window) {
+    caches.keys().then(keys => {
+      el.innerHTML = `Local:<b>${local}</b> Session:<b>${session}</b> Cache:<b>${keys.length}</b> Cookie:<b>${cookie}</b>`;
+    });
+  } else {
+    el.innerHTML = `Local:<b>${local}</b> Session:<b>${session}</b> Cache:<b>-</b> Cookie:<b>${cookie}</b>`;
+  }
+}
+
+function showNotif(msg, type = 'success') {
+  const n = document.getElementById('notif');
+  n.textContent = msg;
+  n.className = `notif ${type} show`;
+  setTimeout(() => n.classList.remove('show'), 3000);
+}
 </script>
 </body>
 </html>
