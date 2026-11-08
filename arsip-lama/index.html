@@ -18403,5 +18403,775 @@ init();
 <!-- ================================================================ -->
 <!-- ========== PATCH FINAL: BACKEND CONFIG PERMANEN + CROSS-DEVICE [END] ========== -->
 <!-- ================================================================ -->
+<!-- ================================================================ -->
+<!-- ========== 🔒 PATCH: PERMANENT LINK RESTORER SYSTEM ========== -->
+<!-- ========== v1.0 - 3-Layer Recovery | Nov 2026 ================== -->
+<!-- ================================================================ -->
+<script>
+(function(){
+"use strict";
+/* ================================================================
+* 🔒 PERMANENT LINK RESTORER SYSTEM v1.0
+* ================================================================
+* TUJUAN:
+* ✅ 1. Semua link yang sudah di-Push ke Sheet bersifat PERMANEN
+* ✅ 2. Jika localStorage kosong → restore dari embedded JSON (HTML)
+* ✅ 3. Jika embedded kosong → restore dari Google Sheet
+* ✅ 4. Tombol manual "🔄 Pulihkan dari Sheet" di panel Rekap
+* ✅ 5. Auto-restore saat halaman load (jika data lokal kosong)
+* ✅ 6. Setiap Push → snapshot otomatis ke embedded JSON
+*
+* 3 LAPIS PEMULIHAN (prioritas):
+*   Layer 1: localStorage (cepat, lokal)
+*   Layer 2: Embedded JSON di HTML (permanen, lintas device)
+*   Layer 3: Google Sheet (ultimate backup, server-side)
+*
+* CARA KERJA:
+* 1. User tambah link → simpan ke localStorage
+* 2. User klik "Push ke Sheet" → link masuk ke Sheet + snapshot ke embedded
+* 3. User clear browser / ganti device:
+*    → Layer 1 kosong → coba Layer 2 (embedded)
+*    → Layer 2 kosong → coba Layer 3 (fetch dari Sheet)
+* 4. Link otomatis muncul lagi di card asal
+*
+* ANTI-CONFLICT:
+* - Flag: window.__bk56LinkRestorerPatched
+* - Namespace: bk56lr- (Link Restorer)
+* - Tidak override addMateriLink/addVideoLink/addDocLink
+* - Hanya hook: bk56SyncToSheet, bk56RenderRekap
+================================================================ */
+const FLAG = '__bk56LinkRestorerPatched';
+if (window[FLAG]) {
+console.log('ℹ️ [LinkRestorer] Patch sudah terpasang, skip');
+return;
+}
+window[FLAG] = true;
+
+const EMB_ID = 'bk56-embedded-data';
+const CFG_KEY = 'bk56_backend_url';
+const MATERI_KEY = 'bk56_materi_links';
+const VIDEO_KEY = 'bk56_video_links';
+const DOC_KEY = 'bk56_doc_links';
+
+// Statistik pemulihan
+window.__lrStats = {
+layer1: 0, // dari localStorage
+layer2: 0, // dari embedded JSON
+layer3: 0, // dari Google Sheet
+lastRestore: null
+};
+
+console.log('');
+console.log('═══════════════════════════════════════════════════════');
+console.log('🔒 [LinkRestorer] Permanent Link Recovery System v1.0');
+console.log('═══════════════════════════════════════════════════════');
+console.log('📌 3 Lapis Pemulihan:');
+console.log('   Layer 1: localStorage (cepat)');
+console.log('   Layer 2: Embedded JSON di HTML (permanen)');
+console.log('   Layer 3: Google Sheet (ultimate backup)');
+console.log('═══════════════════════════════════════════════════════');
+console.log('');
+
+/* ================================================================
+* 🔑 HELPER 1: Baca Embedded JSON
+================================================================ */
+function lrReadEmb() {
+try {
+const el = document.getElementById(EMB_ID);
+if (!el) return null;
+return JSON.parse(el.textContent) || null;
+} catch(e) {
+console.warn('⚠️ [LR] Gagal baca embedded:', e);
+return null;
+}
+}
+
+/* ================================================================
+* 🔑 HELPER 2: Tulis Embedded JSON
+================================================================ */
+function lrWriteEmb(data) {
+try {
+const el = document.getElementById(EMB_ID);
+if (!el) return false;
+el.textContent = JSON.stringify(data);
+return true;
+} catch(e) {
+console.warn('⚠️ [LR] Gagal tulis embedded:', e);
+return false;
+}
+}
+
+/* ================================================================
+* 🔑 HELPER 3: Snapshot semua link ke embedded JSON
+*    → Dipanggil setiap kali Push ke Sheet berhasil
+================================================================ */
+function lrSnapshotToEmbedded() {
+const emb = lrReadEmb() || { materi:{}, video:{}, docLinks:{} };
+
+// Snapshot materi
+try {
+const m = localStorage.getItem(MATERI_KEY);
+if (m) emb.materi = JSON.parse(m);
+} catch(e) {}
+
+// Snapshot video
+try {
+const v = localStorage.getItem(VIDEO_KEY);
+if (v) emb.video = JSON.parse(v);
+} catch(e) {}
+
+// Snapshot dokumen
+try {
+const d = localStorage.getItem(DOC_KEY);
+if (d) emb.docLinks = JSON.parse(d);
+} catch(e) {}
+
+emb.lastUpdated = new Date().toISOString();
+emb.linkRestorerSnapshot = '1.0.0';
+
+const ok = lrWriteEmb(emb);
+if (ok) {
+console.log('✅ [LR] Snapshot tersimpan di embedded HTML');
+}
+return ok;
+}
+
+/* ================================================================
+* 🔑 HELPER 4: Cari docIdx di DOCS array (matching KETAT)
+*    → Primary: Kelas + Guru + Kategori + NamaDokumen (exact)
+================================================================ */
+function lrFindDocIdx(kelas, guru, kategori, nama) {
+if (typeof DOCS === 'undefined' || !Array.isArray(DOCS)) return -1;
+
+const kL = String(kelas || '').toLowerCase().trim();
+const gL = String(guru || '').toLowerCase().trim();
+const katL = String(kategori || '').toLowerCase().trim();
+const nL = String(nama || '').toLowerCase().trim();
+
+for (let i = 0; i < DOCS.length; i++) {
+const d = DOCS[i];
+if (kL && kL !== '-' && d.kelas.toLowerCase() !== kL) continue;
+if (gL && gL !== '-' && d.guru.toLowerCase() !== gL) continue;
+if (katL && d.kat.toLowerCase() !== katL) continue;
+if (nL && d.nama.toLowerCase() === nL) return i;
+}
+return -1;
+}
+
+/* ================================================================
+* 🔑 HELPER 5: Hitung materiIdx dari docIdx
+================================================================ */
+function lrGetMateriIdx(docIdx) {
+if (typeof DOCS === 'undefined' || !DOCS[docIdx]) return -1;
+const d = DOCS[docIdx];
+let idx = 0;
+for (let i = 0; i < DOCS.length; i++) {
+if (DOCS[i].kelas === d.kelas && DOCS[i].guru === d.guru && DOCS[i].kat === 'materi') {
+if (i === docIdx) return idx;
+idx++;
+}
+}
+return -1;
+}
+
+/* ================================================================
+* 🛡️ LAYER 1: Restore dari localStorage (sudah ada, tidak perlu patch)
+*    → Jika data ada di localStorage → pakai itu (paling cepat)
+================================================================ */
+function lrCheckLayer1() {
+let count = 0;
+try {
+const m = localStorage.getItem(MATERI_KEY);
+if (m) {
+const data = JSON.parse(m);
+for (const key in data) {
+const d = data[key];
+['ppt','pdf','doc','video'].forEach(t => {
+if (d[t] && Array.isArray(d[t])) count += d[t].length;
+});
+}
+}
+} catch(e) {}
+try {
+const v = localStorage.getItem(VIDEO_KEY);
+if (v) {
+const data = JSON.parse(v);
+for (const key in data) {
+if (Array.isArray(data[key])) count += data[key].length;
+}
+}
+} catch(e) {}
+try {
+const d = localStorage.getItem(DOC_KEY);
+if (d) {
+const data = JSON.parse(d);
+for (const key in data) {
+if (Array.isArray(data[key])) count += data[key].length;
+}
+}
+} catch(e) {}
+
+window.__lrStats.layer1 = count;
+return count;
+}
+
+/* ================================================================
+* 🛡️ LAYER 2: Restore dari Embedded JSON (HTML)
+*    → Jika localStorage kosong tapi embedded ada → restore
+================================================================ */
+function lrRestoreFromEmbedded() {
+const emb = lrReadEmb();
+if (!emb) return 0;
+
+let restored = 0;
+
+// === MATERI ===
+if (emb.materi && Object.keys(emb.materi).length > 0) {
+try {
+const localM = localStorage.getItem(MATERI_KEY);
+const localData = localM ? JSON.parse(localM) : {};
+
+if (Object.keys(localData).length === 0) {
+// localStorage kosong → restore penuh dari embedded
+localStorage.setItem(MATERI_KEY, JSON.stringify(emb.materi));
+for (const key in emb.materi) {
+const d = emb.materi[key];
+['ppt','pdf','doc','video'].forEach(t => {
+if (d[t] && Array.isArray(d[t])) restored += d[t].length;
+});
+}
+console.log('✅ [LR Layer 2] Materi dipulihkan dari embedded HTML');
+} else {
+// Merge: tambahkan yang belum ada
+let merged = false;
+for (const key in emb.materi) {
+const embItem = emb.materi[key];
+const localItem = localData[key] || {ppt:[],pdf:[],doc:[],video:[]};
+['ppt','pdf','doc','video'].forEach(t => {
+if (embItem[t] && Array.isArray(embItem[t])) {
+embItem[t].forEach(url => {
+if (!localItem[t]) localItem[t] = [];
+if (!localItem[t].includes(url)) {
+localItem[t].push(url);
+restored++;
+merged = true;
+}
+});
+}
+});
+localData[key] = localItem;
+}
+if (merged) {
+localStorage.setItem(MATERI_KEY, JSON.stringify(localData));
+console.log('✅ [LR Layer 2] Materi di-merge dari embedded');
+}
+}
+} catch(e) {
+console.warn('⚠️ [LR] Gagal restore materi:', e);
+}
+}
+
+// === VIDEO ===
+if (emb.video && Object.keys(emb.video).length > 0) {
+try {
+const localV = localStorage.getItem(VIDEO_KEY);
+const localData = localV ? JSON.parse(localV) : {};
+
+if (Object.keys(localData).length === 0) {
+localStorage.setItem(VIDEO_KEY, JSON.stringify(emb.video));
+for (const key in emb.video) {
+if (Array.isArray(emb.video[key])) restored += emb.video[key].length;
+}
+console.log('✅ [LR Layer 2] Video dipulihkan dari embedded HTML');
+} else {
+let merged = false;
+for (const key in emb.video) {
+const embList = emb.video[key];
+if (!Array.isArray(embList)) continue;
+const localList = localData[key] || [];
+embList.forEach(url => {
+if (!localList.includes(url)) {
+localList.push(url);
+restored++;
+merged = true;
+}
+});
+localData[key] = localList;
+}
+if (merged) {
+localStorage.setItem(VIDEO_KEY, JSON.stringify(localData));
+console.log('✅ [LR Layer 2] Video di-merge dari embedded');
+}
+}
+} catch(e) {}
+}
+
+// === DOKUMEN ===
+if (emb.docLinks && Object.keys(emb.docLinks).length > 0) {
+try {
+const localD = localStorage.getItem(DOC_KEY);
+const localData = localD ? JSON.parse(localD) : {};
+
+if (Object.keys(localData).length === 0) {
+localStorage.setItem(DOC_KEY, JSON.stringify(emb.docLinks));
+for (const key in emb.docLinks) {
+if (Array.isArray(emb.docLinks[key])) restored += emb.docLinks[key].length;
+}
+console.log('✅ [LR Layer 2] Dokumen dipulihkan dari embedded HTML');
+} else {
+let merged = false;
+for (const key in emb.docLinks) {
+const embList = emb.docLinks[key];
+if (!Array.isArray(embList)) continue;
+const localList = localData[key] || [];
+embList.forEach(url => {
+if (!localList.includes(url)) {
+localList.push(url);
+restored++;
+merged = true;
+}
+});
+localData[key] = localList;
+}
+if (merged) {
+localStorage.setItem(DOC_KEY, JSON.stringify(localData));
+console.log('✅ [LR Layer 2] Dokumen di-merge dari embedded');
+}
+}
+} catch(e) {}
+}
+
+window.__lrStats.layer2 = restored;
+return restored;
+}
+
+/* ================================================================
+* 🛡️ LAYER 3: Restore dari Google Sheet (ultimate backup)
+*    → Fetch semua data dari Sheet, cocokkan ke card yang tepat
+================================================================ */
+async function lrRestoreFromSheet() {
+const backendUrl = localStorage.getItem(CFG_KEY);
+if (!backendUrl) {
+console.log('ℹ️ [LR Layer 3] Backend URL belum dikonfigurasi');
+return 0;
+}
+
+if (typeof DOCS === 'undefined' || !Array.isArray(DOCS)) {
+console.warn('⚠️ [LR Layer 3] DOCS array tidak tersedia');
+return 0;
+}
+
+console.log('🔄 [LR Layer 3] Mengambil data dari Google Sheets...');
+
+try {
+const res = await fetch(backendUrl, { method: 'GET', redirect: 'follow' });
+const json = await res.json();
+
+if (!json.success || !Array.isArray(json.data)) {
+console.warn('⚠️ [LR Layer 3] Response tidak valid');
+return 0;
+}
+
+console.log('📊 [LR Layer 3]', json.data.length, 'link ditemukan di sheet');
+
+// Load data lokal saat ini
+let materi = {}, video = {}, doc = {};
+try {
+const m = localStorage.getItem(MATERI_KEY);
+if (m) materi = JSON.parse(m);
+} catch(e) {}
+try {
+const v = localStorage.getItem(VIDEO_KEY);
+if (v) video = JSON.parse(v);
+} catch(e) {}
+try {
+const d = localStorage.getItem(DOC_KEY);
+if (d) doc = JSON.parse(d);
+} catch(e) {}
+
+let added = 0;
+let skipped = 0;
+
+// Proses setiap row di sheet
+json.data.forEach(row => {
+const kelas = String(row.Kelas || '').toLowerCase().trim();
+const guru = String(row.Guru || '').toLowerCase().trim();
+const kategori = String(row.Kategori || '').toLowerCase().trim();
+const nama = String(row.NamaDokumen || '').trim();
+const jenis = String(row.JenisLink || 'doc').toLowerCase().trim();
+const url = String(row.URL || '').trim();
+
+if (!url || url === '-') return;
+
+// 🔑 Cari docIdx dengan matching KETAT (AND, bukan OR)
+const docIdx = lrFindDocIdx(kelas, guru, kategori, nama);
+if (docIdx < 0) {
+skipped++;
+return;
+}
+
+const d = DOCS[docIdx];
+
+if (d.kat === 'materi') {
+const materiIdx = lrGetMateriIdx(docIdx);
+if (materiIdx < 0) return;
+
+const key = d.kelas + '_' + d.guru + '_' + materiIdx;
+if (!materi[key]) materi[key] = {ppt:[],pdf:[],doc:[],video:[]};
+if (!materi[key][jenis]) materi[key][jenis] = [];
+
+if (!materi[key][jenis].includes(url)) {
+materi[key][jenis].push(url);
+added++;
+}
+} else {
+if (!doc[docIdx]) doc[docIdx] = [];
+if (!doc[docIdx].includes(url)) {
+doc[docIdx].push(url);
+added++;
+}
+}
+});
+
+// Simpan ke localStorage
+localStorage.setItem(MATERI_KEY, JSON.stringify(materi));
+localStorage.setItem(VIDEO_KEY, JSON.stringify(video));
+localStorage.setItem(DOC_KEY, JSON.stringify(doc));
+
+console.log('✅ [LR Layer 3] Restore selesai:', added, 'link dipulihkan,', skipped, 'link dilewati');
+
+window.__lrStats.layer3 = added;
+window.__lrStats.lastRestore = new Date().toISOString();
+
+return added;
+} catch(e) {
+console.error('❌ [LR Layer 3] Gagal fetch dari sheet:', e);
+return 0;
+}
+}
+
+/* ================================================================
+* 🎯 FUNGSI UTAMA: Auto-Restore (3 lapis berurutan)
+*    → Dipanggil saat halaman load
+*    → Urutan: Layer 1 → Layer 2 → Layer 3 (jika perlu)
+================================================================ */
+async function lrAutoRestore() {
+console.log('🔄 [LR] Memulai auto-restore 3 lapis...');
+
+// Layer 1: Cek localStorage
+const layer1Count = lrCheckLayer1();
+console.log('📦 [LR Layer 1] Data di localStorage:', layer1Count, 'link');
+
+if (layer1Count > 0) {
+console.log('✅ [LR] Data lokal tersedia, tidak perlu restore');
+return;
+}
+
+// Layer 2: Coba restore dari embedded JSON
+console.log('🔄 [LR] Layer 1 kosong, coba Layer 2 (embedded)...');
+const layer2Count = lrRestoreFromEmbedded();
+
+if (layer2Count > 0) {
+console.log('✅ [LR] Restore berhasil dari embedded HTML:', layer2Count, 'link');
+if (typeof showToast === 'function') {
+showToast('🔄 ' + layer2Count + ' link dipulihkan dari backup HTML', 'success');
+}
+// Re-render UI
+setTimeout(() => {
+if (typeof render === 'function') {
+try { render(true); } catch(e) {}
+}
+}, 500);
+return;
+}
+
+// Layer 3: Coba restore dari Google Sheet
+console.log('🔄 [LR] Layer 2 kosong, coba Layer 3 (Google Sheet)...');
+const layer3Count = await lrRestoreFromSheet();
+
+if (layer3Count > 0) {
+console.log('✅ [LR] Restore berhasil dari Google Sheet:', layer3Count, 'link');
+if (typeof showToast === 'function') {
+showToast('🔄 ' + layer3Count + ' link dipulihkan dari Google Sheets', 'success');
+}
+// Snapshot ke embedded untuk next time
+lrSnapshotToEmbedded();
+// Re-render UI
+setTimeout(() => {
+if (typeof render === 'function') {
+try { render(true); } catch(e) {}
+}
+}, 500);
+return;
+}
+
+console.log('ℹ️ [LR] Tidak ada data untuk dipulihkan');
+}
+
+/* ================================================================
+* 🎯 FUNGSI MANUAL: Pulihkan dari Sheet (tombol di panel Rekap)
+================================================================ */
+window.bk56RestoreFromSheetManual = async function() {
+if (typeof showToast === 'function') {
+showToast('🔄 Sedang memulihkan link dari Google Sheets...', 'info');
+}
+
+const count = await lrRestoreFromSheet();
+
+if (count > 0) {
+// Snapshot ke embedded
+lrSnapshotToEmbedded();
+
+// Re-render UI
+setTimeout(() => {
+if (typeof render === 'function') {
+try { render(true); } catch(e) {}
+}
+if (typeof bk56RenderRekap === 'function') {
+try { bk56RenderRekap(); } catch(e) {}
+}
+}, 500);
+
+if (typeof showToast === 'function') {
+showToast('✅ ' + count + ' link berhasil dipulihkan dari Google Sheets', 'success');
+}
+} else {
+if (typeof showToast === 'function') {
+showToast('⚠️ Tidak ada link baru untuk dipulihkan', 'info');
+}
+}
+};
+
+/* ================================================================
+* 🛡️ HOOK 1: bk56SyncToSheet → snapshot ke embedded setelah push
+*    → Setiap kali user push, snapshot otomatis tersimpan
+================================================================ */
+function hookSyncToSheet() {
+if (typeof window.bk56SyncToSheet !== 'function') {
+setTimeout(hookSyncToSheet, 500);
+return;
+}
+if (window.bk56SyncToSheet.__lrHooked) return;
+
+const _orig = window.bk56SyncToSheet;
+window.bk56SyncToSheet = async function() {
+// Panggil fungsi asli
+const result = await _orig.apply(this, arguments);
+
+// 🔑 Snapshot ke embedded SETELAH push berhasil
+setTimeout(() => {
+lrSnapshotToEmbedded();
+console.log('✅ [LR] Snapshot otomatis setelah push ke sheet');
+}, 500);
+
+return result;
+};
+window.bk56SyncToSheet.__lrHooked = true;
+console.log('✅ [LR] bk56SyncToSheet di-hook (snapshot otomatis)');
+}
+
+/* ================================================================
+* 🛡️ HOOK 2: bk56RenderRekap → inject tombol "Pulihkan dari Sheet"
+================================================================ */
+function hookRenderRekap() {
+if (typeof window.bk56RenderRekap !== 'function') {
+setTimeout(hookRenderRekap, 500);
+return;
+}
+if (window.bk56RenderRekap.__lrHooked) return;
+
+const _orig = window.bk56RenderRekap;
+window.bk56RenderRekap = function() {
+_orig.apply(this, arguments);
+
+// Inject tombol setelah render
+setTimeout(injectRestoreButton, 300);
+};
+window.bk56RenderRekap.__lrHooked = true;
+console.log('✅ [LR] bk56RenderRekap di-hook');
+}
+
+/* ================================================================
+* 🎨 INJECT: Tombol "🔄 Pulihkan dari Sheet" di panel Rekap
+================================================================ */
+function injectRestoreButton() {
+const controls = document.querySelector('#a56-panel-rekap .a56-rekap-controls');
+if (!controls) return;
+
+// Jika sudah ada, skip
+if (document.getElementById('bk56-lr-restore-btn')) return;
+
+const btn = document.createElement('button');
+btn.id = 'bk56-lr-restore-btn';
+btn.className = 'a56-rekap-btn secondary';
+btn.style.background = 'linear-gradient(135deg, #8b5cf6, #7c3aed)';
+btn.style.boxShadow = '0 4px 14px rgba(139,92,246,.3)';
+btn.innerHTML = '🔄 Pulihkan dari Sheet';
+btn.title = 'Ambil semua link dari Google Sheets dan kembalikan ke card asal';
+btn.onclick = function() {
+bk56RestoreFromSheetManual();
+};
+
+// Sisipkan setelah tombol "Push ke Sheet"
+const pushBtn = controls.querySelector('button[onclick*="bk56SyncToSheet"]');
+if (pushBtn && pushBtn.nextSibling) {
+controls.insertBefore(btn, pushBtn.nextSibling);
+} else {
+controls.appendChild(btn);
+}
+
+console.log('✅ [LR] Tombol "Pulihkan dari Sheet" di-inject');
+}
+
+/* ================================================================
+* 🛡️ HOOK 3: addMateriLink/addVideoLink/addDocLink → snapshot
+*    → Setiap kali user tambah link, snapshot ke embedded
+================================================================ */
+function hookAddFunctions() {
+['addMateriLink', 'addVideoLink', 'addDocLink'].forEach(fnName => {
+if (typeof window[fnName] !== 'function' || window[fnName].__lrHooked) return;
+
+const _orig = window[fnName];
+window[fnName] = function() {
+const result = _orig.apply(this, arguments);
+
+// Snapshot ke embedded setelah tambah link
+setTimeout(lrSnapshotToEmbedded, 300);
+
+return result;
+};
+window[fnName].__lrHooked = true;
+console.log('✅ [LR] ' + fnName + ' di-hook');
+});
+}
+
+/* ================================================================
+* 🛡️ HOOK 4: bk56BackupToHTML → pastikan snapshot terbaru
+================================================================ */
+function hookBackup() {
+if (typeof window.bk56BackupToHTML !== 'function') return;
+if (window.bk56BackupToHTML.__lrHooked) return;
+
+const _orig = window.bk56BackupToHTML;
+window.bk56BackupToHTML = function() {
+// Snapshot SEBELUM backup
+lrSnapshotToEmbedded();
+console.log('✅ [LR] Snapshot sebelum backup HTML');
+
+return _orig.apply(this, arguments);
+};
+window.bk56BackupToHTML.__lrHooked = true;
+console.log('✅ [LR] bk56BackupToHTML di-hook');
+}
+
+/* ================================================================
+* 📊 DEBUG: Fungsi untuk cek status pemulihan
+================================================================ */
+window.bk56LinkRestorerStatus = function() {
+console.log('');
+console.log('═══════════════════════════════════════════════════════');
+console.log('🔒 LINK RESTORER — STATUS');
+console.log('═══════════════════════════════════════════════════════');
+
+const layer1 = lrCheckLayer1();
+const emb = lrReadEmb();
+
+let layer2 = 0;
+if (emb) {
+if (emb.materi) {
+for (const key in emb.materi) {
+const d = emb.materi[key];
+['ppt','pdf','doc','video'].forEach(t => {
+if (d[t] && Array.isArray(d[t])) layer2 += d[t].length;
+});
+}
+}
+if (emb.video) {
+for (const key in emb.video) {
+if (Array.isArray(emb.video[key])) layer2 += emb.video[key].length;
+}
+}
+if (emb.docLinks) {
+for (const key in emb.docLinks) {
+if (Array.isArray(emb.docLinks[key])) layer2 += emb.docLinks[key].length;
+}
+}
+}
+
+console.log('📦 Layer 1 (localStorage):', layer1, 'link');
+console.log('💾 Layer 2 (embedded HTML):', layer2, 'link');
+console.log('🌐 Layer 3 (Google Sheet): cek manual');
+console.log('🕐 Last restore:', window.__lrStats.lastRestore || 'Belum pernah');
+console.log('');
+console.log('💡 Cara pakai:');
+console.log('   • Auto-restore: otomatis saat load (jika Layer 1 kosong)');
+console.log('   • Manual restore: klik "🔄 Pulihkan dari Sheet" di panel Rekap');
+console.log('═══════════════════════════════════════════════════════');
+console.log('');
+
+return {
+layer1: layer1,
+layer2: layer2,
+lastRestore: window.__lrStats.lastRestore
+};
+};
+
+/* ================================================================
+* 🚀 INIT: Pasang semua hook + auto-restore
+================================================================ */
+async function init() {
+console.log('🚀 [LinkRestorer] Memulai inisialisasi...');
+
+// 1. Hook fungsi-fungsi inti
+hookSyncToSheet();
+hookRenderRekap();
+hookAddFunctions();
+hookBackup();
+
+// 2. Initial snapshot (jika localStorage ada data)
+setTimeout(lrSnapshotToEmbedded, 2000);
+
+// 3. Auto-restore (3 lapis)
+setTimeout(lrAutoRestore, 1500);
+
+// 4. Sync saat visibility change (user kembali ke tab)
+document.addEventListener('visibilitychange', () => {
+if (!document.hidden) {
+const layer1 = lrCheckLayer1();
+if (layer1 === 0) {
+console.log('🔄 [LR] Tab aktif, Layer 1 kosong → coba restore');
+lrAutoRestore();
+}
+}
+});
+
+// 5. Notifikasi awal
+setTimeout(() => {
+const layer1 = lrCheckLayer1();
+if (typeof showToast === 'function') {
+if (layer1 > 0) {
+showToast('🔒 Link Restorer aktif — ' + layer1 + ' link tersimpan aman', 'success');
+} else {
+showToast('🔒 Link Restorer aktif — sistem pemulihan 3 lapis siap', 'info');
+}
+}
+}, 3000);
+
+console.log('✅ [LinkRestorer] Patch terpasang — 4 hook aktif');
+console.log('💡 Cek status: ketik bk56LinkRestorerStatus() di console');
+}
+
+// Jalankan init
+if (document.readyState === 'loading') {
+document.addEventListener('DOMContentLoaded', init);
+} else {
+init();
+}
+
+})();
+</script>
+<!-- ================================================================ -->
+<!-- ========== 🔒 PATCH: PERMANENT LINK RESTORER SYSTEM [END] ========== -->
+<!-- ================================================================ -->
 </body>
 </html>
