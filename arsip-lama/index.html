@@ -18512,5 +18512,380 @@ init();
 <!-- ================================================================ -->
 <!-- ========== PATCH: HAPUS TOMBOL CENTANG SEMUA [END] ========== -->
 <!-- ================================================================ -->
+<!-- ================================================================ -->
+<!-- ===== PATCH CK-FIX v1.0 : CATATAN KASUS VII-A / VIII-A / IX-A ==== -->
+<!-- ===== Perbaikan card TANPA mengubah sistem lama | Nov 2026 ===== -->
+<!-- ================================================================ -->
+<style id="ck-fix-style">
+.ck-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;
+font-size:.7rem;font-weight:800;margin:6px 0 2px;color:#fff;width:fit-content;
+background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);
+backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.ck-badge.ok{background:rgba(16,185,129,.38);border-color:rgba(16,185,129,.75)}
+.ck-badge.warn{background:rgba(245,158,11,.38);border-color:rgba(245,158,11,.8)}
+.ck-badge.dead{background:rgba(239,68,68,.38);border-color:rgba(239,68,68,.8)}
+.ck-actions{display:grid;grid-template-columns:1fr 42px 42px 42px;gap:7px;margin-top:9px}
+.ck-btn-main{background:rgba(255,255,255,.22);backdrop-filter:blur(10px);
+-webkit-backdrop-filter:blur(10px);color:#fff;border:1px solid rgba(255,255,255,.38);
+padding:12px 14px;border-radius:12px;font-weight:800;cursor:pointer;font-size:.88rem;
+font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;
+transition:all .25s ease;box-shadow:0 4px 14px rgba(0,0,0,.22)}
+.ck-btn-main:hover:not(:disabled){background:rgba(255,255,255,.36);transform:translateY(-2px);
+box-shadow:0 8px 22px rgba(0,0,0,.32)}
+.ck-btn-main:disabled{opacity:.5;cursor:not-allowed}
+.ck-btn-main.empty{background:rgba(255,255,255,.1);border:1px dashed rgba(255,255,255,.45);box-shadow:none}
+.ck-mini{width:42px;height:42px;border-radius:11px;cursor:pointer;font-size:1rem;
+background:rgba(255,255,255,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+color:#fff;border:1px solid rgba(255,255,255,.32);display:flex;align-items:center;
+justify-content:center;transition:all .2s ease;font-family:inherit}
+.ck-mini:hover{background:rgba(255,255,255,.32);transform:scale(1.07)}
+.a56-link-url.ck-fixed{color:#a7f3d0!important;font-weight:700}
+@media(max-width:600px){
+.ck-actions{grid-template-columns:1fr 38px 38px 38px;gap:6px}
+.ck-mini{width:38px;height:38px;font-size:.9rem}
+.ck-btn-main{font-size:.8rem;padding:10px 10px}}
+</style>
+<script>
+(function(){
+"use strict";
+/* ================================================================
+ * CK-FIX v1.0 —-self-contained, anti-conflict
+ * Flag  : window.__ckCatatanKasusFix
+ * Namespace : ck-  | localStorage: ck_fixed_links, ck_link_status
+ * TIDAK mengubah: DOCS asli di file, render(), patch materi/video,
+ *                 sync guardian, RKX, backup, login, dll.
+ * ================================================================ */
+var FLAG='__ckCatatanKasusFix';
+if(window[FLAG]){console.log('ℹ️ [CK-FIX] sudah aktif, skip');return;}
+window[FLAG]=true;
+
+var STORE='ck_fixed_links';      // override manual per-card (permanen)
+var CACHE='ck_link_status';      // cache hasil verifikasi URL
+var EMB  ='bk56-embedded-data';
+var TTL  =6*60*60*1000;          // cache 6 jam
+
+/* ============ KONFIGURASI (boleh diedit kapan saja) ============ */
+var CK_CONFIG=[
+ { id:'vii-a', kelas:'vii', nama:'Catatan Kasus Kelas VII-A', urls:[
+   'https://appseet11-cmd.github.io/Catatan-Kasus-Kelas-VII-A/',
+   'https://appseet11-cmd.github.io/CATATAN-KASUS-VII-A/',
+   'https://appseet11-cmd.github.io/CATATAN-KASUS-KELAS-VII-A/'
+ ]},
+ { id:'viii-a', kelas:'viii', nama:'Catatan Kasus Kelas VIII-A', urls:[
+   'https://appseet11-cmd.github.io/CATATAN-KASUS-VIII-A/',
+   'https://appseet11-cmd.github.io/CATATAN-KASUS-KELAS-VIII-A/',
+   'https://appseet11-cmd.github.io/Catatan-Kasus-Kelas-VIII-A/'
+ ]},
+ { id:'ix-a', kelas:'ix', nama:'Catatan Kasus Kelas IX-A', urls:[
+   'https://appseet11-cmd.github.io/CATATAN-KASUS-IX-A/',
+   'https://appseet11-cmd.github.io/CATATAN-KASUS-KELAS-IX-A/',
+   'https://appseet11-cmd.github.io/Catatan-Kasus-Kelas-IX-A/'
+ ]}
+];
+/* =============================================================== */
+
+var RESULT={}, PENDING={}, busy=false, obsTimer=null;
+
+/* ---------- util ---------- */
+function norm(s){return String(s==null?'':s).toLowerCase().replace(/\s+/g,' ').trim();}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+ .replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function lsGet(k,f){try{var r=localStorage.getItem(k);return r?JSON.parse(r):f;}catch(e){return f;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function toast(m,t){if(typeof window.showToast==='function'){try{window.showToast(m,t||'success');return;}catch(e){}}console.log('[CK-FIX] '+m);}
+function docKey(d){return d.kelas+'|'+d.guru+'|'+d.nama;}
+function cfgByName(n){var x=norm(n);for(var i=0;i<CK_CONFIG.length;i++){if(norm(CK_CONFIG[i].nama)===x)return CK_CONFIG[i];}return null;}
+function cfgById(id){for(var i=0;i<CK_CONFIG.length;i++){if(CK_CONFIG[i].id===id)return CK_CONFIG[i];}return null;}
+function docs(){return (typeof DOCS!=='undefined'&&Array.isArray(DOCS))?DOCS:[];}
+function targetsOf(cfg){
+ var out=[];docs().forEach(function(d,i){
+  if(d.kelas===cfg.kelas&&d.kat==='kasus'&&norm(d.nama)===norm(cfg.nama))out.push({d:d,i:i});
+ });return out;
+}
+function uniq(a){var s={},o=[];a.forEach(function(u){u=String(u||'').trim();if(u&&!s[u]){s[u]=1;o.push(u);}});return o;}
+
+/* ---------- verifikasi URL (auto-fallback antar kandidat) ---------- */
+function checkUrl(url){
+ return new Promise(function(resolve){
+  var c=lsGet(CACHE,{}), e=c[url];
+  if(e&&(Date.now()-e.t)<TTL){resolve(e.s);return;}
+  var done=false, ctrl=null, timer=null;
+  function fin(s){if(done)return;done=true;if(timer)clearTimeout(timer);
+   var cc=lsGet(CACHE,{});cc[url]={s:s,t:Date.now()};lsSet(CACHE,cc);resolve(s);}
+  try{
+   if(window.AbortController){ctrl=new AbortController();timer=setTimeout(function(){try{ctrl.abort();}catch(x){}fin('unknown');},8000);}
+   fetch(url,{method:'GET',cache:'no-store',redirect:'follow',signal:ctrl?ctrl.signal:undefined})
+    .then(function(r){fin(r.ok?'ok':'dead');})
+    .catch(function(){fin('unknown');});
+  }catch(err){fin('unknown');}
+ });
+}
+
+function resolveTarget(cfg){
+ if(PENDING[cfg.id])return PENDING[cfg.id];
+ PENDING[cfg.id]=(async function(){
+  var saved=lsGet(STORE,{}), cands=[];
+  targetsOf(cfg).forEach(function(t){
+   var ov=saved[docKey(t.d)]; if(ov)cands.push(ov);
+   if(t.d.link&&t.d.link.trim())cands.push(t.d.link.trim());
+  });
+  cfg.urls.forEach(function(u){cands.push(u);});
+  cands=uniq(cands);
+  var firstUnknown='';
+  for(var i=0;i<cands.length;i++){
+   var st=await checkUrl(cands[i]);
+   if(st==='ok')return {url:cands[i],status:'ok'};
+   if(st==='unknown'&&!firstUnknown)firstUnknown=cands[i];
+  }
+  if(firstUnknown)return {url:firstUnknown,status:'unknown'};
+  return {url:cands[0]||'',status:cands.length?'dead':'empty'};
+ })();
+ return PENDING[cfg.id];
+}
+
+/* ---------- terapkan hasil ke DOCS (pemilik link / semua guru) ---------- */
+function applyResult(cfg,r){
+ var saved=lsGet(STORE,{}), ts=targetsOf(cfg);
+ var owners=ts.filter(function(t){return t.d.link&&t.d.link.trim();});
+ var list=owners.length?owners:ts;
+ list.forEach(function(t){
+  var ov=saved[docKey(t.d)];
+  var url=ov||r.url;
+  if(url)t.d.link=url;
+ });
+ ts.forEach(function(t){var ov=saved[docKey(t.d)];if(ov)t.d.link=ov;});
+ persistEmbedded();
+}
+function persistEmbedded(){
+ try{
+  var el=document.getElementById(EMB); if(!el)return;
+  var d=JSON.parse(el.textContent)||{};
+  d.catatanKasusFix=lsGet(STORE,{});
+  d.ckResolved={};
+  Object.keys(RESULT).forEach(function(k){d.ckResolved[k]=RESULT[k];});
+  d.lastUpdated=new Date().toISOString();
+  el.textContent=JSON.stringify(d);
+ }catch(e){}
+}
+function restoreEmbedded(){
+ try{
+  var el=document.getElementById(EMB); if(!el)return;
+  var d=JSON.parse(el.textContent)||{};
+  if(d.catatanKasusFix&&Object.keys(d.catatanKasusFix).length&&!localStorage.getItem(STORE)){
+   lsSet(STORE,d.catatanKasusFix);
+  }
+  if(d.ckResolved){Object.keys(d.ckResolved).forEach(function(k){
+   if(d.ckResolved[k]&&d.ckResolved[k].url)RESULT[k]=d.ckResolved[k];});}
+ }catch(e){}
+}
+
+/* ---------- aksi tombol ---------- */
+function bestUrl(idx,cfg){
+ var d=docs()[idx]; if(!d)return '';
+ var ov=lsGet(STORE,{})[docKey(d)];
+ if(ov)return ov;
+ try{
+  var dl=lsGet('bk56_doc_links',{});
+  if(dl&&dl[idx]&&dl[idx].length)return dl[idx][0];
+ }catch(e){}
+ if(d.link&&d.link.trim())return d.link.trim();
+ return (RESULT[cfg.id]&&RESULT[cfg.id].url)||'';
+}
+window.ckOpen=function(idx,newTab){
+ var d=docs()[idx]; if(!d){toast('⚠️ Dokumen tidak ditemukan','error');return;}
+ var cfg=cfgByName(d.nama); if(!cfg)return;
+ var url=bestUrl(idx,cfg);
+ if(!url){toast('⚠️ Link belum diisi. Klik ✏️ untuk mengisi.','error');return;}
+ if(!/^https?:\/\//i.test(url))url='https://'+url;
+ if(newTab){window.open(url,'_blank','noopener,noreferrer');toast('↗️ Membuka di tab baru…','success');}
+ else{toast('📂 Membuka '+d.nama+'…','success');setTimeout(function(){window.location.href=url;},250);}
+};
+window.ckEdit=function(idx){
+ var d=docs()[idx]; if(!d)return;
+ var cfg=cfgByName(d.nama); if(!cfg)return;
+ var cur=bestUrl(idx,cfg);
+ var v=prompt('✏️ URL '+d.nama+'\n\nTempel link yang benar (GitHub Pages / Apps Script / Drive):',cur);
+ if(v===null)return;
+ v=v.trim();
+ if(!v){toast('⚠️ URL kosong, dibatalkan','error');return;}
+ if(!/^https?:\/\//i.test(v))v='https://'+v;
+ var s=lsGet(STORE,{}); s[docKey(d)]=v; lsSet(STORE,s);
+ d.link=v;
+ RESULT[cfg.id]={url:v,status:'unknown'};
+ persistEmbedded();
+ toast('💾 Link tersimpan permanen di browser','success');
+ enhance(true);
+};
+window.ckRecheck=function(idx){
+ var d=docs()[idx]; if(!d)return;
+ var cfg=cfgByName(d.nama); if(!cfg)return;
+ var c=lsGet(CACHE,{});
+ cfg.urls.forEach(function(u){delete c[u];});
+ Object.keys(c).forEach(function(u){if(/catatan-kasus/i.test(u))delete c[u];});
+ lsSet(CACHE,c);
+ delete RESULT[cfg.id]; delete PENDING[cfg.id];
+ toast('🔄 Mengecek ulang link…','info');
+ enhance(true);
+};
+
+/* ---------- render ulang area aksi khusus 3 card ---------- */
+function renderCard(card,idx,cfg){
+ var d=docs()[idx];
+ var r=RESULT[cfg.id];
+ var url=bestUrl(idx,cfg);
+ var status=r?r.status:(url?'unknown':'empty');
+ if(!url)status='empty';
+ var sig=idx+'|'+status+'|'+url;
+ if(card.getAttribute('data-ck-sig')===sig)return;
+ card.setAttribute('data-ck-sig',sig);
+
+ ['.ck-actions','.ck-badge','.a56-link-actions-wrap','.a56-materi-actions-final',
+  '.a56-link-badges','.a56-btn','.a56-btn-link-open','.a56-btn-link-manage-small',
+  '.bk56-materi-manage-fix'].forEach(function(sel){
+   card.querySelectorAll(sel).forEach(function(el){el.remove();});
+ });
+
+ var box=card.querySelector('.a56-link-embedded');
+ if(box){
+  var lab=box.querySelector('.a56-link-label');
+  if(lab)lab.textContent='🔗 Link Catatan Kasus (terverifikasi)';
+  var u=box.querySelector('.a56-link-url');
+  if(u){
+   u.textContent=url?url:'BELUM DIISI — klik ✏️ untuk mengisi';
+   u.className='a56-link-url'+(url?' ck-fixed':' kosong');
+   if(url)u.title=url;
+  }
+ }
+
+ var map={
+  ok:['ok','✅ Link Aktif & Terverifikasi'],
+  unknown:['','🔗 Link Tersimpan'],
+  dead:['dead','⚠️ Link Tidak Ditemukan (404)'],
+  empty:['warn','⚠️ Link Belum Diisi'],
+  checking:['warn','⏳ Memeriksa Link…']
+ };
+ if(!r&&url)status='checking';
+ var m=map[status]||map.unknown;
+ var badge=document.createElement('div');
+ badge.className='ck-badge '+m[0];
+ badge.textContent=m[1];
+ card.appendChild(badge);
+
+ var wrap=document.createElement('div');
+ wrap.className='ck-actions';
+
+ var main=document.createElement('button');
+ main.type='button';
+ main.className='ck-btn-main'+(url?'':' empty');
+ main.innerHTML=url?'<span>📂</span> Buka Catatan Kasus':'<span>⚠️</span> Link Belum Diisi';
+ main.title=url?('Buka: '+url):'Klik ✏️ untuk mengisi link';
+ main.disabled=!url;
+ main.onclick=function(e){e.preventDefault();e.stopPropagation();ckOpen(idx,false);};
+ wrap.appendChild(main);
+
+ var b1=document.createElement('button');
+ b1.type='button';b1.className='ck-mini';b1.innerHTML='↗️';b1.title='Buka di tab baru';
+ b1.onclick=function(e){e.preventDefault();e.stopPropagation();ckOpen(idx,true);};
+ wrap.appendChild(b1);
+
+ var b2=document.createElement('button');
+ b2.type='button';b2.className='ck-mini';b2.innerHTML='✏️';b2.title='Ubah / isi link (tersimpan permanen)';
+ b2.onclick=function(e){e.preventDefault();e.stopPropagation();ckEdit(idx);};
+ wrap.appendChild(b2);
+
+ var b3=document.createElement('button');
+ b3.type='button';b3.className='ck-mini';b3.innerHTML='🔄';b3.title='Cek ulang status link';
+ b3.onclick=function(e){e.preventDefault();e.stopPropagation();ckRecheck(idx);};
+ wrap.appendChild(b3);
+
+ card.appendChild(wrap);
+}
+
+function idxOf(card,cfg){
+ var btn=card.querySelector('[onclick]');
+ if(btn){
+  var m=String(btn.getAttribute('onclick')||'').match(/(?:bukaDoc|openDocLinkFinal|openLinkModal)\((\d+)\)/);
+  if(m)return parseInt(m[1],10);
+ }
+ var k=(typeof kelasAktif!=='undefined')?kelasAktif:cfg.kelas;
+ var g=(typeof filterGuru!=='undefined')?filterGuru:null;
+ var arr=docs(),found=-1;
+ for(var i=0;i<arr.length;i++){
+  if(arr[i].kelas===k&&arr[i].kat==='kasus'&&norm(arr[i].nama)===norm(cfg.nama)){
+   if(!g||arr[i].guru===g){found=i;break;}
+   if(found<0)found=i;
+  }
+ }
+ return found;
+}
+
+function enhance(force){
+ var grid=document.getElementById('grid-dokumen'); if(!grid)return;
+ busy=true;
+ grid.querySelectorAll('.a56-card').forEach(function(card){
+  var h3=card.querySelector('h3'); if(!h3)return;
+  var cfg=cfgByName(h3.textContent); if(!cfg)return;
+  var idx=idxOf(card,cfg); if(idx<0)return;
+  if(force)card.removeAttribute('data-ck-sig');
+  renderCard(card,idx,cfg);
+  if(!RESULT[cfg.id]){
+   resolveTarget(cfg).then(function(r){
+    RESULT[cfg.id]=r;
+    applyResult(cfg,r);
+    setTimeout(function(){enhance(true);},30);
+   });
+  }
+ });
+ setTimeout(function(){busy=false;},80);
+}
+
+/* ---------- hook aman ke fungsi lama (tanpa menggantikannya) ---------- */
+function hook(name){
+ var f=window[name];
+ if(typeof f!=='function'||f.__ckHooked)return;
+ window[name]=function(){
+  var r=f.apply(this,arguments);
+  setTimeout(function(){enhance(false);},260);
+  return r;
+ };
+ window[name].__ckHooked=true;
+}
+
+function watch(){
+ var grid=document.getElementById('grid-dokumen');
+ if(!grid){setTimeout(watch,700);return;}
+ new MutationObserver(function(){
+  if(busy)return;
+  clearTimeout(obsTimer);
+  obsTimer=setTimeout(function(){enhance(false);},220);
+ }).observe(grid,{childList:true,subtree:true});
+}
+
+/* ---------- init ---------- */
+function init(){
+ console.log('🚀 [CK-FIX v1.0] Perbaikan Catatan Kasus VII-A / VIII-A / IX-A');
+ restoreEmbedded();
+ ['render','pindahKelas','setGuru','setKat','go','bk56ShowRekap'].forEach(hook);
+ watch();
+ [600,1500,3000,5000].forEach(function(t){setTimeout(function(){enhance(false);},t);});
+ CK_CONFIG.forEach(function(cfg){
+  resolveTarget(cfg).then(function(r){
+   RESULT[cfg.id]=r; applyResult(cfg,r);
+   console.log('   • '+cfg.nama+' → ['+r.status+'] '+(r.url||'(kosong)'));
+   setTimeout(function(){enhance(true);},30);
+  });
+ });
+ window.CKFIX={
+  status:function(){console.table(RESULT);return RESULT;},
+  recheck:function(){lsSet(CACHE,{});RESULT={};PENDING={};enhance(true);toast('🔄 Cek ulang semua link','info');},
+  config:CK_CONFIG
+};
+ console.log('✅ [CK-FIX] aktif — cek status: CKFIX.status()');
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+else init();
+})();
+</script>
+<!-- ================= PATCH CK-FIX v1.0 [END] ================= -->
 </body>
 </html>
