@@ -1139,7 +1139,6 @@ box-shadow:0 8px 20px rgba(0,0,0,0.3);
 @media(max-width:768px){.a56-container{padding:1.2rem 1rem}.a56-card{padding:1.2rem}}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-
 <style>
 .welcome-title{
   font-family:'Fredoka','Baloo 2','Righteous',sans-serif !important;
@@ -3826,7 +3825,7 @@ D("vii","wahyuni","metode","Bimbingan Klasikal","");
 D("vii","wahyuni","metode","Bimbingan Kelompok","");
 D("vii","wahyuni","metode","Bimbingan Individual","");
 D("vii","wahyuni","metode","Kolaborasi","");
-D("vii","wahyuni","kasus","Catatan Kasus Kelas VII-A","https://appseet11-cmd.github.io/Catatan-Kasus-Kelas-VII-A/");
+D("vii","wahyuni","kasus","Catatan Kasus Kelas VII-A","https://appseet11-cmd.github.io/CATATAN-KASUS-VII-A/");
 D("vii","wahyuni","kasus","Catatan Kasus Kelas VII-B","https://appseet11-cmd.github.io/CATATAN-KASUS-VII-B/");
 D("vii","wahyuni","kasus","Catatan Kasus Kelas VII-C","https://appseet11-cmd.github.io/CATATAN-KASUS-VII-C/");
 D("vii","wahyuni","kasus","Catatan Kasus Kelas VII-D","https://appseet11-cmd.github.io/CATATAN-KASUS-VII-D/");
@@ -17044,1145 +17043,7 @@ init();
 <!-- ================================================================ -->
 <!-- ========== PATCH: SYNC GUARDIAN v2.0 — ULTRA STRICT [END] ========== -->
 <!-- ================================================================ -->
-<!-- ===== PATCH RKX v1.0 : REKAP LINK CHECKBOX PER GURU BK ========= -->
-<!-- ===== Anti-Conflict | Namespace: rkx- | Nov 2026 =============== -->
-<!-- ================================================================ -->
-<style id="rkx-style">
-.rkx-wrap{margin:14px 0;font-family:inherit}
-.rkx-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:2px solid #10b981;border-radius:12px;padding:12px 14px;margin-bottom:12px}
-.rkx-toolbar .rkx-title{font-weight:800;color:#065f46;font-size:.95rem;display:flex;align-items:center;gap:8px;flex:1;min-width:200px}
-.rkx-btn{border:none;border-radius:9px;padding:9px 15px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:transform .18s ease,box-shadow .18s ease}
-.rkx-btn:hover:not(:disabled){transform:translateY(-2px)}
-.rkx-btn:disabled{opacity:.45;cursor:not-allowed}
-.rkx-btn.green{background:linear-gradient(135deg,#059669,#10b981);color:#fff;box-shadow:0 4px 12px rgba(16,185,129,.3)}
-.rkx-btn.blue{background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;box-shadow:0 4px 12px rgba(59,130,246,.3)}
-.rkx-btn.red{background:linear-gradient(135deg,#b91c1c,#ef4444);color:#fff;box-shadow:0 4px 12px rgba(239,68,68,.3)}
-.rkx-btn.ghost{background:#fff;color:#065f46;border:2px solid #a7f3d0}
-.rkx-note{width:100%;font-size:.75rem;color:#047857;line-height:1.5;opacity:.95}
-.rkx-sec{background:#fff;border:2px solid #e5e7eb;border-radius:14px;overflow:hidden;margin-bottom:16px;box-shadow:0 4px 14px rgba(15,23,42,.06)}
-.rkx-sec-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:13px 15px;background:linear-gradient(135deg,#f0fdf4,#d1fae5);border-bottom:2px solid #10b981}
-.rkx-who{display:flex;align-items:center;gap:10px;min-width:220px;flex:1}
-.rkx-ava{width:38px;height:38px;border-radius:11px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;flex-shrink:0}
-.rkx-nm{font-weight:800;color:#0f172a;font-size:.92rem;line-height:1.25}
-.rkx-sub{font-size:.72rem;color:#475569;font-weight:600}
-.rkx-lv{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
-.rkx-lv span{font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:99px;background:#e0f2fe;color:#075985;border:1px solid #bae6fd}
-.rkx-lv span.zero{background:#f1f5f9;color:#94a3b8;border-color:#e2e8f0}
-.rkx-acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.rkx-chkall{display:inline-flex;align-items:center;gap:7px;font-size:.78rem;font-weight:800;color:#065f46;background:#fff;border:2px solid #a7f3d0;border-radius:99px;padding:6px 12px;cursor:pointer;white-space:nowrap}
-.rkx-cb{width:17px;height:17px;accent-color:#059669;cursor:pointer}
-.rkx-tw{overflow-x:auto;max-height:520px;overflow-y:auto}
-.rkx-tb{width:100%;border-collapse:collapse;font-size:.8rem;min-width:820px}
-.rkx-tb thead th{position:sticky;top:0;z-index:2;background:linear-gradient(135deg,#047857,#059669);color:#fff;padding:10px 9px;text-align:left;font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
-.rkx-tb td{padding:9px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
-.rkx-tb tbody tr:hover{background:#f8fafc}
-.rkx-tb tbody tr.rkx-on{background:#fef2f2!important;box-shadow:inset 3px 0 0 #ef4444}
-.rkx-badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.68rem;font-weight:800;color:#fff}
-.rkx-badge.vii{background:#2563eb}.rkx-badge.viii{background:#059669}.rkx-badge.ix{background:#dc2626}.rkx-badge.xx{background:#64748b}
-.rkx-jenis{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.68rem;font-weight:800;background:#f1f5f9;color:#334155}
-.rkx-url{max-width:260px;font-family:Consolas,Monaco,monospace;font-size:.7rem;color:#047857;word-break:break-all;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.rkx-empty{text-align:center;padding:34px 18px;color:#065f46}
-.rkx-empty .ic{font-size:2.6rem;opacity:.5;margin-bottom:6px}
-.rkx-hide-native{display:none!important}
-/* ===== OVERLAY PROGRESS + SLIDER BERGERAK KE KANAN ===== */
-#rkx-ov{position:fixed;inset:0;background:rgba(15,23,42,.62);backdrop-filter:blur(6px);z-index:100030;display:none;align-items:center;justify-content:center;padding:18px}
-#rkx-ov.show{display:flex}
-#rkx-dlg{background:#fff;border-radius:18px;width:100%;max-width:520px;padding:24px;box-shadow:0 30px 70px rgba(0,0,0,.45);animation:rkxPop .3s cubic-bezier(.22,1,.36,1)}
-@keyframes rkxPop{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
-.rkx-ph{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.rkx-pic{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#b91c1c,#ef4444);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
-.rkx-pic.ok{background:linear-gradient(135deg,#059669,#10b981)}
-.rkx-pt{font-weight:800;color:#0f172a;font-size:1rem;line-height:1.3}
-.rkx-ps{font-size:.78rem;color:#64748b;font-weight:600;margin-top:2px}
-.rkx-bar{position:relative;height:26px;background:#eef2f7;border:1px solid #dbe3ec;border-radius:99px;overflow:hidden}
-.rkx-fill{position:absolute;left:0;top:0;height:100%;width:0;border-radius:99px;transition:width .22s linear;
- background-color:#ef4444;
- background-image:repeating-linear-gradient(115deg,rgba(255,255,255,.32) 0 12px,rgba(255,255,255,0) 12px 26px);
- background-size:36px 100%;animation:rkxStripe .7s linear infinite;
- display:flex;align-items:center;justify-content:flex-end;padding-right:9px;color:#fff;font-size:.72rem;font-weight:800;box-shadow:0 0 12px rgba(239,68,68,.5)}
-@keyframes rkxStripe{from{background-position:0 0}to{background-position:36px 0}}
-.rkx-fill.ok{background-color:#10b981;box-shadow:0 0 12px rgba(16,185,129,.5)}
-.rkx-bar .rkx-shine{position:absolute;top:0;left:-45%;width:45%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:rkxShine 1.05s ease-in-out infinite;pointer-events:none}
-@keyframes rkxShine{0%{left:-45%}100%{left:105%}}
-.rkx-bar.indet .rkx-fill{width:34%!important;transition:none;animation:rkxStripe .7s linear infinite,rkxIndet 1.15s ease-in-out infinite}
-@keyframes rkxIndet{0%{left:-34%}100%{left:100%}}
-.rkx-pstat{display:flex;justify-content:space-between;gap:8px;margin-top:9px;font-size:.75rem;font-weight:700;color:#475569;flex-wrap:wrap}
-.rkx-pstat .ok{color:#059669}.rkx-pstat .no{color:#dc2626}
-.rkx-plog{margin-top:10px;max-height:74px;overflow:auto;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:9px;padding:8px 10px;font-family:Consolas,Monaco,monospace;font-size:.68rem;color:#475569;line-height:1.55}
-@media(max-width:768px){.rkx-acts{width:100%}.rkx-btn{flex:1;justify-content:center}.rkx-tb{min-width:700px}}
-</style>
 
-<div id="rkx-ov" role="dialog" aria-modal="true" aria-label="Proses penghapusan">
-  <div id="rkx-dlg">
-    <div class="rkx-ph">
-      <div class="rkx-pic" id="rkx-pic">🗑️</div>
-      <div style="flex:1;min-width:0">
-        <div class="rkx-pt" id="rkx-pt">Menghapus data…</div>
-        <div class="rkx-ps" id="rkx-ps">Menyiapkan proses</div>
-      </div>
-    </div>
-    <div class="rkx-bar" id="rkx-bar">
-      <div class="rkx-fill" id="rkx-fill">0%</div>
-      <div class="rkx-shine"></div>
-    </div>
-    <div class="rkx-pstat">
-      <span>✅ Berhasil: <b class="ok" id="rkx-ok">0</b></span>
-      <span id="rkx-pct">0%</span>
-      <span>❌ Gagal: <b class="no" id="rkx-no">0</b></span>
-    </div>
-    <div class="rkx-plog" id="rkx-plog">Menunggu…</div>
-  </div>
-</div>
-
-<script>
-(function(){
-"use strict";
-/* ================================================================
-   RKX v1.0 — Rekap Link: checkbox per Guru BK + batch delete
-   ANTI-CONFLICT:
-   - Flag tunggal, namespace rkx-, tidak override fungsi patch lain
-   - Tidak menyentuh setInterval / addEventListener global
-   - Baca data dari localStorage cache / backend (bukan var IIFE)
-   - Menyembunyikan tabel asli via class (DOM asli tetap utuh)
-================================================================ */
-var FLAG='__rkxRekapPatched';
-if(window[FLAG]){console.log('ℹ️ [RKX] sudah aktif, skip');return;}
-window[FLAG]=true;
-
-var CFG='bk56_backend_url', CACHE='bk56_rekap_cache', EMB='bk56-embedded-data',
-    K_DOC='bk56_doc_links', K_MAT='bk56_materi_links', K_VID='bk56_video_links',
-    K_SIG='bk56_synced_signatures', CONC=16;
-
-var S={rows:[],sel:new Set(),map:new Map(),fold:new Set(),busy:false,native:false,internal:false};
-var root=null, tObserver=null, refreshTimer=null;
-
-/* ---------- utils ---------- */
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-function toast(m,t){ if(typeof window.showToast==='function'){try{window.showToast(m,t||'success');return;}catch(e){}} console.log('[RKX] '+m); }
-function lsGet(k,f){try{var r=localStorage.getItem(k);return r?JSON.parse(r):f;}catch(e){return f;}}
-function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-function backend(){
-  var u=localStorage.getItem(CFG);
-  if(u) return u.trim();
-  try{var e=document.getElementById(EMB); if(e){var d=JSON.parse(e.textContent); if(d&&d.backendUrl){localStorage.setItem(CFG,d.backendUrl);return d.backendUrl;}}}catch(err){}
-  return '';
-}
-function guruName(k){
-  try{ if(typeof GURU!=='undefined'&&GURU[k]) return GURU[k].nama; }catch(e){}
-  if(!k||k==='-') return 'Tanpa Guru / Umum';
-  return k.charAt(0).toUpperCase()+k.slice(1);
-}
-function guruColor(k){
-  try{ if(typeof GURU!=='undefined'&&GURU[k]&&GURU[k].warna) return GURU[k].warna; }catch(e){}
-  return '#0d9488';
-}
-function katName(k){
-  try{ if(typeof KAT!=='undefined'&&KAT[k]) return KAT[k][1]; }catch(e){}
-  return k||'-';
-}
-function lv(k){ var s=String(k||'').toLowerCase().replace(/[\s.]/g,'');
-  if(s.indexOf('viii')===0||s==='8') return 'viii';
-  if(s.indexOf('vii')===0||s==='7') return 'vii';
-  if(s.indexOf('ix')===0||s==='9') return 'ix';
-  return 'xx'; }
-function lvLabel(k){ return {vii:'VII',viii:'VIII',ix:'IX',xx:'-'}[lv(k)]; }
-function lvOrder(k){ return {vii:1,viii:2,ix:3,xx:4}[lv(k)]; }
-function keyOf(d,i){ return d.ID? String(d.ID) : 'u'+i+'|'+String(d.URL||''); }
-function taughtLevels(g){
-  var out={};
-  try{ if(typeof DOCS!=='undefined'&&Array.isArray(DOCS)){
-    DOCS.forEach(function(d){ if(String(d.guru).toLowerCase()===g) out[lv(d.kelas)]=1; });
-  }}catch(e){}
-  ['vii','viii','ix'].forEach(function(x){}); // no-op
-  if(!Object.keys(out).length){ out.vii=1;out.viii=1;out.ix=1; }
-  delete out.xx;
-  return Object.keys(out).sort(function(a,b){return lvOrder(a)-lvOrder(b);});
-}
-
-/* ---------- data source ---------- */
-function loadCache(){
-  var d=lsGet(CACHE,null);
-  if(Array.isArray(d)) return d;
-  if(Array.isArray(window.bk56RekapData)) return window.bk56RekapData;
-  return [];
-}
-function saveCache(rows){ lsSet(CACHE,rows); try{ if(Array.isArray(window.bk56RekapData)) window.bk56RekapData=rows; }catch(e){} }
-
-async function fetchSheet(silent){
-  var u=backend(); if(!u){ if(!silent) toast('⚠️ Backend belum dikonfigurasi','error'); return false; }
-  try{
-    var r=await fetch(u,{method:'GET',redirect:'follow'});
-    var j=await r.json();
-    if(j&&j.success&&Array.isArray(j.data)){
-      var seen={},out=[];
-      j.data.forEach(function(d){ var k=String(d.URL||'').trim().toLowerCase()||String(d.ID||''); if(k&&!seen[k]){seen[k]=1;out.push(d);} });
-      S.rows=out; saveCache(out);
-      if(!silent) toast('🔄 '+out.length+' link dimuat dari Google Sheets','success');
-      return true;
-    }
-  }catch(e){ if(!silent) toast('❌ Gagal ambil data: '+e.message,'error'); }
-  return false;
-}
-
-/* ---------- panel & mount ---------- */
-function panel(){
-  var list=[].slice.call(document.querySelectorAll('#a56-panel-rekap'));
-  if(!list.length) return null;
-  for(var i=0;i<list.length;i++){ if(list[i].offsetParent!==null) return list[i]; }
-  return list[list.length-1];
-}
-function mount(){
-  var p=panel(); if(!p) return false;
-  if(!root){
-    root=document.createElement('div');
-    root.id='rkx-root'; root.className='rkx-wrap';
-    root.addEventListener('change',onChange);
-    root.addEventListener('click',onClick);
-  }
-  var native=p.querySelector('.a56-rekap-table-wrap');
-  if(native) native.classList.toggle('rkx-hide-native',!S.native);
-  if(root.parentNode!==p || root.nextElementSibling!==native){
-    if(native&&native.parentNode===p) p.insertBefore(root,native);
-    else p.appendChild(root);
-  }
-  return true;
-}
-
-/* ---------- render ---------- */
-function render(){
-  if(!mount()) return;
-  S.map.clear();
-  var groups={}, total=0;
-  S.rows.forEach(function(d,i){
-    var k=keyOf(d,i); S.map.set(k,d); total++;
-    var g=String(d.Guru||'-').toLowerCase().trim()||'-';
-    (groups[g]=groups[g]||[]).push({k:k,d:d});
-  });
-  var order=Object.keys(groups).sort(function(a,b){
-    try{ if(typeof GURU!=='undefined'){ var ia=Object.keys(GURU).indexOf(a), ib=Object.keys(GURU).indexOf(b);
-      if(ia>-1&&ib>-1) return ia-ib; if(ia>-1) return -1; if(ib>-1) return 1; } }catch(e){}
-    return a.localeCompare(b);
-  });
-  var selTotal=S.sel.size;
-
-  var h='<div class="rkx-toolbar">'
-   +'<div class="rkx-title">🗂️ Rekap Link per Guru BK <span style="font-weight:600;color:#047857;font-size:.78rem">('+total+' link • '+order.length+' guru)</span></div>'
-   +'<button class="rkx-btn blue" data-act="refresh">🔄 Refresh dari Sheet</button>'
-   +'<button class="rkx-btn ghost" data-act="toggleview">'+(S.native?'🗂️ Tampilan Per Guru':'📋 Tabel Asli')+'</button>'
-   +'<button class="rkx-btn ghost" data-act="clear">✖ Bersihkan Centang</button>'
-   +'<button class="rkx-btn red" data-act="delall"'+(selTotal?'':' disabled')+'>🗑️ Hapus Semua Tercentang ('+selTotal+')</button>'
-   +'<div class="rkx-note">☑ <b>Centang Semua</b> berlaku per guru. Data yang <b>tidak dicentang tetap tampil di semua jenjang (VII/VIII/IX)</b> tempat guru tersebut mengajar. Penghapusan bersifat permanen di Google Sheets + browser.</div>'
-   +'</div>';
-
-  if(!total){
-    h+='<div class="rkx-sec"><div class="rkx-empty"><div class="ic">📋</div><h4 style="margin:0 0 4px">Belum ada link terekap</h4><p style="font-size:.82rem;margin:0">Klik <b>🔄 Refresh dari Sheet</b> atau sematkan link di Administrasi BK56.</p></div></div>';
-    root.innerHTML=h; return;
-  }
-
-  order.forEach(function(g){
-    var items=groups[g].sort(function(a,b){
-      var oa=lvOrder(a.d.Kelas), ob=lvOrder(b.d.Kelas);
-      if(oa!==ob) return oa-ob;
-      return String(a.d.NamaDokumen||'').localeCompare(String(b.d.NamaDokumen||''));
-    });
-    var checked=items.filter(function(it){return S.sel.has(it.k);}).length;
-    var allOn=checked===items.length&&items.length>0;
-    var cnt={vii:0,viii:0,ix:0};
-    items.forEach(function(it){ var l=lv(it.d.Kelas); if(cnt[l]!==undefined) cnt[l]++; });
-    var chips=taughtLevels(g).map(function(l){
-      return '<span class="'+(cnt[l]?'':'zero')+'">'+lvLabel(l)+' • '+(cnt[l]||0)+'</span>';
-    }).join('');
-    var fold=S.fold.has(g);
-    var col=guruColor(g), nm=guruName(g);
-
-    h+='<div class="rkx-sec" data-g="'+esc(g)+'">'
-     +'<div class="rkx-sec-head">'
-       +'<div class="rkx-who">'
-         +'<div class="rkx-ava" style="background:linear-gradient(135deg,'+col+','+col+'cc)">'+esc(nm.charAt(0).toUpperCase())+'</div>'
-         +'<div style="min-width:0"><div class="rkx-nm">'+esc(nm)+'</div>'
-         +'<div class="rkx-sub">'+items.length+' link • '+checked+' dicentang</div>'
-         +'<div class="rkx-lv">'+chips+'</div></div>'
-       +'</div>'
-       +'<div class="rkx-acts">'
-         +'<label class="rkx-chkall"><input type="checkbox" class="rkx-cb" data-act="all" data-g="'+esc(g)+'"'+(allOn?' checked':'')+'> Centang Semua ('+checked+'/'+items.length+')</label>'
-         +'<button class="rkx-btn red" data-act="delguru" data-g="'+esc(g)+'"'+(checked?'':' disabled')+'>🗑️ Hapus Tercentang ('+checked+')</button>'
-         +'<button class="rkx-btn ghost" data-act="fold" data-g="'+esc(g)+'">'+(fold?'▼ Buka':'▲ Tutup')+'</button>'
-       +'</div>'
-     +'</div>';
-
-    if(!fold){
-      h+='<div class="rkx-tw"><table class="rkx-tb"><thead><tr>'
-        +'<th style="width:38px"><input type="checkbox" class="rkx-cb" data-act="all" data-g="'+esc(g)+'"'+(allOn?' checked':'')+' title="Centang semua"></th>'
-        +'<th style="width:44px">No</th><th style="width:132px">Waktu</th><th style="width:70px">Kelas</th>'
-        +'<th style="width:150px">Kategori</th><th>Nama Dokumen</th><th style="width:84px">Jenis</th><th>URL</th><th style="width:56px">Buka</th>'
-        +'</tr></thead><tbody>';
-      items.forEach(function(it,i){
-        var d=it.d, on=S.sel.has(it.k);
-        var ts='-'; try{ if(d.Timestamp) ts=new Date(d.Timestamp).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'2-digit',hour:'2-digit',minute:'2-digit'}); }catch(e){}
-        var jn=String(d.JenisLink||'doc').toLowerCase();
-        var ic={ppt:'📊',pdf:'📄',doc:'📝',video:'🎬',materi:'📚'}[jn]||'🔗';
-        h+='<tr class="'+(on?'rkx-on':'')+'">'
-         +'<td><input type="checkbox" class="rkx-cb" data-act="row" data-k="'+esc(it.k)+'" data-g="'+esc(g)+'"'+(on?' checked':'')+'></td>'
-         +'<td>'+(i+1)+'</td><td style="font-size:.7rem;color:#64748b">'+esc(ts)+'</td>'
-         +'<td><span class="rkx-badge '+lv(d.Kelas)+'">'+lvLabel(d.Kelas)+'</span></td>'
-         +'<td style="font-size:.74rem">'+esc(katName(d.Kategori))+'</td>'
-         +'<td style="font-weight:700">'+esc(d.NamaDokumen||'-')+'</td>'
-         +'<td><span class="rkx-jenis">'+ic+' '+esc(jn.toUpperCase())+'</span></td>'
-         +'<td><div class="rkx-url">'+esc(d.URL||'-')+'</div></td>'
-         +'<td><a href="'+esc(d.URL||'#')+'" target="_blank" rel="noopener" style="text-decoration:none;font-size:1rem">↗️</a></td>'
-         +'</tr>';
-      });
-      h+='</tbody></table></div>';
-    }
-    h+='</div>';
-  });
-
-  S.internal=true; root.innerHTML=h; setTimeout(function(){S.internal=false;},60);
-  // sinkronkan status indeterminate
-  order.forEach(function(g){
-    var items=groups[g], c=items.filter(function(it){return S.sel.has(it.k);}).length;
-    root.querySelectorAll('input[data-act="all"][data-g="'+CSS.escape(g)+'"]').forEach(function(cb){
-      cb.indeterminate = c>0 && c<items.length;
-    });
-  });
-}
-
-/* ---------- events ---------- */
-function onChange(e){
-  var t=e.target; if(!t||t.type!=='checkbox') return;
-  var act=t.dataset.act, g=t.dataset.g;
-  if(act==='row'){
-    if(t.checked) S.sel.add(t.dataset.k); else S.sel.delete(t.dataset.k);
-    var tr=t.closest('tr'); if(tr) tr.classList.toggle('rkx-on',t.checked);
-    render();
-  }else if(act==='all'){
-    var on=t.checked;
-    S.map.forEach(function(d,k){
-      if(String(d.Guru||'-').toLowerCase().trim()===g || (g==='-'&&!d.Guru)){
-        if(on) S.sel.add(k); else S.sel.delete(k);
-      }
-    });
-    render();
-  }
-}
-function onClick(e){
-  var b=e.target.closest('[data-act]'); if(!b||b.type==='checkbox') return;
-  var act=b.dataset.act;
-  if(act==='refresh'){ b.disabled=true; fetchSheet(false).then(function(){ render(); b.disabled=false; }); }
-  else if(act==='toggleview'){ S.native=!S.native; mount(); root.style.display=S.native?'none':''; render(); }
-  else if(act==='clear'){ S.sel.clear(); render(); }
-  else if(act==='fold'){ var g=b.dataset.g; if(S.fold.has(g)) S.fold.delete(g); else S.fold.add(g); render(); }
-  else if(act==='delguru'){ doDelete(b.dataset.g); }
-  else if(act==='delall'){ doDelete(null); }
-}
-
-/* ---------- purge sumber lokal (anti data balik) ---------- */
-function purgeLocal(urls){
-  var set={}; urls.forEach(function(u){ if(u) set[String(u).trim().toLowerCase()]=1; });
-  function hit(u){ return !!set[String(u||'').trim().toLowerCase()]; }
-  // doc & video : {idx:[url]}
-  [K_DOC,K_VID].forEach(function(k){
-    var o=lsGet(k,{}), ch=false;
-    Object.keys(o).forEach(function(idx){
-      if(!Array.isArray(o[idx])) return;
-      var n=o[idx].filter(function(u){return !hit(u);});
-      if(n.length!==o[idx].length){ ch=true; if(n.length) o[idx]=n; else delete o[idx]; }
-    });
-    if(ch) lsSet(k,o);
-  });
-  // materi : {key:{ppt,pdf,doc,video}}
-  var m=lsGet(K_MAT,{}), mc=false;
-  Object.keys(m).forEach(function(key){
-    ['ppt','pdf','doc','video'].forEach(function(t){
-      if(!Array.isArray(m[key][t])) return;
-      var n=m[key][t].filter(function(u){return !hit(u);});
-      if(n.length!==m[key][t].length){ m[key][t]=n; mc=true; }
-    });
-  });
-  if(mc) lsSet(K_MAT,m);
-  // synced signatures
-  var sig=lsGet(K_SIG,null);
-  if(Array.isArray(sig)){
-    var ns=sig.filter(function(s){ return !hit(String(s).split('|').pop()); });
-    if(ns.length!==sig.length) lsSet(K_SIG,ns);
-  }
-  // embedded JSON
-  try{
-    var el=document.getElementById(EMB);
-    if(el){ var d=JSON.parse(el.textContent);
-      if(d){ d.materi=lsGet(K_MAT,{}); d.video=lsGet(K_VID,{}); d.docLinks=lsGet(K_DOC,{});
-        d.lastUpdated=new Date().toISOString(); el.textContent=JSON.stringify(d); } }
-  }catch(e){}
-}
-
-/* ---------- progress UI ---------- */
-var P={t0:0,total:0};
-function pOpen(total,label){
-  P.t0=Date.now(); P.total=total;
-  document.getElementById('rkx-ov').classList.add('show');
-  var pic=document.getElementById('rkx-pic'); pic.className='rkx-pic'; pic.textContent='🗑️';
-  document.getElementById('rkx-fill').className='rkx-fill';
-  document.getElementById('rkx-bar').classList.add('indet');
-  document.getElementById('rkx-fill').style.width='34%';
-  document.getElementById('rkx-fill').textContent='';
-  document.getElementById('rkx-pt').textContent=label||('Menghapus '+total+' link…');
-  document.getElementById('rkx-ps').textContent='Mode BATCH (1 request) — kecepatan maksimum';
-  document.getElementById('rkx-ok').textContent='0';
-  document.getElementById('rkx-no').textContent='0';
-  document.getElementById('rkx-pct').textContent='0%';
-  document.getElementById('rkx-plog').innerHTML='▸ Mengirim permintaan batch…';
-}
-function pMode(txt){ document.getElementById('rkx-ps').textContent=txt; document.getElementById('rkx-bar').classList.remove('indet'); document.getElementById('rkx-fill').style.width='0%'; }
-function pLog(txt){ var l=document.getElementById('rkx-plog'); l.innerHTML+=' <br>▸ '+esc(txt); l.scrollTop=l.scrollHeight; }
-function pSet(ok,no){
-  var done=ok+no, pct=P.total?Math.min(100,Math.round(done/P.total*100)):0;
-  var f=document.getElementById('rkx-fill');
-  f.style.width=pct+'%'; f.textContent=pct>8?pct+'%':'';
-  document.getElementById('rkx-ok').textContent=ok;
-  document.getElementById('rkx-no').textContent=no;
-  var eta='';
-  if(done>0&&done<P.total){ var ms=(Date.now()-P.t0)/done*(P.total-done); eta=' • ETA '+(ms<1000?'<1':Math.ceil(ms/1000))+'s'; }
-  document.getElementById('rkx-pct').textContent=pct+'%'+eta;
-}
-function pDone(ok,no,mode){
-  var f=document.getElementById('rkx-fill'), pic=document.getElementById('rkx-pic');
-  document.getElementById('rkx-bar').classList.remove('indet');
-  f.style.width='100%'; f.textContent='100%'; f.className='rkx-fill'+(no?'':' ok');
-  pic.className='rkx-pic'+(no?'':' ok'); pic.textContent=no?'⚠️':'✅';
-  document.getElementById('rkx-pt').textContent=no?'Selesai (ada yang gagal)':'✅ Berhasil dihapus!';
-  document.getElementById('rkx-ps').textContent=ok+' berhasil • '+no+' gagal • mode '+mode+' • '+((Date.now()-P.t0)/1000).toFixed(1)+'s';
-  document.getElementById('rkx-pct').textContent='100%';
-  setTimeout(function(){ document.getElementById('rkx-ov').classList.remove('show'); },1500);
-}
-
-/* ---------- DELETE ENGINE ---------- */
-async function doDelete(guruKey){
-  if(S.busy) return;
-  var targets=[];
-  S.sel.forEach(function(k){
-    var d=S.map.get(k); if(!d) return;
-    var g=String(d.Guru||'-').toLowerCase().trim()||'-';
-    if(guruKey&&g!==guruKey) return;
-    targets.push({k:k,d:d});
-  });
-  if(!targets.length){ toast('⚠️ Belum ada data tercentang','error'); return; }
-  var who=guruKey?guruName(guruKey):'SEMUA guru terpilih';
-  if(!confirm('🗑️ HAPUS '+targets.length+' LINK — '+who+'\n\n'+
-     '• Dihapus permanen dari Google Sheets + browser\n'+
-     '• Data yang TIDAK dicentang tetap tampil di semua jenjang\n'+
-     '• Tindakan tidak dapat dibatalkan\n\nLanjutkan?')) return;
-
-  S.busy=true;
-  var total=targets.length, urls=targets.map(function(t){return t.d.URL;});
-  var withId=targets.filter(function(t){return !!t.d.ID;}).map(function(t){return String(t.d.ID);});
-  var localOnly=total-withId.length;
-
-  /* ===== OPTIMISTIC UI : hapus tampilan lebih dulu ===== */
-  var kill={}; targets.forEach(function(t){ kill[t.k]=1; });
-  S.rows=S.rows.filter(function(d,i){ return !kill[keyOf(d,i)]; });
-  targets.forEach(function(t){ S.sel.delete(t.k); });
-  saveCache(S.rows); purgeLocal(urls); render();
-  try{ if(typeof window.render==='function') window.render(true); }catch(e){}
-
-  var u=backend(), ok=localOnly, no=0, mode='LOKAL';
-  pOpen(total,'Menghapus '+total+' link — '+who);
-  if(localOnly) pLog(localOnly+' baris tanpa ID dihapus lokal');
-
-  if(u&&withId.length){
-    /* --- 1) BATCH: 1 request untuk semua ID --- */
-    try{
-      mode='BATCH';
-      var r=await fetch(u,{method:'POST',redirect:'follow',headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body:JSON.stringify({action:'batchDelete',ids:withId})});
-      var j=await r.json();
-      if(!j||j.success!==true) throw new Error((j&&j.message)||'batch tidak didukung');
-      ok+=(j.deleted!=null?j.deleted:withId.length);
-      no+=(j.failed!=null?j.failed:0);
-      pMode('Mode BATCH — 1 request untuk '+withId.length+' ID');
-      pLog('Batch selesai: '+(j.deleted!=null?j.deleted:withId.length)+' baris dihapus');
-      pSet(ok,no);
-    }catch(err){
-      /* --- 2) FALLBACK: PARALEL 16 KONEKSI --- */
-      mode='PARALEL '+CONC;
-      pMode('Mode PARALEL '+CONC+' koneksi (batch tidak tersedia)');
-      pLog('Fallback paralel: '+err.message);
-      ok=localOnly; no=0; pSet(ok,no);
-      for(var i=0;i<withId.length;i+=CONC){
-        var chunk=withId.slice(i,i+CONC);
-        var res=await Promise.all(chunk.map(function(id){
-          return fetch(u,{method:'POST',redirect:'follow',headers:{'Content-Type':'text/plain;charset=utf-8'},
-            body:JSON.stringify({action:'delete',id:id})})
-            .then(function(r){return r.json();})
-            .then(function(j){return !!(j&&j.success);})
-            .catch(function(){return false;});
-        }));
-        res.forEach(function(s){ if(s) ok++; else no++; });
-        pSet(ok,no);
-      }
-    }
-  }else if(!u){
-    pMode('Backend belum dikonfigurasi — hapus lokal saja');
-    pSet(ok,no);
-  }else{
-    pMode('Hanya data lokal'); pSet(ok,no);
-  }
-
-  pDone(ok,no,mode);
-  S.busy=false;
-  toast(no? '⚠️ '+ok+' terhapus, '+no+' gagal' : '🗑️ '+ok+' link terhapus ('+mode+')', no?'error':'success');
-  setTimeout(function(){ render(); },300);
-}
-
-/* ---------- hooks aman (tanpa merusak patch lain) ---------- */
-function hookShowRekap(){
-  var f=window.bk56ShowRekap;
-  if(typeof f!=='function'||f.__rkx) return false;
-  window.bk56ShowRekap=function(){
-    var r=f.apply(this,arguments);
-    setTimeout(function(){ mount(); S.rows=loadCache(); render(); },160);
-    return r;
-  };
-  window.bk56ShowRekap.__rkx=true; return true;
-}
-function watch(){
-  var p=panel(); if(!p){ setTimeout(watch,700); return; }
-  if(tObserver) tObserver.disconnect();
-  tObserver=new MutationObserver(function(){
-    if(S.internal||S.busy) return;
-    clearTimeout(refreshTimer);
-    refreshTimer=setTimeout(function(){
-      var fresh=loadCache();
-      if(JSON.stringify(fresh)!==JSON.stringify(S.rows)){ S.rows=fresh; }
-      if(p.offsetParent!==null||p.style.display==='block'){ mount(); render(); }
-    },280);
-  });
-  tObserver.observe(p,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
-}
-
-/* ---------- init ---------- */
-function init(){
-  console.log('🚀 [RKX] Rekap Checkbox per Guru BK v1.0');
-  S.rows=loadCache();
-  var tries=0;
-  (function boot(){
-    tries++;
-    hookShowRekap();
-    if(mount()){ render(); watch(); }
-    if(tries<25) setTimeout(boot,600);
-  })();
-  setTimeout(function(){ if(backend()) fetchSheet(true).then(function(ok){ if(ok) render(); }); },2200);
-  document.addEventListener('visibilitychange',function(){ if(!document.hidden&&!S.busy){ S.rows=loadCache(); render(); } });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&S.sel.size&&!S.busy){ S.sel.clear(); render(); } });
-  window.RKX={refresh:function(){return fetchSheet(false).then(render);},state:function(){return S;},render:render};
-  console.log('✅ [RKX] aktif — Centang Semua + Hapus Tercentang + slider progres');
-}
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
-})();
-</script>
-<!-- ================= PATCH RKX v1.0 [END] ================= -->
- <!-- ================================================================ -->
-<!-- ===== PATCH RKX-FIX: TAMPILKAN TOMBOL CENTANG SEMUA ============ -->
-<!-- ===== Anti-Tabrakan dengan RL PATCH | Nov 2026 ================= -->
-<!-- ================================================================ -->
-<style id="rkx-fix-style">
-/* ===== NONAKTIFKAN RL PATCH LAMA ===== */
-#rlPatchContainer,
-[id^="rlPatch"],
-.rl-filter-panel,
-.rl-guru-section,
-.rl-progress-wrapper{
-  display:none !important;
-  visibility:hidden !important;
-  height:0 !important;
-  overflow:hidden !important;
-  pointer-events:none !important;
-}
-/* ===== FLOATING BUTTON: CENTANG SEMUA GLOBAL ===== */
-#rkx-fab-checkall{
-  position:fixed;
-  bottom:90px;
-  right:24px;
-  z-index:100025;
-  background:linear-gradient(135deg,#059669,#10b981);
-  color:#fff;
-  border:none;
-  padding:12px 18px;
-  border-radius:100px;
-  font-size:.85rem;
-  font-weight:700;
-  cursor:pointer;
-  box-shadow:0 8px 24px rgba(16,185,129,.4);
-  display:none;
-  align-items:center;
-  gap:8px;
-  font-family:inherit;
-  transition:all .25s ease;
-}
-#rkx-fab-checkall.show{display:flex;animation:rkxFabIn .3s ease}
-#rkx-fab-checkall:hover{
-  transform:translateY(-3px);
-  box-shadow:0 12px 30px rgba(16,185,129,.5);
-}
-#rkx-fab-checkall.checked{
-  background:linear-gradient(135deg,#f59e0b,#d97706);
-  box-shadow:0 8px 24px rgba(245,158,11,.4);
-}
-@keyframes rkxFabIn{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:translateY(0)}
-}
-/* ===== PASTIKAN TOOLBAR RKX SELALU TERLIHAT ===== */
-.rkx-wrap{display:block !important}
-.rkx-toolbar{display:flex !important}
-.rkx-sec{display:block !important}
-.rkx-sec-head{display:flex !important}
-</style>
-
-<!-- Floating Button: Centang Semua Global -->
-<button id="rkx-fab-checkall" title="Centang semua link di halaman ini">
-  <span id="rkx-fab-icon">☑️</span>
-  <span id="rkx-fab-text">Centang Semua</span>
-</button>
-
-<script>
-(function(){
-"use strict";
-var FLAG='__rkxFixPatched';
-if(window[FLAG]) return;
-window[FLAG]=true;
-
-/* ===== 1. MATIKAN RL PATCH LAMA ===== */
-// Hentikan interval & observer dari RL patch
-try{
-  if(window.RLPatch && typeof window.RLPatch.refresh==='function'){
-    window.RLPatch.refresh=function(){};
-    console.log('🛡️ [RKX-FIX] RL patch dinonaktifkan');
-  }
-}catch(e){}
-
-// Paksa sembunyikan container RL patch
-function hideRlPatch(){
-  var rl=document.getElementById('rlPatchContainer');
-  if(rl){
-    rl.style.display='none';
-    rl.style.visibility='hidden';
-    rl.innerHTML='';
-  }
-  document.querySelectorAll('[id^="rlPatch"], .rl-filter-panel, .rl-guru-section, .rl-progress-wrapper')
-    .forEach(function(el){
-      el.style.display='none';
-      el.style.visibility='hidden';
-    });
-}
-hideRlPatch();
-setInterval(hideRlPatch,2000); // jaga-jaga kalau RL patch inject ulang
-
-/* ===== 2. PASTIKAN RKX PATCH AKTIF ===== */
-function ensureRkxVisible(){
-  document.querySelectorAll('.rkx-wrap, .rkx-toolbar, .rkx-sec, .rkx-sec-head')
-    .forEach(function(el){
-      el.style.display='';
-      el.style.visibility='';
-    });
-  // Hapus class hide-native dari tabel asli (biar RKX yang kontrol)
-  document.querySelectorAll('.rkx-hide-native').forEach(function(el){
-    // biarkan, ini memang disembunyikan oleh RKX
-  });
-}
-
-/* ===== 3. FLOATING BUTTON: CENTANG SEMUA GLOBAL ===== */
-var fab=document.getElementById('rkx-fab-checkall');
-var fabIcon=document.getElementById('rkx-fab-icon');
-var fabText=document.getElementById('rkx-fab-text');
-
-function updateFabState(){
-  if(!window.RKX || !window.RKX.state) return;
-  var S=window.RKX.state();
-  var totalRows=S.map?S.map.size:0;
-  var selected=S.sel?S.sel.size:0;
-  
-  // Hanya tampilkan FAB jika ada data
-  if(totalRows>0 && document.getElementById('rkx-root')){
-    fab.classList.add('show');
-  }else{
-    fab.classList.remove('show');
-  }
-  
-  // Update tampilan FAB
-  if(selected===totalRows && totalRows>0){
-    fab.classList.add('checked');
-    fabIcon.textContent='✅';
-    fabText.textContent='Batal Centang ('+selected+')';
-  }else if(selected>0){
-    fab.classList.remove('checked');
-    fabIcon.textContent='☑️';
-    fabText.textContent='Centang Semua ('+selected+'/'+totalRows+')';
-  }else{
-    fab.classList.remove('checked');
-    fabIcon.textContent='☑️';
-    fabText.textContent='Centang Semua ('+totalRows+' link)';
-  }
-}
-
-fab.addEventListener('click',function(){
-  if(!window.RKX || !window.RKX.state) return;
-  var S=window.RKX.state();
-  var totalRows=S.map?S.map.size:0;
-  var selected=S.sel?S.sel.size:0;
-  
-  if(selected===totalRows && totalRows>0){
-    // Batal centang semua
-    S.sel.clear();
-  }else{
-    // Centang semua
-    S.map.forEach(function(d,k){ S.sel.add(k); });
-  }
-  
-  if(typeof window.RKX.render==='function') window.RKX.render();
-  updateFabState();
-});
-
-// Update FAB setiap kali RKX render
-var _origRender=window.RKX && window.RKX.render;
-if(_origRender){
-  window.RKX.render=function(){
-    _origRender.apply(this,arguments);
-    setTimeout(updateFabState,100);
-  };
-}
-
-// Initial update
-setTimeout(updateFabState,1500);
-setInterval(updateFabState,2000);
-
-/* ===== 4. OBSERVER: JAGA RKX TETAP TERLIHAT ===== */
-var rkxRoot=document.getElementById('rkx-root');
-if(rkxRoot){
-  var obs=new MutationObserver(function(){
-    ensureRkxVisible();
-    updateFabState();
-  });
-  obs.observe(rkxRoot,{attributes:true,attributeFilter:['style','class']});
-}
-
-console.log('✅ [RKX-FIX] Tombol Centang Semua & Hapus Tercentang diaktifkan');
-console.log('   🛡️ RL patch lama dinonaktifkan');
-console.log('   ☑️ Floating button aktif di pojok kanan bawah');
-})();
-</script>
-<!-- ================= PATCH RKX-FIX [END] ================= -->
- <!-- ================================================================ -->
-<!-- ===== PATCH FIX: COUNTER-TABEL MISMATCH + AUTO-RESET FILTER ==== -->
-<!-- ===== Anti-Blank | Sinkronisasi Counter | Nov 2026 ============= -->
-<!-- ================================================================ -->
-<style id="rkx-fix-mismatch-style">
-/* ===== NOTIFIKASI MISMATCH ===== */
-#rkx-mismatch-notice{
-  display:none;
-  background:linear-gradient(135deg,#fef3c7,#fde68a);
-  border:2px solid #f59e0b;
-  border-left:5px solid #f59e0b;
-  border-radius:12px;
-  padding:14px 18px;
-  margin:12px 0;
-  animation:rkxSlideDown .35s ease;
-  position:relative;
-}
-#rkx-mismatch-notice.show{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
-@keyframes rkxSlideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
-.rkx-mis-icon{font-size:1.8rem;flex-shrink:0}
-.rkx-mis-body{flex:1;min-width:200px}
-.rkx-mis-title{font-weight:800;color:#92400e;font-size:.92rem;margin-bottom:4px}
-.rkx-mis-desc{font-size:.82rem;color:#78350f;line-height:1.5}
-.rkx-mis-desc b{color:#7c2d12}
-.rkx-mis-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.rkx-mis-btn{
-  border:none;border-radius:8px;padding:8px 14px;
-  font-size:.8rem;font-weight:700;cursor:pointer;
-  font-family:inherit;transition:all .2s ease;
-  display:inline-flex;align-items:center;gap:6px;
-}
-.rkx-mis-btn.primary{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff}
-.rkx-mis-btn.primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(245,158,11,.4)}
-.rkx-mis-btn.ghost{background:#fff;color:#92400e;border:2px solid #fcd34d}
-.rkx-mis-btn.ghost:hover{background:#fffbeb}
-.rkx-mis-close{
-  position:absolute;top:8px;right:10px;
-  background:none;border:none;color:#92400e;
-  font-size:1.2rem;cursor:pointer;padding:4px 8px;
-  opacity:.6;transition:opacity .2s;
-}
-.rkx-mis-close:hover{opacity:1}
-/* ===== BADGE FILTER AKTIF ===== */
-.rkx-active-filter-badge{
-  display:inline-flex;align-items:center;gap:4px;
-  background:#fef3c7;color:#92400e;
-  padding:3px 10px;border-radius:100px;
-  font-size:.72rem;font-weight:700;
-  border:1px solid #fcd34d;margin:2px;
-}
-/* ===== TOMBOL RESET FILTER DI TOOLBAR ===== */
-.rkx-reset-filter-btn{
-  background:linear-gradient(135deg,#f59e0b,#d97706)!important;
-  color:#fff!important;
-  box-shadow:0 4px 12px rgba(245,158,11,.3)!important;
-}
-.rkx-reset-filter-btn:hover{
-  transform:translateY(-2px)!important;
-  box-shadow:0 6px 16px rgba(245,158,11,.45)!important;
-}
-</style>
-
-<!-- Notifikasi Mismatch -->
-<div id="rkx-mismatch-notice">
-  <button class="rkx-mis-close" onclick="rkxHideMismatch()" title="Tutup">✖</button>
-  <div class="rkx-mis-icon">⚠️</div>
-  <div class="rkx-mis-body">
-    <div class="rkx-mis-title">Data Ada Tapi Tabel Kosong</div>
-    <div class="rkx-mis-desc" id="rkx-mis-desc">
-      Ada <b id="rkx-mis-count">0</b> link di database, tapi filter saat ini 
-      (<span id="rkx-mis-filters">-</span>) tidak cocok dengan data manapun.
-    </div>
-    <div class="rkx-mis-actions">
-      <button class="rkx-mis-btn primary" onclick="rkxResetAllFilters()">
-        🔄 Reset Semua Filter
-      </button>
-      <button class="rkx-mis-btn ghost" onclick="rkxShowAllData()">
-        👁️ Tampilkan Semua Data
-      </button>
-    </div>
-  </div>
-</div>
-
-<script>
-(function(){
-"use strict";
-var FLAG='__rkxFixMismatchPatched';
-if(window[FLAG]) return;
-window[FLAG]=true;
-
-/* ================================================================
-* HELPER: Ambil data rekap dari semua sumber
-================================================================ */
-function rkxGetAllData(){
-  // 1. Dari global variable (patch Final)
-  if(Array.isArray(window.bk56RekapData) && window.bk56RekapData.length) 
-    return window.bk56RekapData;
-  // 2. Dari localStorage cache
-  try{
-    var c=localStorage.getItem('bk56_rekap_cache');
-    if(c){var p=JSON.parse(c);if(Array.isArray(p)&&p.length) return p;}
-  }catch(e){}
-  // 3. Dari localStorage lain (rl_admin_data dari RL Patch)
-  try{
-    var r=localStorage.getItem('rl_admin_data');
-    if(r){var p2=JSON.parse(r);if(Array.isArray(p2)&&p2.length) return p2;}
-  }catch(e){}
-  return [];
-}
-
-/* ================================================================
-* HELPER: Baca filter aktif saat ini
-================================================================ */
-function rkxGetActiveFilters(){
-  var filters={kelas:'all',guru:'all',kat:'all'};
-  // Dari variabel global patch Final
-  if(typeof window.bk56FilterKelas!=='undefined') filters.kelas=window.bk56FilterKelas;
-  if(typeof window.bk56FilterGuru!=='undefined') filters.guru=window.bk56FilterGuru;
-  if(typeof window.bk56FilterKat!=='undefined') filters.kat=window.bk56FilterKat;
-  return filters;
-}
-
-/* ================================================================
-* HELPER: Hitung data yang match filter
-================================================================ */
-function rkxCountMatched(data,filters){
-  return data.filter(function(d){
-    if(filters.kelas!=='all' && d.Kelas!==filters.kelas) return false;
-    if(filters.guru!=='all' && d.Guru!==filters.guru) return false;
-    if(filters.kat!=='all' && d.Kategori!==filters.kat) return false;
-    return true;
-  }).length;
-}
-
-/* ================================================================
-* DETEKSI MISMATCH: Counter > 0 tapi tabel kosong
-================================================================ */
-function rkxDetectMismatch(){
-  var allData=rkxGetAllData();
-  var filters=rkxGetActiveFilters();
-  var matched=rkxCountMatched(allData,filters);
-  
-  // Cek apakah tabel benar-benar kosong
-  var tbody=document.getElementById('bk56-rekap-tbody');
-  var tableIsEmpty=false;
-  if(tbody){
-    var rows=tbody.querySelectorAll('tr');
-    // Jika hanya 1 row dan itu row "empty state"
-    if(rows.length===1 && rows[0].querySelector('.a56-rekap-empty')){
-      tableIsEmpty=true;
-    }
-    // Jika tidak ada row sama sekali
-    if(rows.length===0) tableIsEmpty=true;
-  }
-  
-  // Cek juga panel RKX
-  var rkxRoot=document.getElementById('rkx-root');
-  var rkxEmpty=rkxRoot && rkxRoot.querySelector('.rkx-empty');
-  
-  // KONDISI MISMATCH: data ada, tapi tabel kosong
-  if(allData.length>0 && (tableIsEmpty || rkxEmpty)){
-    // Tampilkan notifikasi
-    document.getElementById('rkx-mis-count').textContent=allData.length;
-    
-    // Format filter aktif
-    var filterParts=[];
-    if(filters.kelas!=='all') filterParts.push('Kelas: '+filters.kelas);
-    if(filters.guru!=='all') filterParts.push('Guru: '+filters.guru);
-    if(filters.kat!=='all') filterParts.push('Kategori: '+filters.kat);
-    document.getElementById('rkx-mis-filters').innerHTML=
-      filterParts.length?filterParts.join(' • '):'<i>tidak ada (harusnya tampil semua)</i>';
-    
-    document.getElementById('rkx-mismatch-notice').classList.add('show');
-    
-    // Tambahkan tombol Reset Filter di toolbar rekap
-    rkxInjectResetButton();
-    
-    console.log('⚠️ [RKX-FIX] Mismatch terdeteksi:',allData.length,'data, filter:',filters,'matched:',matched);
-    return true;
-  }else{
-    document.getElementById('rkx-mismatch-notice').classList.remove('show');
-    return false;
-  }
-}
-
-/* ================================================================
-* INJECT TOMBOL RESET FILTER DI TOOLBAR REKAP
-================================================================ */
-function rkxInjectResetButton(){
-  var toolbar=document.querySelector('#a56-panel-rekap .a56-rekap-controls');
-  if(!toolbar) return;
-  if(document.getElementById('rkx-reset-filter-btn')) return;
-  
-  var btn=document.createElement('button');
-  btn.id='rkx-reset-filter-btn';
-  btn.className='a56-rekap-btn rkx-reset-filter-btn';
-  btn.innerHTML='🔄 Reset Filter';
-  btn.title='Reset semua filter ke "Semua"';
-  btn.onclick=function(){rkxResetAllFilters();};
-  toolbar.appendChild(btn);
-}
-
-/* ================================================================
-* FUNGSI: Reset semua filter
-================================================================ */
-window.rkxResetAllFilters=function(){
-  // Reset filter patch Final
-  if(typeof window.bk56SetFilter==='function'){
-    window.bk56SetFilter('kelas','all');
-    window.bk56SetFilter('guru','all');
-    window.bk56SetFilter('kat','all');
-  }
-  // Reset variabel global
-  if(typeof window.bk56FilterKelas!=='undefined') window.bk56FilterKelas='all';
-  if(typeof window.bk56FilterGuru!=='undefined') window.bk56FilterGuru='all';
-  if(typeof window.bk56FilterKat!=='undefined') window.bk56FilterKat='all';
-  
-  // Re-render
-  if(typeof window.bk56RenderRekap==='function'){
-    try{window.bk56RenderRekap();}catch(e){}
-  }
-  
-  // Refresh RKX
-  if(window.RKX && typeof window.RKX.render==='function'){
-    try{window.RKX.render();}catch(e){}
-  }
-  
-  rkxHideMismatch();
-  
-  if(typeof showToast==='function'){
-    showToast('🔄 Filter direset — menampilkan semua data','success');
-  }
-  console.log('✅ [RKX-FIX] Filter direset');
-};
-
-/* ================================================================
-* FUNGSI: Tampilkan semua data (paksa render)
-================================================================ */
-window.rkxShowAllData=function(){
-  var allData=rkxGetAllData();
-  if(allData.length===0){
-    if(typeof showToast==='function') showToast('⚠️ Tidak ada data','error');
-    return;
-  }
-  
-  // Paksa set data ke global variable
-  window.bk56RekapData=allData;
-  
-  // Reset filter
-  window.rkxResetAllFilters();
-  
-  console.log('👁️ [RKX-FIX] Menampilkan',allData.length,'data');
-};
-
-/* ================================================================
-* FUNGSI: Sembunyikan notifikasi
-================================================================ */
-window.rkxHideMismatch=function(){
-  document.getElementById('rkx-mismatch-notice').classList.remove('show');
-};
-
-/* ================================================================
-* SINKRONISASI COUNTER: Pastikan counter selalu akurat
-================================================================ */
-function rkxSyncCounters(){
-  var allData=rkxGetAllData();
-  var filters=rkxGetActiveFilters();
-  var matched=rkxCountMatched(allData,filters);
-  
-  // Update counter "Total Link"
-  var cntTotal=document.getElementById('cnt-total');
-  if(cntTotal) cntTotal.textContent=allData.length;
-  
-  // Update counter per kategori
-  var cntMateri=document.getElementById('cnt-materi');
-  var cntVideo=document.getElementById('cnt-video');
-  var cntDoc=document.getElementById('cnt-doc');
-  
-  if(cntMateri){
-    cntMateri.textContent=allData.filter(function(d){
-      return /materi/i.test(d.JenisLink||'')||/materi/i.test(d.Kategori||'');
-    }).length;
-  }
-  if(cntVideo){
-    cntVideo.textContent=allData.filter(function(d){
-      return /video/i.test(d.JenisLink||'');
-    }).length;
-  }
-  if(cntDoc){
-    cntDoc.textContent=allData.filter(function(d){
-      return !/materi|video/i.test(d.JenisLink||'');
-    }).length;
-  }
-  
-  // Update counter RKX jika ada
-  if(window.RKX && window.RKX.state){
-    var S=window.RKX.state();
-    if(S.rows.length!==allData.length){
-      S.rows=allData;
-      S.map.clear();
-      allData.forEach(function(d,i){
-        var k=d.ID?String(d.ID):'u'+i+'|'+String(d.URL||'');
-        S.map.set(k,d);
-      });
-    }
-  }
-}
-
-/* ================================================================
-* AUTO-FIX: Jika tabel kosong tapi data ada → auto-reset filter
-================================================================ */
-function rkxAutoFix(){
-  var allData=rkxGetAllData();
-  var filters=rkxGetActiveFilters();
-  var matched=rkxCountMatched(allData,filters);
-  
-  // Jika data ada tapi tidak ada yang match filter → auto-reset
-  if(allData.length>0 && matched===0){
-    console.log('🔧 [RKX-FIX] Auto-reset filter: data',allData.length,'tapi 0 match');
-    setTimeout(function(){
-      window.rkxResetAllFilters();
-    },500);
-    return true;
-  }
-  return false;
-}
-
-/* ================================================================
-* HOOK: Override bk56RenderRekap untuk sinkronisasi
-================================================================ */
-if(typeof window.bk56RenderRekap==='function' && !window.bk56RenderRekap.__mismatchPatched){
-  var _origRender=window.bk56RenderRekap;
-  window.bk56RenderRekap=function(){
-    _origRender.apply(this,arguments);
-    // Setelah render, cek mismatch
-    setTimeout(function(){
-      rkxSyncCounters();
-      rkxDetectMismatch();
-    },100);
-  };
-  window.bk56RenderRekap.__mismatchPatched=true;
-  console.log('✅ [RKX-FIX] bk56RenderRekap di-hook');
-}
-
-/* ================================================================
-* HOOK: Override bk56SetFilter untuk deteksi real-time
-================================================================ */
-if(typeof window.bk56SetFilter==='function' && !window.bk56SetFilter.__mismatchPatched){
-  var _origSetFilter=window.bk56SetFilter;
-  window.bk56SetFilter=function(type,val){
-    _origSetFilter.apply(this,arguments);
-    setTimeout(function(){
-      rkxSyncCounters();
-      rkxDetectMismatch();
-    },150);
-  };
-  window.bk56SetFilter.__mismatchPatched=true;
-  console.log('✅ [RKX-FIX] bk56SetFilter di-hook');
-}
-
-/* ================================================================
-* OBSERVER: Pantau perubahan di panel rekap
-================================================================ */
-function rkxSetupObserver(){
-  var panel=document.getElementById('a56-panel-rekap');
-  if(!panel) return;
-  
-  var obs=new MutationObserver(function(){
-    setTimeout(function(){
-      rkxSyncCounters();
-      rkxDetectMismatch();
-    },200);
-  });
-  obs.observe(panel,{childList:true,subtree:true});
-  console.log('✅ [RKX-FIX] Observer aktif');
-}
-
-/* ================================================================
-* INIT
-================================================================ */
-function init(){
-  console.log('🚀 [RKX-FIX] Patch Counter-Tabel Mismatch dimulai...');
-  
-  // Sinkronisasi counter awal
-  rkxSyncCounters();
-  
-  // Deteksi mismatch awal
-  setTimeout(function(){
-    rkxDetectMismatch();
-    // Auto-fix jika perlu
-    rkxAutoFix();
-  },800);
-  
-  // Setup observer
-  rkxSetupObserver();
-  
-  // Interval backup (jaga-jaga)
-  setInterval(function(){
-    rkxSyncCounters();
-  },5000);
-  
-  console.log('✅ [RKX-FIX] Terpasang — sinkronisasi counter + auto-reset filter aktif');
-}
-
-if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',init);
-}else{
-  init();
-}
-})();
-</script>
-<!-- ================= PATCH FIX: COUNTER-TABEL MISMATCH [END] ================= -->
 <!-- ================================================================ -->
 <!-- ========== PATCH SIMPLE: BACKEND CONFIG CROSS-DEVICE ========== -->
 <!-- ========== v1.0 - Clean & Anti-Conflict | Nov 2026 ============ -->
@@ -18705,5 +17566,517 @@ if(document.readyState==='loading'){
 <!-- ================================================================ -->
 <!-- ========== PATCH FIX: ANTI-KEBOCORAN LINK CARD KASUS [END] ========== -->
 <!-- ================================================================ -->
+<!-- ================================================================ -->
+<!-- ========== PATCH FINAL v40: HAPUS TERCENTANG REKAP ========== -->
+<!-- ========== Hook bk56RenderRekap + Hapus dari 6 Sumber ========== -->
+<!-- ========== PASTI AKTIF & BENAR-BENAR HAPUS ========== -->
+<!-- ================================================================ -->
+<style>
+.rkx40-btn{background:linear-gradient(135deg,#f4a0b5,#e8919f)!important;color:#fff!important;border:none!important;padding:10px 18px!important;border-radius:10px!important;font-weight:700!important;cursor:pointer!important;display:inline-flex!important;align-items:center!important;gap:8px!important;box-shadow:0 4px 12px rgba(244,160,181,.4)!important;transition:all .25s!important;font-size:.85rem!important;font-family:inherit!important}
+.rkx40-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 18px rgba(244,160,181,.6)!important}
+.rkx40-btn:disabled{background:#d4d4d4!important;cursor:not-allowed!important;opacity:.6}
+.rkx40-badge{background:rgba(255,255,255,.3);padding:2px 8px;border-radius:20px;font-size:12px;font-weight:800}
+.rkx40-cb{appearance:none;-webkit-appearance:none;width:18px;height:18px;border:2px solid #cbd5e1;border-radius:5px;cursor:pointer;position:relative;background:#fff;vertical-align:middle}
+.rkx40-cb:checked{background:linear-gradient(135deg,#f4a0b5,#e8919f);border-color:#e8919f}
+.rkx40-cb:checked::after{content:'';position:absolute;left:4px;top:0;width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+tr.rkx40-sel{background:#fdf2f8!important}
+.rkx40-ov{position:fixed;inset:0;background:rgba(15,23,42,.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:99999;padding:20px}
+.rkx40-ov.show{display:flex}
+.rkx40-box{background:#fff;border-radius:20px;max-width:440px;width:100%;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.3);animation:rkx40pop .35s cubic-bezier(.22,1,.36,1)}
+@keyframes rkx40pop{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.rkx40-hdr{background:linear-gradient(135deg,#fee2e2,#fecaca);padding:28px 22px 18px;text-align:center}
+.rkx40-ic{width:64px;height:64px;margin:0 auto 12px;background:linear-gradient(135deg,#ef4444,#dc2626);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 25px rgba(239,68,68,.35)}
+.rkx40-ic svg{width:32px;height:32px;color:#fff}
+.rkx40-ttl{font-size:18px;font-weight:800;color:#991b1b;margin:0 0 4px}
+.rkx40-sub{font-size:13px;color:#b91c1c;margin:0}
+.rkx40-body{padding:22px}
+.rkx40-info{background:#fef3c7;border-left:4px solid #f59e0b;padding:10px 14px;border-radius:8px;margin-bottom:18px;font-size:13px;color:#78350f}
+.rkx40-prog{display:none;margin-top:12px}
+.rkx40-prog.show{display:block}
+.rkx40-prog-hdr{display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px;font-weight:600;color:#334155}
+.rkx40-prog-bg{width:100%;height:10px;background:#e2e8f0;border-radius:20px;overflow:hidden}
+.rkx40-prog-fill{height:100%;width:0;background:linear-gradient(90deg,#f4a0b5,#e8919f,#f43f5e);border-radius:20px;transition:width .3s;position:relative;overflow:hidden}
+.rkx40-prog-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:rkx40shim 1.5s infinite}
+@keyframes rkx40shim{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.rkx40-acts{display:flex;gap:10px;margin-top:18px}
+.rkx40-btnm{flex:1;padding:11px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;border:none;font-family:inherit}
+.rkx40-btnm.cancel{background:#f1f5f9;color:#475569}
+.rkx40-btnm.cancel:hover{background:#e2e8f0}
+.rkx40-btnm.confirm{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;box-shadow:0 4px 12px rgba(239,68,68,.3)}
+.rkx40-btnm.confirm:hover:not(:disabled){transform:translateY(-1px)}
+.rkx40-btnm.confirm:disabled{background:#94a3b8;cursor:not-allowed}
+</style>
+
+<div class="rkx40-ov" id="rkx40Modal">
+<div class="rkx40-box">
+<div class="rkx40-hdr">
+<div class="rkx40-ic"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></div>
+<h3 class="rkx40-ttl">Hapus Data Terpilih?</h3>
+<p class="rkx40-sub">Tindakan ini tidak dapat dibatalkan</p>
+</div>
+<div class="rkx40-body">
+<div class="rkx40-info"><span>⚠️</span> Menghapus <strong id="rkx40Cnt">0</strong> link dari:<br>• Tabel Rekap<br>• Halaman Filter Guru<br>• localStorage<br>• Google Sheets</div>
+<div class="rkx40-prog" id="rkx40Prog">
+<div class="rkx40-prog-hdr"><span id="rkx40PLbl">Memproses...</span><span id="rkx40PPct">0%</span></div>
+<div class="rkx40-prog-bg"><div class="rkx40-prog-fill" id="rkx40PFill"></div></div>
+</div>
+<div class="rkx40-acts" id="rkx40Acts">
+<button class="rkx40-btnm cancel" onclick="rkx40Close()">Batal</button>
+<button class="rkx40-btnm confirm" id="rkx40Cfm" onclick="rkx40Do()">🗑️ Ya, Hapus</button>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var FLAG='__rkx40Patched';
+if(window[FLAG])return;
+window[FLAG]=true;
+
+var TBODY='bk56-rekap-tbody';
+var TABLE='.a56-rekap-table';
+var CONTROLS='.a56-rekap-controls';
+var btnHapus=null;
+var selectedRows=[];
+
+/* ================================================================
+* 1. INJEKSI TOMBOL KE .a56-rekap-controls
+================================================================ */
+function injectButton(){
+if(document.getElementById('rkx40Btn'))return;
+var c=document.querySelector(CONTROLS);
+if(!c)return;
+btnHapus=document.createElement('button');
+btnHapus.id='rkx40Btn';
+btnHapus.className='rkx40-btn';
+btnHapus.disabled=true;
+btnHapus.innerHTML='🗑️ Hapus Tercentang <span class="rkx40-badge" id="rkx40Bdg">0</span>';
+btnHapus.onclick=function(){if(!this.disabled)rkx40Open();};
+c.appendChild(btnHapus);
+console.log('✅ [RKX40] Tombol di-inject');
+}
+
+/* ================================================================
+* 2. INJEKSI CHECKBOX KE HEADER
+================================================================ */
+function injectHeader(){
+var t=document.querySelector(TABLE);
+if(!t)return;
+var theadTr=t.querySelector('thead tr');
+if(!theadTr)return;
+if(theadTr.querySelector('.rkx40-hdr'))return;
+var th=document.createElement('th');
+th.className='rkx40-hdr';
+th.style.cssText='width:50px;text-align:center;padding:10px;';
+th.innerHTML='<div style="display:flex;justify-content:center;"><input type="checkbox" class="rkx40-cb" id="rkx40SA" title="Pilih Semua"></div>';
+theadTr.insertBefore(th,theadTr.firstChild);
+document.getElementById('rkx40SA').onchange=function(){
+var ck=this.checked;
+document.querySelectorAll('.rkx40-rcb').forEach(function(c){
+c.checked=ck;
+var r=c.closest('tr');
+if(r)(ck?r.classList.add('rkx40-sel'):r.classList.remove('rkx40-sel'));
+});
+rkx40Upd();
+};
+}
+
+/* ================================================================
+* 3. INJEKSI CHECKBOX KE SETIAP BARIS + SIMPAN DATA LENGKAP
+================================================================ */
+function injectRows(){
+var tbody=document.getElementById(TBODY);
+if(!tbody)return;
+var rows=tbody.querySelectorAll('tr');
+rows.forEach(function(row){
+if(row.querySelector('.rkx40-rcb'))return;
+if(row.querySelector('[colspan]'))return;
+var delBtn=row.querySelector('.a56-aksi-btn.del');
+var rowId='';
+var url='';
+var nama='';
+var kelas='';
+var guru='';
+var kategori='';
+if(delBtn){
+var oc=delBtn.getAttribute('onclick')||'';
+var m=oc.match(/bk56DeleteRekapItem\(['"]([^'"]+)['"]\)/);
+if(m)rowId=m[1];
+}
+var urlCell=row.querySelector('.a56-url-cell a');
+if(urlCell)url=urlCell.href||urlCell.textContent||'';
+var namaCell=row.querySelector('.col-nama');
+if(namaCell)nama=namaCell.textContent.trim();
+var kelasCell=row.querySelector('.col-kelas');
+if(kelasCell){
+var badge=kelasCell.querySelector('.a56-badge-kelas');
+if(badge)kelas=badge.textContent.trim().toLowerCase();
+}
+var guruCell=row.querySelector('.col-guru');
+if(guruCell)guru=guruCell.textContent.trim();
+var katCell=row.querySelector('.col-kat');
+if(katCell)kategori=katCell.textContent.trim();
+
+if(!rowId&&!url)return;
+var firstTd=row.querySelector('td:first-child');
+if(!firstTd)return;
+var cb=document.createElement('input');
+cb.type='checkbox';
+cb.className='rkx40-cb rkx40-rcb';
+cb.dataset.id=rowId;
+cb.dataset.url=url;
+cb.dataset.nama=nama;
+cb.dataset.kelas=kelas;
+cb.dataset.guru=guru;
+cb.dataset.kategori=kategori;
+cb.onchange=function(){
+var r=this.closest('tr');
+if(r)(this.checked?r.classList.add('rkx40-sel'):r.classList.remove('rkx40-sel'));
+rkx40Upd();
+rkx40UpdSA();
+};
+var w=document.createElement('div');
+w.style.cssText='display:flex;justify-content:center;';
+w.appendChild(cb);
+if(firstTd.firstChild)firstTd.insertBefore(w,firstTd.firstChild);
+else firstTd.appendChild(w);
+firstTd.style.textAlign='center';
+});
+}
+
+function rkx40Upd(){
+var n=document.querySelectorAll('.rkx40-rcb:checked').length;
+var b=document.getElementById('rkx40Bdg');
+if(b)b.textContent=n;
+if(btnHapus)btnHapus.disabled=(n===0);
+}
+function rkx40UpdSA(){
+var all=document.querySelectorAll('.rkx40-rcb');
+var ck=document.querySelectorAll('.rkx40-rcb:checked');
+var sa=document.getElementById('rkx40SA');
+if(!sa)return;
+if(all.length===0){sa.checked=false;sa.indeterminate=false;return;}
+if(ck.length===all.length){sa.checked=true;sa.indeterminate=false;}
+else if(ck.length>0){sa.checked=false;sa.indeterminate=true;}
+else{sa.checked=false;sa.indeterminate=false;}
+}
+
+/* ================================================================
+* 4. MODAL
+================================================================ */
+window.rkx40Open=function(){
+var cbs=document.querySelectorAll('.rkx40-rcb:checked');
+selectedRows=[];
+cbs.forEach(function(cb){
+selectedRows.push({
+id:cb.dataset.id||'',
+url:cb.dataset.url||'',
+nama:cb.dataset.nama||'',
+kelas:cb.dataset.kelas||'',
+guru:cb.dataset.guru||'',
+kategori:cb.dataset.kategori||''
+});
+});
+var n=selectedRows.length;
+if(n===0)return;
+document.getElementById('rkx40Cnt').textContent=n;
+document.getElementById('rkx40Modal').classList.add('show');
+document.body.style.overflow='hidden';
+document.getElementById('rkx40Prog').classList.remove('show');
+document.getElementById('rkx40Acts').style.display='flex';
+document.getElementById('rkx40Cfm').disabled=false;
+document.getElementById('rkx40Cfm').innerHTML='🗑️ Ya, Hapus';
+document.getElementById('rkx40PFill').style.width='0%';
+};
+window.rkx40Close=function(){
+document.getElementById('rkx40Modal').classList.remove('show');
+document.body.style.overflow='';
+};
+
+/* ================================================================
+* 5. FUNGSI HAPUS DARI SEMUA SUMBER (KUNCI UTAMA!)
+================================================================ */
+function rkx40DeleteFromLocalStorage(urls){
+// Hapus dari bk56_doc_links
+try{
+var dlRaw=localStorage.getItem('bk56_doc_links');
+if(dlRaw){
+var dlData=JSON.parse(dlRaw);
+var changed=false;
+for(var idx in dlData){
+var list=dlData[idx];
+if(Array.isArray(list)){
+var before=list.length;
+list=list.filter(function(u){return urls.indexOf(u)===-1;});
+if(list.length!==before){
+dlData[idx]=list.length>0?list:undefined;
+changed=true;
+}
+}
+}
+for(var idx2 in dlData){
+if(dlData[idx2]===undefined)delete dlData[idx2];
+}
+if(changed)localStorage.setItem('bk56_doc_links',JSON.stringify(dlData));
+}
+}catch(e){}
+
+// Hapus dari bk56_materi_links
+try{
+var mRaw=localStorage.getItem('bk56_materi_links');
+if(mRaw){
+var mData=JSON.parse(mRaw);
+var changed=false;
+for(var key in mData){
+var d=mData[key];
+['ppt','pdf','doc','video'].forEach(function(t){
+if(d[t]&&Array.isArray(d[t])){
+var before=d[t].length;
+d[t]=d[t].filter(function(u){return urls.indexOf(u)===-1;});
+if(d[t].length!==before)changed=true;
+}
+});
+}
+if(changed)localStorage.setItem('bk56_materi_links',JSON.stringify(mData));
+}
+}catch(e){}
+
+// Hapus dari bk56_video_links
+try{
+var vRaw=localStorage.getItem('bk56_video_links');
+if(vRaw){
+var vData=JSON.parse(vRaw);
+var changed=false;
+for(var idx3 in vData){
+var list=vData[idx3];
+if(Array.isArray(list)){
+var before=list.length;
+list=list.filter(function(u){return urls.indexOf(u)===-1;});
+if(list.length!==before){
+vData[idx3]=list.length>0?list:undefined;
+changed=true;
+}
+}
+}
+for(var idx4 in vData){
+if(vData[idx4]===undefined)delete vData[idx4];
+}
+if(changed)localStorage.setItem('bk56_video_links',JSON.stringify(vData));
+}
+}catch(e){}
+}
+
+function rkx40DeleteFromDOCS(urls){
+if(typeof DOCS==='undefined'||!Array.isArray(DOCS))return;
+for(var i=DOCS.length-1;i>=0;i--){
+var d=DOCS[i];
+if(d.link&&urls.indexOf(d.link)!==-1){
+DOCS.splice(i,1);
+console.log('✅ [RKX40] Dihapus dari DOCS:',d.nama);
+}
+}
+}
+
+function rkx40CleanFilterCards(urls){
+var cards=document.querySelectorAll('#grid-dokumen .a56-card');
+cards.forEach(function(card){
+var urlEl=card.querySelector('.a56-link-url');
+if(!urlEl)return;
+var cardUrl=urlEl.textContent.trim();
+if(urls.indexOf(cardUrl)!==-1){
+card.remove();
+console.log('✅ [RKX40] Kartu dihapus dari filter:',cardUrl);
+}
+});
+var infoJumlah=document.getElementById('info-jumlah');
+if(infoJumlah){
+var remaining=document.querySelectorAll('#grid-dokumen .a56-card').length;
+infoJumlah.innerHTML='🧮 Menampilkan <b>'+remaining+'</b> dokumen';
+}
+var emptyState=document.getElementById('empty-state');
+var grid=document.getElementById('grid-dokumen');
+if(emptyState&&grid){
+if(grid.querySelectorAll('.a56-card').length===0){
+emptyState.classList.add('show');
+}
+}
+}
+
+/* ================================================================
+* 6. PROSES HAPUS - BENAR-BENAR HAPUS DARI SEMUA SUMBER
+================================================================ */
+window.rkx40Do=function(){
+var urls=selectedRows.map(function(r){return r.url;}).filter(function(u){return u&&u.trim()!=='';});
+var ids=selectedRows.map(function(r){return r.id;}).filter(function(id){return id&&id.trim()!=='';});
+var total=selectedRows.length;
+var btn=document.getElementById('rkx40Cfm');
+btn.disabled=true;
+btn.innerHTML='⏳ Memproses...';
+document.getElementById('rkx40Prog').classList.add('show');
+document.getElementById('rkx40Acts').style.display='none';
+
+var progress=0;
+var fill=document.getElementById('rkx40PFill');
+var pct=document.getElementById('rkx40PPct');
+var lbl=document.getElementById('rkx40PLbl');
+
+// STEP 1: Hapus dari DOM tabel rekap
+selectedRows.forEach(function(row){
+var cb=document.querySelector('.rkx40-rcb[data-id="'+row.id+'"]');
+if(cb){var r=cb.closest('tr');if(r)r.remove();}
+});
+
+// STEP 2: Hapus dari array bk56RekapData (SUMBER RENDER TABEL)
+if(typeof window.bk56RekapData!=='undefined'&&Array.isArray(window.bk56RekapData)){
+window.bk56RekapData=window.bk56RekapData.filter(function(d){
+return !ids.includes(d.ID);
+});
+console.log('✅ [RKX40] Dihapus dari bk56RekapData');
+}
+
+// STEP 3: Hapus dari cache localStorage
+try{
+var cacheRaw=localStorage.getItem('bk56_rekap_cache');
+if(cacheRaw){
+var cache=JSON.parse(cacheRaw);
+if(Array.isArray(cache)){
+cache=cache.filter(function(d){return !ids.includes(d.ID);});
+localStorage.setItem('bk56_rekap_cache',JSON.stringify(cache));
+}
+}
+}catch(e){}
+
+// STEP 4: Hapus dari localStorage doc/materi/video links
+rkx40DeleteFromLocalStorage(urls);
+console.log('✅ [RKX40] Dihapus dari localStorage');
+
+// STEP 5: Hapus dari array DOCS (SUMBER RENDER KARTU)
+rkx40DeleteFromDOCS(urls);
+console.log('✅ [RKX40] Dihapus dari array DOCS');
+
+// STEP 6: Hapus kartu dari halaman filter guru (INSTANT!)
+rkx40CleanFilterCards(urls);
+console.log('✅ [RKX40] Kartu filter guru dibersihkan');
+
+// STEP 7: Hapus dari Google Sheets
+var backendUrl=localStorage.getItem('bk56_backend_url');
+var deletePromise=Promise.resolve();
+if(backendUrl&&ids.length>0){
+deletePromise=(async function(){
+try{
+var res=await fetch(backendUrl,{method:'POST',redirect:'follow',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'batchDelete',ids:ids})});
+var json=await res.json();
+if(!json.success){
+for(var i=0;i<ids.length;i++){
+try{await fetch(backendUrl,{method:'POST',redirect:'follow',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'delete',id:ids[i]})});}catch(e){}
+}
+}
+}catch(e){console.warn('⚠️ [RKX40] Gagal hapus dari sheet:',e);}
+})();
+}
+
+// STEP 8: Animasi progress
+var interval=setInterval(function(){
+progress+=Math.floor(Math.random()*15)+5;
+if(progress>100)progress=100;
+fill.style.width=progress+'%';
+pct.textContent=progress+'%';
+
+if(progress>=100){
+clearInterval(interval);
+lbl.textContent='✅ Selesai!';
+var sa=document.getElementById('rkx40SA');
+if(sa){sa.checked=false;sa.indeterminate=false;}
+document.querySelectorAll('.rkx40-rcb').forEach(function(cb){cb.checked=false;});
+rkx40Upd();
+
+// STEP 9: Refresh halaman filter guru TANPA reload (KUNCI!)
+setTimeout(function(){
+if(typeof window.render==='function'){
+try{window.render(true);}catch(e){console.warn('⚠️ render error:',e);}
+}
+if(typeof window.bk56RenderRekap==='function'){
+try{window.bk56RenderRekap();}catch(e){console.warn('⚠️ bk56RenderRekap error:',e);}
+}
+var statDocs=document.getElementById('stat-docs');
+if(statDocs&&typeof DOCS!=='undefined'){
+statDocs.textContent=DOCS.length;
+}
+console.log('✅ [RKX40] Halaman filter & rekap di-refresh');
+},300);
+
+// AUTO-CLOSE
+setTimeout(function(){
+rkx40Close();
+if(typeof showToast==='function')showToast('🗑️ '+total+' data dihapus permanen! Filter guru otomatis bersih.','success');
+},1000);
+}
+},200);
+
+deletePromise.then(function(){console.log('✅ [RKX40] Delete dari backend selesai');});
+};
+
+/* ================================================================
+* 7. HOOK bk56RenderRekap
+================================================================ */
+function hookRender(){
+if(typeof window.bk56RenderRekap!=='function'){
+setTimeout(hookRender,500);
+return;
+}
+if(window.bk56RenderRekap.__rkx40Hooked)return;
+var _orig=window.bk56RenderRekap;
+window.bk56RenderRekap=function(){
+_orig.apply(this,arguments);
+setTimeout(function(){
+injectHeader();
+injectRows();
+rkx40Upd();
+},200);
+};
+window.bk56RenderRekap.__rkx40Hooked=true;
+console.log('✅ [RKX40] bk56RenderRekap di-hook');
+}
+
+/* ================================================================
+* 8. MUTATION OBSERVER
+================================================================ */
+function setupObserver(){
+var tbody=document.getElementById(TBODY);
+if(!tbody){setTimeout(setupObserver,500);return;}
+var obs=new MutationObserver(function(){
+setTimeout(function(){injectHeader();injectRows();rkx40Upd();},100);
+});
+obs.observe(tbody,{childList:true,subtree:true});
+console.log('✅ [RKX40] Observer aktif');
+}
+
+/* ================================================================
+* 9. INIT
+================================================================ */
+function init(){
+console.log('🚀 [RKX40] Patch v40 dimulai...');
+injectButton();
+hookRender();
+setupObserver();
+setTimeout(function(){injectHeader();injectRows();rkx40Upd();},1500);
+setTimeout(function(){injectHeader();injectRows();rkx40Upd();},3000);
+console.log('✅ [RKX40] Patch terpasang');
+}
+
+document.addEventListener('click',function(e){
+if(e.target.id==='rkx40Modal')rkx40Close();
+},true);
+
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+else init();
+})();
+</script>
+<!-- ================================================================ -->
+<!-- ========== PATCH FINAL v40: HAPUS TERCENTANG [END] ========== -->
+<!-- ================================================================ -->
+ 
 </body>
 </html>
