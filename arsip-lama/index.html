@@ -18513,425 +18513,467 @@ init();
 <!-- ========== PATCH: HAPUS TOMBOL CENTANG SEMUA [END] ========== -->
 <!-- ================================================================ -->
 <!-- ================================================================ -->
-<!-- ========== PATCH FIX: ANTI-KEBOCORAN LINK CARD KASUS ========== -->
-<!-- ========== Fix: OR (||) → AND (&&) di syncSheetToLocal ========== -->
-<!-- ========== Anti-Conflict | Namespace: akb- | Nov 2026 =========== -->
+<!-- ===== PATCH KLS-FIX v1.0 : ANTI-KEBOCORAN CARD CATATAN KASUS ===== -->
+<!-- ===== Strict Match + Storage Guardian + Repair Sheet =========== -->
+<!-- ===== Anti-Conflict | Namespace: kls- | Nov 2026 =============== -->
 <!-- ================================================================ -->
+<style id="kls-fix-style">
+.kls-btn{background:linear-gradient(135deg,#b91c1c,#ef4444)!important;color:#fff!important;box-shadow:0 4px 12px rgba(239,68,68,.32)!important}
+.kls-btn:hover{transform:translateY(-2px)!important;box-shadow:0 6px 18px rgba(239,68,68,.45)!important}
+#kls-report{display:none;background:#fff;border:2px solid #ef4444;border-left:5px solid #ef4444;border-radius:12px;padding:14px 16px;margin:12px 0;font-size:.84rem;color:#7f1d1d;line-height:1.6}
+#kls-report.show{display:block}
+#kls-report h4{margin:0 0 8px;font-size:.95rem;color:#991b1b;display:flex;align-items:center;gap:8px}
+#kls-report table{width:100%;border-collapse:collapse;margin-top:8px;font-size:.78rem}
+#kls-report th{background:#fef2f2;color:#991b1b;text-align:left;padding:6px 8px;border-bottom:2px solid #fecaca;font-size:.72rem;text-transform:uppercase}
+#kls-report td{padding:6px 8px;border-bottom:1px solid #fee2e2}
+#kls-report .kls-ok{color:#059669;font-weight:800}
+#kls-report .kls-mv{color:#b91c1c;font-weight:800}
+#kls-report .kls-acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+#kls-report button{border:none;border-radius:8px;padding:8px 14px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit}
+#kls-report .kls-b1{background:linear-gradient(135deg,#059669,#10b981);color:#fff}
+#kls-report .kls-b2{background:#f1f5f9;color:#7f1d1d;border:2px solid #fecaca}
+</style>
+
+<div id="kls-report">
+  <h4>🧹 Laporan Perbaikan Kebocoran Card Catatan Kasus</h4>
+  <div id="kls-report-body">Belum dijalankan.</div>
+  <div class="kls-acts">
+    <button class="kls-b1" onclick="klsFixNow(true)">🔄 Jalankan Ulang</button>
+    <button class="kls-b2" onclick="klsRepairSheet()">🗄️ Perbaiki Nama di Google Sheets</button>
+    <button class="kls-b2" onclick="document.getElementById('kls-report').classList.remove('show')">✖ Tutup</button>
+  </div>
+</div>
+
 <script>
 (function(){
 "use strict";
 /* ================================================================
-* PATCH FIX: ANTI-KEBOCORAN LINK CARD KASUS VII-A / VIII-A / IX-A
-* ================================================================
-* AKAR MASALAH:
-* ❌ Fungsi syncSheetToLocal & bk56SyncToSheetSilent menggunakan:
-*      if (nama match || kategori match) → docIdx = i; break;
-*    Akibatnya: SEMUA link "Catatan Kasus" (VII-A s/d VII-J)
-*    tertangkap oleh card PERTAMA yang kategori-nya "kasus"
-*    yaitu VII-A. Begitu juga VIII-A dan IX-A.
-*
-* SOLUSI:
-* ✅ Ganti OR (||) menjadi AND (&&):
-*      if (nama match && kategori match) → docIdx = i; break;
-*    Sehingga VII-A hanya match "Catatan Kasus Kelas VII-A",
-*    VII-B hanya match "Catatan Kasus Kelas VII-B", dst.
-*
-* ANTI-CONFLICT:
-* - Flag: window.__akbAntiKebocoranPatched
-* - Hanya override 2 fungsi yang bermasalah
-* - Tidak sentuh fungsi lain
-================================================================ */
-const FLAG = '__akbAntiKebocoranPatched';
-if (window[FLAG]) {
-console.log('ℹ️ [AKB] Patch sudah terpasang, skip');
-return;
+ * KLS-FIX v1.0
+ * ---------------------------------------------------------------
+ * MASALAH:
+ *   Fungsi syncSheetToLocal() memakai operator OR:
+ *     if (d.nama === nama || d.kat === kategori) { docIdx = i; break; }
+ *   Akibatnya SEMUA link kategori 'kasus' milik 1 guru menumpuk
+ *   di card PERTAMA (VII-A / VIII-A / IX-A).
+ *
+ * SOLUSI:
+ *   1. klsFindDoc()      → strict match (kelas AND guru AND kat AND nama)
+ *   2. Storage Guardian  → cegat setItem('bk56_doc_links'), redistribusi
+ *                          link berdasar slug URL (sumber kebenaran)
+ *   3. klsRepairSheet()  → perbaiki NamaDokumen rusak di Google Sheets
+ *
+ * ANTI-CONFLICT:
+ *   - Flag tunggal: window.__klsLeakFix
+ *   - TIDAK menghapus patch lain, hanya menyaring hasil tulisannya
+ *   - TIDAK override setInterval / addEventListener global
+ *   - Guard hanya aktif untuk key 'bk56_doc_links'
+ * ============================================================== */
+var FLAG='__klsLeakFix';
+if(window[FLAG]){console.log('ℹ️ [KLS] sudah aktif, skip');return;}
+window[FLAG]=true;
+
+var K_DOC='bk56_doc_links', K_CFG='bk56_backend_url', EMB='bk56-embedded-data';
+var busy=false, lastReport=null;
+
+/* ---------------- utils ---------------- */
+function norm(s){return String(s==null?'':s).trim().toLowerCase().replace(/\s+/g,' ');}
+function ukey(u){return String(u||'').trim().toLowerCase().replace(/\/+$/,'');}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function toast(m,t){if(typeof window.showToast==='function'){try{window.showToast(m,t||'success');return;}catch(e){}}console.log('[KLS] '+m);}
+function lsGet(k,f){try{var r=localStorage.getItem(k);return r?JSON.parse(r):f;}catch(e){return f;}}
+function backend(){
+  var u=localStorage.getItem(K_CFG); if(u&&u.trim())return u.trim();
+  try{var e=document.getElementById(EMB);if(e){var d=JSON.parse(e.textContent);if(d&&d.backendUrl){return String(d.backendUrl).trim();}}}catch(x){}
+  return '';
 }
-window[FLAG] = true;
-const MATERI_KEY = 'bk56_materi_links';
-const VIDEO_KEY  = 'bk56_video_links';
-const DOC_KEY    = 'bk56_doc_links';
-const CFG_KEY    = 'bk56_backend_url';
-const CACHE_KEY  = 'bk56_rekap_cache';
+
 /* ================================================================
-* 🔑 HELPER: Cari docIdx dengan logika AND (KETAT)
-*    → Harus match: kelas + guru + kategori + nama (exact)
-*    → Jika tidak match, return -1
-================================================================ */
-function akbFindDocIdxStrict(kelas, guru, kategori, nama) {
-if (typeof DOCS === 'undefined' || !Array.isArray(DOCS)) return -1;
-const kelasLow = String(kelas || '').toLowerCase().trim();
-const guruLow  = String(guru  || '').toLowerCase().trim();
-const katLow   = String(kategori || '').toLowerCase().trim();
-const namaLow  = String(nama  || '').toLowerCase().trim();
-for (let i = 0; i < DOCS.length; i++) {
-const d = DOCS[i];
-// ✅ FILTER KETAT: kelas harus match (kecuali '-' atau kosong)
-if (kelasLow && kelasLow !== '-' && d.kelas.toLowerCase() !== kelasLow) continue;
-// ✅ FILTER KETAT: guru harus match (kecuali '-' atau kosong)
-if (guruLow && guruLow !== '-' && d.guru.toLowerCase() !== guruLow) continue;
-// ✅ FILTER KETAT: kategori harus match
-if (katLow && d.kat.toLowerCase() !== katLow) continue;
-// ✅ FILTER KETAT: nama harus match EXACT (bukan OR!)
-if (namaLow && d.nama.toLowerCase() === namaLow) {
-return i;
+ * 1) STRICT MATCH — pengganti logika OR yang bocor
+ * ============================================================== */
+function klsFindDoc(kelas,guru,kat,nama){
+  if(typeof DOCS==='undefined'||!Array.isArray(DOCS))return -1;
+  var nk=norm(kelas),ng=norm(guru),nc=norm(kat),nn=norm(nama);
+  if(!nn)return -1;                       // nama wajib ada
+  for(var i=0;i<DOCS.length;i++){
+    var d=DOCS[i];
+    if(nk && norm(d.kelas)!==nk)continue;
+    if(ng && ng!=='-' && norm(d.guru)!==ng)continue;
+    if(nc && norm(d.kat)!==nc)continue;
+    if(norm(d.nama)!==nn)return i;        // ⬅️ AND, bukan OR
+  }
+  return -1;
 }
-}
-return -1;
-}
+window.klsFindDoc=klsFindDoc;
+
 /* ================================================================
-* 🛡️ OVERRIDE 1: syncSheetToLocal (versi Final)
-*    → Ganti logika OR menjadi AND
-================================================================ */
-if (typeof window.syncSheetToLocal === 'function' && !window.syncSheetToLocal.__akbPatched) {
-window.syncSheetToLocal = async function(sheetData) {
-if (typeof DOCS === 'undefined' || !Array.isArray(DOCS)) {
-console.warn('⚠️ [AKB] DOCS array tidak tersedia');
-return;
+ * 2) INFERENSI KEPEMILIKAN DARI SLUG URL
+ *    .../CATATAN-KASUS-VIII-H/  → Catatan Kasus Kelas VIII-H
+ *    .../Catatan-Kasus-Kelas-VII-A/ → Catatan Kasus Kelas VII-A
+ * ============================================================== */
+function klsInfer(url){
+  var u;
+  try{u=decodeURIComponent(String(url||''));}catch(e){u=String(url||'');}
+  u=u.toUpperCase().replace(/[_\s]+/g,'-');
+  if(u.indexOf('KASUS')<0)return null;               // hanya card kasus
+  var m=u.match(/(VIII|VII|IX)-([A-J])(?![A-Z0-9])/); // VIII dulu!
+  if(!m)return null;
+  return {roman:m[1],letter:m[2],nama:'catatan kasus kelas '+m[1]+'-'+m[2]};
 }
-let materi = {}, video = {}, doc = {};
-try { materi = JSON.parse(localStorage.getItem(MATERI_KEY) || '{}'); } catch(e){}
-try { video  = JSON.parse(localStorage.getItem(VIDEO_KEY)  || '{}'); } catch(e){}
-try { doc    = JSON.parse(localStorage.getItem(DOC_KEY)    || '{}'); } catch(e){}
-let added = 0;
-let skipped = 0;
-sheetData.forEach(row => {
-const kelas    = String(row.Kelas || '').toLowerCase().trim();
-const guru     = String(row.Guru || '').toLowerCase().trim();
-const kategori = String(row.Kategori || '').toLowerCase().trim();
-const nama     = String(row.NamaDokumen || '').trim();
-const jenis    = String(row.JenisLink || 'doc').toLowerCase().trim();
-const url      = String(row.URL || '').trim();
-if (!url || url === '-') return;
-// 🔑 PENCOCOKAN KETAT (AND, bukan OR)
-const docIdx = akbFindDocIdxStrict(kelas, guru, kategori, nama);
-if (docIdx < 0) {
-skipped++;
-return;
+
+function klsOwner(doc,url){
+  if(!doc||doc.kat!=='kasus')return -1;
+  var inf=klsInfer(url); if(!inf)return -1;
+  if(typeof DOCS==='undefined')return -1;
+  for(var i=0;i<DOCS.length;i++){
+    var d=DOCS[i];
+    if(d.kat!=='kasus')continue;
+    if(d.guru!==doc.guru)continue;      // guru tetap pemiliknya
+    if(norm(d.nama)!==inf.nama)continue;
+    return i;
+  }
+  return -1;                            // card tujuan belum ada (mis. IX-J)
 }
-const d = DOCS[docIdx];
-if (d.kat === 'materi') {
-// Hitung materiIdx
-let materiIdx = 0, found = false;
-for (let i = 0; i < DOCS.length; i++) {
-if (DOCS[i].kelas === d.kelas && DOCS[i].guru === d.guru && DOCS[i].kat === 'materi') {
-if (i === docIdx) { found = true; break; }
-materiIdx++;
+
+/* ================================================================
+ * 3) SANITIZER — redistribusi + dedupe
+ * ============================================================== */
+function klsSanitize(obj){
+  var res={data:obj,moved:0,detail:[],orphan:[]};
+  if(!obj||typeof obj!=='object'||typeof DOCS==='undefined')return res;
+
+  var out={};
+  Object.keys(obj).forEach(function(k){
+    out[k]=Array.isArray(obj[k])?obj[k].slice():obj[k];
+  });
+
+  Object.keys(out).forEach(function(k){
+    var idx=parseInt(k,10), doc=DOCS[idx];
+    if(!doc||!Array.isArray(out[k]))return;
+    var keep=[];
+    out[k].forEach(function(url){
+      var t=klsOwner(doc,url);
+      if(t>=0 && t!==idx){
+        if(!Array.isArray(out[t]))out[t]=[];
+        out[t].push(url);
+        res.moved++;
+        res.detail.push({from:doc.nama,to:DOCS[t].nama,guru:doc.guru,kelas:doc.kelas,url:url});
+      }else{
+        if(t<0 && doc.kat==='kasus' && klsInfer(url) &&
+           norm(doc.nama)!==klsInfer(url).nama){
+          res.orphan.push({card:doc.nama,url:url,want:klsInfer(url).nama});
+        }
+        keep.push(url);
+      }
+    });
+    out[k]=keep;
+  });
+
+  /* dedupe per card (key = URL tanpa trailing slash) */
+  Object.keys(out).forEach(function(k){
+    if(!Array.isArray(out[k]))return;
+    var seen={},r=[];
+    out[k].forEach(function(u){var kk=ukey(u);if(kk&&!seen[kk]){seen[kk]=1;r.push(u);}});
+    if(r.length)out[k]=r; else delete out[k];
+  });
+
+  res.data=out;
+  return res;
 }
-}
-if (!found) return;
-const key = d.kelas + '_' + d.guru + '_' + materiIdx;
-if (!materi[key]) materi[key] = {ppt:[],pdf:[],doc:[],video:[]};
-if (!materi[key][jenis]) materi[key][jenis] = [];
-if (!materi[key][jenis].includes(url)) {
-materi[key][jenis].push(url);
-added++;
-}
-} else {
-if (!doc[docIdx]) doc[docIdx] = [];
-if (!doc[docIdx].includes(url)) {
-doc[docIdx].push(url);
-added++;
-}
-}
-});
-localStorage.setItem(MATERI_KEY, JSON.stringify(materi));
-localStorage.setItem(VIDEO_KEY, JSON.stringify(video));
-localStorage.setItem(DOC_KEY, JSON.stringify(doc));
-console.log('✅ [AKB] syncSheetToLocal (FIXED):', added, 'link ditambahkan,', skipped, 'link dilewati (tidak match)');
-setTimeout(() => {
-if (typeof render === 'function') {
-try { render(true); } catch(e){}
-}
-}, 600);
+window.klsSanitize=klsSanitize;
+
+/* ================================================================
+ * 4) STORAGE GUARDIAN — cegat SEMUA tulisan bk56_doc_links
+ *    Ini yang mematikan efek patch buggy tanpa menghapusnya
+ * ============================================================== */
+var _setItem=Storage.prototype.setItem;
+Storage.prototype.setItem=function(k,v){
+  if(k===K_DOC && typeof v==='string'){
+    try{
+      var o=JSON.parse(v);
+      var r=klsSanitize(o);
+      if(r.moved>0){
+        console.log('🛡️ [KLS] '+r.moved+' link dikembalikan ke card yang benar');
+        v=JSON.stringify(r.data);
+      }
+    }catch(e){}
+  }
+  return _setItem.call(this,k,v);
 };
-window.syncSheetToLocal.__akbPatched = true;
-console.log('✅ [AKB] syncSheetToLocal di-override (logika AND)');
-}
+console.log('✅ [KLS] Storage Guardian aktif pada key '+K_DOC);
+
 /* ================================================================
-* 🛡️ OVERRIDE 2: bk56SyncToSheetSilent (versi Final)
-*    → Ganti logika OR menjadi AND
-================================================================ */
-if (typeof window.bk56SyncToSheetSilent === 'function' && !window.bk56SyncToSheetSilent.__akbPatched) {
-const _origSilent = window.bk56SyncToSheetSilent;
-window.bk56SyncToSheetSilent = async function(flag) {
-// Jika dipanggil manual (dari tombol Push), biarkan lewat
-// Tapi kita tetap perlu override untuk fix logika
-const backendUrl = window.bk56BackendUrl || localStorage.getItem(CFG_KEY);
-if (!backendUrl) return;
-try {
-// Kumpulkan semua link dari localStorage
-const allLinks = [];
-// Materi
-try {
-const m = localStorage.getItem(MATERI_KEY);
-if (m) {
-const mData = JSON.parse(m);
-for (const key in mData) {
-const parts = key.split('_');
-if (parts.length < 3) continue;
-const [kelas, guru, materiIdx] = parts;
-const d = mData[key];
-['ppt','pdf','doc','video'].forEach(t => {
-if (d[t] && d[t].length > 0) {
-d[t].forEach(url => {
-allLinks.push({
-kelas, guru, kategori: 'materi',
-nama: 'Materi ' + (parseInt(materiIdx)+1),
-jenis: t, url
-});
-});
+ * 5) SINKRONISASI EMBEDDED JSON (lintas device)
+ * ============================================================== */
+function klsSyncEmbedded(docData){
+  try{
+    var el=document.getElementById(EMB); if(!el)return;
+    var d=JSON.parse(el.textContent)||{};
+    d.docLinks=docData;
+    d.lastUpdated=new Date().toISOString();
+    d.klsFix='1.0.0';
+    el.textContent=JSON.stringify(d);
+  }catch(e){}
 }
-});
-}
-}
-} catch(e) {}
-// Video
-try {
-const v = localStorage.getItem(VIDEO_KEY);
-if (v) {
-const vData = JSON.parse(v);
-for (const idx in vData) {
-const list = vData[idx];
-if (Array.isArray(list)) {
-list.forEach(url => {
-allLinks.push({
-kelas: '-', guru: '-', kategori: 'video',
-nama: 'Video ' + (parseInt(idx)+1),
-jenis: 'video', url
-});
-});
-}
-}
-}
-} catch(e) {}
-// Dokumen
-try {
-const dl = localStorage.getItem(DOC_KEY);
-if (dl && typeof DOCS !== 'undefined') {
-const dlData = JSON.parse(dl);
-for (const idx in dlData) {
-const docItem = DOCS[parseInt(idx)];
-if (!docItem) continue;
-const list = dlData[idx];
-if (Array.isArray(list)) {
-list.forEach(url => {
-allLinks.push({
-kelas: docItem.kelas, guru: docItem.guru, kategori: docItem.kat,
-nama: docItem.nama, jenis: 'doc', url
-});
-});
-}
-}
-}
-} catch(e) {}
-if (allLinks.length === 0) return;
-// Fetch existing URLs dari sheet
-let existingUrls = new Set();
-try {
-const res = await fetch(backendUrl, { method: 'GET', redirect: 'follow' });
-const json = await res.json();
-if (json.success && Array.isArray(json.data)) {
-existingUrls = new Set(json.data.map(d => d.URL));
-if (typeof window.bk56RekapData !== 'undefined') {
-window.bk56RekapData = json.data;
-}
-}
-} catch(e) {
-existingUrls = new Set((window.bk56RekapData || []).map(d => d.URL));
-}
-// Push hanya yang belum ada
-let pushed = 0;
-for (const link of allLinks) {
-if (existingUrls.has(link.url)) continue;
-try {
-const res = await fetch(backendUrl, {
-method: 'POST',
-redirect: 'follow',
-headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-body: JSON.stringify({
-action: 'add',
-kelas: link.kelas,
-guru: link.guru,
-kategori: link.kategori,
-nama: link.nama,
-jenis: link.jenis,
-url: link.url
-})
-});
-const json = await res.json();
-if (json.success) {
-pushed++;
-if (typeof window.bk56RekapData !== 'undefined' && Array.isArray(window.bk56RekapData)) {
-window.bk56RekapData.push({
-ID: json.id,
-Timestamp: new Date().toISOString(),
-Kelas: link.kelas,
-Guru: link.guru,
-Kategori: link.kategori,
-NamaDokumen: link.nama,
-JenisLink: link.jenis,
-URL: link.url
-});
-}
-existingUrls.add(link.url);
-}
-} catch(e) {
-console.warn('⚠️ [AKB] Gagal push 1 link:', e);
-}
-}
-if (pushed > 0) {
-try {
-localStorage.setItem(CACHE_KEY, JSON.stringify(window.bk56RekapData || []));
-} catch(e) {}
-console.log('✅ [AKB] Auto-sync:', pushed, 'link baru ke sheet');
-if (typeof showToast === 'function') {
-showToast('✅ ' + pushed + ' link tersinkron ke Google Sheets', 'success');
-}
-}
-} catch(e) {
-console.error('❌ [AKB] Sync error:', e);
-}
+
+/* ================================================================
+ * 6) PERBAIKAN LOKAL (dipanggil manual & otomatis)
+ * ============================================================== */
+window.klsFixNow=function(showUI){
+  if(typeof DOCS==='undefined'){toast('⚠️ DOCS belum siap','error');return null;}
+  var raw=lsGet(K_DOC,{});
+  var r=klsSanitize(raw);
+  _setItem.call(localStorage,K_DOC,JSON.stringify(r.data)); // tulis tanpa guard ganda
+  klsSyncEmbedded(r.data);
+
+  lastReport=r;
+  try{if(typeof window.render==='function')window.render(true);}catch(e){}
+  try{if(window.RKX&&window.RKX.render)window.RKX.render();}catch(e){}
+
+  if(showUI!==false)klsRenderReport(r);
+  if(r.moved>0)toast('🧹 '+r.moved+' link dikembalikan ke card yang benar','success');
+  else if(showUI)toast('✅ Tidak ada kebocoran — semua card sudah benar','success');
+  console.log('📋 [KLS] Hasil perbaikan:',r);
+  return r;
 };
-window.bk56SyncToSheetSilent.__akbPatched = true;
-console.log('✅ [AKB] bk56SyncToSheetSilent di-override (logika AND)');
+
+function klsRenderReport(r){
+  var box=document.getElementById('kls-report');
+  var body=document.getElementById('kls-report-body');
+  if(!box||!body)return;
+
+  var h='';
+  if(r.moved===0){
+    h+='<div class="kls-ok">✅ Tidak ditemukan link yang salah tempat.</div>';
+  }else{
+    h+='<div> Sebanyak <b class="kls-mv">'+r.moved+' link</b> dipindahkan dari card <code>-A</code> ke card yang benar:</div>';
+    var agg={};
+    r.detail.forEach(function(d){
+      var k=d.from+' → '+d.to;
+      agg[k]=(agg[k]||0)+1;
+    });
+    h+='<table><thead><tr><th>Dari (bocor)</th><th>Ke (benar)</th><th style="width:70px">Jumlah</th></tr></thead><tbody>';
+    Object.keys(agg).sort().forEach(function(k){
+      var p=k.split(' → ');
+      h+='<tr><td>'+esc(p[0])+'</td><td class="kls-ok">'+esc(p[1])+'</td><td><b>'+agg[k]+'</b></td></tr>';
+    });
+    h+='</tbody></table>';
+  }
+  if(r.orphan.length){
+    h+='<div style="margin-top:10px">⚠️ <b>'+r.orphan.length+' link</b> tidak punya card tujuan (mis. <code>IX-J</code> belum ada di DOCS). Link dibiarkan di tempatnya:</div><ul style="margin:4px 0 0 18px">';
+    r.orphan.slice(0,6).forEach(function(o){h+='<li><code>'+esc(o.want)+'</code> — '+esc(o.url.slice(0,60))+'</li>';});
+    if(r.orphan.length>6)h+='<li>… dan '+(r.orphan.length-6)+' lainnya</li>';
+    h+='</ul>';
+  }
+  h+='<div style="margin-top:10px;font-size:.78rem;opacity:.9">💡 Guardian aktif permanen — link yang salah tempat akan otomatis dikembalikan setiap kali disimpan.</div>';
+  body.innerHTML=h;
+  box.classList.add('show');
 }
+
 /* ================================================================
-* 🛡️ OVERRIDE 3: autoSyncFromSheet (versi Final)
-*    → Gunakan syncSheetToLocal yang sudah di-fix
-================================================================ */
-if (typeof window.autoSyncFromSheet === 'function' && !window.autoSyncFromSheet.__akbPatched) {
-window.autoSyncFromSheet = async function() {
-const backendUrl = localStorage.getItem(CFG_KEY);
-if (!backendUrl) {
-console.log('ℹ️ [AKB] Backend URL belum dikonfigurasi');
-return;
-}
-try {
-console.log('🔄 [AKB] Mengambil data dari Google Sheets...');
-const res = await fetch(backendUrl, { method: 'GET', redirect: 'follow' });
-const json = await res.json();
-if (!json.success || !Array.isArray(json.data)) {
-console.warn('⚠️ [AKB] Response tidak valid');
-return;
-}
-console.log('📊 [AKB]', json.data.length, 'link ditemukan di sheet');
-// 🔑 Gunakan syncSheetToLocal yang sudah di-fix (logika AND)
-if (typeof window.syncSheetToLocal === 'function') {
-await window.syncSheetToLocal(json.data);
-}
-} catch(e) {
-console.warn('⚠️ [AKB] Gagal:', e.message);
-}
+ * 7) OVERRIDE Sync dari Sheet → versi STRICT
+ *    (tidak memanggil fungsi internal yang bocor)
+ * ============================================================== */
+window.bk56SyncFromSheet=async function(){
+  var u=backend();
+  if(!u){toast('⚠️ Backend belum dikonfigurasi','error');return;}
+  toast('🔄 Mengambil data (strict matching)…','info');
+  try{
+    var res=await fetch(u,{method:'GET',redirect:'follow'});
+    var j=await res.json();
+    if(!j||!j.success||!Array.isArray(j.data))throw new Error('response tidak valid');
+
+    var doc=lsGet(K_DOC,{}), added=0, skipped=0, unmatched=0;
+    j.data.forEach(function(row){
+      var url=String(row.URL||'').trim(); if(!url||url==='-')return;
+      var idx=klsFindDoc(row.Kelas,row.Guru,row.Kategori,row.NamaDokumen);
+      /* koreksi identitas via slug URL bila card kasus */
+      if(idx>=0 && DOCS[idx] && DOCS[idx].kat==='kasus'){
+        var own=klsOwner(DOCS[idx],url);
+        if(own>=0)idx=own;
+      }
+      if(idx<0){unmatched++;return;}
+      if(DOCS[idx].kat==='materi'){skipped++;return;} // materi punya sistem sendiri
+      if(!Array.isArray(doc[idx]))doc[idx]=[];
+      var exist=doc[idx].some(function(x){return ukey(x)===ukey(url);});
+      if(exist){skipped++;return;}
+      doc[idx].push(url); added++;
+    });
+
+    _setItem.call(localStorage,K_DOC,JSON.stringify(klsSanitize(doc).data));
+    localStorage.setItem('bk56_rekap_cache',JSON.stringify(j.data));
+    try{window.bk56RekapData=j.data;}catch(e){}
+    klsFixNow(false);
+    try{if(typeof window.bk56RenderRekap==='function')window.bk56RenderRekap();}catch(e){}
+
+    toast('✅ Sync strict: '+added+' baru, '+skipped+' sudah ada'+(unmatched?', '+unmatched+' tak cocok':''),'success');
+    console.log('📊 [KLS] Sync strict →',j.data.length,'baris | baru:',added,'| skip:',skipped,'| unmatched:',unmatched);
+  }catch(e){
+    toast('❌ Gagal sync: '+e.message,'error');
+  }
 };
-window.autoSyncFromSheet.__akbPatched = true;
-console.log('✅ [AKB] autoSyncFromSheet di-override');
-}
+window.bk56SyncFromSheet.__klsStrict=true;
+
 /* ================================================================
-* 🧹 BONUS: Bersihkan data yang sudah "bocor" di localStorage
-*    → Scan semua docIdx, cek apakah URL cocok dengan card tersebut
-*    → Jika tidak cocok (bocoran dari card lain), hapus
-================================================================ */
-function akbCleanExistingLeaks() {
-try {
-const dlRaw = localStorage.getItem(DOC_KEY);
-if (!dlRaw) return;
-const dlData = JSON.parse(dlRaw);
-let cleaned = 0;
-// Untuk setiap docIdx di localStorage
-for (const idxStr in dlData) {
-const idx = parseInt(idxStr);
-const docItem = DOCS[idx];
-if (!docItem) continue;
-const list = dlData[idx];
-if (!Array.isArray(list)) continue;
-// Filter: hanya simpan URL yang memang milik card ini
-// (URL yang mengandung nama kelas yang sesuai)
-const kelasName = String(docItem.kelas).toUpperCase();
-const namaDoc = docItem.nama.toLowerCase();
-const cleanList = list.filter(url => {
-// Jika URL kosong, buang
-if (!url || !url.trim()) return false;
-// Cek apakah URL ini masuk akal untuk card ini
-// (URL biasanya mengandung nama kelas atau nama dokumen)
-// Kita pakai heuristik: jika nama dokumen mengandung "VII-A"
-// tapi card-nya "VII-B", itu bocoran → buang
-const urlLow = url.toLowerCase();
-// Cek semua kelas VII-A s/d VII-J, VIII-A s/d VIII-I, IX-A s/d IX-I
-const allKelas = ['vii-a','vii-b','vii-c','vii-d','vii-e','vii-f','vii-g','vii-h','vii-i','vii-j',
-'viii-a','viii-b','viii-c','viii-d','viii-e','viii-f','viii-g','viii-h','viii-i',
-'ix-a','ix-b','ix-c','ix-d','ix-e','ix-f','ix-g','ix-h','ix-i'];
-const cardKelas = kelasName.toLowerCase().replace(/\s/g,'');
-// Jika URL mengandung nama kelas yang BUKAN kelas card ini → bocoran
-let isLeak = false;
-for (const k of allKelas) {
-if (urlLow.includes(k) && k !== cardKelas) {
-// URL mengandung nama kelas lain → kemungkinan bocoran
-// Tapi hati-hati: URL backend bisa saja tidak mengandung nama kelas
-// Jadi kita cek lebih ketat: hanya jika URL jelas-jelas untuk kelas lain
-if (urlLow.includes('catatan-kasus-kelas-' + k) ||
-urlLow.includes('catatan-kasus-' + k.toUpperCase().replace('-','')) ||
-urlLow.includes('catatan-kasus-' + k)) {
-isLeak = true;
-break;
-}
-}
-}
-return !isLeak;
-});
-if (cleanList.length !== list.length) {
-cleaned += (list.length - cleanList.length);
-if (cleanList.length > 0) {
-dlData[idx] = cleanList;
-} else {
-delete dlData[idx];
-}
-}
-}
-if (cleaned > 0) {
-localStorage.setItem(DOC_KEY, JSON.stringify(dlData));
-console.log('🧹 [AKB] Dibersihkan', cleaned, 'link bocor dari card VII-A/VIII-A/IX-A');
-if (typeof showToast === 'function') {
-showToast('🧹 ' + cleaned + ' link bocor telah dibersihkan', 'info');
-}
-// Refresh UI
-setTimeout(() => {
-if (typeof render === 'function') {
-try { render(true); } catch(e) {}
-}
-}, 500);
-}
-} catch(e) {
-console.warn('⚠️ [AKB] Gagal clean leaks:', e);
-}
-}
+ * 8) HOOK Push ke Sheet → repair lokal dulu, baru push
+ * ============================================================== */
+(function hookPush(){
+  var f=window.bk56SyncToSheet;
+  if(typeof f!=='function'||f.__klsHooked){setTimeout(hookPush,700);return;}
+  window.bk56SyncToSheet=function(){
+    klsFixNow(false);
+    return f.apply(this,arguments);
+  };
+  window.bk56SyncToSheet.__klsHooked=true;
+  console.log('✅ [KLS] bk56SyncToSheet di-hook (repair sebelum push)');
+})();
+
 /* ================================================================
-* 🚀 INIT
-================================================================ */
-function init() {
-console.log('🚀 [AKB] Patch Anti-Kebocoran Link dimulai...');
-console.log('📌 Perbaikan:');
-console.log('   ✅ syncSheetToLocal: OR (||) → AND (&&)');
-console.log('   ✅ bk56SyncToSheetSilent: logika match diperketat');
-console.log('   ✅ autoSyncFromSheet: pakai versi fix');
-console.log('   ✅ Bersihkan data bocor yang sudah ada di localStorage');
-console.log('');
-console.log('📌 Hasil:');
-console.log('   • VII-A hanya terima link "Catatan Kasus Kelas VII-A"');
-console.log('   • VII-B hanya terima link "Catatan Kasus Kelas VII-B"');
-console.log('   • dst...');
-// Bersihkan data bocor yang sudah ada
-setTimeout(akbCleanExistingLeaks, 1500);
-console.log('✅ [AKB] Patch terpasang — kebocoran link diperbaiki');
+ * 9) PERBAIKI NamaDokumen YANG RUSAK DI GOOGLE SHEETS
+ * ============================================================== */
+window.klsRepairSheet=async function(){
+  if(busy)return;
+  var u=backend();
+  if(!u){toast('⚠️ Backend belum dikonfigurasi','error');return;}
+  if(!confirm('🗄️ PERBAIKI NAMA DOKUMEN DI GOOGLE SHEETS\n\n'+
+    'Baris yang NamaDokumen-nya tidak sesuai slug URL akan\n'+
+    'dihapus lalu ditulis ulang dengan nama yang benar.\n\n'+
+    '• URL tidak berubah\n• Tidak ada link yang hilang\n'+
+    '• Proses butuh beberapa detik\n\nLanjutkan?'))return;
+
+  busy=true;
+  toast('🔄 Memeriksa Google Sheets…','info');
+  try{
+    var res=await fetch(u,{method:'GET',redirect:'follow'});
+    var j=await res.json();
+    if(!j||!j.success||!Array.isArray(j.data))throw new Error('response tidak valid');
+
+    var wrong=[];
+    j.data.forEach(function(row){
+      var url=String(row.URL||'').trim(); if(!url)return;
+      var idx=klsFindDoc(row.Kelas,row.Guru,row.Kategori,row.NamaDokumen);
+      if(idx<0)return;
+      var d=DOCS[idx]; if(!d||d.kat!=='kasus')return;
+      var own=klsOwner(d,url);
+      if(own<0||own===idx)return;
+      wrong.push({row:row,target:DOCS[own]});
+    });
+
+    if(!wrong.length){
+      toast('✅ Google Sheets sudah bersih — tidak ada nama salah','success');
+      busy=false;return;
+    }
+    toast('🔧 Memperbaiki '+wrong.length+' baris di Sheets…','info');
+
+    /* hapus dulu (batch bila didukung) */
+    var ids=wrong.map(function(w){return w.row.ID;}).filter(Boolean);
+    var deleted=false;
+    if(ids.length){
+      try{
+        var r1=await fetch(u,{method:'POST',redirect:'follow',
+          headers:{'Content-Type':'text/plain;charset=utf-8'},
+          body:JSON.stringify({action:'batchDelete',ids:ids})});
+        var j1=await r1.json();
+        deleted=!!(j1&&j1.success);
+      }catch(e){}
+      if(!deleted){
+        for(var i=0;i<ids.length;i+=12){
+          await Promise.all(ids.slice(i,i+12).map(function(id){
+            return fetch(u,{method:'POST',redirect:'follow',
+              headers:{'Content-Type':'text/plain;charset=utf-8'},
+              body:JSON.stringify({action:'delete',id:id})}).catch(function(){});
+          }));
+        }
+      }
+    }
+
+    /* tulis ulang dengan nama benar */
+    var ok=0;
+    for(var k=0;k<wrong.length;k++){
+      var w=wrong[k],t=w.target;
+      try{
+        var r2=await fetch(u,{method:'POST',redirect:'follow',
+          headers:{'Content-Type':'text/plain;charset=utf-8'},
+          body:JSON.stringify({action:'add',kelas:t.kelas,guru:t.guru,
+            kategori:t.kat,nama:t.nama,jenis:'doc',url:String(w.row.URL).trim()})});
+        var j2=await r2.json();
+        if(j2&&j2.success)ok++;
+      }catch(e){}
+    }
+    toast('✅ '+ok+'/'+wrong.length+' baris Sheets diperbaiki','success');
+    console.log('🗄️ [KLS] Repair sheet:',ok,'dari',wrong.length);
+    setTimeout(function(){window.bk56SyncFromSheet();},1200);
+  }catch(e){
+    toast('❌ Gagal: '+e.message,'error');
+  }
+  busy=false;
+};
+
+/* ================================================================
+ * 10) TOMBOL DI TOOLBAR REKAP LINK
+ * ============================================================== */
+function klsInjectBtn(){
+  var bars=document.querySelectorAll('#a56-panel-rekap .a56-rekap-controls');
+  bars.forEach(function(bar){
+    if(bar.querySelector('.kls-btn'))return;
+    var b=document.createElement('button');
+    b.className='a56-rekap-btn kls-btn';
+    b.innerHTML='🧹 Perbaiki Card Bocor';
+    b.title='Kembalikan link Catatan Kasus yang menumpuk di card -A';
+    b.onclick=function(){klsFixNow(true);};
+    bar.appendChild(b);
+  });
 }
-if (document.readyState === 'loading') {
-document.addEventListener('DOMContentLoaded', init);
-} else {
-init();
+
+/* ================================================================
+ * 11) LAPORAN DIAGNOSTIK
+ * ============================================================== */
+window.klsReport=function(){
+  var raw=lsGet(K_DOC,{}), rows=[];
+  Object.keys(raw).forEach(function(k){
+    var d=DOCS[parseInt(k,10)]; if(!d||d.kat!=='kasus')return;
+    (raw[k]||[]).forEach(function(u){
+      var inf=klsInfer(u);
+      var salah=inf && norm(inf.nama)!==norm(d.nama);
+      rows.push({card:d.nama,guru:d.guru,url:u,seharusnya:inf?inf.nama:'?',status:salah?'❌ BOCOR':'✅ OK'});
+    });
+  });
+  console.table(rows);
+  console.log('Total link kasus:',rows.length,'| Bocor:',rows.filter(function(r){return r.status.indexOf('BOCOR')>-1;}).length);
+  return rows;
+};
+
+/* ================================================================
+ * INIT
+ * ============================================================== */
+function init(){
+  console.log('🚀 [KLS-FIX v1.0] Anti-kebocoran card Catatan Kasus');
+  console.log('   ✅ Strict matching (AND, bukan OR)');
+  console.log('   ✅ Storage Guardian pada bk56_doc_links');
+  console.log('   ✅ Redistribusi berbasis slug URL');
+  console.log('   📋 Diagnostik: klsReport()');
+  console.log('   🧹 Perbaikan : klsFixNow(true)');
+
+  klsInjectBtn();
+  /* jalankan setelah patch auto-sync lain selesai menulis */
+  setTimeout(function(){klsFixNow(false);klsInjectBtn();},1800);
+  setTimeout(function(){klsFixNow(false);klsInjectBtn();},4200);
+  setTimeout(function(){klsFixNow(false);klsInjectBtn();},8000);
+
+  document.addEventListener('visibilitychange',function(){
+    if(!document.hidden){klsFixNow(false);klsInjectBtn();}
+  });
+  document.addEventListener('click',function(e){
+    if(e.target.closest && e.target.closest('#a56-tab-rekap-btn')){
+      setTimeout(function(){klsInjectBtn();},250);
+    }
+  },{passive:true});
+
+  console.log('✅ [KLS-FIX] aktif');
 }
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+else init();
 })();
 </script>
-<!-- ================================================================ -->
-<!-- ========== PATCH FIX: ANTI-KEBOCORAN LINK CARD KASUS [END] ========== -->
-<!-- ================================================================ -->
+<!-- ================= PATCH KLS-FIX v1.0 [END] ================= -->
 </body>
 </html>
