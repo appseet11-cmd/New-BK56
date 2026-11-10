@@ -18874,6 +18874,69 @@ document.addEventListener('visibilitychange',function(){
 <!-- ================================================================ -->
 <!-- ==== PATCH FINAL: ANTI-PINDAH CARD [END] ======================= -->
 <!-- ================================================================ -->
+<!-- ========== EMERGENCY FIX: FORCE RESET ========== -->
+<script>
+(function(){
+"use strict";
+console.log('🚨 [Emergency Fix] Memulai force reset...');
 
+// 1. Tutup SEMUA modal yang mungkin terbuka
+const modalSelectors = [
+'.bk56-backup-modal', '.bk56-config-modal',
+'.adm56-login-modal', '.adm56-admin-modal',
+'.materi-modal', '.materi-picker-modal',
+'.video-modal', '.link-modal', '.link-picker-modal',
+'.pw-modal', '.master-modal', '.editor-modal',
+'#share-pw-modal', '#edit-pw-modal', '#master-pw-modal',
+'#bk56-universal-player', '#videoPlayerModal',
+'#bk56-delete-overlay', '#bk56-delete-progress',
+'#rkx40Modal', '#welcome-overlay'
+];
 
+modalSelectors.forEach(function(sel) {
+const el = document.querySelector(sel);
+if (el) {
+el.classList.remove('show');
+el.style.display = 'none';
+console.log('✅ [Emergency] Tutup modal:', sel);
+}
+});
+
+// 2. Reset panel rekap
+const rekapPanel = document.getElementById('a56-panel-rekap');
+if (rekapPanel) rekapPanel.style.display = 'none';
+
+// 3. Reset container admin
+const container = document.querySelector('.a56-container');
+if (container) container.style.display = '';
+
+// 4. Reset tab ke default
+const tabBtns = document.querySelectorAll('.a56-tab-btn');
+tabBtns.forEach(function(btn, i) {
+if (i === 0) btn.classList.add('active');
+else btn.classList.remove('active');
+});
+
+// 5. Hapus overlay protection jika ada
+const shield = document.getElementById('protection-shield');
+if (shield) shield.classList.remove('active');
+
+// 6. Force show halaman home
+setTimeout(function() {
+const homePage = document.getElementById('features');
+if (homePage) {
+homePage.scrollIntoView({ behavior: 'instant', block: 'start' });
+console.log('✅ [Emergency] Scroll ke home');
+}
+}, 500);
+
+// 7. Cek jika ada error di console
+window.addEventListener('error', function(e) {
+console.error('🚨 [Emergency] Error terdeteksi:', e.message, 'at', e.filename, ':', e.lineno);
+});
+
+console.log('✅ [Emergency Fix] Selesai - halaman seharusnya sudah tampil');
+})();
+</script>
+<!-- ========== EMERGENCY FIX [END] ========== -->
 </body></html>
