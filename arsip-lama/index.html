@@ -3057,8 +3057,65 @@ Telp. (021) 7803516 | www.smpn56jakarta.sch.id
 <button class="a56-tab-btn" onclick="pindahKelas('ix',this)">📕 Kelas IX</button>
 <button class="a56-tab-btn" id="a56-tab-rekap-btn" onclick="bk56ShowRekap(this)">📋 Rekap Link</button>
 </div>
-</nav>
-<div class="a56-container">
+</nav><div id="a56-panel-rekap" style="display: block;">
+  <div class="a56-tab-rekap">
+    <h2>📋 Rekap Link Tersemat</h2>
+    <p>Semua link yang disematkan di Administrasi BK56 terekap otomatis di sini. Data tersinkron dengan Google Sheets (backend).</p>
+  </div>
+
+  <div class="a56-connection-status connected" id="bk56-conn-status">
+    <span class="status-dot"></span>
+    <span id="bk56-conn-text">✅ Terhubung • 14 link tersinkron</span>
+  </div>
+
+  <div id="bk56-sg2-badge" style="width: 100%; background: linear-gradient(135deg, rgb(254, 243, 199), rgb(253, 230, 138)); border-width: 2px 2px 2px 4px; border-style: solid; border-color: rgb(245, 158, 11); border-image: none; padding: 12px 16px; border-radius: 10px; font-size: 0.85rem; color: rgb(120, 53, 15); line-height: 1.5; margin-bottom: 12px; display: flex; align-items: center; gap: 12px;"><span style="font-size:1.5rem;">🛡️</span><div style="flex:1;"><strong style="color:#92400e;font-size:.95rem;">Mode Sync: MANUAL (Auto-Sync MATI TOTAL)</strong><br><small style="opacity:.9;">📦 Total data di browser: <strong>0</strong> | ✅ Sudah di-sync: <strong>0</strong> | ⚠️ Belum di-push: <strong style="color:#dc2626;">0</strong></small><br><small style="opacity:.8;font-style:italic;">💡 Data hanya masuk ke Google Sheets saat Anda klik "💾 Push ke Sheet". Data lama yang sudah pernah di-sync akan DITOLAK.</small></div></div><div class="a56-rekap-controls">
+    <button class="a56-rekap-btn primary" onclick="bk56SyncFromSheet()">🔄 Sync dari Sheet</button>
+    <button class="a56-rekap-btn secondary" onclick="bk56SyncToSheet()">💾 Push ke Sheet</button><button id="bk56-restore-from-sheet-btn" class="a56-rekap-btn" title="Ambil semua link dari Google Sheets dan kembalikan ke card asal" style="background: linear-gradient(135deg, rgb(139, 92, 246), rgb(124, 58, 237)); color: rgb(255, 255, 255); box-shadow: rgba(139, 92, 246, 0.4) 0px 4px 14px;">🔄 Pulihkan dari Sheet</button>
+    <button class="a56-rekap-btn warning" onclick="bk56OpenConfig()">⚙️ Konfigurasi Backend</button>
+    <button class="a56-rekap-btn ghost" onclick="bk56ExportRekapCSV()">📊 Export CSV</button>
+  <button id="rkx40Btn" class="rkx40-btn" disabled="">🗑️ Hapus Tercentang <span class="rkx40-badge" id="rkx40Bdg">0</span></button></div>
+
+  <div class="a56-rekap-counter" id="bk56-rekap-counter">
+    <div class="a56-rekap-count-item">
+      <div class="count-value" id="cnt-total">14</div>
+      <div class="count-label">Total Link</div>
+    </div>
+    <div class="a56-rekap-count-item">
+      <div class="count-value" id="cnt-materi">0</div>
+      <div class="count-label">Materi</div>
+    </div>
+    <div class="a56-rekap-count-item">
+      <div class="count-value" id="cnt-video">0</div>
+      <div class="count-label">Video</div>
+    </div>
+    <div class="a56-rekap-count-item">
+      <div class="count-value" id="cnt-doc">14</div>
+      <div class="count-label">Dokumen</div>
+    </div>
+  </div>
+
+  <div class="a56-rekap-filter" id="bk56-rekap-filter"><div class="a56-rekap-filter-label">🔍 Filter Tampilan:</div><button class="a56-rekap-chip active" onclick="bk56SetFilter('kelas','all')">📋 Semua Kelas</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kelas','ix')">IX</button><button class="a56-rekap-chip active" onclick="bk56SetFilter('guru','all')" style="margin-left:8px;">👤 Semua Guru</button><button class="a56-rekap-chip " onclick="bk56SetFilter('guru','sotya')">Sotya Palupi</button><button class="a56-rekap-chip active" onclick="bk56SetFilter('kat','all')" style="margin-left:8px;">🗂️ Semua Kategori</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kat','kasus')">Catatan Kasus</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kat','status')">Status Konseling</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kat','homevisit')">Home Visit</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kat','inklusi')">Program Inklusi</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kat','agenda')">Agenda Belajar</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kat','rpl')">Rencana Pelaksanaan Layanan (RPL)</button></div>
+
+  <div class="a56-rekap-table-wrap">
+    <table class="a56-rekap-table">
+      <thead>
+        <tr><th class="rkx40-hdr" style="width: 50px; text-align: center; padding: 10px;"><div style="display:flex;justify-content:center;"><input type="checkbox" class="rkx40-cb" id="rkx40SA" title="Pilih Semua"></div></th>
+          <th class="col-no">No</th>
+          <th class="col-time">Waktu</th>
+          <th class="col-kelas">Kelas</th>
+          <th class="col-guru">Guru BK</th>
+          <th class="col-kat">Kategori</th>
+          <th class="col-nama">Nama Dokumen</th>
+          <th class="col-jenis">Jenis</th>
+          <th class="col-url">URL Link</th>
+          <th class="col-aksi">Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="bk56-rekap-tbody"><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794149045316" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-A/" data-nama="Catatan Kasus Kelas IX-A" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>1</td><td class="col-time">08 Nov 2026, 21.44</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-A</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-A/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-A/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-A/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794149045316')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154039054" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-B/" data-nama="Catatan Kasus Kelas IX-B" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>2</td><td class="col-time">08 Nov 2026, 23.07</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-B</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-B/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-B/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-B/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154039054')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154281005" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-C/" data-nama="Catatan Kasus Kelas IX-C" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>3</td><td class="col-time">08 Nov 2026, 23.11</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-C</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-C/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-C/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-C/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154281005')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154282835" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-D/" data-nama="Catatan Kasus Kelas IX-D" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>4</td><td class="col-time">08 Nov 2026, 23.11</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-D</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-D/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-D/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-D/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154282835')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154510668" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-E/" data-nama="Catatan Kasus Kelas IX-E" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>5</td><td class="col-time">08 Nov 2026, 23.15</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-E</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-E/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-E/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-E/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154510668')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154512693" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-F/" data-nama="Catatan Kasus Kelas IX-F" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>6</td><td class="col-time">08 Nov 2026, 23.15</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-F</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-F/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-F/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-F/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154512693')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154514688" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-G/" data-nama="Catatan Kasus Kelas IX-G" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>7</td><td class="col-time">08 Nov 2026, 23.15</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-G</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-G/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-G/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-G/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154514688')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154516288" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-H/" data-nama="Catatan Kasus Kelas IX-H" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>8</td><td class="col-time">08 Nov 2026, 23.15</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-H</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-H/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-H/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-H/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154516288')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154518092" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-I/" data-nama="Catatan Kasus Kelas IX-I" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>9</td><td class="col-time">08 Nov 2026, 23.15</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-I</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-I/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-I/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-I/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154518092')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154639349" data-url="https://appseet11-cmd.github.io/Status-Konseling-Kelas-IX/" data-nama="Status Konseling" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Status Konseling"></div>10</td><td class="col-time">08 Nov 2026, 23.17</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Status Konseling</td><td class="col-nama">Status Konseling</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/Status-Konseling-Kelas-IX/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/Status-Konseling-Kelas-IX/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/Status-Konseling-Kelas-IX/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154639349')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154798068" data-url="https://script.google.com/macros/s/AKfycbwLpwo_ySLUNaLVgGdfbKHVmPjqBjKbwEIjfUjAeRmJ2OBh8Y7NqhO8fJEQKjqzlYEbkQ/exec" data-nama="Home Visit" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Home Visit"></div>11</td><td class="col-time">08 Nov 2026, 23.19</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Home Visit</td><td class="col-nama">Home Visit</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://script.google.com/macros/s/AKfycbwLpwo_ySLUNaLVgGdfbKHVmPjqBjKbwEIjfUjAeRmJ2OBh8Y7NqhO8fJEQKjqzlYEbkQ/exec" target="_blank" rel="noopener">https://script.google.com/macros/s/AKfycbwLpwo_ySLUNaLVgGdfbKHVmPjqBjKbwEIjfUjAeRmJ2OBh8Y7NqhO8fJEQKjqzlYEbkQ/exec</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://script.google.com/macros/s/AKfycbwLpwo_ySLUNaLVgGdfbKHVmPjqBjKbwEIjfUjAeRmJ2OBh8Y7NqhO8fJEQKjqzlYEbkQ/exec','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154798068')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154978887" data-url="https://script.google.com/macros/s/AKfycbxmTgmeEsWY8kh5W9OsveB2vFKb4pwNL-C6AILuz5CxvtTv3xuPLtv-cX4N36HqfZDdzA/exec" data-nama="Program Inklusi" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Program Inklusi"></div>12</td><td class="col-time">08 Nov 2026, 23.22</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Program Inklusi</td><td class="col-nama">Program Inklusi</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://script.google.com/macros/s/AKfycbxmTgmeEsWY8kh5W9OsveB2vFKb4pwNL-C6AILuz5CxvtTv3xuPLtv-cX4N36HqfZDdzA/exec" target="_blank" rel="noopener">https://script.google.com/macros/s/AKfycbxmTgmeEsWY8kh5W9OsveB2vFKb4pwNL-C6AILuz5CxvtTv3xuPLtv-cX4N36HqfZDdzA/exec</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://script.google.com/macros/s/AKfycbxmTgmeEsWY8kh5W9OsveB2vFKb4pwNL-C6AILuz5CxvtTv3xuPLtv-cX4N36HqfZDdzA/exec','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154978887')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794155078032" data-url="https://appseet11-cmd.github.io/Agenda-Belajar-Sotya-Palupi-Kelas-IX-Sem-1/" data-nama="Agenda Belajar Semester 1" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Agenda Belajar"></div>13</td><td class="col-time">08 Nov 2026, 23.24</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Agenda Belajar</td><td class="col-nama">Agenda Belajar Semester 1</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/Agenda-Belajar-Sotya-Palupi-Kelas-IX-Sem-1/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/Agenda-Belajar-Sotya-Palupi-Kelas-IX-Sem-1/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/Agenda-Belajar-Sotya-Palupi-Kelas-IX-Sem-1/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794155078032')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794294210386" data-url="https://script.google.com/macros/s/AKfycbymZlGYF99WC9ctNA6b1AJpq2unpphgMxen8soMkjEwgK_clyF7M_12o66xY-Jd-shE/exec" data-nama="RPL Individual" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Rencana Pelaksanaan Layanan (RPL)"></div>14</td><td class="col-time">10 Nov 2026, 14.03</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Rencana Pelaksanaan Layanan (RPL)</td><td class="col-nama">RPL Individual</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://script.google.com/macros/s/AKfycbymZlGYF99WC9ctNA6b1AJpq2unpphgMxen8soMkjEwgK_clyF7M_12o66xY-Jd-shE/exec" target="_blank" rel="noopener">https://script.google.com/macros/s/AKfycbymZlGYF99WC9ctNA6b1AJpq2unpphgMxen8soMkjEwgK_clyF7M_12o66xY-Jd-shE/exec</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://script.google.com/macros/s/AKfycbymZlGYF99WC9ctNA6b1AJpq2unpphgMxen8soMkjEwgK_clyF7M_12o66xY-Jd-shE/exec','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794294210386')" title="Hapus">🗑️</button></div></td></tr></tbody>
+    </table>
+  </div>
+</div>
+<div class="a56-container" style="display: none;">
 <div class="a56-info-tip">
 <strong>💡 Cara mengisi link:</strong> buka kode halaman ini, tekan <strong>Ctrl+F</strong>, ketik <strong>nama guru</strong> (contoh: SOTYA PALUPI). Setiap baris dokumen diakhiri tanda <strong>""</strong> — tempelkan link Anda di antara dua tanda kutip itu.
 </div>
@@ -3066,11 +3123,11 @@ Telp. (021) 7803516 | www.smpn56jakarta.sch.id
 <h2 id="judul-panel">📘 Administrasi BK Kelas VII</h2>
 <p>Tahun Ajaran 2026/2027 — Fase D • 4 Guru BK • 16 Kategori</p>
 </div>
-<div class="a56-filter"><div class="a56-filter-label">👩‍🏫 Filter Guru BK:</div><div id="filter-guru" style="display:contents"><button class="a56-chip active" onclick="setGuru('sotya',this)"><span class="a56-gdot" style="background:#c2410c"></span>Sotya Palupi, S.Pd, MM <span class="cnt">44</span></button><button class="a56-chip" onclick="setGuru('halaliah',this)"><span class="a56-gdot" style="background:#0f766e"></span>Halaliah, S.Pd <span class="cnt">41</span></button><button class="a56-chip" onclick="setGuru('wahyuni',this)"><span class="a56-gdot" style="background:#be185d"></span>Siti Wahyuni, S.Pd <span class="cnt">44</span></button><button class="a56-chip" onclick="setGuru('rizqi',this)"><span class="a56-gdot" style="background:#6d28d9"></span>Rizqi Putri Sholihatin, S.Pd <span class="cnt">44</span></button></div></div>
-<div class="a56-filter"><div class="a56-filter-label">🗂️ Filter Kategori:</div><div id="filter-kat" style="display:contents"><button class="a56-chip active" onclick="setKat('all',this)">📋 Semua Kategori</button><button class="a56-chip " onclick="setKat('analisis',this)">🔍 Analisis Kebutuhan Siswa <span class="cnt">2</span></button><button class="a56-chip " onclick="setKat('protapromes',this)">📅 ProtaPromes <span class="cnt">4</span></button><button class="a56-chip " onclick="setKat('rpl',this)">📝 Rencana Pelaksanaan Layanan (RPL) <span class="cnt">3</span></button><button class="a56-chip " onclick="setKat('inklusi',this)">🤝 Program Inklusi <span class="cnt">1</span></button><button class="a56-chip " onclick="setKat('jurnal',this)">📒 Jurnal Pelaksanaan Layanan dan BK <span class="cnt">2</span></button><button class="a56-chip " onclick="setKat('agenda',this)">📖 Agenda Belajar <span class="cnt">2</span></button><button class="a56-chip " onclick="setKat('materi',this)">📚 Materi <span class="cnt">6</span></button><button class="a56-chip " onclick="setKat('metode',this)">🎯 Metode Bimbingan <span class="cnt">4</span></button><button class="a56-chip " onclick="setKat('kasus',this)">🚨 Catatan Kasus <span class="cnt">10</span></button><button class="a56-chip " onclick="setKat('homevisit',this)">🏠 Home Visit <span class="cnt">1</span></button><button class="a56-chip " onclick="setKat('status',this)">🗂️ Status Konseling <span class="cnt">1</span></button><button class="a56-chip " onclick="setKat('lintas',this)">🌐 Lintas Kelas <span class="cnt">4</span></button><button class="a56-chip " onclick="setKat('suara',this)">🗣️ Suara Siswa <span class="cnt">4</span></button></div></div>
-<div class="a56-count-info" id="info-jumlah">🧮 Menampilkan <b>44</b> dokumen</div>
-<div class="a56-grid" id="grid-dokumen"><div class="a56-card" data-kat="analisis"><div class="a56-card-icon">🔍</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Metode Angket</h3><div class="a56-path">Kelas VII › Analisis Kebutuhan Siswa</div><p class="a56-desc">Dokumen administrasi BK — Analisis Kebutuhan Siswa Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="analisis"><div class="a56-card-icon">🔍</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Metode Wawancara</h3><div class="a56-path">Kelas VII › Analisis Kebutuhan Siswa</div><p class="a56-desc">Dokumen administrasi BK — Analisis Kebutuhan Siswa Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="protapromes"><div class="a56-card-icon">📅</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Prota Semester 1</h3><div class="a56-path">Kelas VII › ProtaPromes</div><p class="a56-desc">Dokumen administrasi BK — ProtaPromes Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="protapromes"><div class="a56-card-icon">📅</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Promes Semester 1</h3><div class="a56-path">Kelas VII › ProtaPromes</div><p class="a56-desc">Dokumen administrasi BK — ProtaPromes Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="protapromes"><div class="a56-card-icon">📅</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Prota Semester 2</h3><div class="a56-path">Kelas VII › ProtaPromes</div><p class="a56-desc">Dokumen administrasi BK — ProtaPromes Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="protapromes"><div class="a56-card-icon">📅</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Promes Semester 2</h3><div class="a56-path">Kelas VII › ProtaPromes</div><p class="a56-desc">Dokumen administrasi BK — ProtaPromes Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="rpl"><div class="a56-card-icon">📝</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>RPL Klasikal</h3><div class="a56-path">Kelas VII › Rencana Pelaksanaan Layanan (RPL)</div><p class="a56-desc">Dokumen administrasi BK — Rencana Pelaksanaan Layanan (RPL) Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="rpl"><div class="a56-card-icon">📝</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>RPL Kelompok</h3><div class="a56-path">Kelas VII › Rencana Pelaksanaan Layanan (RPL)</div><p class="a56-desc">Dokumen administrasi BK — Rencana Pelaksanaan Layanan (RPL) Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="rpl"><div class="a56-card-icon">📝</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>RPL Individu</h3><div class="a56-path">Kelas VII › Rencana Pelaksanaan Layanan (RPL)</div><p class="a56-desc">Dokumen administrasi BK — Rencana Pelaksanaan Layanan (RPL) Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="jurnal"><div class="a56-card-icon">📒</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Jurnal Layanan BK Sem 1</h3><div class="a56-path">Kelas VII › Jurnal Pelaksanaan Layanan dan BK</div><p class="a56-desc">Dokumen administrasi BK — Jurnal Pelaksanaan Layanan dan BK Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="jurnal"><div class="a56-card-icon">📒</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Jurnal Layanan BK Sem 2</h3><div class="a56-path">Kelas VII › Jurnal Pelaksanaan Layanan dan BK</div><p class="a56-desc">Dokumen administrasi BK — Jurnal Pelaksanaan Layanan dan BK Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="agenda"><div class="a56-card-icon">📖</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Agenda Belajar Semester 1</h3><div class="a56-path">Kelas VII › Agenda Belajar</div><p class="a56-desc">Dokumen administrasi BK — Agenda Belajar Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="agenda"><div class="a56-card-icon">📖</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Agenda Belajar Semester 2</h3><div class="a56-path">Kelas VII › Agenda Belajar</div><p class="a56-desc">Dokumen administrasi BK — Agenda Belajar Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="materi"><div class="a56-card-icon">📚</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Materi 1</h3><div class="a56-path">Kelas VII › Materi</div><p class="a56-desc">Dokumen administrasi BK — Materi Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-materi-badges"><span class="a56-materi-badge ">📊 PPT: 0</span><span class="a56-materi-badge ">📄 PDF: 0</span><span class="a56-materi-badge ">📝 DOC: 0</span><span class="a56-materi-badge ">🎬 Video: 0</span></div><div class="a56-materi-actions-final" style="display: grid; grid-template-columns: 1fr 44px; gap: 8px; margin-top: 8px;"><button class="a56-btn-materi" onclick="openMateriModal(13)">📚 Kelola Link Materi</button><button class="bk56-materi-manage-fix" type="button" title="Kelola Link Materi (PPT/PDF/DOC/Video)" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); color: rgb(255, 255, 255); border: 1px solid rgba(255, 255, 255, 0.3); width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.1rem; transition: 0.2s; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">⚙️</button></div></div><div class="a56-card" data-kat="materi"><div class="a56-card-icon">📚</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Materi 2</h3><div class="a56-path">Kelas VII › Materi</div><p class="a56-desc">Dokumen administrasi BK — Materi Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-materi-badges"><span class="a56-materi-badge ">📊 PPT: 0</span><span class="a56-materi-badge ">📄 PDF: 0</span><span class="a56-materi-badge ">📝 DOC: 0</span><span class="a56-materi-badge ">🎬 Video: 0</span></div><div class="a56-materi-actions-final" style="display: grid; grid-template-columns: 1fr 44px; gap: 8px; margin-top: 8px;"><button class="a56-btn-materi" onclick="openMateriModal(14)">📚 Kelola Link Materi</button><button class="bk56-materi-manage-fix" type="button" title="Kelola Link Materi (PPT/PDF/DOC/Video)" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); color: rgb(255, 255, 255); border: 1px solid rgba(255, 255, 255, 0.3); width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.1rem; transition: 0.2s; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">⚙️</button></div></div><div class="a56-card" data-kat="materi"><div class="a56-card-icon">📚</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Materi 3</h3><div class="a56-path">Kelas VII › Materi</div><p class="a56-desc">Dokumen administrasi BK — Materi Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-materi-badges"><span class="a56-materi-badge ">📊 PPT: 0</span><span class="a56-materi-badge ">📄 PDF: 0</span><span class="a56-materi-badge ">📝 DOC: 0</span><span class="a56-materi-badge ">🎬 Video: 0</span></div><div class="a56-materi-actions-final" style="display: grid; grid-template-columns: 1fr 44px; gap: 8px; margin-top: 8px;"><button class="a56-btn-materi" onclick="openMateriModal(15)">📚 Kelola Link Materi</button><button class="bk56-materi-manage-fix" type="button" title="Kelola Link Materi (PPT/PDF/DOC/Video)" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); color: rgb(255, 255, 255); border: 1px solid rgba(255, 255, 255, 0.3); width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.1rem; transition: 0.2s; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">⚙️</button></div></div><div class="a56-card" data-kat="materi"><div class="a56-card-icon">📚</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Materi 4</h3><div class="a56-path">Kelas VII › Materi</div><p class="a56-desc">Dokumen administrasi BK — Materi Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-materi-badges"><span class="a56-materi-badge ">📊 PPT: 0</span><span class="a56-materi-badge ">📄 PDF: 0</span><span class="a56-materi-badge ">📝 DOC: 0</span><span class="a56-materi-badge ">🎬 Video: 0</span></div><div class="a56-materi-actions-final" style="display: grid; grid-template-columns: 1fr 44px; gap: 8px; margin-top: 8px;"><button class="a56-btn-materi" onclick="openMateriModal(16)">📚 Kelola Link Materi</button><button class="bk56-materi-manage-fix" type="button" title="Kelola Link Materi (PPT/PDF/DOC/Video)" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); color: rgb(255, 255, 255); border: 1px solid rgba(255, 255, 255, 0.3); width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.1rem; transition: 0.2s; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">⚙️</button></div></div><div class="a56-card" data-kat="materi"><div class="a56-card-icon">📚</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Materi 5</h3><div class="a56-path">Kelas VII › Materi</div><p class="a56-desc">Dokumen administrasi BK — Materi Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-materi-badges"><span class="a56-materi-badge ">📊 PPT: 0</span><span class="a56-materi-badge ">📄 PDF: 0</span><span class="a56-materi-badge ">📝 DOC: 0</span><span class="a56-materi-badge ">🎬 Video: 0</span></div><div class="a56-materi-actions-final" style="display: grid; grid-template-columns: 1fr 44px; gap: 8px; margin-top: 8px;"><button class="a56-btn-materi" onclick="openMateriModal(17)">📚 Kelola Link Materi</button><button class="bk56-materi-manage-fix" type="button" title="Kelola Link Materi (PPT/PDF/DOC/Video)" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); color: rgb(255, 255, 255); border: 1px solid rgba(255, 255, 255, 0.3); width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.1rem; transition: 0.2s; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">⚙️</button></div></div><div class="a56-card" data-kat="materi"><div class="a56-card-icon">📚</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Materi 6</h3><div class="a56-path">Kelas VII › Materi</div><p class="a56-desc">Dokumen administrasi BK — Materi Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-materi-badges"><span class="a56-materi-badge ">📊 PPT: 0</span><span class="a56-materi-badge ">📄 PDF: 0</span><span class="a56-materi-badge ">📝 DOC: 0</span><span class="a56-materi-badge ">🎬 Video: 0</span></div><div class="a56-materi-actions-final" style="display: grid; grid-template-columns: 1fr 44px; gap: 8px; margin-top: 8px;"><button class="a56-btn-materi" onclick="openMateriModal(18)">📚 Kelola Link Materi</button><button class="bk56-materi-manage-fix" type="button" title="Kelola Link Materi (PPT/PDF/DOC/Video)" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); color: rgb(255, 255, 255); border: 1px solid rgba(255, 255, 255, 0.3); width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.1rem; transition: 0.2s; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">⚙️</button></div></div><div class="a56-card" data-kat="metode"><div class="a56-card-icon">🎯</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Bimbingan Klasikal</h3><div class="a56-path">Kelas VII › Metode Bimbingan</div><p class="a56-desc">Dokumen administrasi BK — Metode Bimbingan Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="metode"><div class="a56-card-icon">🎯</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Bimbingan Kelompok</h3><div class="a56-path">Kelas VII › Metode Bimbingan</div><p class="a56-desc">Dokumen administrasi BK — Metode Bimbingan Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="metode"><div class="a56-card-icon">🎯</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Bimbingan Individual</h3><div class="a56-path">Kelas VII › Metode Bimbingan</div><p class="a56-desc">Dokumen administrasi BK — Metode Bimbingan Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="metode"><div class="a56-card-icon">🎯</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Kolaborasi</h3><div class="a56-path">Kelas VII › Metode Bimbingan</div><p class="a56-desc">Dokumen administrasi BK — Metode Bimbingan Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="kasus"><div class="a56-card-icon">🚨</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Catatan Kasus Kelas VII-A</h3><div class="a56-path">Kelas VII › Catatan Kasus</div><p class="a56-desc">Dokumen administrasi BK — Catatan Kasus Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="kasus"><div class="a56-card-icon">🚨</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Catatan Kasus Kelas VII-B</h3><div class="a56-path">Kelas VII › Catatan Kasus</div><p class="a56-desc">Dokumen administrasi BK — Catatan Kasus Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="kasus"><div class="a56-card-icon">🚨</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Catatan Kasus Kelas VII-C</h3><div class="a56-path">Kelas VII › Catatan Kasus</div><p class="a56-desc">Dokumen administrasi BK — Catatan Kasus Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="kasus"><div class="a56-card-icon">🚨</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Catatan Kasus Kelas VII-D</h3><div class="a56-path">Kelas VII › Catatan Kasus</div><p class="a56-desc">Dokumen administrasi BK — Catatan Kasus Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="kasus"><div class="a56-card-icon">🚨</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Catatan Kasus Kelas VII-E</h3><div class="a56-path">Kelas VII › Catatan Kasus</div><p class="a56-desc">Dokumen administrasi BK — Catatan Kasus Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="kasus"><div class="a56-card-icon">🚨</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Catatan Kasus Kelas VII-F</h3><div class="a56-path">Kelas VII › Catatan Kasus</div><p class="a56-desc">Dokumen administrasi BK — Catatan Kasus Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="kasus"><div class="a56-card-icon">🚨</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Catatan Kasus Kelas VII-G</h3><div class="a56-path">Kelas VII › Catatan Kasus</div><p class="a56-desc">Dokumen administrasi BK — Catatan Kasus Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="kasus"><div class="a56-card-icon">🚨</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Catatan Kasus Kelas VII-H</h3><div class="a56-path">Kelas VII › Catatan Kasus</div><p class="a56-desc">Dokumen administrasi BK — Catatan Kasus Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="kasus"><div class="a56-card-icon">🚨</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Catatan Kasus Kelas VII-I</h3><div class="a56-path">Kelas VII › Catatan Kasus</div><p class="a56-desc">Dokumen administrasi BK — Catatan Kasus Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="kasus"><div class="a56-card-icon">🚨</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Catatan Kasus Kelas VII-J</h3><div class="a56-path">Kelas VII › Catatan Kasus</div><p class="a56-desc">Dokumen administrasi BK — Catatan Kasus Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="homevisit"><div class="a56-card-icon">🏠</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Home Visit</h3><div class="a56-path">Kelas VII › Home Visit</div><p class="a56-desc">Dokumen administrasi BK — Home Visit Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="status"><div class="a56-card-icon">🗂️</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Status Konseling</h3><div class="a56-path">Kelas VII › Status Konseling</div><p class="a56-desc">Dokumen administrasi BK — Status Konseling Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="lintas"><div class="a56-card-icon">🌐</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Kesehatan Mental</h3><div class="a56-path">Kelas VII › Lintas Kelas</div><p class="a56-desc">Dokumen administrasi BK — Lintas Kelas Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="lintas"><div class="a56-card-icon">🌐</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Pendidikan Anti Korupsi dan Integritas</h3><div class="a56-path">Kelas VII › Lintas Kelas</div><p class="a56-desc">Dokumen administrasi BK — Lintas Kelas Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="lintas"><div class="a56-card-icon">🌐</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Toleransi dan Kebhinekaan Global</h3><div class="a56-path">Kelas VII › Lintas Kelas</div><p class="a56-desc">Dokumen administrasi BK — Lintas Kelas Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="lintas"><div class="a56-card-icon">🌐</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Tanggap Bencana dan Keselamatan Diri</h3><div class="a56-path">Kelas VII › Lintas Kelas</div><p class="a56-desc">Dokumen administrasi BK — Lintas Kelas Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="suara"><div class="a56-card-icon">🗣️</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Aspirasi Siswa &amp; Aduan Siswa</h3><div class="a56-path">Kelas VII › Suara Siswa</div><p class="a56-desc">Dokumen administrasi BK — Suara Siswa Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="suara"><div class="a56-card-icon">🗣️</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Refleksi &amp; Cerita Siswa</h3><div class="a56-path">Kelas VII › Suara Siswa</div><p class="a56-desc">Dokumen administrasi BK — Suara Siswa Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="suara"><div class="a56-card-icon">🗣️</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Harapan &amp; Saran Siswa</h3><div class="a56-path">Kelas VII › Suara Siswa</div><p class="a56-desc">Dokumen administrasi BK — Suara Siswa Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="suara"><div class="a56-card-icon">🗣️</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Testimoni &amp; Umpan Balik</h3><div class="a56-path">Kelas VII › Suara Siswa</div><p class="a56-desc">Dokumen administrasi BK — Suara Siswa Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div><div class="a56-card" data-kat="inklusi"><div class="a56-card-icon">🤝</div><span class="a56-guru-badge" style="background:#c2410c"><b>SP</b>Sotya Palupi, S.Pd, MM</span><h3>Program Inklusi</h3><div class="a56-path">Kelas VII › Program Inklusi</div><p class="a56-desc">Dokumen administrasi BK — Program Inklusi Kelas VII</p><div class="a56-link-embedded"><div class="a56-link-label">🔗 Link Dokumen Tersemat</div><span class="a56-link-url kosong">BELUM DIISI</span></div><div class="a56-link-actions-wrap"><button class="a56-btn-link-open empty-link" title="Klik untuk menambah link dokumen"><span class="btn-icon">⚠️</span> Belum Ada Link Dokumen</button><button class="a56-btn-link-manage-small" title="Kelola link dokumen">⚙️</button></div></div></div>
-<div class="a56-empty" id="empty-state"><div class="e-icon">🔍</div><h4>Tidak ada dokumen</h4><p>Silakan ubah pilihan filter.</p></div>
+<div class="a56-filter"><div class="a56-filter-label">👩‍🏫 Filter Guru BK:</div><div id="filter-guru" style="display:contents"><button class="a56-chip" onclick="setGuru('sotya',this)"><span class="a56-gdot" style="background:#c2410c"></span>Sotya Palupi, S.Pd, MM <span class="cnt">44</span></button><button class="a56-chip" onclick="setGuru('halaliah',this)"><span class="a56-gdot" style="background:#0f766e"></span>Halaliah, S.Pd <span class="cnt">41</span></button><button class="a56-chip" onclick="setGuru('wahyuni',this)"><span class="a56-gdot" style="background:#be185d"></span>Siti Wahyuni, S.Pd <span class="cnt">44</span></button><button class="a56-chip" onclick="setGuru('rizqi',this)"><span class="a56-gdot" style="background:#6d28d9"></span>Rizqi Putri Sholihatin, S.Pd <span class="cnt">44</span></button></div></div>
+<div class="a56-filter"><div class="a56-filter-label">🗂️ Filter Kategori:</div><div id="filter-kat" style="display:contents"><button class="a56-chip active" onclick="setKat('all',this)">📋 Semua Kategori</button></div></div>
+<div class="a56-count-info" id="info-jumlah">🧮 Menampilkan <b>0</b> dokumen</div>
+<div class="a56-grid" id="grid-dokumen"></div>
+<div class="a56-empty show" id="empty-state"><div class="e-icon">🔍</div><h4>Tidak ada dokumen</h4><p>Silakan ubah pilihan filter.</p></div>
 </div>
 <footer class="a56-footer">
 <h4>📁 Administrasi BK 56</h4>
@@ -7491,7 +7548,7 @@ console.log('✅ Patch Link Permanen Dokumen (kecuali Materi) berhasil dimuat');
   JANGAN dihapus manual kecuali ingin mereset semua link.
 -->
 <script type="application/json" id="bk56-embedded-data">
-{"materi":{},"video":{},"docLinks":{"347":["https://appseet11-cmd.github.io/Agenda-Belajar-Sotya-Palupi-Kelas-IX-Sem-1/"],"359":["https://appseet11-cmd.github.io/CATATAN-KASUS-IX-A/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-B/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-C/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-D/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-E/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-F/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-G/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-H/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-I/"],"368":["https://script.google.com/macros/s/AKfycbymZlGYF99WC9ctNA6b1AJpq2unpphgMxen8soMkjEwgK_clyF7M_12o66xY-Jd-shE/exec"],"371":["https://script.google.com/macros/s/AKfycbwLpwo_ySLUNaLVgGdfbKHVmPjqBjKbwEIjfUjAeRmJ2OBh8Y7NqhO8fJEQKjqzlYEbkQ/exec"],"372":["https://appseet11-cmd.github.io/Status-Konseling-Kelas-IX/"],"381":["https://script.google.com/macros/s/AKfycbxmTgmeEsWY8kh5W9OsveB2vFKb4pwNL-C6AILuz5CxvtTv3xuPLtv-cX4N36HqfZDdzA/exec"]},"version":"1.0","lastUpdated":"2026-11-10T07:14:49.804Z","note":"Data link Administrasi BK56 - tersimpan permanen di HTML"}
+{"materi":{},"video":{},"docLinks":{"347":["https://appseet11-cmd.github.io/Agenda-Belajar-Sotya-Palupi-Kelas-IX-Sem-1/"],"359":["https://appseet11-cmd.github.io/CATATAN-KASUS-IX-A/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-B/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-C/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-D/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-E/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-F/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-G/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-H/","https://appseet11-cmd.github.io/CATATAN-KASUS-IX-I/"],"368":["https://script.google.com/macros/s/AKfycbymZlGYF99WC9ctNA6b1AJpq2unpphgMxen8soMkjEwgK_clyF7M_12o66xY-Jd-shE/exec"],"371":["https://script.google.com/macros/s/AKfycbwLpwo_ySLUNaLVgGdfbKHVmPjqBjKbwEIjfUjAeRmJ2OBh8Y7NqhO8fJEQKjqzlYEbkQ/exec"],"372":["https://appseet11-cmd.github.io/Status-Konseling-Kelas-IX/"],"381":["https://script.google.com/macros/s/AKfycbxmTgmeEsWY8kh5W9OsveB2vFKb4pwNL-C6AILuz5CxvtTv3xuPLtv-cX4N36HqfZDdzA/exec"]},"version":"1.0","lastUpdated":"2026-11-10T07:34:54.652Z","note":"Data link Administrasi BK56 - tersimpan permanen di HTML"}
 </script>
 <!-- ========== BK56 EMBEDDED DATA [END] ========== -->
  <!-- ================================================================ -->
@@ -8532,64 +8589,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </style>
 
 <!-- ===== PANEL REKAP LINK ===== -->
-<div id="a56-panel-rekap" style="display:none;">
-  <div class="a56-tab-rekap">
-    <h2>📋 Rekap Link Tersemat</h2>
-    <p>Semua link yang disematkan di Administrasi BK56 terekap otomatis di sini. Data tersinkron dengan Google Sheets (backend).</p>
-  </div>
 
-  <div class="a56-connection-status connected" id="bk56-conn-status">
-    <span class="status-dot"></span>
-    <span id="bk56-conn-text">✅ Terhubung • 14 link tersinkron</span>
-  </div>
-
-  <div id="bk56-sg2-badge" style="width: 100%; background: linear-gradient(135deg, rgb(254, 243, 199), rgb(253, 230, 138)); border-width: 2px 2px 2px 4px; border-style: solid; border-color: rgb(245, 158, 11); border-image: none; padding: 12px 16px; border-radius: 10px; font-size: 0.85rem; color: rgb(120, 53, 15); line-height: 1.5; margin-bottom: 12px; display: flex; align-items: center; gap: 12px;"><span style="font-size:1.5rem;">🛡️</span><div style="flex:1;"><strong style="color:#92400e;font-size:.95rem;">Mode Sync: MANUAL (Auto-Sync MATI TOTAL)</strong><br><small style="opacity:.9;">📦 Total data di browser: <strong>0</strong> | ✅ Sudah di-sync: <strong>0</strong> | ⚠️ Belum di-push: <strong style="color:#dc2626;">0</strong></small><br><small style="opacity:.8;font-style:italic;">💡 Data hanya masuk ke Google Sheets saat Anda klik "💾 Push ke Sheet". Data lama yang sudah pernah di-sync akan DITOLAK.</small></div></div><div class="a56-rekap-controls">
-    <button class="a56-rekap-btn primary" onclick="bk56SyncFromSheet()">🔄 Sync dari Sheet</button>
-    <button class="a56-rekap-btn secondary" onclick="bk56SyncToSheet()">💾 Push ke Sheet</button><button id="bk56-restore-from-sheet-btn" class="a56-rekap-btn" title="Ambil semua link dari Google Sheets dan kembalikan ke card asal" style="background: linear-gradient(135deg, rgb(139, 92, 246), rgb(124, 58, 237)); color: rgb(255, 255, 255); box-shadow: rgba(139, 92, 246, 0.4) 0px 4px 14px;">🔄 Pulihkan dari Sheet</button>
-    <button class="a56-rekap-btn warning" onclick="bk56OpenConfig()">⚙️ Konfigurasi Backend</button>
-    <button class="a56-rekap-btn ghost" onclick="bk56ExportRekapCSV()">📊 Export CSV</button>
-  <button id="rkx40Btn" class="rkx40-btn" disabled="">🗑️ Hapus Tercentang <span class="rkx40-badge" id="rkx40Bdg">0</span></button></div>
-
-  <div class="a56-rekap-counter" id="bk56-rekap-counter">
-    <div class="a56-rekap-count-item">
-      <div class="count-value" id="cnt-total">14</div>
-      <div class="count-label">Total Link</div>
-    </div>
-    <div class="a56-rekap-count-item">
-      <div class="count-value" id="cnt-materi">0</div>
-      <div class="count-label">Materi</div>
-    </div>
-    <div class="a56-rekap-count-item">
-      <div class="count-value" id="cnt-video">0</div>
-      <div class="count-label">Video</div>
-    </div>
-    <div class="a56-rekap-count-item">
-      <div class="count-value" id="cnt-doc">14</div>
-      <div class="count-label">Dokumen</div>
-    </div>
-  </div>
-
-  <div class="a56-rekap-filter" id="bk56-rekap-filter"><div class="a56-rekap-filter-label">🔍 Filter Tampilan:</div><button class="a56-rekap-chip active" onclick="bk56SetFilter('kelas','all')">📋 Semua Kelas</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kelas','ix')">IX</button><button class="a56-rekap-chip active" onclick="bk56SetFilter('guru','all')" style="margin-left:8px;">👤 Semua Guru</button><button class="a56-rekap-chip " onclick="bk56SetFilter('guru','sotya')">Sotya Palupi</button><button class="a56-rekap-chip active" onclick="bk56SetFilter('kat','all')" style="margin-left:8px;">🗂️ Semua Kategori</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kat','kasus')">Catatan Kasus</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kat','status')">Status Konseling</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kat','homevisit')">Home Visit</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kat','inklusi')">Program Inklusi</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kat','agenda')">Agenda Belajar</button><button class="a56-rekap-chip " onclick="bk56SetFilter('kat','rpl')">Rencana Pelaksanaan Layanan (RPL)</button></div>
-
-  <div class="a56-rekap-table-wrap">
-    <table class="a56-rekap-table">
-      <thead>
-        <tr><th class="rkx40-hdr" style="width: 50px; text-align: center; padding: 10px;"><div style="display:flex;justify-content:center;"><input type="checkbox" class="rkx40-cb" id="rkx40SA" title="Pilih Semua"></div></th>
-          <th class="col-no">No</th>
-          <th class="col-time">Waktu</th>
-          <th class="col-kelas">Kelas</th>
-          <th class="col-guru">Guru BK</th>
-          <th class="col-kat">Kategori</th>
-          <th class="col-nama">Nama Dokumen</th>
-          <th class="col-jenis">Jenis</th>
-          <th class="col-url">URL Link</th>
-          <th class="col-aksi">Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="bk56-rekap-tbody"><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794149045316" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-A/" data-nama="Catatan Kasus Kelas IX-A" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>1</td><td class="col-time">08 Nov 2026, 21.44</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-A</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-A/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-A/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-A/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794149045316')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154039054" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-B/" data-nama="Catatan Kasus Kelas IX-B" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>2</td><td class="col-time">08 Nov 2026, 23.07</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-B</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-B/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-B/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-B/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154039054')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154281005" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-C/" data-nama="Catatan Kasus Kelas IX-C" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>3</td><td class="col-time">08 Nov 2026, 23.11</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-C</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-C/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-C/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-C/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154281005')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154282835" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-D/" data-nama="Catatan Kasus Kelas IX-D" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>4</td><td class="col-time">08 Nov 2026, 23.11</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-D</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-D/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-D/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-D/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154282835')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154510668" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-E/" data-nama="Catatan Kasus Kelas IX-E" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>5</td><td class="col-time">08 Nov 2026, 23.15</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-E</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-E/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-E/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-E/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154510668')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154512693" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-F/" data-nama="Catatan Kasus Kelas IX-F" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>6</td><td class="col-time">08 Nov 2026, 23.15</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-F</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-F/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-F/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-F/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154512693')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154514688" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-G/" data-nama="Catatan Kasus Kelas IX-G" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>7</td><td class="col-time">08 Nov 2026, 23.15</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-G</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-G/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-G/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-G/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154514688')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154516288" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-H/" data-nama="Catatan Kasus Kelas IX-H" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>8</td><td class="col-time">08 Nov 2026, 23.15</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-H</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-H/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-H/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-H/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154516288')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154518092" data-url="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-I/" data-nama="Catatan Kasus Kelas IX-I" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Catatan Kasus"></div>9</td><td class="col-time">08 Nov 2026, 23.15</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Catatan Kasus</td><td class="col-nama">Catatan Kasus Kelas IX-I</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/CATATAN-KASUS-IX-I/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/CATATAN-KASUS-IX-I/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/CATATAN-KASUS-IX-I/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154518092')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154639349" data-url="https://appseet11-cmd.github.io/Status-Konseling-Kelas-IX/" data-nama="Status Konseling" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Status Konseling"></div>10</td><td class="col-time">08 Nov 2026, 23.17</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Status Konseling</td><td class="col-nama">Status Konseling</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/Status-Konseling-Kelas-IX/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/Status-Konseling-Kelas-IX/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/Status-Konseling-Kelas-IX/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154639349')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154798068" data-url="https://script.google.com/macros/s/AKfycbwLpwo_ySLUNaLVgGdfbKHVmPjqBjKbwEIjfUjAeRmJ2OBh8Y7NqhO8fJEQKjqzlYEbkQ/exec" data-nama="Home Visit" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Home Visit"></div>11</td><td class="col-time">08 Nov 2026, 23.19</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Home Visit</td><td class="col-nama">Home Visit</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://script.google.com/macros/s/AKfycbwLpwo_ySLUNaLVgGdfbKHVmPjqBjKbwEIjfUjAeRmJ2OBh8Y7NqhO8fJEQKjqzlYEbkQ/exec" target="_blank" rel="noopener">https://script.google.com/macros/s/AKfycbwLpwo_ySLUNaLVgGdfbKHVmPjqBjKbwEIjfUjAeRmJ2OBh8Y7NqhO8fJEQKjqzlYEbkQ/exec</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://script.google.com/macros/s/AKfycbwLpwo_ySLUNaLVgGdfbKHVmPjqBjKbwEIjfUjAeRmJ2OBh8Y7NqhO8fJEQKjqzlYEbkQ/exec','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154798068')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794154978887" data-url="https://script.google.com/macros/s/AKfycbxmTgmeEsWY8kh5W9OsveB2vFKb4pwNL-C6AILuz5CxvtTv3xuPLtv-cX4N36HqfZDdzA/exec" data-nama="Program Inklusi" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Program Inklusi"></div>12</td><td class="col-time">08 Nov 2026, 23.22</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Program Inklusi</td><td class="col-nama">Program Inklusi</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://script.google.com/macros/s/AKfycbxmTgmeEsWY8kh5W9OsveB2vFKb4pwNL-C6AILuz5CxvtTv3xuPLtv-cX4N36HqfZDdzA/exec" target="_blank" rel="noopener">https://script.google.com/macros/s/AKfycbxmTgmeEsWY8kh5W9OsveB2vFKb4pwNL-C6AILuz5CxvtTv3xuPLtv-cX4N36HqfZDdzA/exec</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://script.google.com/macros/s/AKfycbxmTgmeEsWY8kh5W9OsveB2vFKb4pwNL-C6AILuz5CxvtTv3xuPLtv-cX4N36HqfZDdzA/exec','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794154978887')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794155078032" data-url="https://appseet11-cmd.github.io/Agenda-Belajar-Sotya-Palupi-Kelas-IX-Sem-1/" data-nama="Agenda Belajar Semester 1" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Agenda Belajar"></div>13</td><td class="col-time">08 Nov 2026, 23.24</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Agenda Belajar</td><td class="col-nama">Agenda Belajar Semester 1</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://appseet11-cmd.github.io/Agenda-Belajar-Sotya-Palupi-Kelas-IX-Sem-1/" target="_blank" rel="noopener">https://appseet11-cmd.github.io/Agenda-Belajar-Sotya-Palupi-Kelas-IX-Sem-1/</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://appseet11-cmd.github.io/Agenda-Belajar-Sotya-Palupi-Kelas-IX-Sem-1/','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794155078032')" title="Hapus">🗑️</button></div></td></tr><tr><td class="col-no" style="text-align: center;"><div style="display: flex; justify-content: center;"><input type="checkbox" class="rkx40-cb rkx40-rcb" data-id="LK1794294210386" data-url="https://script.google.com/macros/s/AKfycbymZlGYF99WC9ctNA6b1AJpq2unpphgMxen8soMkjEwgK_clyF7M_12o66xY-Jd-shE/exec" data-nama="RPL Individual" data-kelas="ix" data-guru="Sotya Palupi, S.Pd, MM" data-kategori="Rencana Pelaksanaan Layanan (RPL)"></div>14</td><td class="col-time">10 Nov 2026, 14.03</td><td class="col-kelas"><span class="a56-badge-kelas ix">IX</span></td><td class="col-guru">Sotya Palupi, S.Pd, MM</td><td class="col-kat">Rencana Pelaksanaan Layanan (RPL)</td><td class="col-nama">RPL Individual</td><td class="col-jenis"><span class="a56-badge-jenis doc">📝 DOC</span></td><td class="col-url"><div class="a56-url-cell"><a href="https://script.google.com/macros/s/AKfycbymZlGYF99WC9ctNA6b1AJpq2unpphgMxen8soMkjEwgK_clyF7M_12o66xY-Jd-shE/exec" target="_blank" rel="noopener">https://script.google.com/macros/s/AKfycbymZlGYF99WC9ctNA6b1AJpq2unpphgMxen8soMkjEwgK_clyF7M_12o66xY-Jd-shE/exec</a></div></td><td class="col-aksi"><div class="a56-aksi-btns"><button class="a56-aksi-btn open" onclick="window.open('https://script.google.com/macros/s/AKfycbymZlGYF99WC9ctNA6b1AJpq2unpphgMxen8soMkjEwgK_clyF7M_12o66xY-Jd-shE/exec','_blank','noopener')" title="Buka">🔗</button><button class="a56-aksi-btn del" onclick="bk56DeleteRekapItem('LK1794294210386')" title="Hapus">🗑️</button></div></td></tr></tbody>
-    </table>
-  </div>
-</div>
 
 <!-- ===== MODAL KONFIGURASI BACKEND ===== -->
 <div class="bk56-config-modal" id="bk56-config-modal">
@@ -17637,332 +17637,6 @@ else init();
 <!-- ================================================================ -->
 <!-- ========== PATCH FINAL v40: HAPUS TERCENTANG [END] ========== -->
 <!-- ================================================================ -->
- <!-- ================================================================ -->
-<!-- ========== PATCH FINAL: BACKEND CONFIG PERMANEN + CROSS-DEVICE ========== -->
-<!-- ========== v2.0 - Ultra Strong | Anti-Lepas | Nov 2026 ========== -->
-<!-- ================================================================ -->
-<script>
-(function(){
-"use strict";
-/* ================================================================
-* PATCH FINAL: BACKEND CONFIG PERMANEN + CROSS-DEVICE v2.0
-* ================================================================
-* ATURAN UTAMA:
-* ✅ 1. URL backend tersimpan PERMANEN di embedded JSON (HTML)
-* ✅ 2. Auto-restore saat localStorage kosong (clear browser/ganti device)
-* ✅ 3. Real-time sync saat user mengetik di input
-* ✅ 4. Periodic check setiap 10 detik untuk sinkronisasi
-* ✅ 5. Anti-conflict dengan patch existing
-* ✅ 6. Namespace unik: sbc2- (Simple Backend Config v2)
-*
-* CARA KERJA:
-* 1. User input URL → simpan ke localStorage + embedded JSON
-* 2. Saat load → jika localStorage kosong, restore dari embedded
-* 3. Saat backup HTML → URL ikut ter-backup otomatis
-* 4. Saat ganti device → URL tetap ada di HTML
-* 5. Real-time sync → setiap perubahan langsung ter-embed
-*
-* ANTI-CONFLICT:
-* - Flag: window.__sbc2BackendConfigPatched
-* - Hanya hook 3 fungsi inti (bk56SaveConfig, bk56BackupToHTML, bk56OpenConfig)
-* - Tidak override setInterval/addEventListener global
-* - Menggunakan namespace sbc2- untuk semua variabel/fungsi
-================================================================ */
-const FLAG = '__sbc2BackendConfigPatched';
-if (window[FLAG]) {
-console.log('ℹ️ [SBC2] Patch sudah terpasang, skip');
-return;
-}
-window[FLAG] = true;
-
-const EMB_ID = 'bk56-embedded-data';
-const CFG_KEY = 'bk56_backend_url';
-const PATCH_VERSION = '2.0.0';
-
-/* ================================================================
-* 🔑 HELPER 1: Baca Embedded JSON
-================================================================ */
-function sbc2ReadEmb() {
-try {
-const el = document.getElementById(EMB_ID);
-if (!el) return null;
-return JSON.parse(el.textContent) || null;
-} catch(e) {
-console.warn('⚠️ [SBC2] Gagal baca embedded:', e);
-return null;
-}
-}
-
-/* ================================================================
-* 🔑 HELPER 2: Tulis Embedded JSON
-================================================================ */
-function sbc2WriteEmb(data) {
-try {
-const el = document.getElementById(EMB_ID);
-if (!el) return false;
-el.textContent = JSON.stringify(data);
-return true;
-} catch(e) {
-console.warn('⚠️ [SBC2] Gagal tulis embedded:', e);
-return false;
-}
-}
-
-/* ================================================================
-* 🔑 HELPER 3: Update URL di Embedded JSON (PERMANEN)
-================================================================ */
-function sbc2UpdateEmbUrl(url) {
-const data = sbc2ReadEmb() || { materi:{}, video:{}, docLinks:{} };
-data.backendUrl = url || '';
-data.lastUpdated = new Date().toISOString();
-data.sbc2Patch = PATCH_VERSION;
-const ok = sbc2WriteEmb(data);
-if (ok) {
-console.log('✅ [SBC2] URL tersimpan permanen di embedded HTML');
-}
-return ok;
-}
-
-/* ================================================================
-* 🎯 FUNGSI 1: AUTO-RESTORE dari Embedded JSON
-*    → Dipanggil saat halaman load
-*    → Jika localStorage kosong, restore dari embedded
-================================================================ */
-function sbc2AutoRestore() {
-const localUrl = localStorage.getItem(CFG_KEY);
-
-// Jika localStorage sudah ada URL → gunakan itu
-if (localUrl && localUrl.trim()) {
-console.log('✅ [SBC2] URL dari localStorage:', localUrl.slice(0, 50) + '...');
-sbc2UpdateInputField(localUrl);
-return;
-}
-
-// Jika localStorage kosong → restore dari embedded
-const emb = sbc2ReadEmb();
-if (emb && emb.backendUrl && emb.backendUrl.trim()) {
-localStorage.setItem(CFG_KEY, emb.backendUrl);
-console.log('✅ [SBC2] URL dipulihkan dari embedded HTML');
-sbc2UpdateInputField(emb.backendUrl);
-if (typeof showToast === 'function') {
-showToast('🔄 Konfigurasi backend dipulihkan dari HTML', 'info');
-}
-}
-}
-
-/* ================================================================
-* 🎯 FUNGSI 2: Update Input Field URL
-================================================================ */
-function sbc2UpdateInputField(url) {
-const input = document.getElementById('bk56-cfg-url');
-if (input && !input.value) {
-input.value = url;
-}
-}
-
-/* ================================================================
-* 🎯 FUNGSI 3: HOOK bk56SaveConfig
-*    → Setelah user simpan config → URL ikut ter-embed ke HTML
-================================================================ */
-function sbc2HookSaveConfig() {
-if (typeof window.bk56SaveConfig !== 'function') {
-setTimeout(sbc2HookSaveConfig, 500);
-return;
-}
-if (window.bk56SaveConfig.__sbc2Hooked) return;
-
-const _orig = window.bk56SaveConfig;
-window.bk56SaveConfig = function() {
-// Panggil fungsi asli dulu
-const result = _orig.apply(this, arguments);
-
-// Setelah selesai, sync URL ke embedded
-setTimeout(function() {
-const input = document.getElementById('bk56-cfg-url');
-if (input) {
-const url = input.value.trim();
-if (url) {
-localStorage.setItem(CFG_KEY, url);
-sbc2UpdateEmbUrl(url);
-console.log('✅ [SBC2] URL tersimpan di embedded HTML');
-}
-}
-}, 200);
-
-return result;
-};
-window.bk56SaveConfig.__sbc2Hooked = true;
-console.log('✅ [SBC2] bk56SaveConfig di-hook');
-}
-
-/* ================================================================
-* 🎯 FUNGSI 4: HOOK bk56BackupToHTML
-*    → Sebelum backup → pastikan URL terbaru ter-embed
-================================================================ */
-function sbc2HookBackup() {
-if (typeof window.bk56BackupToHTML !== 'function') {
-setTimeout(sbc2HookBackup, 500);
-return;
-}
-if (window.bk56BackupToHTML.__sbc2Hooked) return;
-
-const _orig = window.bk56BackupToHTML;
-window.bk56BackupToHTML = function() {
-// 🔑 Sync URL ke embedded SEBELUM backup
-const url = localStorage.getItem(CFG_KEY) || '';
-sbc2UpdateEmbUrl(url);
-console.log('✅ [SBC2] URL ter-embed sebelum backup');
-
-// Panggil fungsi asli
-return _orig.apply(this, arguments);
-};
-window.bk56BackupToHTML.__sbc2Hooked = true;
-console.log('✅ [SBC2] bk56BackupToHTML di-hook');
-}
-
-/* ================================================================
-* 🎯 FUNGSI 5: HOOK bk56OpenConfig
-*    → Saat modal config dibuka → pastikan URL ter-load
-================================================================ */
-function sbc2HookOpenConfig() {
-if (typeof window.bk56OpenConfig !== 'function') {
-setTimeout(sbc2HookOpenConfig, 500);
-return;
-}
-if (window.bk56OpenConfig.__sbc2Hooked) return;
-
-const _orig = window.bk56OpenConfig;
-window.bk56OpenConfig = function() {
-// Panggil fungsi asli
-const result = _orig.apply(this, arguments);
-
-// Setelah modal terbuka, pastikan input terisi
-setTimeout(function() {
-const url = localStorage.getItem(CFG_KEY) || '';
-const input = document.getElementById('bk56-cfg-url');
-if (input && !input.value && url) {
-input.value = url;
-}
-}, 300);
-
-return result;
-};
-window.bk56OpenConfig.__sbc2Hooked = true;
-console.log('✅ [SBC2] bk56OpenConfig di-hook');
-}
-
-/* ================================================================
-* 👁️ FUNGSI 6: WATCH Input URL (Real-time sync)
-*    → Setiap kali user mengetik → simpan ke embedded
-================================================================ */
-function sbc2WatchInput() {
-const input = document.getElementById('bk56-cfg-url');
-if (!input) {
-setTimeout(sbc2WatchInput, 500);
-return;
-}
-
-let debounceTimer;
-input.addEventListener('input', function() {
-clearTimeout(debounceTimer);
-debounceTimer = setTimeout(() => {
-const url = input.value.trim();
-if (url) {
-localStorage.setItem(CFG_KEY, url);
-sbc2UpdateEmbUrl(url);
-console.log('🔄 [SBC2] Real-time sync:', url.slice(0, 40) + '...');
-}
-}, 1000); // Debounce 1 detik
-});
-
-console.log('✅ [SBC2] Input watcher aktif');
-}
-
-/* ================================================================
-* 🔄 FUNGSI 7: PERIODIC SYNC (setiap 10 detik)
-*    → Pastikan embedded JSON selalu sinkron dengan localStorage
-================================================================ */
-function sbc2StartPeriodicSync() {
-setInterval(() => {
-const localUrl = localStorage.getItem(CFG_KEY);
-const emb = sbc2ReadEmb();
-
-// Jika ada perbedaan → sync ke embedded
-if (emb && localUrl && emb.backendUrl !== localUrl) {
-sbc2UpdateEmbUrl(localUrl);
-console.log('🔄 [SBC2] Periodic sync completed');
-}
-
-// Jika localStorage kosong tapi embedded ada → restore
-if (!localUrl && emb && emb.backendUrl) {
-localStorage.setItem(CFG_KEY, emb.backendUrl);
-sbc2UpdateInputField(emb.backendUrl);
-console.log('🔄 [SBC2] Restored from embedded');
-}
-}, 10000); // Setiap 10 detik
-
-console.log('✅ [SBC2] Periodic sync aktif (setiap 10 detik)');
-}
-
-/* ================================================================
-* 🚀 INIT: Pasang semua hook
-================================================================ */
-function init() {
-console.log('🚀 [SBC2] Backend Config Permanen + Cross-Device v' + PATCH_VERSION);
-console.log('📌 Prinsip:');
-console.log('   ✅ PERMANEN - URL tersimpan di embedded JSON (HTML)');
-console.log('   ✅ CROSS-DEVICE - Berlaku di semua device');
-console.log('   ✅ AUTO-RESTORE - Pulihkan saat localStorage kosong');
-console.log('   ✅ REAL-TIME SYNC - Setiap perubahan langsung ter-embed');
-console.log('   ✅ PERIODIC CHECK - Sinkronisasi setiap 10 detik');
-console.log('   ✅ ANTI-CONFLICT - Tidak override fungsi global');
-
-// 1. Auto-restore dari embedded
-sbc2AutoRestore();
-
-// 2. Hook fungsi-fungsi inti
-sbc2HookSaveConfig();
-sbc2HookBackup();
-sbc2HookOpenConfig();
-
-// 3. Watch input (real-time sync)
-sbc2WatchInput();
-
-// 4. Periodic sync
-sbc2StartPeriodicSync();
-
-// 5. Initial sync ke embedded (jika localStorage ada data)
-setTimeout(function() {
-const url = localStorage.getItem(CFG_KEY);
-if (url && url.trim()) {
-sbc2UpdateEmbUrl(url);
-console.log('✅ [SBC2] Initial sync selesai');
-}
-}, 2000);
-
-// 6. Sync saat visibility change (user kembali ke tab)
-document.addEventListener('visibilitychange', () => {
-if (!document.hidden) {
-sbc2AutoRestore();
-}
-});
-
-console.log('✅ [SBC2] Patch terpasang — semua hook aktif');
-console.log('📌 URL backend akan tersimpan permanen di HTML');
-console.log('📌 Berlaku lintas device (anti lepas/terlepas)');
-}
-
-// Jalankan init
-if (document.readyState === 'loading') {
-document.addEventListener('DOMContentLoaded', init);
-} else {
-init();
-}
-})();
-</script>
-<!-- ================================================================ -->
-<!-- ========== PATCH FINAL: BACKEND CONFIG PERMANEN + CROSS-DEVICE [END] ========== -->
-<!-- ================================================================ -->
 <!-- ================================================================ -->
 <!-- ========== PATCH: TOMBOL PULIHKAN DARI SHEET - PASTI MUNCUL ========== -->
 <!-- ========== v2.0 - Direct DOM Injection | Nov 2026 ============== -->
@@ -18388,6 +18062,435 @@ init();
 </script>
 <!-- ================================================================ -->
 <!-- ========== PATCH: TOMBOL PULIHKAN DARI SHEET - PASTI MUNCUL [END] ========== -->
+<!-- ================================================================ -->
+ <!-- ================================================================ -->
+<!-- ========== PATCH ULTIMATE: BACKEND CONFIG PERMANEN LINTAS DEVICE ========== -->
+<!-- ========== v3.0 - Embedded-First Strategy | Anti-Lepas ========== -->
+<!-- ================================================================ -->
+<script>
+(function(){
+"use strict";
+
+/* ================================================================
+ * PATCH ULTIMATE: BACKEND CONFIG PERMANEN LINTAS DEVICE v3.0
+ * ================================================================
+ * STRATEGI: "EMBEDDED-FIRST"
+ * - Embedded JSON di HTML = SUMBER UTAMA (bukan cadangan)
+ * - localStorage = cache sementara
+ * - Setiap perubahan → langsung tulis ke embedded JSON di DOM
+ * - Saat Backup → embedded JSON (yang sudah berisi URL) di-bake ke file baru
+ * - File baru di GitHub → URL permanen untuk semua device
+ *
+ * ANTI-CONFLICT:
+ * - Flag unik: window.__ultimateBackendConfigPatched
+ * - Namespace: ubc- (Ultimate Backend Config)
+ * - Hanya hook, tidak replace total
+ * - Tidak sentuh setInterval/addEventListener global
+ * ================================================================ */
+
+const FLAG = '__ultimateBackendConfigPatched';
+if (window[FLAG]) {
+    console.log('ℹ️ [UBC] Patch sudah terpasang, skip');
+    return;
+}
+window[FLAG] = true;
+
+const EMB_ID = 'bk56-embedded-data';
+const CFG_KEY = 'bk56_backend_url';
+const VERSION = '3.0';
+
+/* ================================================================
+ * 🔑 HELPER: Baca Embedded JSON
+ * ================================================================ */
+function ubcReadEmb() {
+    try {
+        const el = document.getElementById(EMB_ID);
+        if (!el) return null;
+        return JSON.parse(el.textContent) || null;
+    } catch(e) {
+        return null;
+    }
+}
+
+/* ================================================================
+ * 🔑 HELPER: Tulis Embedded JSON
+ * ================================================================ */
+function ubcWriteEmb(data) {
+    try {
+        const el = document.getElementById(EMB_ID);
+        if (!el) return false;
+        el.textContent = JSON.stringify(data);
+        return true;
+    } catch(e) {
+        return false;
+    }
+}
+
+/* ================================================================
+ * 🔑 HELPER: Simpan URL ke Embedded JSON (PERMANEN di HTML)
+ * ================================================================ */
+function ubcSaveUrlToEmbedded(url) {
+    const data = ubcReadEmb() || { materi:{}, video:{}, docLinks:{} };
+    data.backendUrl = url || '';
+    data.lastUpdated = new Date().toISOString();
+    data.ubcVersion = VERSION;
+    return ubcWriteEmb(data);
+}
+
+/* ================================================================
+ * 🎯 LANGKAH 1: AUTO-RESTORE (Prioritas: Embedded JSON)
+ * - Cek embedded JSON DULU (sumber utama)
+ * - Jika ada URL di embedded → gunakan itu (override localStorage)
+ * - Ini memastikan URL dari GitHub selalu menang
+ * ================================================================ */
+function ubcAutoRestore() {
+    const emb = ubcReadEmb();
+    const embUrl = (emb && emb.backendUrl) ? emb.backendUrl.trim() : '';
+    const localUrl = (localStorage.getItem(CFG_KEY) || '').trim();
+
+    // PRIORITAS: Embedded JSON (dari file HTML di GitHub)
+    if (embUrl) {
+        // URL ada di embedded → ini yang berlaku (lintas device)
+        localStorage.setItem(CFG_KEY, embUrl);
+
+        // Update input field jika ada
+        const input = document.getElementById('bk56-cfg-url');
+        if (input && input.value !== embUrl) {
+            input.value = embUrl;
+        }
+
+        console.log('✅ [UBC] URL dari embedded HTML (lintas device):', embUrl.slice(0, 60) + '...');
+
+        // Notifikasi jika berbeda dengan localStorage lama
+        if (localUrl && localUrl !== embUrl) {
+            console.log('🔄 [UBC] URL embedded meng-override localStorage');
+        }
+
+        return embUrl;
+    }
+
+    // Fallback: localStorage (jika embedded kosong)
+    if (localUrl) {
+        console.log('ℹ️ [UBC] URL dari localStorage:', localUrl.slice(0, 60) + '...');
+        const input = document.getElementById('bk56-cfg-url');
+        if (input && !input.value) input.value = localUrl;
+        return localUrl;
+    }
+
+    console.log('ℹ️ [UBC] Belum ada URL backend terkonfigurasi');
+    return '';
+}
+
+/* ================================================================
+ * 🎯 LANGKAH 2: HOOK bk56SaveConfig
+ * - Setelah user klik "Simpan Konfigurasi"
+ * - URL langsung ditulis ke embedded JSON di DOM
+ * - Juga simpan ke localStorage (cache)
+ * ================================================================ */
+function ubcHookSaveConfig() {
+    if (typeof window.bk56SaveConfig !== 'function') {
+        setTimeout(ubcHookSaveConfig, 500);
+        return;
+    }
+    if (window.bk56SaveConfig.__ubcHooked) return;
+
+    const _orig = window.bk56SaveConfig;
+    window.bk56SaveConfig = function() {
+        // Panggil fungsi asli
+        const result = _orig.apply(this, arguments);
+
+        // Setelah selesai → tulis URL ke embedded JSON
+        setTimeout(function() {
+            const input = document.getElementById('bk56-cfg-url');
+            if (input) {
+                const url = input.value.trim();
+                if (url) {
+                    localStorage.setItem(CFG_KEY, url);
+                    ubcSaveUrlToEmbedded(url);
+                    console.log('✅ [UBC] URL tersimpan di embedded HTML (permanen)');
+
+                    // Notifikasi penting
+                    if (typeof showToast === 'function') {
+                        showToast('💾 URL tersimpan. Klik "Backup Permanen" agar berlaku di semua device!', 'success');
+                    }
+                }
+            }
+        }, 200);
+
+        return result;
+    };
+    window.bk56SaveConfig.__ubcHooked = true;
+    console.log('✅ [UBC] bk56SaveConfig di-hook');
+}
+
+/* ================================================================
+ * 🎯 LANGKAH 3: HOOK bk56BackupToHTML
+ * - SEBELUM backup → pastikan URL terbaru ada di embedded JSON
+ * - File HTML hasil backup akan mengandung URL permanen
+ * ================================================================ */
+function ubcHookBackup() {
+    if (typeof window.bk56BackupToHTML !== 'function') {
+        setTimeout(ubcHookBackup, 500);
+        return;
+    }
+    if (window.bk56BackupToHTML.__ubcHooked) return;
+
+    const _orig = window.bk56BackupToHTML;
+    window.bk56BackupToHTML = function() {
+        // 🔑 PENTING: Sync URL ke embedded SEBELUM backup
+        const url = localStorage.getItem(CFG_KEY) || '';
+        if (url) {
+            ubcSaveUrlToEmbedded(url);
+            console.log('✅ [UBC] URL ter-embed sebelum backup → akan permanen di file baru');
+        }
+
+        // Panggil fungsi asli
+        return _orig.apply(this, arguments);
+    };
+    window.bk56BackupToHTML.__ubcHooked = true;
+    console.log('✅ [UBC] bk56BackupToHTML di-hook');
+}
+
+/* ================================================================
+ * 🎯 LANGKAH 4: HOOK bk56OpenConfig
+ * - Saat modal config dibuka → pastikan URL ter-load
+ * ================================================================ */
+function ubcHookOpenConfig() {
+    if (typeof window.bk56OpenConfig !== 'function') {
+        setTimeout(ubcHookOpenConfig, 500);
+        return;
+    }
+    if (window.bk56OpenConfig.__ubcHooked) return;
+
+    const _orig = window.bk56OpenConfig;
+    window.bk56OpenConfig = function() {
+        const result = _orig.apply(this, arguments);
+
+        setTimeout(function() {
+            const emb = ubcReadEmb();
+            const embUrl = (emb && emb.backendUrl) ? emb.backendUrl.trim() : '';
+            const localUrl = localStorage.getItem(CFG_KEY) || '';
+            const finalUrl = embUrl || localUrl;
+
+            const input = document.getElementById('bk56-cfg-url');
+            if (input && !input.value && finalUrl) {
+                input.value = finalUrl;
+            }
+        }, 300);
+
+        return result;
+    };
+    window.bk56OpenConfig.__ubcHooked = true;
+    console.log('✅ [UBC] bk56OpenConfig di-hook');
+}
+
+/* ================================================================
+ * 🎯 LANGKAH 5: REAL-TIME WATCH pada input URL
+ * - Setiap user mengetik → auto-save ke embedded JSON
+ * - Debounce 1.5 detik
+ * ================================================================ */
+function ubcWatchInput() {
+    const input = document.getElementById('bk56-cfg-url');
+    if (!input) {
+        setTimeout(ubcWatchInput, 500);
+        return;
+    }
+    if (input.__ubcWatched) return;
+
+    let debounceTimer;
+    input.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function() {
+            const url = input.value.trim();
+            if (url) {
+                localStorage.setItem(CFG_KEY, url);
+                ubcSaveUrlToEmbedded(url);
+                console.log('🔄 [UBC] Real-time sync ke embedded:', url.slice(0, 40) + '...');
+            }
+        }, 1500);
+    });
+
+    input.__ubcWatched = true;
+    console.log('✅ [UBC] Input watcher aktif');
+}
+
+/* ================================================================
+ * 🎯 LANGKAH 6: NOTIFIKASI PENTING saat halaman load
+ * - Jika URL sudah ada di embedded → tampilkan info "Permanen Aktif"
+ * - Jika belum → tampilkan panduan setup
+ * ================================================================ */
+function ubcShowStatusNotification() {
+    const emb = ubcReadEmb();
+    const embUrl = (emb && emb.backendUrl) ? emb.backendUrl.trim() : '';
+
+    setTimeout(function() {
+        if (embUrl) {
+            // URL sudah permanen di HTML
+            console.log('✅ [UBC] Status: URL Backend PERMANEN di HTML (lintas device aktif)');
+            if (typeof showToast === 'function') {
+                showToast('✅ Konfigurasi Backend PERMANEN aktif (berlaku di semua device)', 'success');
+            }
+        } else {
+            // Belum ada URL
+            console.log('ℹ️ [UBC] Status: URL Backend belum dikonfigurasi');
+            setTimeout(function() {
+                if (typeof showToast === 'function') {
+                    showToast('ℹ️ Klik ⚙️ Konfigurasi Backend untuk setup. Setelah itu klik "Backup Permanen".', 'info');
+                }
+            }, 2000);
+        }
+    }, 3000);
+}
+
+/* ================================================================
+ * 🎯 LANGKAH 7: PERIODIC SYNC (setiap 15 detik)
+ * - Pastikan embedded JSON selalu sinkron dengan localStorage
+ * - Jika embedded kosong tapi localStorage ada → restore
+ * ================================================================ */
+function ubcStartPeriodicSync() {
+    setInterval(function() {
+        const emb = ubcReadEmb();
+        if (!emb) return;
+
+        const embUrl = (emb.backendUrl || '').trim();
+        const localUrl = (localStorage.getItem(CFG_KEY) || '').trim();
+
+        // Jika embedded kosong tapi localStorage ada → sync ke embedded
+        if (!embUrl && localUrl) {
+            ubcSaveUrlToEmbedded(localUrl);
+            console.log('🔄 [UBC] Periodic sync: localStorage → embedded');
+        }
+
+        // Jika embedded ada tapi localStorage kosong → restore
+        if (embUrl && !localUrl) {
+            localStorage.setItem(CFG_KEY, embUrl);
+            console.log('🔄 [UBC] Periodic sync: embedded → localStorage');
+        }
+    }, 15000);
+
+    console.log('✅ [UBC] Periodic sync aktif (15 detik)');
+}
+
+/* ================================================================
+ * 🎯 LANGKAH 8: VISIBILITY CHANGE (user kembali ke tab)
+ * ================================================================ */
+function ubcHookVisibility() {
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            ubcAutoRestore();
+        }
+    });
+}
+
+/* ================================================================
+ * 🎯 LANGKAH 9: INFO BOX di modal config
+ * - Tambahkan info jelas bahwa URL akan permanen setelah backup
+ * ================================================================ */
+function ubcInjectInfoBox() {
+    const configBody = document.querySelector('.bk56-config-body');
+    if (!configBody) {
+        setTimeout(ubcInjectInfoBox, 500);
+        return;
+    }
+    if (document.getElementById('ubc-info-box')) return;
+
+    const infoBox = document.createElement('div');
+    infoBox.id = 'ubc-info-box';
+    infoBox.style.cssText = 'background:linear-gradient(135deg,#dcfce7,#bbf7d0);border:2px solid #10b981;border-left:4px solid #10b981;padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:0.85rem;color:#065f46;line-height:1.6;';
+
+    const emb = ubcReadEmb();
+    const hasUrl = emb && emb.backendUrl && emb.backendUrl.trim();
+
+    infoBox.innerHTML = `
+        <strong>🔒 Mode: PERMANEN LINTAS DEVICE</strong><br>
+        <small style="opacity:0.9;">
+            ${hasUrl
+                ? '✅ URL Backend sudah tersimpan permanen di file HTML. Berlaku di semua device (HP, PC, tablet).'
+                : '⚠️ URL belum tersimpan permanen. Setelah konfigurasi, klik <strong>"Backup Permanen"</strong> lalu replace file di GitHub.'
+            }
+        </small>
+    `;
+
+    const firstSection = configBody.querySelector('.bk56-config-section');
+    if (firstSection) {
+        configBody.insertBefore(infoBox, firstSection);
+    } else {
+        configBody.appendChild(infoBox);
+    }
+
+    console.log('✅ [UBC] Info box di-inject di modal config');
+}
+
+/* ================================================================
+ * 🚀 INIT: Pasang semua mekanisme
+ * ================================================================ */
+function init() {
+    console.log('');
+    console.log('═══════════════════════════════════════');
+    console.log('🚀 [UBC] Ultimate Backend Config v' + VERSION);
+    console.log('═══════════════════════════════════════');
+    console.log('📌 Strategi: EMBEDDED-FIRST');
+    console.log('   ✅ Embedded JSON = sumber utama (permanen di HTML)');
+    console.log('   ✅ localStorage = cache sementara');
+    console.log('   ✅ Berlaku lintas device (HP, PC, tablet)');
+    console.log('   ✅ Anti-lepas (URL menempel di file HTML)');
+    console.log('');
+
+    // 1. Auto-restore (PRIORITAS: Embedded JSON)
+    const restoredUrl = ubcAutoRestore();
+
+    // 2. Hook fungsi-fungsi inti
+    ubcHookSaveConfig();
+    ubcHookBackup();
+    ubcHookOpenConfig();
+
+    // 3. Watch input (real-time sync)
+    ubcWatchInput();
+
+    // 4. Periodic sync
+    ubcStartPeriodicSync();
+
+    // 5. Visibility change
+    ubcHookVisibility();
+
+    // 6. Show status notification
+    ubcShowStatusNotification();
+
+    // 7. Inject info box saat modal config dibuka
+    const cfgModal = document.getElementById('bk56-config-modal');
+    if (cfgModal) {
+        const obs = new MutationObserver(function() {
+            if (cfgModal.classList.contains('show')) {
+                setTimeout(ubcInjectInfoBox, 300);
+            }
+        });
+        obs.observe(cfgModal, { attributes: true, attributeFilter: ['class'] });
+    }
+
+    console.log('');
+    console.log('📌 CARA PAKAI (PENTING):');
+    console.log('   1. Klik ⚙️ Konfigurasi Backend → masukkan URL Apps Script');
+    console.log('   2. Klik 💾 Simpan Konfigurasi');
+    console.log('   3. Klik 💾 Backup Permanen → file HTML baru ter-download');
+    console.log('   4. Upload file baru ke GitHub (replace index.html)');
+    console.log('   5. ✅ SELESAI! URL berlaku permanen di semua device');
+    console.log('');
+    console.log('✅ [UBC] Patch terpasang — semua mekanisme aktif');
+    console.log('═══════════════════════════════════════');
+    console.log('');
+}
+
+// Jalankan init
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+
+})();
+</script>
+<!-- ================================================================ -->
+<!-- ========== PATCH ULTIMATE: BACKEND CONFIG PERMANEN LINTAS DEVICE [END] ========== -->
 <!-- ================================================================ -->
 
 
