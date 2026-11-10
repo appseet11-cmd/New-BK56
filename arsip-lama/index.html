@@ -18882,69 +18882,42 @@ document.addEventListener('visibilitychange',function(){
 <!-- ================================================================ -->
 <!-- ==== PATCH FINAL: ANTI-PINDAH CARD [END] ======================= -->
 <!-- ================================================================ -->
-<!-- ========== EMERGENCY FIX: FORCE RESET ========== -->
+<!-- ========== PATCH MINIMAL: TUTUP MODAL CONFIG SAJA ========== -->
 <script>
 (function(){
-"use strict";
-console.log('🚨 [Emergency Fix] Memulai force reset...');
-
-// 1. Tutup SEMUA modal yang mungkin terbuka
-const modalSelectors = [
-'.bk56-backup-modal', '.bk56-config-modal',
-'.adm56-login-modal', '.adm56-admin-modal',
-'.materi-modal', '.materi-picker-modal',
-'.video-modal', '.link-modal', '.link-picker-modal',
-'.pw-modal', '.master-modal', '.editor-modal',
-'#share-pw-modal', '#edit-pw-modal', '#master-pw-modal',
-'#bk56-universal-player', '#videoPlayerModal',
-'#bk56-delete-overlay', '#bk56-delete-progress',
-'#rkx40Modal', '#welcome-overlay'
-];
-
-modalSelectors.forEach(function(sel) {
-const el = document.querySelector(sel);
-if (el) {
-el.classList.remove('show');
-el.style.display = 'none';
-console.log('✅ [Emergency] Tutup modal:', sel);
-}
-});
-
-// 2. Reset panel rekap
-const rekapPanel = document.getElementById('a56-panel-rekap');
-if (rekapPanel) rekapPanel.style.display = 'none';
-
-// 3. Reset container admin
-const container = document.querySelector('.a56-container');
-if (container) container.style.display = '';
-
-// 4. Reset tab ke default
-const tabBtns = document.querySelectorAll('.a56-tab-btn');
-tabBtns.forEach(function(btn, i) {
-if (i === 0) btn.classList.add('active');
-else btn.classList.remove('active');
-});
-
-// 5. Hapus overlay protection jika ada
-const shield = document.getElementById('protection-shield');
-if (shield) shield.classList.remove('active');
-
-// 6. Force show halaman home
-setTimeout(function() {
-const homePage = document.getElementById('features');
-if (homePage) {
-homePage.scrollIntoView({ behavior: 'instant', block: 'start' });
-console.log('✅ [Emergency] Scroll ke home');
-}
-}, 500);
-
-// 7. Cek jika ada error di console
-window.addEventListener('error', function(e) {
-console.error('🚨 [Emergency] Error terdeteksi:', e.message, 'at', e.filename, ':', e.lineno);
-});
-
-console.log('✅ [Emergency Fix] Selesai - halaman seharusnya sudah tampil');
+  "use strict";
+  // HANYA tutup modal config, TIDAK sentuh tab Administrasi BK56
+  window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      // Tutup modal config jika terbuka
+      var cfgModal = document.getElementById('bk56-config-modal');
+      if (cfgModal) cfgModal.classList.remove('show');
+      
+      // Tutup modal backup jika terbuka
+      var backupModal = document.getElementById('bk56-backup-modal');
+      if (backupModal) backupModal.classList.remove('show');
+      
+      // Tutup modal login admin jika terbuka
+      var loginModal = document.getElementById('adm56-login-modal');
+      if (loginModal) loginModal.classList.remove('show');
+      
+      // Tutup modal admin jika terbuka
+      var adminModal = document.getElementById('adm56-admin-modal');
+      if (adminModal) adminModal.classList.remove('show');
+      
+      // PASTIKAN container Administrasi BK56 visible
+      var container = document.querySelector('.a56-container');
+      if (container) container.style.display = '';
+      
+      // PASTIKAN panel rekap hidden (default)
+      var rekapPanel = document.getElementById('a56-panel-rekap');
+      if (rekapPanel) rekapPanel.style.display = 'none';
+      
+      // JANGAN reset tab — biarkan tab aktif tetap aktif
+      console.log('✅ [Minimal Fix] Hanya menutup modal, tab Administrasi BK56 tetap aktif');
+    }, 500);
+  });
 })();
 </script>
-<!-- ========== EMERGENCY FIX [END] ========== -->
+<!-- ========== PATCH MINIMAL [END] ========== -->
 </body></html>
