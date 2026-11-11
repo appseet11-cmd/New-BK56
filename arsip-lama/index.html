@@ -19003,548 +19003,485 @@ document.addEventListener('visibilitychange',function(){
 </script>
 <!-- ========== PATCH MINIMAL [END] ========== -->
 <!-- ================================================================ -->
-<!-- ========== PATCH FIX: FILTER GURU - LINK SEMATAN FIX ========== -->
-<!-- ========== v1.0 - Solusi Index Mapping & Anti-Conflict ========== -->
+<!-- ================================================================ -->
+<!-- ========== PATCH FINAL FIX: INISIALISASI DOCS + TOMBOL PASTI ========== -->
+<!-- ========== v1.0 - Selesai Masalah Halaliah/Wahyuni/Rizqi ========== -->
+<!-- ========== Nov 2026 ========== -->
 <!-- ================================================================ -->
 <script>
 (function(){
 "use strict";
 
-const FLAG = '__bk56FilterGuruLinkFix';
+const FLAG = '__bk56FinalFixLinkEmbed';
 if (window[FLAG]) {
-    console.log('ℹ️ [FilterGuruFix] Patch sudah terpasang');
+    console.log('ℹ️ [FinalFix] Patch sudah terpasang, skip');
     return;
 }
 window[FLAG] = true;
 
+const GRID_ID = 'grid-dokumen';
 const DOC_KEY = 'bk56_doc_links';
-const MATERI_KEY = 'bk56_materi_links';
-const VIDEO_KEY = 'bk56_video_links';
-
-// State global untuk tracking
-window.__fgf_currentFilteredDocs = [];
-window.__fgf_originalIndexMap = new Map();
 
 /* ================================================================
-* 🔑 HELPER 1: Dapatkan index asli dari DOCS array
-*    Menggunakan matching yang KETAT (kelas+guru+kategori+nama)
+* 🔑 LANGKAH 1: Inisialisasi bk56_doc_links dari DOCS bawaan
+*    → Card yang punya link DOCS bawaan sekarang punya entry di localStorage
+*    → Ini yang membuat openDocLinkFinal() bisa bekerja
 ================================================================ */
-function fgfFindOriginalIndex(kelas, guru, kategori, nama) {
-    if (typeof DOCS === 'undefined' || !Array.isArray(DOCS)) {
-        console.error('❌ [FilterGuruFix] DOCS array tidak tersedia');
-        return -1;
-    }
+function initializeDocLinksFromDOCS() {
+    if (typeof DOCS === 'undefined' || !Array.isArray(DOCS)) return 0;
     
-    const kL = String(kelas || '').toLowerCase().trim();
-    const gL = String(guru || '').toLowerCase().trim();
-    const katL = String(kategori || '').toLowerCase().trim();
-    const nL = String(nama || '').toLowerCase().trim();
-    
-    for (let i = 0; i < DOCS.length; i++) {
-        const d = DOCS[i];
-        
-        // Matching KETAT - semua field harus cocok
-        if (kL && d.kelas.toLowerCase() !== kL) continue;
-        if (gL && d.guru.toLowerCase() !== gL) continue;
-        if (katL && d.kat.toLowerCase() !== katL) continue;
-        if (nL && d.nama.toLowerCase().trim() !== nL) continue;
-        
-        return i; // DITEMUKAN!
-    }
-    
-    console.warn('️ [FilterGuruFix] Dokumen tidak ditemukan:', {kelas, guru, kategori, nama});
-    return -1;
-}
-
-/* ================================================================
-* 🔑 HELPER 2: Load data link dari localStorage
-================================================================ */
-function fgfLoadLinks() {
+    let existing = {};
     try {
         const raw = localStorage.getItem(DOC_KEY);
-        return raw ? JSON.parse(raw) : {};
-    } catch(e) {
-        console.error(' [FilterGuruFix] Gagal load links:', e);
-        return {};
+        if (raw) existing = JSON.parse(raw);
+    } catch(e) {}
+    
+    let initialized = 0;
+    DOCS.forEach(function(doc, idx) {
+        // Skip jika sudah ada di localStorage
+        if (existing[idx] && existing[idx].length > 0) return;
+        
+        // Jika DOCS punya link bawaan → simpan ke localStorage
+        if (doc.link && doc.link.trim() !== '') {
+            if (!existing[idx]) existing[idx] = [];
+            // Tambahkan link DOCS bawaan jika belum ada
+            if (!existing[idx].includes(doc.link)) {
+                existing[idx].push(doc.link);
+                initialized++;
+                console.log('✅ [FinalFix] Inisialisasi DOCS[' + idx + ']:', doc.nama, '→', doc.link.slice(0, 50));
+            }
+        }
+    });
+    
+    if (initialized > 0) {
+        try {
+            localStorage.setItem(DOC_KEY, JSON.stringify(existing));
+            console.log('✅ [FinalFix]', initialized, 'card di-inisialisasi dari DOCS bawaan');
+        } catch(e) {
+            console.warn('⚠️ [FinalFix] Gagal simpan:', e);
+        }
     }
+    
+    return initialized;
 }
 
 /* ================================================================
-* 🔑 HELPER 3: Save data link ke localStorage
+* 🔑 LANGKAH 2: Override bukaDoc() → Fallback ke DOCS bawaan
+*    → Jika docLinks kosong, pakai DOCS[idx].link
 ================================================================ */
-function fgfSaveLinks(data) {
-    try {
-        localStorage.setItem(DOC_KEY, JSON.stringify(data));
-        return true;
-    } catch(e) {
-        console.error('❌ [FilterGuruFix] Gagal save links:', e);
-        return false;
-    }
+if (typeof window.bukaDoc === 'function') {
+    const _origBukaDoc = window.bukaDoc;
+    window.bukaDoc = function(idx) {
+        if (typeof DOCS === 'undefined' || !DOCS[idx]) {
+            if (typeof showToast === 'function') showToast('⚠️ Dokumen tidak ditemukan', 'error');
+            return;
+        }
+        
+        const doc = DOCS[idx];
+        
+        // Jika kategori materi → arahkan ke sistem materi
+        if (doc.kat === 'materi') {
+            if (typeof window.openMateriFinal === 'function') {
+                window.openMateriFinal(idx);
+                return;
+            }
+        }
+        
+        // 🔑 CEK docLinks dulu
+        let links = [];
+        try {
+            const raw = localStorage.getItem(DOC_KEY);
+            if (raw) {
+                const all = JSON.parse(raw);
+                links = all[idx] || [];
+            }
+        } catch(e) {}
+        
+        // 🔑 FALLBACK: Pakai DOCS bawaan jika docLinks kosong
+        if (links.length === 0 && doc.link && doc.link.trim() !== '') {
+            links = [doc.link];
+        }
+        
+        // Jika masih kosong → tampilkan error
+        if (links.length === 0) {
+            if (typeof showToast === 'function') showToast('⚠️ Link belum diisi. Klik ⚙️ untuk menambah.', 'error');
+            return;
+        }
+        
+        // Jika hanya 1 link → buka langsung
+        if (links.length === 1) {
+            let url = links[0];
+            if (!/^https?:\/\//i.test(url) && !/^mailto:/i.test(url)) url = 'https://' + url;
+            if (typeof showToast === 'function') showToast('📂 Membuka dokumen...', 'success');
+            setTimeout(function(){ window.location.href = url; }, 200);
+            return;
+        }
+        
+        // Jika banyak link → buka modal picker (pakai openDocLinkFinal)
+        if (typeof window.openDocLinkFinal === 'function') {
+            window.openDocLinkFinal(idx);
+        } else {
+            // Fallback: buka link pertama
+            let url = links[0];
+            if (!/^https?:\/\//i.test(url) && !/^mailto:/i.test(url)) url = 'https://' + url;
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+    };
+    window.bukaDoc.__finalFixPatched = true;
+    console.log('✅ [FinalFix] bukaDoc() di-override dengan fallback DOCS bawaan');
 }
 
 /* ================================================================
-* 🔑 HELPER 4: Dapatkan link untuk dokumen tertentu
-*    Menggunakan ORIGINAL INDEX, bukan index tampilan
+* 🔑 LANGKAH 3: Inject tombol ⚙️ ke SEMUA card non-materi
+*    → Menggunakan MutationObserver yang RELIABLE
+*    → Tidak bergantung pada chain render()
 ================================================================ */
-function fgfGetDocLinks(originalIdx) {
-    const all = fgfLoadLinks();
-    return all[originalIdx] || [];
-}
-
-/* ================================================================
-* 🔑 HELPER 5: Set link untuk dokumen tertentu
-*    Menggunakan ORIGINAL INDEX
-================================================================ */
-function fgfSetDocLinks(originalIdx, links) {
-    const all = fgfLoadLinks();
-    all[originalIdx] = links;
-    return fgfSaveLinks(all);
-}
-
-/* ================================================================
-* 🎯 FUNGSI UTAMA 1: Buka Modal Link (FIXED)
-*    → Cari original index terlebih dahulu
-*    → Gunakan original index untuk semua operasi
-================================================================ */
-window.fgfOpenLinkModal = function(cardElement) {
-    // 1. Ekstrak data dari card
-    const pathEl = cardElement.querySelector('.a56-path');
-    const guruBadge = cardElement.querySelector('.a56-guru-badge b');
+function injectManageButtons() {
+    const grid = document.getElementById(GRID_ID);
+    if (!grid) return;
     
-    if (!pathEl || !guruBadge) {
-        console.error('❌ [FilterGuruFix] Tidak bisa ekstrak data dari card');
-        return;
-    }
+    const cards = grid.querySelectorAll('.a56-card');
+    let added = 0;
     
-    // 2. Parse informasi dari card
-    const pathText = pathEl.textContent || '';
-    const guruText = guruBadge.textContent || '';
-    
-    // Ekstrak kategori dari path (contoh: "Kelas VII • Sotya Palupi • Catatan Kasus")
-    const pathParts = pathText.split('•').map(p => p.trim());
-    if (pathParts.length < 3) {
-        console.error('❌ [FilterGuruFix] Format path tidak valid:', pathText);
-        return;
-    }
-    
-    const kelasRaw = pathParts[0]; // "Kelas VII"
-    const kategori = pathParts[2].toLowerCase().trim(); // "catatan kasus"
-    
-    // Ekstrak kelas dari "Kelas VII" → "vii"
-    const kelasMatch = kelasRaw.match(/Kelas\s+(VII|VIII|IX)/i);
-    const kelas = kelasMatch ? kelasMatch[1].toLowerCase() : '';
-    
-    // Ekstrak nama guru dari badge (contoh: "SP" → cari nama lengkap di GURU)
-    let guru = '';
-    if (typeof GURU !== 'undefined') {
-        for (const key in GURU) {
-            if (GURU[key].inisial === guruText || 
-                GURU[key].nama.toLowerCase().includes(guruText.toLowerCase())) {
-                guru = key;
+    cards.forEach(function(card) {
+        // Skip jika sudah ada tombol
+        if (card.querySelector('.finalfix-kelola-btn')) return;
+        
+        // Cari docIdx dari tombol yang ada
+        const allBtns = card.querySelectorAll('button, [onclick]');
+        let docIdx = -1;
+        
+        for (let i = 0; i < allBtns.length; i++) {
+            const onclick = allBtns[i].getAttribute('onclick') || '';
+            // Match berbagai pola: bukaDoc, openDocLinkFinal, openMateriFinal, dll
+            const match = onclick.match(/(?:bukaDoc|openDocLinkFinal|openMateriFinal|openMateriModal|bukaVideoLangsungFix)\((\d+)\)/);
+            if (match) {
+                docIdx = parseInt(match[1]);
                 break;
             }
         }
-    }
-    
-    // 3. Cari nama dokumen dari card
-    const titleEl = cardElement.querySelector('.a56-card h3');
-    const namaDokumen = titleEl ? titleEl.textContent.trim() : '';
-    
-    // 4.  CARI ORIGINAL INDEX
-    const originalIdx = fgfFindOriginalIndex(kelas, guru, kategori, namaDokumen);
-    
-    if (originalIdx < 0) {
-        alert('⚠️ Dokumen tidak ditemukan di database!\n\n' +
-              'Kelas: ' + kelas + '\n' +
-              'Guru: ' + guru + '\n' +
-              'Kategori: ' + kategori + '\n' +
-              'Nama: ' + namaDokumen);
-        return;
-    }
-    
-    console.log('✅ [FilterGuruFix] Original index ditemukan:', originalIdx);
-    console.log('   Card data:', {kelas, guru, kategori, namaDokumen});
-    
-    // 5. Simpan state untuk operasi selanjutnya
-    window.__fgf_currentDocIdx = originalIdx;
-    window.__fgf_currentDocData = {
-        kelas: kelas,
-        guru: guru,
-        kategori: kategori,
-        nama: namaDokumen,
-        originalIdx: originalIdx
-    };
-    
-    // 6. Buka modal dengan data yang benar
-    fgfRenderLinkModal(originalIdx);
-    
-    // 7. Tampilkan modal
-    const modal = document.getElementById('link-modal');
-    if (modal) {
-        modal.classList.add('show');
-        console.log('✅ [FilterGuruFix] Modal ditampilkan');
-    } else {
-        console.error('❌ [FilterGuruFix] Modal #link-modal tidak ditemukan');
-    }
-};
-
-/* ================================================================
-* 🎯 FUNGSI UTAMA 2: Render Modal Link (FIXED)
-================================================================ */
-function fgfRenderLinkModal(originalIdx) {
-    const links = fgfGetDocLinks(originalIdx);
-    const docData = window.__fgf_currentDocData;
-    
-    if (!docData) {
-        console.error('❌ [FilterGuruFix] Doc data tidak tersedia');
-        return;
-    }
-    
-    // Update header modal
-    const titleEl = document.getElementById('link-modal-title');
-    const subtitleEl = document.getElementById('link-modal-subtitle');
-    
-    if (titleEl) {
-        titleEl.textContent = '🔗 ' + docData.nama + ' — ' + 
-                             (docData.kelas ? docData.kelas.toUpperCase() : '');
-    }
-    
-    if (subtitleEl) {
-        const guruNama = (typeof GURU !== 'undefined' && GURU[docData.guru]) 
-            ? GURU[docData.guru].nama 
-            : docData.guru;
         
-        subtitleEl.textContent = 'Guru BK: ' + guruNama + ' • ' + 
-                                links.length + ' link tersimpan';
+        // Fallback: cari dari nama card
+        if (docIdx === -1 && typeof DOCS !== 'undefined') {
+            const h3 = card.querySelector('h3');
+            if (h3) {
+                const cardName = h3.textContent.trim().toLowerCase();
+                for (let i = 0; i < DOCS.length; i++) {
+                    if (DOCS[i].nama.toLowerCase() === cardName) {
+                        docIdx = i;
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if (docIdx === -1) return;
+        if (typeof DOCS === 'undefined' || !DOCS[docIdx]) return;
+        
+        const doc = DOCS[docIdx];
+        
+        // SKIP kategori materi (sudah ada sistem sendiri)
+        if (doc.kat === 'materi') return;
+        
+        // Buat tombol ⚙️
+        const btn = document.createElement('button');
+        btn.className = 'finalfix-kelola-btn';
+        btn.type = 'button';
+        btn.innerHTML = '⚙️';
+        btn.title = 'Kelola Link: ' + doc.nama;
+        btn.style.cssText = 'position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:10px;border:none;background:rgba(255,255,255,0.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;font-size:1.1rem;cursor:pointer;z-index:10;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.2);';
+        
+        btn.onmouseover = function() {
+            this.style.background = 'rgba(255,255,255,0.4)';
+            this.style.transform = 'scale(1.1)';
+        };
+        btn.onmouseout = function() {
+            this.style.background = 'rgba(255,255,255,0.25)';
+            this.style.transform = 'scale(1)';
+        };
+        
+        btn.onclick = function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            openFinalFixKelolaModal(docIdx);
+        };
+        
+        card.style.position = 'relative';
+        card.insertBefore(btn, card.firstChild);
+        added++;
+    });
+    
+    if (added > 0) {
+        console.log('✅ [FinalFix]', added, 'tombol ⚙️ di-inject ke card');
     }
-    
-    // Render panel
-    const panel = document.getElementById('link-panel');
-    if (!panel) {
-        console.error('❌ [FilterGuruFix] Panel #link-panel tidak ditemukan');
-        return;
-    }
-    
-    let html = '<div class="link-panel-title">🔗 Daftar Link Dokumen ' +
-               '<span style="font-size:0.78rem;color:#047857;font-weight:500;">(' + 
-               links.length + ' link)</span></div>';
-    
-    if (links.length === 0) {
-        html += '<div class="link-empty">' +
-                '<div class="link-empty-icon">🔗</div>' +
-                '<div class="link-empty-text">Belum ada link dokumen</div>' +
-                '<div style="font-size:0.78rem;margin-top:4px;opacity:0.7;">' +
-                'Tambahkan link di bawah ini</div></div>';
-    } else {
-        html += '<div class="link-list">';
-        links.forEach(function(url, i) {
-            const displayUrl = url.length > 60 ? url.substring(0, 57) + '...' : url;
-            html += '<div class="link-item">' +
-                    '<div class="link-num">' + (i+1) + '</div>' +
-                    '<a class="link-url" href="' + escLink(url) + '" ' +
-                    'target="_blank" rel="noopener" title="' + escLink(url) + '">' +
-                    escLink(displayUrl) + '</a>' +
-                    '<div class="link-actions">' +
-                    '<button class="link-btn-icon open" onclick="fgfOpenDocLink(' + i + ')" ' +
-                    'title="Buka link">🔗</button>' +
-                    '<button class="link-btn-icon del" onclick="fgfRemoveDocLink(' + i + ')" ' +
-                    'title="Hapus link">🗑️</button>' +
-                    '</div></div>';
-        });
-        html += '</div>';
-    }
-    
-    // Input tambah link
-    html += '<div class="link-add-section">' +
-            '<div class="link-input-wrap">' +
-            '<input type="text" id="input-doc-link-fix" ' +
-            'placeholder="Tempel URL dokumen di sini..." ' +
-            'onkeypress="if(event.key===\'Enter\') fgfAddDocLink()">' +
-            '</div>' +
-            '<button class="link-btn-add" onclick="fgfAddDocLink()">➕ Tambah Link</button>' +
-            '</div>';
-    
-    panel.innerHTML = html;
-    console.log('✅ [FilterGuruFix] Modal di-render dengan', links.length, 'link');
 }
 
 /* ================================================================
-*  FUNGSI UTAMA 3: Tambah Link (FIXED)
+* 🔑 LANGKAH 4: Modal Kelola Link (Self-Contained)
+*    → Menampilkan link DOCS bawaan + link localStorage
+*    → User bisa tambah/hapus link
 ================================================================ */
-window.fgfAddDocLink = function() {
-    const input = document.getElementById('input-doc-link-fix');
-    if (!input) {
-        console.error('❌ [FilterGuruFix] Input field tidak ditemukan');
+function openFinalFixKelolaModal(docIdx) {
+    if (typeof DOCS === 'undefined' || !DOCS[docIdx]) {
+        if (typeof showToast === 'function') showToast('⚠️ Dokumen tidak ditemukan', 'error');
         return;
     }
     
+    const doc = DOCS[docIdx];
+    const guru = (typeof GURU !== 'undefined' && GURU[doc.guru]) ? GURU[doc.guru] : { nama: doc.guru };
+    const kelasLabel = (typeof KELAS !== 'undefined' && KELAS[doc.kelas]) ? KELAS[doc.kelas] : doc.kelas.toUpperCase();
+    const katLabel = (typeof KAT !== 'undefined' && KAT[doc.kat]) ? KAT[doc.kat][1] : doc.kat;
+    
+    // Hapus modal lama
+    const oldModal = document.getElementById('finalfix-kelola-modal');
+    if (oldModal) oldModal.remove();
+    
+    // Ambil link dari localStorage + DOCS bawaan
+    let links = [];
+    try {
+        const raw = localStorage.getItem(DOC_KEY);
+        if (raw) {
+            const all = JSON.parse(raw);
+            links = all[docIdx] || [];
+        }
+    } catch(e) {}
+    
+    // Tambahkan DOCS bawaan jika belum ada
+    if (doc.link && doc.link.trim() !== '' && !links.includes(doc.link)) {
+        links.unshift(doc.link); // DOCS bawaan di awal
+    }
+    
+    // Buat modal
+    const modal = document.createElement('div');
+    modal.id = 'finalfix-kelola-modal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;z-index:100004;padding:20px;overflow-y:auto;';
+    
+    const box = document.createElement('div');
+    box.style.cssText = 'background:#fff;border-radius:20px;max-width:600px;width:100%;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 25px 60px rgba(0,0,0,0.3);';
+    
+    // Header
+    const header = document.createElement('div');
+    header.style.cssText = 'background:linear-gradient(135deg,#059669,#047857);color:#fff;padding:20px 24px;';
+    header.innerHTML = '<h3 style="font-family:\'Space Grotesk\',sans-serif;font-size:1.1rem;margin-bottom:4px;font-weight:700;">🔗 Kelola Link: ' + escFF(doc.nama) + '</h3>' +
+        '<p style="font-size:0.85rem;opacity:0.9;">' + escFF(guru.nama) + ' • ' + kelasLabel + ' • ' + katLabel + '</p>';
+    
+    // Body
+    const body = document.createElement('div');
+    body.style.cssText = 'padding:20px 24px;flex:1;overflow-y:auto;background:#fff;';
+    
+    let listHtml = '<div style="font-size:0.95rem;font-weight:700;color:#047857;margin-bottom:12px;">📋 Daftar Link (' + links.length + ')</div>';
+    
+    if (links.length === 0) {
+        listHtml += '<div style="text-align:center;padding:30px 20px;color:#047857;background:#ecfdf5;border:2px dashed #a7f3d0;border-radius:12px;">' +
+            '<div style="font-size:2.5rem;margin-bottom:8px;opacity:0.6;">🔗</div>' +
+            '<div style="font-size:0.88rem;font-weight:600;">Belum ada link</div>' +
+            '<div style="font-size:0.78rem;margin-top:4px;opacity:0.7;">Tambahkan link di bawah ini</div>' +
+            '</div>';
+    } else {
+        listHtml += '<div style="display:flex;flex-direction:column;gap:8px;">';
+        links.forEach(function(url, i) {
+            const isDocsLink = (url === doc.link);
+            const displayUrl = url.length > 60 ? url.substring(0, 57) + '...' : url;
+            listHtml += '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:' + 
+                (isDocsLink ? 'linear-gradient(135deg,#dbeafe,#bfdbfe);border:1px solid #60a5fa;' : 'linear-gradient(135deg,#ecfdf5,#d1fae5);border:1px solid #a7f3d0;') + 
+                'border-radius:10px;">' +
+                '<div style="background:' + (isDocsLink ? '#3b82f6' : '#10b981') + ';color:#fff;min-width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;flex-shrink:0;">' + 
+                (isDocsLink ? '📌' : (i+1)) + '</div>' +
+                '<a href="' + escFF(url) + '" target="_blank" rel="noopener" style="flex:1;font-size:0.82rem;color:' + (isDocsLink ? '#1e40af' : '#047857') + ';font-family:Consolas,Monaco,monospace;word-break:break-all;text-decoration:none;line-height:1.4;" title="' + escFF(url) + '">' + escFF(displayUrl) + '</a>' +
+                (isDocsLink ? '<div style="font-size:0.72rem;color:#60a5fa;font-weight:600;white-space:nowrap;">DOCS</div>' : 
+                '<button onclick="finalFixRemoveLink(' + docIdx + ',' + i + ')" title="Hapus" style="width:30px;height:30px;border-radius:8px;border:none;background:#ef4444;color:#fff;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🗑️</button>') +
+                '</div>';
+        });
+        listHtml += '</div>';
+    }
+    
+    // Input tambah link
+    listHtml += '<div style="margin-top:16px;padding-top:16px;border-top:1px dashed #a7f3d0;display:flex;gap:8px;flex-wrap:wrap;">' +
+        '<input type="text" id="finalfix-input-link-' + docIdx + '" placeholder="Tempel URL dokumen di sini..." style="flex:1;min-width:200px;padding:10px 14px;border:2px solid #a7f3d0;border-radius:10px;font-size:0.85rem;outline:none;font-family:inherit;" onkeypress="if(event.key===\'Enter\')finalFixAddLink(' + docIdx + ')">' +
+        '<button onclick="finalFixAddLink(' + docIdx + ')" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;white-space:nowrap;">➕ Tambah</button>' +
+        '</div>';
+    
+    body.innerHTML = listHtml;
+    
+    // Footer
+    const footer = document.createElement('div');
+    footer.style.cssText = 'padding:14px 24px;background:#ecfdf5;border-top:1px solid #a7f3d0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;';
+    footer.innerHTML = '<div style="font-size:0.78rem;color:#047857;font-weight:600;">💾 Link tersimpan di browser</div>' +
+        '<button onclick="document.getElementById(\'finalfix-kelola-modal\').remove()" style="background:#f1f5f9;color:#047857;border:none;padding:10px 20px;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:inherit;">✖ Tutup</button>';
+    
+    box.appendChild(header);
+    box.appendChild(body);
+    box.appendChild(footer);
+    modal.appendChild(box);
+    
+    modal.onclick = function(e) {
+        if (e.target === modal) modal.remove();
+    };
+    
+    document.body.appendChild(modal);
+    console.log('✅ [FinalFix] Modal dibuka untuk:', doc.nama);
+}
+
+/* ================================================================
+* 🔑 LANGKAH 5: Fungsi Tambah/Hapus Link (Global)
+================================================================ */
+window.finalFixAddLink = function(docIdx) {
+    const input = document.getElementById('finalfix-input-link-' + docIdx);
+    if (!input) return;
     const url = input.value.trim();
     if (!url) {
-        if (typeof showToast === 'function') {
-            showToast('⚠️ Masukkan URL terlebih dahulu', 'error');
-        }
+        if (typeof showToast === 'function') showToast('⚠️ Masukkan URL terlebih dahulu', 'error');
         input.focus();
         return;
     }
-    
-    // Normalisasi URL
     let finalUrl = url;
     if (!/^https?:\/\//i.test(url) && !/^mailto:/i.test(url)) {
         finalUrl = 'https://' + url;
     }
     
-    // Dapatkan original index
-    const originalIdx = window.__fgf_currentDocIdx;
-    if (originalIdx === undefined || originalIdx < 0) {
-        console.error('❌ [FilterGuruFix] Original index tidak valid');
+    // Simpan ke localStorage
+    let existing = {};
+    try {
+        const raw = localStorage.getItem(DOC_KEY);
+        if (raw) existing = JSON.parse(raw);
+    } catch(e) {}
+    
+    if (!existing[docIdx]) existing[docIdx] = [];
+    
+    // Cek duplikat
+    if (existing[docIdx].includes(finalUrl)) {
+        if (typeof showToast === 'function') showToast('⚠️ Link sudah ada', 'error');
         return;
     }
     
-    // Load links yang ada
-    const links = fgfGetDocLinks(originalIdx);
+    existing[docIdx].push(finalUrl);
     
-    // Tambahkan link baru
-    links.push(finalUrl);
+    try {
+        localStorage.setItem(DOC_KEY, JSON.stringify(existing));
+    } catch(e) {}
     
-    // Save
-    if (fgfSetDocLinks(originalIdx, links)) {
-        input.value = '';
-        fgfRenderLinkModal(originalIdx);
-        
-        if (typeof showToast === 'function') {
-            showToast('✅ Link berhasil ditambahkan!', 'success');
+    // Update DOCS array juga
+    if (typeof DOCS !== 'undefined' && DOCS[docIdx]) {
+        if (!DOCS[docIdx].link || DOCS[docIdx].link.trim() === '') {
+            DOCS[docIdx].link = finalUrl;
         }
+    }
+    
+    input.value = '';
+    if (typeof showToast === 'function') showToast('✅ Link berhasil ditambahkan!', 'success');
+    
+    // Refresh modal
+    const oldModal = document.getElementById('finalfix-kelola-modal');
+    if (oldModal) oldModal.remove();
+    setTimeout(function() { openFinalFixKelolaModal(docIdx); }, 100);
+    
+    // Refresh card
+    if (typeof render === 'function') {
+        try { render(true); } catch(e) {}
+    }
+};
+
+window.finalFixRemoveLink = function(docIdx, linkIdx) {
+    if (!confirm('🗑️ Yakin ingin menghapus link ini?')) return;
+    
+    let existing = {};
+    try {
+        const raw = localStorage.getItem(DOC_KEY);
+        if (raw) existing = JSON.parse(raw);
+    } catch(e) {}
+    
+    if (existing[docIdx] && existing[docIdx][linkIdx] !== undefined) {
+        existing[docIdx].splice(linkIdx, 1);
+        try {
+            localStorage.setItem(DOC_KEY, JSON.stringify(existing));
+        } catch(e) {}
         
-        console.log('✅ [FilterGuruFix] Link ditambahkan ke index', originalIdx);
+        if (typeof showToast === 'function') showToast('🗑️ Link berhasil dihapus', 'info');
         
-        // Trigger refresh UI
-        setTimeout(function() {
-            if (typeof window.render === 'function') {
-                try { window.render(true); } catch(e) {}
-            }
-        }, 300);
-    } else {
-        if (typeof showToast === 'function') {
-            showToast('❌ Gagal menyimpan link', 'error');
+        const oldModal = document.getElementById('finalfix-kelola-modal');
+        if (oldModal) oldModal.remove();
+        setTimeout(function() { openFinalFixKelolaModal(docIdx); }, 100);
+        
+        if (typeof render === 'function') {
+            try { render(true); } catch(e) {}
         }
     }
 };
 
 /* ================================================================
-* 🎯 FUNGSI UTAMA 4: Hapus Link (FIXED)
+* 🔑 HELPER: Escape HTML
 ================================================================ */
-window.fgfRemoveDocLink = function(linkIdx) {
-    if (!confirm('🗑️ Yakin ingin menghapus link ini?')) {
-        return;
-    }
-    
-    const originalIdx = window.__fgf_currentDocIdx;
-    if (originalIdx === undefined || originalIdx < 0) {
-        console.error('❌ [FilterGuruFix] Original index tidak valid');
-        return;
-    }
-    
-    const links = fgfGetDocLinks(originalIdx);
-    if (linkIdx >= 0 && linkIdx < links.length) {
-        links.splice(linkIdx, 1);
-        
-        if (fgfSetDocLinks(originalIdx, links)) {
-            fgfRenderLinkModal(originalIdx);
-            
-            if (typeof showToast === 'function') {
-                showToast('🗑️ Link berhasil dihapus', 'info');
-            }
-            
-            setTimeout(function() {
-                if (typeof window.render === 'function') {
-                    try { window.render(true); } catch(e) {}
-                }
-            }, 300);
-        }
-    }
-};
-
-/* ================================================================
-* 🎯 FUNGSI UTAMA 5: Buka Link (FIXED)
-================================================================ */
-window.fgfOpenDocLink = function(linkIdx) {
-    const originalIdx = window.__fgf_currentDocIdx;
-    const links = fgfGetDocLinks(originalIdx);
-    
-    if (linkIdx >= 0 && linkIdx < links.length) {
-        window.open(links[linkIdx], '_blank', 'noopener,noreferrer');
-    }
-};
-
-/* ================================================================
-*  FUNGSI UTAMA 6: Tutup Modal
-================================================================ */
-window.fgfCloseLinkModal = function() {
-    const modal = document.getElementById('link-modal');
-    if (modal) {
-        modal.classList.remove('show');
-    }
-    window.__fgf_currentDocIdx = undefined;
-    window.__fgf_currentDocData = null;
-};
-
-/* ================================================================
-* 🔧 HELPER: Escape HTML
-================================================================ */
-function escLink(s) {
-    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
-                       .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function escFF(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 /* ================================================================
-* 🛡️ PATCH: Override openLinkModal yang asli
-*    → Alihkan ke fungsi fix kita
+* 🔑 LANGKAH 6: Setup MutationObserver + Initial Run
 ================================================================ */
-if (typeof window.openLinkModal === 'function') {
-    const _origOpenLinkModal = window.openLinkModal;
-    window.openLinkModal = function(docIdx) {
-        // Cek apakah ini dipanggil dari card yang terfilter
-        const card = event ? event.target.closest('.a56-card') : null;
-        
-        if (card) {
-            // Gunakan versi FIX yang mencari original index
-            fgfOpenLinkModal(card);
-        } else {
-            // Fallback ke fungsi asli jika tidak ada card
-            _origOpenLinkModal(docIdx);
-        }
-    };
-    console.log('✅ [FilterGuruFix] openLinkModal di-override');
-}
-
-/* ================================================================
-* 🛡️ PATCH: Inject tombol manage di setiap card
-*    → Pastikan tombol ⚙️ menggunakan fungsi fix
-================================================================ */
-function fgfInjectManageButtons() {
-    const cards = document.querySelectorAll('#grid-dokumen .a56-card');
-    
-    cards.forEach(function(card, displayIdx) {
-        // Cek apakah sudah ada tombol fix
-        if (card.querySelector('.fgf-manage-btn')) {
-            return;
-        }
-        
-        // Cari tombol manage yang sudah ada
-        const existingBtn = card.querySelector('.a56-btn-link-manage-small, ' +
-                                               '.bk56-materi-manage-fix, ' +
-                                               '[onclick*="openLinkModal"]');
-        
-        if (existingBtn) {
-            // Override onclick existing button
-            existingBtn.onclick = function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                fgfOpenLinkModal(card);
-            };
-            
-            // Tandai sebagai sudah di-fix
-            existingBtn.classList.add('fgf-manage-btn');
-        }
-    });
-    
-    console.log('✅ [FilterGuruFix] Tombol manage di-inject untuk', cards.length, 'card');
-}
-
-/* ================================================================
-* ️ PATCH: Hook fungsi render
-*    → Inject tombol setelah render
-================================================================ */
-if (typeof window.render === 'function') {
-    const _origRender = window.render;
-    window.render = function(hanyaKartu) {
-        _origRender.apply(this, arguments);
-        
-        // Inject tombol setelah render
-        setTimeout(fgfInjectManageButtons, 200);
-    };
-    console.log('✅ [FilterGuruFix] window.render di-hook');
-}
-
-/* ================================================================
-* 🛡️ PATCH: Hook pindahKelas, setGuru, setKat
-*    → Inject tombol setelah filter berubah
-================================================================ */
-['pindahKelas', 'setGuru', 'setKat'].forEach(function(fnName) {
-    if (typeof window[fnName] === 'function') {
-        const _orig = window[fnName];
-        window[fnName] = function() {
-            _orig.apply(this, arguments);
-            setTimeout(fgfInjectManageButtons, 300);
-        };
-        console.log('✅ [FilterGuruFix]', fnName, 'di-hook');
-    }
-});
-
-/* ================================================================
-* ️ PATCH: MutationObserver
-*    → Auto-inject tombol saat grid berubah
-================================================================ */
-function fgfSetupObserver() {
-    const grid = document.getElementById('grid-dokumen');
+function setupObserver() {
+    const grid = document.getElementById(GRID_ID);
     if (!grid) {
-        setTimeout(fgfSetupObserver, 500);
+        setTimeout(setupObserver, 500);
         return;
     }
     
-    const observer = new MutationObserver(function() {
-        setTimeout(fgfInjectManageButtons, 150);
+    const observer = new MutationObserver(function(mutations) {
+        let hasChanges = false;
+        for (let i = 0; i < mutations.length; i++) {
+            if (mutations[i].addedNodes.length > 0) {
+                hasChanges = true;
+                break;
+            }
+        }
+        if (hasChanges) {
+            setTimeout(injectManageButtons, 200);
+        }
     });
     
-    observer.observe(grid, { childList: true, subtree: true });
-    console.log('✅ [FilterGuruFix] MutationObserver aktif');
+    observer.observe(grid, {
+        childList: true,
+        subtree: true
+    });
+    
+    console.log('✅ [FinalFix] MutationObserver aktif');
 }
-
-/* ================================================================
-* 🛡️ PATCH: ESC untuk tutup modal
-================================================================ */
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        const modal = document.getElementById('link-modal');
-        if (modal && modal.classList.contains('show')) {
-            fgfCloseLinkModal();
-        }
-    }
-});
-
-/* ================================================================
-* 🛡️ PATCH: Klik di luar modal untuk tutup
-================================================================ */
-document.addEventListener('click', function(e) {
-    const modal = document.getElementById('link-modal');
-    if (modal && modal.classList.contains('show')) {
-        if (e.target === modal) {
-            fgfCloseLinkModal();
-        }
-    }
-}, true);
 
 /* ================================================================
 * 🚀 INIT
 ================================================================ */
 function init() {
-    console.log('🚀 [FilterGuruFix] Patch dimulai...');
-    console.log('📌 Fitur:');
-    console.log('   ✅ Original index mapping (anti-filter error)');
-    console.log('   ✅ Matching ketat (kelas+guru+kategori+nama)');
-    console.log('   ✅ Auto-inject tombol manage');
-    console.log('   ✅ Hook semua fungsi render/filter');
-    console.log('   ✅ Tidak konflik dengan patch lain');
+    console.log('');
+    console.log('═══════════════════════════════════════');
+    console.log('🚀 [FinalFix] Patch v1.0 dimulai...');
+    console.log('═══════════════════════════════════════');
+    console.log('📌 Memperbaiki:');
+    console.log('   ✅ Card Halaliah/Wahyuni/Rizqi yang punya link DOCS bawaan');
+    console.log('   ✅ Inisialisasi bk56_doc_links dari DOCS');
+    console.log('   ✅ Override bukaDoc() dengan fallback');
+    console.log('   ✅ Inject tombol ⚙️ ke SEMUA card non-materi');
+    console.log('');
     
-    // Setup observer
-    fgfSetupObserver();
+    // 1. Inisialisasi docLinks dari DOCS bawaan
+    const initCount = initializeDocLinksFromDOCS();
+    if (initCount > 0) {
+        console.log('✅ [FinalFix]', initCount, 'card di-inisialisasi');
+    }
     
-    // Initial inject
-    setTimeout(fgfInjectManageButtons, 1000);
-    setTimeout(fgfInjectManageButtons, 2500);
-    setTimeout(fgfInjectManageButtons, 5000);
+    // 2. Inject tombol segera
+    injectManageButtons();
     
-    console.log('✅ [FilterGuruFix] Patch terpasang');
+    // 3. Setup observer
+    setupObserver();
+    
+    // 4. Jalankan beberapa kali untuk memastikan
+    setTimeout(injectManageButtons, 1000);
+    setTimeout(injectManageButtons, 2500);
+    setTimeout(injectManageButtons, 5000);
+    
+    console.log('');
+    console.log('✅ [FinalFix] Patch terpasang');
+    console.log('═══════════════════════════════════════');
+    console.log('');
 }
 
 if (document.readyState === 'loading') {
@@ -19552,11 +19489,10 @@ if (document.readyState === 'loading') {
 } else {
     init();
 }
-
 })();
 </script>
 <!-- ================================================================ -->
-<!-- ========== PATCH FIX: FILTER GURU - LINK SEMATAN [END] ========== -->
+<!-- ========== PATCH FINAL FIX: INISIALISASI DOCS + TOMBOL PASTI [END] ========== -->
 <!-- ================================================================ -->
 </body>
 </html>
