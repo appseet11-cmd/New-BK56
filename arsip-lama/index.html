@@ -1363,60 +1363,53 @@ box-shadow: 0 8px 22px rgba(0,0,0,0.3);
 
     <div class="welcome-bar" aria-hidden="true"><span></span></div>
 
-    <div class="welcome-note" id="welcome-note">Memuat platform... 10 detik</div>
+    <div class="welcome-note" id="welcome-note">Memuat platform... 5 detik</div>
   </div>
 
   <script>
-  (function () {
-    var WELCOME_DURATION = 10000;
+(function () {
+/* 🔧 SET DURASI CUKUP DI SINI (milidetik): 3000=3dtk, 5000=5dtk, 8000=8dtk, 15000=15dtk */
+var WELCOME_DURATION = 4000;
 
-    function hideWelcome() {
-      var overlay = document.getElementById('welcome-overlay');
-      if (!overlay) return;
+var detik = Math.max(1, Math.round(WELCOME_DURATION / 1000));
 
-      overlay.classList.add('hidden');
-      document.body.style.overflow = '';
-
-      setTimeout(function () {
-        overlay.style.display = 'none';
-      }, 900);
-
-      try {
-        sessionStorage.setItem('bk_platform_access', 'granted');
-      } catch (e) {}
-    }
-
-    function startWelcome() {
-      var overlay = document.getElementById('welcome-overlay');
-      if (!overlay) return;
-
-      overlay.style.display = 'flex';
-      overlay.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-
-      var note = document.getElementById('welcome-note');
-      var left = 10;
-
-      var countdown = setInterval(function () {
-        left--;
-        if (note) {
-          note.textContent = left > 0 ? 'Memuat platform... ' + left + ' detik' : 'Memuat platform...';
-        }
-        if (left <= 0) {
-          clearInterval(countdown);
-        }
-      }, 1000);
-
-      setTimeout(hideWelcome, WELCOME_DURATION);
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', startWelcome);
-    } else {
-      startWelcome();
-    }
-  })();
-  </script>
+function syncUI() {
+  var note = document.getElementById('welcome-note');
+  if (note) note.textContent = 'Memuat platform... ' + detik + ' detik';
+  var bar = document.querySelector('.welcome-bar span');
+  if (bar) bar.style.animationDuration = detik + 's';
+}
+function hideWelcome() {
+  var overlay = document.getElementById('welcome-overlay');
+  if (!overlay) return;
+  overlay.classList.add('hidden');
+  document.body.style.overflow = '';
+  setTimeout(function () { overlay.style.display = 'none'; }, 900);
+  try { sessionStorage.setItem('bk_platform_access', 'granted'); } catch (e) {}
+}
+function startWelcome() {
+  var overlay = document.getElementById('welcome-overlay');
+  if (!overlay) return;
+  overlay.style.display = 'flex';
+  overlay.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  syncUI();
+  var left = detik;
+  var countdown = setInterval(function () {
+    left--;
+    var n = document.getElementById('welcome-note');
+    if (n) n.textContent = left > 0 ? 'Memuat platform... ' + left + ' detik' : 'Memuat platform...';
+    if (left <= 0) clearInterval(countdown);
+  }, 1000);
+  setTimeout(hideWelcome, WELCOME_DURATION);
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startWelcome);
+} else {
+  startWelcome();
+}
+})();
+</script>
 </div>
 <div class="pw-modal" id="share-pw-modal" role="dialog" aria-modal="true">
 <div class="pw-modal-box">
