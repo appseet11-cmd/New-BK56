@@ -19004,17 +19004,16 @@ document.addEventListener('visibilitychange',function(){
 <!-- ========== PATCH MINIMAL [END] ========== -->
 <!-- ================================================================ -->
 <!-- ================================================================ -->
-<!-- ========== PATCH FINAL: FIX HALALIAH/WAHYUNI/RIZQI ========== -->
-<!-- ========== v1.0 - Init DOCS + Fallback + Inject Tombol ========== -->
-<!-- ========== Nov 2026 ========== -->
+<!-- ========== PATCH FINAL SIMPLE: TOMBOL ⚙️ PASTI MUNCUL ========== -->
+<!-- ========== v1.0 - MutationObserver Only | Nov 2026 ============ -->
 <!-- ================================================================ -->
 <script>
 (function(){
 "use strict";
 
-const FLAG = '__bk56FinalFixHalaliah';
+const FLAG = '__simpleKelolaLinkPatched';
 if (window[FLAG]) {
-    console.log('ℹ️ [FinalFix] Patch sudah terpasang, skip');
+    console.log('ℹ️ [SimpleKelola] Patch sudah terpasang, skip');
     return;
 }
 window[FLAG] = true;
@@ -19023,110 +19022,69 @@ const GRID_ID = 'grid-dokumen';
 const DOC_KEY = 'bk56_doc_links';
 
 /* ================================================================
-* 🔑 LANGKAH 1: Inisialisasi bk56_doc_links dari DOCS bawaan
-*    → Card dengan link DOCS bawaan sekarang punya entry di localStorage
+* 🔑 HELPER: Escape HTML
 ================================================================ */
-function initDocLinksFromDOCS() {
-    if (typeof DOCS === 'undefined' || !Array.isArray(DOCS)) return 0;
-    
-    let existing = {};
+function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ================================================================
+* 🔑 HELPER: Load/Save link dari localStorage
+================================================================ */
+function getDocLinkData(docIdx) {
     try {
         const raw = localStorage.getItem(DOC_KEY);
-        if (raw) existing = JSON.parse(raw);
-    } catch(e) {}
-    
-    let initialized = 0;
-    DOCS.forEach(function(doc, idx) {
-        // Skip jika sudah ada di localStorage
-        if (existing[idx] && existing[idx].length > 0) return;
-        
-        // Jika DOCS punya link bawaan → simpan ke localStorage
-        if (doc.link && doc.link.trim() !== '') {
-            if (!existing[idx]) existing[idx] = [];
-            if (!existing[idx].includes(doc.link)) {
-                existing[idx].push(doc.link);
-                initialized++;
-                console.log('✅ [FinalFix] Init DOCS[' + idx + ']:', doc.nama, '→', doc.link.slice(0, 50));
-            }
+        if (raw) {
+            const all = JSON.parse(raw);
+            return all[docIdx] || [];
         }
-    });
+    } catch(e) {}
+    return [];
+}
+
+function setDocLinkData(docIdx, data) {
+    try {
+        const raw = localStorage.getItem(DOC_KEY);
+        const all = raw ? JSON.parse(raw) : {};
+        all[docIdx] = data;
+        localStorage.setItem(DOC_KEY, JSON.stringify(all));
+    } catch(e) {
+        console.warn('⚠️ [SimpleKelola] Gagal simpan:', e);
+    }
+}
+
+/* ================================================================
+* 🔑 HELPER: Cari docIdx dari card
+*    Metode: Cocokkan nama card (h3) + kategori (data-kat) dengan DOCS
+================================================================ */
+function findDocIdxFromCard(card) {
+    if (typeof DOCS === 'undefined' || !Array.isArray(DOCS)) return -1;
     
-    if (initialized > 0) {
-        try {
-            localStorage.setItem(DOC_KEY, JSON.stringify(existing));
-            console.log('✅ [FinalFix]', initialized, 'card di-inisialisasi dari DOCS bawaan');
-        } catch(e) {
-            console.warn('⚠️ [FinalFix] Gagal simpan:', e);
+    const h3 = card.querySelector('h3');
+    if (!h3) return -1;
+    
+    const cardName = h3.textContent.trim().toLowerCase();
+    const cardKat = card.getAttribute('data-kat') || '';
+    
+    for (let i = 0; i < DOCS.length; i++) {
+        const d = DOCS[i];
+        const docName = d.nama.toLowerCase();
+        const docKat = d.kat || '';
+        
+        // Match nama DAN kategori
+        if (docName === cardName && docKat === cardKat) {
+            return i;
         }
     }
     
-    return initialized;
+    return -1;
 }
 
 /* ================================================================
-* 🔑 LANGKAH 2: Override bukaDoc() → Fallback ke DOCS bawaan
-*    → Jika docLinks kosong, pakai DOCS[idx].link
+* 🎯 FUNGSI UTAMA: Inject tombol ⚙️ ke SEMUA card
+*    → Dipanggil setiap kali ada perubahan di grid
 ================================================================ */
-if (typeof window.bukaDoc === 'function') {
-    const _origBukaDoc = window.bukaDoc;
-    window.bukaDoc = function(idx) {
-        if (typeof DOCS === 'undefined' || !DOCS[idx]) {
-            if (typeof showToast === 'function') showToast('⚠️ Dokumen tidak ditemukan', 'error');
-            return;
-        }
-        
-        const doc = DOCS[idx];
-        
-        // Jika kategori materi → arahkan ke sistem materi
-        if (doc.kat === 'materi') {
-            if (typeof window.openMateriFinal === 'function') {
-                window.openMateriFinal(idx);
-                return;
-            }
-        }
-        
-        // 🔑 CEK docLinks dulu
-        let links = [];
-        try {
-            const raw = localStorage.getItem(DOC_KEY);
-            if (raw) {
-                const all = JSON.parse(raw);
-                links = all[idx] || [];
-            }
-        } catch(e) {}
-        
-        // 🔑 FALLBACK: Pakai DOCS bawaan jika docLinks kosong
-        if (links.length === 0 && doc.link && doc.link.trim() !== '') {
-            links = [doc.link];
-        }
-        
-        // Jika masih kosong → tampilkan error
-        if (links.length === 0) {
-            if (typeof showToast === 'function') showToast('⚠️ Link belum diisi. Klik ⚙️ untuk menambah.', 'error');
-            return;
-        }
-        
-        // Jika hanya 1 link → buka langsung
-        if (links.length === 1) {
-            let url = links[0];
-            if (!/^https?:\/\//i.test(url) && !/^mailto:/i.test(url)) url = 'https://' + url;
-            if (typeof showToast === 'function') showToast('📂 Membuka dokumen...', 'success');
-            setTimeout(function(){ window.location.href = url; }, 200);
-            return;
-        }
-        
-        // Jika banyak link → buka modal picker
-        openFinalKelolaModal(idx);
-    };
-    window.bukaDoc.__finalFixPatched = true;
-    console.log('✅ [FinalFix] bukaDoc() di-override dengan fallback DOCS bawaan');
-}
-
-/* ================================================================
-* 🔑 LANGKAH 3: Inject tombol ⚙️ ke SEMUA card non-materi
-*    → Menggunakan MutationObserver yang RELIABLE
-================================================================ */
-function injectManageButtons() {
+function injectKelolaButtons() {
     const grid = document.getElementById(GRID_ID);
     if (!grid) return;
     
@@ -19135,50 +19093,46 @@ function injectManageButtons() {
     
     cards.forEach(function(card) {
         // Skip jika sudah ada tombol
-        if (card.querySelector('.finalfix-kelola-btn')) return;
+        if (card.querySelector('.simple-kelola-btn')) return;
         
-        // Cari docIdx dari tombol yang ada
-        const allBtns = card.querySelectorAll('button, [onclick]');
-        let docIdx = -1;
-        
-        for (let i = 0; i < allBtns.length; i++) {
-            const onclick = allBtns[i].getAttribute('onclick') || '';
-            const match = onclick.match(/(?:bukaDoc|openDocLinkFinal|openMateriFinal)\((\d+)\)/);
-            if (match) {
-                docIdx = parseInt(match[1]);
-                break;
-            }
-        }
-        
-        // Fallback: cari dari nama card
-        if (docIdx === -1 && typeof DOCS !== 'undefined') {
-            const h3 = card.querySelector('h3');
-            if (h3) {
-                const cardName = h3.textContent.trim().toLowerCase();
-                for (let i = 0; i < DOCS.length; i++) {
-                    if (DOCS[i].nama.toLowerCase() === cardName) {
-                        docIdx = i;
-                        break;
-                    }
-                }
-            }
-        }
-        
+        // Cari docIdx
+        const docIdx = findDocIdxFromCard(card);
         if (docIdx === -1) return;
+        
         if (typeof DOCS === 'undefined' || !DOCS[docIdx]) return;
         
         const doc = DOCS[docIdx];
         
-        // SKIP kategori materi
+        // SKIP kategori materi (sudah ada sistem sendiri)
         if (doc.kat === 'materi') return;
         
         // Buat tombol ⚙️
         const btn = document.createElement('button');
-        btn.className = 'finalfix-kelola-btn';
+        btn.className = 'simple-kelola-btn';
         btn.type = 'button';
         btn.innerHTML = '⚙️';
         btn.title = 'Kelola Link: ' + doc.nama;
-        btn.style.cssText = 'position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:10px;border:none;background:rgba(255,255,255,0.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;font-size:1.1rem;cursor:pointer;z-index:10;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.2);';
+        btn.style.cssText = [
+            'position:absolute',
+            'top:10px',
+            'right:10px',
+            'width:36px',
+            'height:36px',
+            'border-radius:10px',
+            'border:none',
+            'background:rgba(255,255,255,0.25)',
+            'backdrop-filter:blur(10px)',
+            '-webkit-backdrop-filter:blur(10px)',
+            'color:#fff',
+            'font-size:1.1rem',
+            'cursor:pointer',
+            'z-index:10',
+            'transition:all 0.2s ease',
+            'display:flex',
+            'align-items:center',
+            'justify-content:center',
+            'box-shadow:0 2px 8px rgba(0,0,0,0.2)'
+        ].join(';');
         
         btn.onmouseover = function() {
             this.style.background = 'rgba(255,255,255,0.4)';
@@ -19192,23 +19146,31 @@ function injectManageButtons() {
         btn.onclick = function(e) {
             e.stopPropagation();
             e.preventDefault();
-            openFinalKelolaModal(docIdx);
+            openSimpleKelolaModal(docIdx);
         };
         
+        // Pastikan card position:relative
         card.style.position = 'relative';
-        card.insertBefore(btn, card.firstChild);
+        
+        // Sisipkan di awal card
+        if (card.firstChild) {
+            card.insertBefore(btn, card.firstChild);
+        } else {
+            card.appendChild(btn);
+        }
+        
         added++;
     });
     
     if (added > 0) {
-        console.log('✅ [FinalFix]', added, 'tombol ⚙️ di-inject ke card');
+        console.log('✅ [SimpleKelola]', added, 'tombol ⚙️ di-inject');
     }
 }
 
 /* ================================================================
-* 🔑 LANGKAH 4: Modal Kelola Link (Self-Contained)
+* 🎯 MODAL KELOLA LINK (Self-Contained)
 ================================================================ */
-function openFinalKelolaModal(docIdx) {
+function openSimpleKelolaModal(docIdx) {
     if (typeof DOCS === 'undefined' || !DOCS[docIdx]) {
         if (typeof showToast === 'function') showToast('⚠️ Dokumen tidak ditemukan', 'error');
         return;
@@ -19220,37 +19182,53 @@ function openFinalKelolaModal(docIdx) {
     const katLabel = (typeof KAT !== 'undefined' && KAT[doc.kat]) ? KAT[doc.kat][1] : doc.kat;
     
     // Hapus modal lama
-    const oldModal = document.getElementById('finalfix-kelola-modal');
+    const oldModal = document.getElementById('simple-kelola-modal');
     if (oldModal) oldModal.remove();
     
     // Ambil link dari localStorage + DOCS bawaan
-    let links = [];
-    try {
-        const raw = localStorage.getItem(DOC_KEY);
-        if (raw) {
-            const all = JSON.parse(raw);
-            links = all[docIdx] || [];
-        }
-    } catch(e) {}
+    let links = getDocLinkData(docIdx);
+    const docsLink = doc.link && doc.link.trim() !== '' ? doc.link : '';
     
     // Tambahkan DOCS bawaan jika belum ada
-    if (doc.link && doc.link.trim() !== '' && !links.includes(doc.link)) {
-        links.unshift(doc.link);
+    if (docsLink && !links.includes(docsLink)) {
+        links.unshift(docsLink);
     }
     
     // Buat modal
     const modal = document.createElement('div');
-    modal.id = 'finalfix-kelola-modal';
-    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;z-index:100004;padding:20px;overflow-y:auto;';
+    modal.id = 'simple-kelola-modal';
+    modal.style.cssText = [
+        'position:fixed',
+        'inset:0',
+        'background:rgba(0,0,0,0.75)',
+        'backdrop-filter:blur(10px)',
+        '-webkit-backdrop-filter:blur(10px)',
+        'display:flex',
+        'align-items:center',
+        'justify-content:center',
+        'z-index:100004',
+        'padding:20px',
+        'overflow-y:auto'
+    ].join(';');
     
     const box = document.createElement('div');
-    box.style.cssText = 'background:#fff;border-radius:20px;max-width:600px;width:100%;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 25px 60px rgba(0,0,0,0.3);';
+    box.style.cssText = [
+        'background:#fff',
+        'border-radius:20px',
+        'max-width:600px',
+        'width:100%',
+        'max-height:90vh',
+        'overflow:hidden',
+        'display:flex',
+        'flex-direction:column',
+        'box-shadow:0 25px 60px rgba(0,0,0,0.3)'
+    ].join(';');
     
     // Header
     const header = document.createElement('div');
     header.style.cssText = 'background:linear-gradient(135deg,#059669,#047857);color:#fff;padding:20px 24px;';
-    header.innerHTML = '<h3 style="font-family:\'Space Grotesk\',sans-serif;font-size:1.1rem;margin-bottom:4px;font-weight:700;">🔗 Kelola Link: ' + escFF(doc.nama) + '</h3>' +
-        '<p style="font-size:0.85rem;opacity:0.9;">' + escFF(guru.nama) + ' • ' + kelasLabel + ' • ' + katLabel + '</p>';
+    header.innerHTML = '<h3 style="font-family:\'Space Grotesk\',sans-serif;font-size:1.1rem;margin-bottom:4px;font-weight:700;">🔗 Kelola Link: ' + esc(doc.nama) + '</h3>' +
+        '<p style="font-size:0.85rem;opacity:0.9;">' + esc(guru.nama) + ' • ' + kelasLabel + ' • ' + katLabel + '</p>';
     
     // Body
     const body = document.createElement('div');
@@ -19267,16 +19245,16 @@ function openFinalKelolaModal(docIdx) {
     } else {
         listHtml += '<div style="display:flex;flex-direction:column;gap:8px;">';
         links.forEach(function(url, i) {
-            const isDocsLink = (url === doc.link);
+            const isDocsLink = (url === docsLink);
             const displayUrl = url.length > 60 ? url.substring(0, 57) + '...' : url;
             listHtml += '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:' + 
                 (isDocsLink ? 'linear-gradient(135deg,#dbeafe,#bfdbfe);border:1px solid #60a5fa;' : 'linear-gradient(135deg,#ecfdf5,#d1fae5);border:1px solid #a7f3d0;') + 
                 'border-radius:10px;">' +
                 '<div style="background:' + (isDocsLink ? '#3b82f6' : '#10b981') + ';color:#fff;min-width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;flex-shrink:0;">' + 
                 (isDocsLink ? '📌' : (i+1)) + '</div>' +
-                '<a href="' + escFF(url) + '" target="_blank" rel="noopener" style="flex:1;font-size:0.82rem;color:' + (isDocsLink ? '#1e40af' : '#047857') + ';font-family:Consolas,Monaco,monospace;word-break:break-all;text-decoration:none;line-height:1.4;" title="' + escFF(url) + '">' + escFF(displayUrl) + '</a>' +
+                '<a href="' + esc(url) + '" target="_blank" rel="noopener" style="flex:1;font-size:0.82rem;color:' + (isDocsLink ? '#1e40af' : '#047857') + ';font-family:Consolas,Monaco,monospace;word-break:break-all;text-decoration:none;line-height:1.4;" title="' + esc(url) + '">' + esc(displayUrl) + '</a>' +
                 (isDocsLink ? '<div style="font-size:0.72rem;color:#60a5fa;font-weight:600;white-space:nowrap;">DOCS</div>' : 
-                '<button onclick="finalFixRemoveLink(' + docIdx + ',' + i + ')" title="Hapus" style="width:30px;height:30px;border-radius:8px;border:none;background:#ef4444;color:#fff;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🗑️</button>') +
+                '<button onclick="simpleRemoveLink(' + docIdx + ',' + i + ')" title="Hapus" style="width:30px;height:30px;border-radius:8px;border:none;background:#ef4444;color:#fff;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🗑️</button>') +
                 '</div>';
         });
         listHtml += '</div>';
@@ -19284,8 +19262,8 @@ function openFinalKelolaModal(docIdx) {
     
     // Input tambah link
     listHtml += '<div style="margin-top:16px;padding-top:16px;border-top:1px dashed #a7f3d0;display:flex;gap:8px;flex-wrap:wrap;">' +
-        '<input type="text" id="finalfix-input-link-' + docIdx + '" placeholder="Tempel URL dokumen di sini..." style="flex:1;min-width:200px;padding:10px 14px;border:2px solid #a7f3d0;border-radius:10px;font-size:0.85rem;outline:none;font-family:inherit;" onkeypress="if(event.key===\'Enter\')finalFixAddLink(' + docIdx + ')">' +
-        '<button onclick="finalFixAddLink(' + docIdx + ')" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;white-space:nowrap;">➕ Tambah</button>' +
+        '<input type="text" id="simple-input-link-' + docIdx + '" placeholder="Tempel URL dokumen di sini..." style="flex:1;min-width:200px;padding:10px 14px;border:2px solid #a7f3d0;border-radius:10px;font-size:0.85rem;outline:none;font-family:inherit;" onkeypress="if(event.key===\'Enter\')simpleAddLink(' + docIdx + ')">' +
+        '<button onclick="simpleAddLink(' + docIdx + ')" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;white-space:nowrap;">➕ Tambah</button>' +
         '</div>';
     
     body.innerHTML = listHtml;
@@ -19294,26 +19272,27 @@ function openFinalKelolaModal(docIdx) {
     const footer = document.createElement('div');
     footer.style.cssText = 'padding:14px 24px;background:#ecfdf5;border-top:1px solid #a7f3d0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;';
     footer.innerHTML = '<div style="font-size:0.78rem;color:#047857;font-weight:600;">💾 Link tersimpan di browser</div>' +
-        '<button onclick="document.getElementById(\'finalfix-kelola-modal\').remove()" style="background:#f1f5f9;color:#047857;border:none;padding:10px 20px;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:inherit;">✖ Tutup</button>';
+        '<button onclick="document.getElementById(\'simple-kelola-modal\').remove()" style="background:#f1f5f9;color:#047857;border:none;padding:10px 20px;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:inherit;">✖ Tutup</button>';
     
     box.appendChild(header);
     box.appendChild(body);
     box.appendChild(footer);
     modal.appendChild(box);
     
+    // Klik di luar untuk tutup
     modal.onclick = function(e) {
         if (e.target === modal) modal.remove();
     };
     
     document.body.appendChild(modal);
-    console.log('✅ [FinalFix] Modal dibuka untuk:', doc.nama);
+    console.log('✅ [SimpleKelola] Modal dibuka untuk:', doc.nama);
 }
 
 /* ================================================================
-* 🔑 LANGKAH 5: Fungsi Tambah/Hapus Link (Global)
+* ➕ Tambah Link (Global)
 ================================================================ */
-window.finalFixAddLink = function(docIdx) {
-    const input = document.getElementById('finalfix-input-link-' + docIdx);
+window.simpleAddLink = function(docIdx) {
+    const input = document.getElementById('simple-input-link-' + docIdx);
     if (!input) return;
     const url = input.value.trim();
     if (!url) {
@@ -19326,26 +19305,9 @@ window.finalFixAddLink = function(docIdx) {
         finalUrl = 'https://' + url;
     }
     
-    // Simpan ke localStorage
-    let existing = {};
-    try {
-        const raw = localStorage.getItem(DOC_KEY);
-        if (raw) existing = JSON.parse(raw);
-    } catch(e) {}
-    
-    if (!existing[docIdx]) existing[docIdx] = [];
-    
-    // Cek duplikat
-    if (existing[docIdx].includes(finalUrl)) {
-        if (typeof showToast === 'function') showToast('⚠️ Link sudah ada', 'error');
-        return;
-    }
-    
-    existing[docIdx].push(finalUrl);
-    
-    try {
-        localStorage.setItem(DOC_KEY, JSON.stringify(existing));
-    } catch(e) {}
+    const data = getDocLinkData(docIdx);
+    data.push(finalUrl);
+    setDocLinkData(docIdx, data);
     
     // Update DOCS array juga
     if (typeof DOCS !== 'undefined' && DOCS[docIdx]) {
@@ -19358,43 +19320,29 @@ window.finalFixAddLink = function(docIdx) {
     if (typeof showToast === 'function') showToast('✅ Link berhasil ditambahkan!', 'success');
     
     // Refresh modal
-    const oldModal = document.getElementById('finalfix-kelola-modal');
+    const oldModal = document.getElementById('simple-kelola-modal');
     if (oldModal) oldModal.remove();
-    setTimeout(function() { openFinalKelolaModal(docIdx); }, 100);
+    setTimeout(function() { openSimpleKelolaModal(docIdx); }, 100);
 };
 
-window.finalFixRemoveLink = function(docIdx, linkIdx) {
+/* ================================================================
+* 🗑️ Hapus Link (Global)
+================================================================ */
+window.simpleRemoveLink = function(docIdx, linkIdx) {
     if (!confirm('🗑️ Yakin ingin menghapus link ini?')) return;
-    
-    let existing = {};
-    try {
-        const raw = localStorage.getItem(DOC_KEY);
-        if (raw) existing = JSON.parse(raw);
-    } catch(e) {}
-    
-    if (existing[docIdx] && existing[docIdx][linkIdx] !== undefined) {
-        existing[docIdx].splice(linkIdx, 1);
-        try {
-            localStorage.setItem(DOC_KEY, JSON.stringify(existing));
-        } catch(e) {}
-        
+    const data = getDocLinkData(docIdx);
+    if (data[linkIdx] !== undefined) {
+        data.splice(linkIdx, 1);
+        setDocLinkData(docIdx, data);
         if (typeof showToast === 'function') showToast('🗑️ Link berhasil dihapus', 'info');
-        
-        const oldModal = document.getElementById('finalfix-kelola-modal');
+        const oldModal = document.getElementById('simple-kelola-modal');
         if (oldModal) oldModal.remove();
-        setTimeout(function() { openFinalKelolaModal(docIdx); }, 100);
+        setTimeout(function() { openSimpleKelolaModal(docIdx); }, 100);
     }
 };
 
 /* ================================================================
-* 🔑 HELPER: Escape HTML
-================================================================ */
-function escFF(s) {
-    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-/* ================================================================
-* 🔑 LANGKAH 6: Setup MutationObserver + Initial Run
+* 🛡️ MutationObserver: Auto-inject tombol saat card berubah
 ================================================================ */
 function setupObserver() {
     const grid = document.getElementById(GRID_ID);
@@ -19412,7 +19360,7 @@ function setupObserver() {
             }
         }
         if (hasChanges) {
-            setTimeout(injectManageButtons, 200);
+            setTimeout(injectKelolaButtons, 200);
         }
     });
     
@@ -19421,45 +19369,28 @@ function setupObserver() {
         subtree: true
     });
     
-    console.log('✅ [FinalFix] MutationObserver aktif');
+    console.log('✅ [SimpleKelola] MutationObserver aktif');
 }
 
 /* ================================================================
 * 🚀 INIT
 ================================================================ */
 function init() {
-    console.log('');
-    console.log('═══════════════════════════════════════');
-    console.log('🚀 [FinalFix] Patch v1.0 dimulai...');
-    console.log('═══════════════════════════════════════');
-    console.log('📌 Memperbaiki:');
-    console.log('   ✅ Card Halaliah/Wahyuni/Rizqi yang punya link DOCS bawaan');
-    console.log('   ✅ Inisialisasi bk56_doc_links dari DOCS');
-    console.log('   ✅ Override bukaDoc() dengan fallback');
-    console.log('   ✅ Inject tombol ⚙️ ke SEMUA card non-materi');
-    console.log('');
+    console.log('🚀 [SimpleKelola] Patch dimulai...');
+    console.log('📌 Fitur: Tombol ⚙️ pasti muncul di semua card non-materi');
     
-    // 1. Inisialisasi docLinks dari DOCS bawaan
-    const initCount = initDocLinksFromDOCS();
-    if (initCount > 0) {
-        console.log('✅ [FinalFix]', initCount, 'card di-inisialisasi');
-    }
+    // Jalankan segera
+    injectKelolaButtons();
     
-    // 2. Inject tombol segera
-    injectManageButtons();
-    
-    // 3. Setup observer
+    // Setup observer
     setupObserver();
     
-    // 4. Jalankan beberapa kali untuk memastikan
-    setTimeout(injectManageButtons, 1000);
-    setTimeout(injectManageButtons, 2500);
-    setTimeout(injectManageButtons, 5000);
+    // Jalankan beberapa kali untuk memastikan
+    setTimeout(injectKelolaButtons, 1000);
+    setTimeout(injectKelolaButtons, 2500);
+    setTimeout(injectKelolaButtons, 5000);
     
-    console.log('');
-    console.log('✅ [FinalFix] Patch terpasang');
-    console.log('═══════════════════════════════════════');
-    console.log('');
+    console.log('✅ [SimpleKelola] Patch terpasang');
 }
 
 if (document.readyState === 'loading') {
@@ -19467,10 +19398,11 @@ if (document.readyState === 'loading') {
 } else {
     init();
 }
+
 })();
 </script>
 <!-- ================================================================ -->
-<!-- ========== PATCH FINAL: FIX HALALIAH/WAHYUNI/RIZQI [END] ========== -->
+<!-- ========== PATCH FINAL SIMPLE: TOMBOL ⚙️ PASTI MUNCUL [END] ========== -->
 <!-- ================================================================ -->
 </body>
 </html>
