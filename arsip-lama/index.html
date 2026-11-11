@@ -19003,15 +19003,16 @@ document.addEventListener('visibilitychange',function(){
 </script>
 <!-- ========== PATCH MINIMAL [END] ========== -->
  <!-- ================================================================ -->
-<!-- ========== PATCH ULTIMATE: TOMBOL KELOLA LINK PASTI MUNCUL ========== -->
-<!-- ========== v4.0 - Direct DOM Injection | Nov 2026 ============== -->
+<!-- ========== PATCH UNIVERSAL: TOMBOL KELOLA LINK PASTI MUNCUL ========== -->
+<!-- ========== v5.0 - Universal Card Handler | Nov 2026 ============ -->
 <!-- ================================================================ -->
 <script>
 (function(){
 "use strict";
-const FLAG = '__fixKelolaLinkBtnULTIMATE';
+
+const FLAG = '__universalKelolaLinkPatched';
 if (window[FLAG]) {
-    console.log('ℹ️ [FixULTIMATE] Patch sudah terpasang');
+    console.log('ℹ️ [UniversalKelola] Patch sudah terpasang, skip');
     return;
 }
 window[FLAG] = true;
@@ -19047,74 +19048,85 @@ function setDocLinkData(docIdx, data) {
         all[docIdx] = data;
         localStorage.setItem(DOC_KEY, JSON.stringify(all));
     } catch(e) {
-        console.warn('⚠️ Gagal simpan:', e);
+        console.warn('⚠️ [UniversalKelola] Gagal simpan:', e);
     }
+}
+
+/* ================================================================
+* 🔑 HELPER: Cari docIdx dengan 3 metode fallback
+*    Metode 1: Dari onclick="bukaDoc(idx)" atau variannya
+*    Metode 2: Dari nama card yang match dengan DOCS
+*    Metode 3: Dari data attribute (jika ada)
+================================================================ */
+function findDocIdx(card) {
+    // Metode 1: Cari dari semua tombol di card
+    const allBtns = card.querySelectorAll('button, [onclick]');
+    for (let i = 0; i < allBtns.length; i++) {
+        const onclick = allBtns[i].getAttribute('onclick') || '';
+        const match = onclick.match(/(?:bukaDoc|openDocLinkFinal|openLinkModal|openMateriModal|openVideoModal)\((\d+)\)/);
+        if (match) return parseInt(match[1]);
+    }
+    
+    // Metode 2: Cari dari nama card (h3)
+    if (typeof DOCS !== 'undefined') {
+        const h3 = card.querySelector('h3');
+        if (h3) {
+            const cardName = h3.textContent.trim().toLowerCase();
+            for (let i = 0; i < DOCS.length; i++) {
+                if (DOCS[i].nama.toLowerCase() === cardName) {
+                    return i;
+                }
+            }
+        }
+    }
+    
+    return -1;
 }
 
 /* ================================================================
 * 🎯 FUNGSI UTAMA: Tambahkan tombol ⚙️ ke SEMUA card
 *    → Tidak bergantung pada render()
 *    → Langsung manipulate DOM
+*    → Berlaku untuk SEMUA kategori (kecuali materi yang sudah ada sistem sendiri)
 ================================================================ */
 function ensureKelolaButtons() {
     const grid = document.getElementById(GRID_ID);
     if (!grid) {
-        console.log('⏳ [FixULTIMATE] Grid belum ada, tunggu...');
+        console.log('⏳ [UniversalKelola] Grid belum ada, tunggu...');
         return;
     }
     
     const cards = grid.querySelectorAll('.a56-card');
-    console.log('🔍 [FixULTIMATE] Ditemukan', cards.length, 'card');
+    console.log('🔍 [UniversalKelola] Ditemukan', cards.length, 'card');
     
     let addedCount = 0;
     cards.forEach(function(card, index) {
-        // Skip jika sudah ada tombol
-        if (card.querySelector('.fix-kelola-ultimate')) return;
+        // Skip jika sudah ada tombol kelola universal
+        if (card.querySelector('.universal-kelola-btn')) return;
         
-        // Cari docIdx dengan berbagai metode
-        let docIdx = -1;
-        
-        // Metode 1: Cari dari onclick="bukaDoc(idx)"
-        const allBtns = card.querySelectorAll('button, [onclick]');
-        for (let i = 0; i < allBtns.length; i++) {
-            const onclick = allBtns[i].getAttribute('onclick') || '';
-            const match = onclick.match(/bukaDoc\((\d+)\)/);
-            if (match) {
-                docIdx = parseInt(match[1]);
-                break;
-            }
-        }
-        
-        // Metode 2: Cari dari nama card (fallback)
-        if (docIdx === -1 && typeof DOCS !== 'undefined') {
-            const h3 = card.querySelector('h3');
-            if (h3) {
-                const cardName = h3.textContent.trim();
-                for (let i = 0; i < DOCS.length; i++) {
-                    if (DOCS[i].nama === cardName) {
-                        docIdx = i;
-                        break;
-                    }
-                }
-            }
-        }
-        
+        // Cari docIdx
+        const docIdx = findDocIdx(card);
         if (docIdx === -1) {
-            console.log('❌ [FixULTIMATE] Card', index, 'tidak ada docIdx');
+            console.log('❌ [UniversalKelola] Card', index, 'tidak ada docIdx');
             return;
         }
         
         if (typeof DOCS === 'undefined' || !DOCS[docIdx]) {
-            console.log('❌ [FixULTIMATE] Card', index, 'DOCS[' + docIdx + '] tidak ada');
+            console.log('❌ [UniversalKelola] Card', index, 'DOCS[' + docIdx + '] tidak ada');
             return;
         }
         
+        const doc = DOCS[docIdx];
+        
+        // SKIP kategori materi (sudah ada sistem sendiri dengan modal materi)
+        if (doc.kat === 'materi') return;
+        
         // Buat tombol ⚙️
         const btn = document.createElement('button');
-        btn.className = 'fix-kelola-ultimate';
+        btn.className = 'universal-kelola-btn';
         btn.type = 'button';
         btn.innerHTML = '⚙️';
-        btn.title = 'Kelola Link Dokumen';
+        btn.title = 'Kelola Link: ' + doc.nama;
         btn.style.cssText = 'position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:10px;border:none;background:rgba(255,255,255,0.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;font-size:1.1rem;cursor:pointer;z-index:10;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.2);';
         
         btn.onmouseover = function() {
@@ -19129,22 +19141,24 @@ function ensureKelolaButtons() {
         btn.onclick = function(e) {
             e.stopPropagation();
             e.preventDefault();
-            openKelolaModalUltimate(docIdx);
+            openUniversalKelolaModal(docIdx);
         };
         
         card.style.position = 'relative';
         card.insertBefore(btn, card.firstChild);
         addedCount++;
-        console.log('✅ [FixULTIMATE] Tombol ditambahkan ke card', index, 'docIdx:', docIdx, 'nama:', DOCS[docIdx].nama);
+        console.log('✅ [UniversalKelola] Tombol ditambahkan ke card', index, 'docIdx:', docIdx, 'nama:', doc.nama, 'kat:', doc.kat);
     });
     
-    console.log('✅ [FixULTIMATE] Total tombol ditambahkan:', addedCount);
+    console.log('✅ [UniversalKelola] Total tombol ditambahkan:', addedCount);
 }
 
 /* ================================================================
-* 🎯 MODAL KELOLA LINK (Self-Contained)
+* 🎯 MODAL KELOLA LINK UNIVERSAL (Self-Contained)
+*    → Tidak bergantung fungsi eksternal
+*    → Handle semua kategori (kecuali materi)
 ================================================================ */
-function openKelolaModalUltimate(docIdx) {
+function openUniversalKelolaModal(docIdx) {
     if (typeof DOCS === 'undefined' || !DOCS[docIdx]) {
         if (typeof showToast === 'function') showToast('⚠️ Dokumen tidak ditemukan', 'error');
         return;
@@ -19153,14 +19167,15 @@ function openKelolaModalUltimate(docIdx) {
     const doc = DOCS[docIdx];
     const guru = (typeof GURU !== 'undefined' && GURU[doc.guru]) ? GURU[doc.guru] : { nama: doc.guru };
     const kelasLabel = (typeof KELAS !== 'undefined' && KELAS[doc.kelas]) ? KELAS[doc.kelas] : doc.kelas.toUpperCase();
+    const katLabel = (typeof KAT !== 'undefined' && KAT[doc.kat]) ? KAT[doc.kat][1] : doc.kat;
     
     // Hapus modal lama
-    const oldModal = document.getElementById('fix-kelola-modal-ultimate');
+    const oldModal = document.getElementById('universal-kelola-modal');
     if (oldModal) oldModal.remove();
     
     // Buat modal
     const modal = document.createElement('div');
-    modal.id = 'fix-kelola-modal-ultimate';
+    modal.id = 'universal-kelola-modal';
     modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;z-index:100004;padding:20px;overflow-y:auto;';
     
     const box = document.createElement('div');
@@ -19170,7 +19185,7 @@ function openKelolaModalUltimate(docIdx) {
     const header = document.createElement('div');
     header.style.cssText = 'background:linear-gradient(135deg,#059669,#047857);color:#fff;padding:20px 24px;';
     header.innerHTML = '<h3 style="font-family:\'Space Grotesk\',sans-serif;font-size:1.1rem;margin-bottom:4px;font-weight:700;">🔗 Kelola Link: ' + esc(doc.nama) + '</h3>' +
-        '<p style="font-size:0.85rem;opacity:0.9;">' + esc(guru.nama) + ' • ' + kelasLabel + '</p>';
+        '<p style="font-size:0.85rem;opacity:0.9;">' + esc(guru.nama) + ' • ' + kelasLabel + ' • ' + katLabel + '</p>';
     
     // Body
     const body = document.createElement('div');
@@ -19191,7 +19206,7 @@ function openKelolaModalUltimate(docIdx) {
     } else {
         listHtml += '<div style="display:flex;flex-direction:column;gap:8px;">';
         
-        // Tampilkan link dari DOCS array
+        // Tampilkan link dari DOCS array (link bawaan)
         if (docsLink) {
             listHtml += '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,#dbeafe,#bfdbfe);border:1px solid #60a5fa;border-radius:10px;">' +
                 '<div style="background:#3b82f6;color:#fff;min-width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;flex-shrink:0;">📌</div>' +
@@ -19206,7 +19221,7 @@ function openKelolaModalUltimate(docIdx) {
             listHtml += '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:1px solid #a7f3d0;border-radius:10px;">' +
                 '<div style="background:#10b981;color:#fff;min-width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;flex-shrink:0;">' + (i+1) + '</div>' +
                 '<a href="' + esc(url) + '" target="_blank" rel="noopener" style="flex:1;font-size:0.82rem;color:#047857;font-family:Consolas,Monaco,monospace;word-break:break-all;text-decoration:none;line-height:1.4;" title="' + esc(url) + '">' + esc(displayUrl) + '</a>' +
-                '<button onclick="fixRemoveLinkUltimate(' + docIdx + ',' + i + ')" title="Hapus" style="width:30px;height:30px;border-radius:8px;border:none;background:#ef4444;color:#fff;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🗑️</button>' +
+                '<button onclick="universalRemoveLink(' + docIdx + ',' + i + ')" title="Hapus" style="width:30px;height:30px;border-radius:8px;border:none;background:#ef4444;color:#fff;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🗑️</button>' +
                 '</div>';
         });
         
@@ -19215,8 +19230,8 @@ function openKelolaModalUltimate(docIdx) {
     
     // Input tambah link
     listHtml += '<div style="margin-top:16px;padding-top:16px;border-top:1px dashed #a7f3d0;display:flex;gap:8px;flex-wrap:wrap;">' +
-        '<input type="text" id="fix-input-link-ultimate-' + docIdx + '" placeholder="Tempel URL dokumen di sini..." style="flex:1;min-width:200px;padding:10px 14px;border:2px solid #a7f3d0;border-radius:10px;font-size:0.85rem;outline:none;font-family:inherit;" onkeypress="if(event.key===\'Enter\')fixAddLinkUltimate(' + docIdx + ')">' +
-        '<button onclick="fixAddLinkUltimate(' + docIdx + ')" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;white-space:nowrap;">➕ Tambah</button>' +
+        '<input type="text" id="universal-input-link-' + docIdx + '" placeholder="Tempel URL dokumen di sini..." style="flex:1;min-width:200px;padding:10px 14px;border:2px solid #a7f3d0;border-radius:10px;font-size:0.85rem;outline:none;font-family:inherit;" onkeypress="if(event.key===\'Enter\')universalAddLink(' + docIdx + ')">' +
+        '<button onclick="universalAddLink(' + docIdx + ')" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;white-space:nowrap;">➕ Tambah</button>' +
         '</div>';
     
     body.innerHTML = listHtml;
@@ -19225,7 +19240,7 @@ function openKelolaModalUltimate(docIdx) {
     const footer = document.createElement('div');
     footer.style.cssText = 'padding:14px 24px;background:#ecfdf5;border-top:1px solid #a7f3d0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;';
     footer.innerHTML = '<div style="font-size:0.78rem;color:#047857;font-weight:600;">💾 Link tersimpan di browser</div>' +
-        '<button onclick="document.getElementById(\'fix-kelola-modal-ultimate\').remove()" style="background:#f1f5f9;color:#047857;border:none;padding:10px 20px;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:inherit;">✖ Tutup</button>';
+        '<button onclick="document.getElementById(\'universal-kelola-modal\').remove()" style="background:#f1f5f9;color:#047857;border:none;padding:10px 20px;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:inherit;">✖ Tutup</button>';
     
     box.appendChild(header);
     box.appendChild(body);
@@ -19238,14 +19253,14 @@ function openKelolaModalUltimate(docIdx) {
     };
     
     document.body.appendChild(modal);
-    console.log('✅ [FixULTIMATE] Modal dibuka untuk:', doc.nama);
+    console.log('✅ [UniversalKelola] Modal dibuka untuk:', doc.nama);
 }
 
 /* ================================================================
-* ➕ Tambah Link
+* ➕ Tambah Link (Global)
 ================================================================ */
-window.fixAddLinkUltimate = function(docIdx) {
-    const input = document.getElementById('fix-input-link-ultimate-' + docIdx);
+window.universalAddLink = function(docIdx) {
+    const input = document.getElementById('universal-input-link-' + docIdx);
     if (!input) return;
     const url = input.value.trim();
     if (!url) {
@@ -19262,42 +19277,34 @@ window.fixAddLinkUltimate = function(docIdx) {
     data.push(finalUrl);
     setDocLinkData(docIdx, data);
     
-    // Update DOCS array
+    // Update DOCS array juga
     if (typeof DOCS !== 'undefined' && DOCS[docIdx]) {
         DOCS[docIdx].link = finalUrl;
-        console.log('✅ [FixULTIMATE] Link disimpan ke DOCS[' + docIdx + ']:', finalUrl);
+        console.log('✅ [UniversalKelola] Link disimpan ke DOCS[' + docIdx + ']:', finalUrl);
     }
     
     input.value = '';
     if (typeof showToast === 'function') showToast('✅ Link berhasil ditambahkan!', 'success');
     
     // Refresh modal
-    const oldModal = document.getElementById('fix-kelola-modal-ultimate');
+    const oldModal = document.getElementById('universal-kelola-modal');
     if (oldModal) oldModal.remove();
-    setTimeout(function() { openKelolaModalUltimate(docIdx); }, 100);
-    
-    // Refresh card
-    if (typeof render === 'function') {
-        try { render(true); } catch(e) {}
-    }
+    setTimeout(function() { openUniversalKelolaModal(docIdx); }, 100);
 };
 
 /* ================================================================
-* 🗑️ Hapus Link
+* 🗑️ Hapus Link (Global)
 ================================================================ */
-window.fixRemoveLinkUltimate = function(docIdx, linkIdx) {
+window.universalRemoveLink = function(docIdx, linkIdx) {
     if (!confirm('🗑️ Yakin ingin menghapus link ini?')) return;
     const data = getDocLinkData(docIdx);
     if (data[linkIdx] !== undefined) {
         data.splice(linkIdx, 1);
         setDocLinkData(docIdx, data);
         if (typeof showToast === 'function') showToast('🗑️ Link berhasil dihapus', 'info');
-        const oldModal = document.getElementById('fix-kelola-modal-ultimate');
+        const oldModal = document.getElementById('universal-kelola-modal');
         if (oldModal) oldModal.remove();
-        setTimeout(function() { openKelolaModalUltimate(docIdx); }, 100);
-        if (typeof render === 'function') {
-            try { render(true); } catch(e) {}
-        }
+        setTimeout(function() { openUniversalKelolaModal(docIdx); }, 100);
     }
 };
 
@@ -19329,15 +19336,15 @@ function setupObserver() {
         subtree: true
     });
     
-    console.log('✅ [FixULTIMATE] MutationObserver aktif');
+    console.log('✅ [UniversalKelola] MutationObserver aktif');
 }
 
 /* ================================================================
 * 🚀 INIT: Tunggu grid benar-benar ada
 ================================================================ */
 function init() {
-    console.log('🚀 [FixULTIMATE] Patch dimulai...');
-    console.log('📌 Memperbaiki: Tombol ⚙️ Kelola Link pasti muncul di semua card');
+    console.log('🚀 [UniversalKelola] Patch dimulai...');
+    console.log('📌 Memperbaiki: Tombol ⚙️ Kelola Link pasti muncul di semua card (Halaliah, Wahyuni, Rizqi)');
     
     // Tunggu grid ada dan punya children
     let attempts = 0;
@@ -19347,7 +19354,7 @@ function init() {
         
         if (grid && grid.children.length > 0) {
             clearInterval(checkGrid);
-            console.log('✅ [FixULTIMATE] Grid ditemukan dengan', grid.children.length, 'card');
+            console.log('✅ [UniversalKelola] Grid ditemukan dengan', grid.children.length, 'card');
             
             // Jalankan segera
             ensureKelolaButtons();
@@ -19360,10 +19367,10 @@ function init() {
             setTimeout(ensureKelolaButtons, 2500);
             setTimeout(ensureKelolaButtons, 5000);
             
-            console.log('✅ [FixULTIMATE] Patch terpasang');
+            console.log('✅ [UniversalKelola] Patch terpasang');
         } else if (attempts > 100) {
             clearInterval(checkGrid);
-            console.log('❌ [FixULTIMATE] Grid tidak ditemukan setelah 10 detik');
+            console.log('❌ [UniversalKelola] Grid tidak ditemukan setelah 10 detik');
         }
     }, 100);
 }
@@ -19376,7 +19383,7 @@ if (document.readyState === 'loading') {
 })();
 </script>
 <!-- ================================================================ -->
-<!-- ========== PATCH ULTIMATE: TOMBOL KELOLA LINK PASTI MUNCUL [END] ========== -->
+<!-- ========== PATCH UNIVERSAL: TOMBOL KELOLA LINK PASTI MUNCUL [END] ========== -->
 <!-- ================================================================ -->
 </body>
 </html>
