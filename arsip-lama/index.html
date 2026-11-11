@@ -18889,4 +18889,567 @@ document.addEventListener('visibilitychange',function(){
 })();
 </script>
 <!-- ========== PATCH MINIMAL [END] ========== -->
+<!-- ================================================================ -->
+<!-- ========== PATCH: DIRECT-TO-CARD LINK STORAGE v1.0 ========== -->
+<!-- ========== Link tersimpan di Card + Push langsung ke Sheet ========== -->
+<!-- ========== Anti-Conflict | Nov 2026 ========== -->
+<!-- ================================================================ -->
+<script>
+(function(){
+"use strict";
+/* ================================================================
+* PATCH: DIRECT-TO-CARD LINK STORAGE v1.0
+* ================================================================
+* MASALAH YANG DIPECAHKAN:
+* ❌ Sebelumnya: Link disimpan di localStorage → tidak muncul di card
+* ❌ Push ke Sheet tidak mengirim data dari card
+*
+* SOLUSI:
+* ✅ Link langsung tersimpan di DOCS[idx].link (in-memory) + embedded JSON
+* ✅ Card langsung menampilkan link yang disematkan
+* ✅ Push ke Sheet mengambil data dari DOCS + embedded JSON
+* ✅ Berlaku untuk SEMUA card di SEMUA filter (Materi, Video, Dokumen)
+* ✅ Backward compatible dengan localStorage (sebagai backup)
+*
+* ATURAN ANTI-CONFLICT:
+* ❌ TIDAK override setInterval/addEventListener global
+* ❌ TIDAK menghapus patch yang sudah ada
+* ✅ HANYA hook fungsi add/remove/render/push
+* ✅ Flag: window.__directToCardPatched
+* ✅ Namespace: dtc- (Direct-To-Card)
+================================================================ */
+const FLAG = '__directToCardPatched';
+if (window[FLAG]) {
+console.log('ℹ️ [DTC] Patch sudah terpasang, skip');
+return;
+}
+window[FLAG] = true;
+
+const EMB_ID = 'bk56-embedded-data';
+const MATERI_KEY = 'bk56_materi_links';
+const VIDEO_KEY = 'bk56_video_links';
+const DOC_KEY = 'bk56_doc_links';
+
+/* ================================================================
+* 🔑 HELPER 1: Baca Embedded JSON
+================================================================ */
+function dtcReadEmb() {
+try {
+const el = document.getElementById(EMB_ID);
+if (!el) return null;
+return JSON.parse(el.textContent) || null;
+} catch(e) {
+return null;
+}
+}
+
+/* ================================================================
+* 🔑 HELPER 2: Tulis Embedded JSON
+================================================================ */
+function dtcWriteEmb(data) {
+try {
+const el = document.getElementById(EMB_ID);
+if (!el) return false;
+el.textContent = JSON.stringify(data);
+return true;
+} catch(e) {
+return false;
+}
+}
+
+/* ================================================================
+* 🔑 HELPER 3: Sync DOCS ke Embedded JSON
+*    → Simpan semua link dari DOCS ke embedded JSON
+================================================================ */
+function dtcSyncDocsToEmbedded() {
+if (typeof DOCS === 'undefined' || !Array.isArray(DOCS)) return;
+
+const emb = dtcReadEmb() || { materi:{}, video:{}, docLinks:{} };
+
+// Sync docLinks dari DOCS
+emb.docLinks = {};
+DOCS.forEach(function(d, idx) {
+if (d.link && d.link.trim() !== '') {
+emb.docLinks[idx] = [d.link];
+}
+});
+
+// Sync materi & video dari localStorage (jika ada)
+try {
+const m = localStorage.getItem(MATERI_KEY);
+if (m) emb.materi = JSON.parse(m);
+} catch(e) {}
+try {
+const v = localStorage.getItem(VIDEO_KEY);
+if (v) emb.video = JSON.parse(v);
+} catch(e) {}
+
+emb.lastUpdated = new Date().toISOString();
+emb.dtcPatch = '1.0.0';
+
+const ok = dtcWriteEmb(emb);
+if (ok) console.log('✅ [DTC] DOCS synced ke embedded JSON');
+return ok;
+}
+
+/* ================================================================
+* 🔑 HELPER 4: Restore DOCS dari Embedded JSON
+*    → Saat halaman load, kembalikan DOCS dari embedded JSON
+================================================================ */
+function dtcRestoreDocsFromEmbedded() {
+if (typeof DOCS === 'undefined' || !Array.isArray(DOCS)) return 0;
+
+const emb = dtcReadEmb();
+if (!emb || !emb.docLinks) return 0;
+
+let restored = 0;
+Object.keys(emb.docLinks).forEach(function(idxStr) {
+const idx = parseInt(idxStr, 10);
+const links = emb.docLinks[idxStr];
+if (DOCS[idx] && Array.isArray(links) && links.length > 0) {
+// Ambil link pertama (untuk single link di card)
+DOCS[idx].link = links[0];
+restored++;
+}
+});
+
+if (restored > 0) {
+console.log('✅ [DTC] DOCS dipulihkan dari embedded JSON (' + restored + ' card)');
+}
+return restored;
+}
+
+/* ================================================================
+* 🎯 LAYER 1: Hook addDocLink → Simpan ke DOCS + Embedded
+================================================================ */
+function dtcHookAddDocLink() {
+if (typeof window.addDocLink !== 'function') {
+setTimeout(dtcHookAddDocLink, 500);
+return;
+}
+if (window.addDocLink.__dtcHooked) return;
+
+const _orig = window.addDocLink;
+window.addDocLink = function() {
+// Panggil fungsi asli (simpan ke localStorage)
+const result = _orig.apply(this, arguments);
+
+// 🔑 TAMBAHAN: Simpan ke DOCS + Embedded JSON
+setTimeout(function() {
+if (typeof currentLinkEdit !== 'undefined' && currentLinkEdit) {
+const docIdx = currentLinkEdit.docIdx;
+try {
+const raw = localStorage.getItem(DOC_KEY);
+if (raw) {
+const all = JSON.parse(raw);
+const list = all[docIdx];
+if (list && list.length > 0 && DOCS[docIdx]) {
+// Simpan link pertama ke DOCS[idx].link
+DOCS[docIdx].link = list[0];
+console.log('✅ [DTC] Link disimpan ke DOCS[' + docIdx + ']:', list[0].slice(0, 50));
+
+// Sync ke embedded JSON
+dtcSyncDocsToEmbedded();
+
+// Refresh kartu agar link muncul
+if (typeof render === 'function') {
+try { render(true); } catch(e) {}
+}
+}
+}
+} catch(e) {
+console.warn('⚠️ [DTC] Gagal sync ke DOCS:', e);
+}
+}
+}, 200);
+
+return result;
+};
+window.addDocLink.__dtcHooked = true;
+console.log('✅ [DTC] addDocLink di-hook');
+}
+
+/* ================================================================
+* 🎯 LAYER 2: Hook removeDocLink → Update DOCS + Embedded
+================================================================ */
+function dtcHookRemoveDocLink() {
+if (typeof window.removeDocLink !== 'function') {
+setTimeout(dtcHookRemoveDocLink, 500);
+return;
+}
+if (window.removeDocLink.__dtcHooked) return;
+
+const _orig = window.removeDocLink;
+window.removeDocLink = function(idx) {
+// Panggil fungsi asli
+const result = _orig.apply(this, arguments);
+
+// 🔑 TAMBAHAN: Update DOCS + Embedded JSON
+setTimeout(function() {
+if (typeof currentLinkEdit !== 'undefined' && currentLinkEdit) {
+const docIdx = currentLinkEdit.docIdx;
+try {
+const raw = localStorage.getItem(DOC_KEY);
+if (raw) {
+const all = JSON.parse(raw);
+const list = all[docIdx];
+if (DOCS[docIdx]) {
+if (list && list.length > 0) {
+DOCS[docIdx].link = list[0];
+} else {
+DOCS[docIdx].link = '';
+}
+console.log('✅ [DTC] DOCS[' + docIdx + '] di-update');
+dtcSyncDocsToEmbedded();
+if (typeof render === 'function') {
+try { render(true); } catch(e) {}
+}
+}
+}
+} catch(e) {}
+}
+}, 200);
+
+return result;
+};
+window.removeDocLink.__dtcHooked = true;
+console.log('✅ [DTC] removeDocLink di-hook');
+}
+
+/* ================================================================
+* 🎯 LAYER 3: Hook addMateriLink → Simpan ke Embedded
+================================================================ */
+function dtcHookAddMateriLink() {
+if (typeof window.addMateriLink !== 'function') {
+setTimeout(dtcHookAddMateriLink, 500);
+return;
+}
+if (window.addMateriLink.__dtcHooked) return;
+
+const _orig = window.addMateriLink;
+window.addMateriLink = function(type) {
+const result = _orig.apply(this, arguments);
+
+setTimeout(function() {
+dtcSyncDocsToEmbedded();
+console.log('✅ [DTC] Materi link synced ke embedded');
+}, 200);
+
+return result;
+};
+window.addMateriLink.__dtcHooked = true;
+console.log('✅ [DTC] addMateriLink di-hook');
+}
+
+/* ================================================================
+* 🎯 LAYER 4: Hook addVideoLink → Simpan ke Embedded
+================================================================ */
+function dtcHookAddVideoLink() {
+if (typeof window.addVideoLink !== 'function') {
+setTimeout(dtcHookAddVideoLink, 500);
+return;
+}
+if (window.addVideoLink.__dtcHooked) return;
+
+const _orig = window.addVideoLink;
+window.addVideoLink = function() {
+const result = _orig.apply(this, arguments);
+
+setTimeout(function() {
+dtcSyncDocsToEmbedded();
+console.log('✅ [DTC] Video link synced ke embedded');
+}, 200);
+
+return result;
+};
+window.addVideoLink.__dtcHooked = true;
+console.log('✅ [DTC] addVideoLink di-hook');
+}
+
+/* ================================================================
+* 🎯 LAYER 5: Override bk56SyncToSheet → Kirim dari DOCS + Embedded
+================================================================ */
+function dtcOverridePushToSheet() {
+if (typeof window.bk56SyncToSheet !== 'function') {
+setTimeout(dtcOverridePushToSheet, 500);
+return;
+}
+if (window.bk56SyncToSheet.__dtcOverridden) return;
+
+const _orig = window.bk56SyncToSheet;
+window.bk56SyncToSheet = async function() {
+const backendUrl = localStorage.getItem('bk56_backend_url');
+if (!backendUrl) {
+if (typeof showToast === 'function') {
+showToast('⚠️ Backend belum dikonfigurasi', 'error');
+}
+return;
+}
+
+if (typeof showToast === 'function') {
+showToast('🔄 Mengirim data dari Card ke Google Sheets...', 'info');
+}
+
+console.log('🚀 [DTC] Push to Sheet dimulai...');
+
+// 🔑 KUNCI: Ambil data dari DOCS + Embedded JSON (bukan localStorage)
+const allLinks = [];
+
+// 1. Dari DOCS array (link yang tersemat di card)
+if (typeof DOCS !== 'undefined' && Array.isArray(DOCS)) {
+DOCS.forEach(function(d, idx) {
+if (d.link && d.link.trim() !== '') {
+allLinks.push({
+kelas: d.kelas,
+guru: d.guru,
+kategori: d.kat,
+nama: d.nama,
+jenis: 'doc',
+url: d.link
+});
+}
+});
+}
+
+// 2. Dari embedded JSON (materi & video)
+const emb = dtcReadEmb();
+if (emb) {
+// Materi
+if (emb.materi) {
+Object.keys(emb.materi).forEach(function(key) {
+const parts = key.split('_');
+if (parts.length < 3) return;
+const [kelas, guru, materiIdx] = parts;
+const d = emb.materi[key];
+['ppt','pdf','doc','video'].forEach(function(t) {
+if (d[t] && Array.isArray(d[t])) {
+d[t].forEach(function(url) {
+allLinks.push({
+kelas: kelas,
+guru: guru,
+kategori: 'materi',
+nama: 'Materi ' + (parseInt(materiIdx)+1),
+jenis: t,
+url: url
+});
+});
+}
+});
+});
+}
+
+// Video
+if (emb.video) {
+Object.keys(emb.video).forEach(function(idx) {
+const list = emb.video[idx];
+if (Array.isArray(list)) {
+list.forEach(function(url) {
+allLinks.push({
+kelas: '-',
+guru: '-',
+kategori: 'video',
+nama: 'Video ' + (parseInt(idx)+1),
+jenis: 'video',
+url: url
+});
+});
+}
+});
+}
+}
+
+console.log('📊 [DTC] Total link yang akan di-push:', allLinks.length);
+
+if (allLinks.length === 0) {
+if (typeof showToast === 'function') {
+showToast('⚠️ Tidak ada link untuk di-push', 'error');
+}
+return;
+}
+
+// 🔑 Fetch existing URLs dari sheet (anti-duplikat)
+let existingUrls = new Set();
+try {
+const res = await fetch(backendUrl, { method: 'GET', redirect: 'follow' });
+const json = await res.json();
+if (json.success && Array.isArray(json.data)) {
+json.data.forEach(function(d) {
+if (d.URL) existingUrls.add(String(d.URL).trim().toLowerCase());
+});
+}
+} catch(e) {
+console.warn('⚠️ [DTC] Gagal fetch existing URLs:', e);
+}
+
+// 🔑 Push hanya yang baru
+let pushed = 0;
+let failed = 0;
+
+for (const link of allLinks) {
+const urlLower = String(link.url).trim().toLowerCase();
+if (existingUrls.has(urlLower)) {
+console.log('⏭️ [DTC] Skip (sudah ada):', link.nama);
+continue;
+}
+
+try {
+const res = await fetch(backendUrl, {
+method: 'POST',
+redirect: 'follow',
+headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+body: JSON.stringify({
+action: 'add',
+kelas: link.kelas,
+guru: link.guru,
+kategori: link.kategori,
+nama: link.nama,
+jenis: link.jenis,
+url: link.url
+})
+});
+const json = await res.json();
+if (json.success) {
+pushed++;
+existingUrls.add(urlLower);
+} else {
+failed++;
+}
+} catch(e) {
+failed++;
+console.warn('⚠️ [DTC] Gagal push:', link.nama, e);
+}
+}
+
+console.log('✅ [DTC] Push selesai:', pushed, 'berhasil,', failed, 'gagal');
+
+if (typeof showToast === 'function') {
+if (failed > 0) {
+showToast('⚠️ ' + pushed + ' link di-push, ' + failed + ' gagal', 'error');
+} else {
+showToast('✅ ' + pushed + ' link berhasil dikirim ke Google Sheets', 'success');
+}
+}
+
+// Refresh rekap
+if (typeof window.bk56FetchFromSheet === 'function') {
+try { await window.bk56FetchFromSheet(); } catch(e) {}
+}
+if (typeof window.bk56RenderRekap === 'function') {
+try { window.bk56RenderRekap(); } catch(e) {}
+}
+};
+
+window.bk56SyncToSheet.__dtcOverridden = true;
+console.log('✅ [DTC] bk56SyncToSheet di-override → ambil dari DOCS + Embedded');
+}
+
+/* ================================================================
+* 🎯 LAYER 6: Hook render → Tampilkan link dari DOCS
+================================================================ */
+function dtcHookRender() {
+if (typeof window.render !== 'function') {
+setTimeout(dtcHookRender, 500);
+return;
+}
+if (window.render.__dtcHooked) return;
+
+const _orig = window.render;
+window.render = function(hanyaKartu) {
+// 🔑 SEBELUM render, pastikan DOCS punya link dari embedded JSON
+dtcRestoreDocsFromEmbedded();
+
+// Panggil render asli
+_orig.apply(this, arguments);
+};
+
+window.render.__dtcHooked = true;
+console.log('✅ [DTC] render di-hook → restore DOCS dari embedded');
+}
+
+/* ================================================================
+* 🎯 LAYER 7: Hook bk56BackupToHTML → Include DOCS di backup
+================================================================ */
+function dtcHookBackup() {
+if (typeof window.bk56BackupToHTML !== 'function') {
+setTimeout(dtcHookBackup, 500);
+return;
+}
+if (window.bk56BackupToHTML.__dtcHooked) return;
+
+const _orig = window.bk56BackupToHTML;
+window.bk56BackupToHTML = function() {
+// 🔑 Sync DOCS ke embedded SEBELUM backup
+dtcSyncDocsToEmbedded();
+console.log('✅ [DTC] DOCS ter-embed sebelum backup');
+
+return _orig.apply(this, arguments);
+};
+
+window.bk56BackupToHTML.__dtcHooked = true;
+console.log('✅ [DTC] bk56BackupToHTML di-hook');
+}
+
+/* ================================================================
+* 🚀 INIT: Pasang semua layer
+================================================================ */
+function init() {
+console.log('');
+console.log('═══════════════════════════════════════');
+console.log('🚀 [DTC] Direct-To-Card Link Storage v1.0');
+console.log('═══════════════════════════════════════');
+console.log('📌 Fitur:');
+console.log('   ✅ Link tersimpan di DOCS array (in-memory)');
+console.log('   ✅ Link tersimpan di embedded JSON (permanen di HTML)');
+console.log('   ✅ Card langsung menampilkan link yang disematkan');
+console.log('   ✅ Push ke Sheet mengambil dari DOCS + Embedded');
+console.log('   ✅ Berlaku untuk SEMUA card di SEMUA filter');
+console.log('   ✅ Backward compatible dengan localStorage');
+console.log('');
+
+// 1. Restore DOCS dari embedded (saat load)
+const restored = dtcRestoreDocsFromEmbedded();
+if (restored > 0) {
+console.log('✅ [DTC] DOCS dipulihkan dari embedded (' + restored + ' card)');
+}
+
+// 2. Hook fungsi-fungsi inti
+dtcHookAddDocLink();
+dtcHookRemoveDocLink();
+dtcHookAddMateriLink();
+dtcHookAddVideoLink();
+dtcOverridePushToSheet();
+dtcHookRender();
+dtcHookBackup();
+
+// 3. Initial sync
+setTimeout(function() {
+dtcSyncDocsToEmbedded();
+if (typeof render === 'function') {
+try { render(true); } catch(e) {}
+}
+}, 1500);
+
+console.log('');
+console.log('📌 CARA PAKAI:');
+console.log('   1. Klik ⚙️ di card → Tambah Link');
+console.log('   2. Link langsung muncul di card');
+console.log('   3. Klik 💾 Push ke Sheet → link terkirim ke Google Sheets');
+console.log('   4. Klik 💾 Backup Permanen → link tersimpan di HTML');
+console.log('');
+console.log('✅ [DTC] Patch terpasang — semua layer aktif');
+console.log('═══════════════════════════════════════');
+console.log('');
+}
+
+// Jalankan init
+if (document.readyState === 'loading') {
+document.addEventListener('DOMContentLoaded', init);
+} else {
+init();
+}
+})();
+</script>
+<!-- ================================================================ -->
+<!-- ========== PATCH: DIRECT-TO-CARD LINK STORAGE [END] ========== -->
+<!-- ================================================================ -->
 </body></html>
