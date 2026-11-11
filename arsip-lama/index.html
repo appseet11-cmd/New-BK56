@@ -19452,4 +19452,367 @@ init();
 <!-- ================================================================ -->
 <!-- ========== PATCH: DIRECT-TO-CARD LINK STORAGE [END] ========== -->
 <!-- ================================================================ -->
+<!-- ================================================================ -->
+<!-- ========== PATCH FIX: TOMBOL KELOLA LINK PASTI MUNCUL ========== -->
+<!-- ========== Untuk Semua Card Non-Materi | Nov 2026 ============== -->
+<!-- ================================================================ -->
+<script>
+(function(){
+"use strict";
+
+const FLAG = '__fixKelolaLinkBtn';
+if (window[FLAG]) { console.log('ℹ️ [FixKelolaLink] Sudah terpasang'); return; }
+window[FLAG] = true;
+
+const GRID_ID = 'grid-dokumen';
+const DOC_KEY = 'bk56_doc_links';
+
+/* ================================================================
+* 🔑 HELPER: Load link dari localStorage
+================================================================ */
+function getDocLinkData(docIdx) {
+try {
+const raw = localStorage.getItem(DOC_KEY);
+if (raw) {
+const all = JSON.parse(raw);
+return all[docIdx] || [];
+}
+} catch(e) {}
+return [];
+}
+
+/* ================================================================
+* 🔑 HELPER: Simpan link ke localStorage
+================================================================ */
+function setDocLinkData(docIdx, data) {
+try {
+const raw = localStorage.getItem(DOC_KEY);
+const all = raw ? JSON.parse(raw) : {};
+all[docIdx] = data;
+localStorage.setItem(DOC_KEY, JSON.stringify(all));
+} catch(e) {
+console.warn('⚠️ [FixKelolaLink] Gagal simpan:', e);
+}
+}
+
+/* ================================================================
+* 🔑 HELPER: Escape HTML
+================================================================ */
+function esc(s) {
+return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ================================================================
+* 🎯 FUNGSI UTAMA: Tambahkan tombol ⚙️ ke SEMUA card non-materi
+*    → Dipanggil via MutationObserver (paling reliable)
+================================================================ */
+function ensureKelolaLinkButtons() {
+const grid = document.getElementById(GRID_ID);
+if (!grid) return;
+
+const cards = grid.querySelectorAll('.a56-card');
+cards.forEach(function(card) {
+// Skip jika sudah ada tombol kelola
+if (card.querySelector('.fix-kelola-link-btn')) return;
+
+// Cek kategori dari data-kat attribute
+const kat = card.getAttribute('data-kat');
+if (kat === 'materi') return; // Skip materi (sudah ada sistem sendiri)
+
+// Cari docIdx dari tombol bukaDoc
+const btn = card.querySelector('[onclick*="bukaDoc("]');
+if (!btn) return;
+
+const onclickAttr = btn.getAttribute('onclick') || '';
+const match = onclickAttr.match(/bukaDoc\((\d+)\)/);
+if (!match) return;
+
+const docIdx = parseInt(match[1]);
+const doc = (typeof DOCS !== 'undefined') ? DOCS[docIdx] : null;
+if (!doc) return;
+
+// Buat tombol ⚙️ Kelola Link
+const kelolaBtn = document.createElement('button');
+kelolaBtn.className = 'fix-kelola-link-btn';
+kelolaBtn.type = 'button';
+kelolaBtn.style.cssText = [
+'position:absolute',
+'top:10px',
+'right:10px',
+'width:36px',
+'height:36px',
+'border-radius:10px',
+'border:none',
+'background:rgba(255,255,255,0.25)',
+'backdrop-filter:blur(10px)',
+'-webkit-backdrop-filter:blur(10px)',
+'color:#fff',
+'font-size:1.1rem',
+'cursor:pointer',
+'z-index:10',
+'transition:all 0.2s ease',
+'display:flex',
+'align-items:center',
+'justify-content:center',
+'box-shadow:0 2px 8px rgba(0,0,0,0.2)'
+].join(';');
+kelolaBtn.innerHTML = '⚙️';
+kelolaBtn.title = 'Kelola Link Dokumen';
+
+kelolaBtn.onmouseover = function() {
+this.style.background = 'rgba(255,255,255,0.4)';
+this.style.transform = 'scale(1.1)';
+};
+kelolaBtn.onmouseout = function() {
+this.style.background = 'rgba(255,255,255,0.25)';
+this.style.transform = 'scale(1)';
+};
+
+kelolaBtn.onclick = function(e) {
+e.stopPropagation();
+e.preventDefault();
+openFixKelolaModal(docIdx);
+};
+
+// Pastikan card position:relative agar tombol absolute bekerja
+card.style.position = 'relative';
+
+// Sisipkan tombol di awal card (sebelum konten lain)
+if (card.firstChild) {
+card.insertBefore(kelolaBtn, card.firstChild);
+} else {
+card.appendChild(kelolaBtn);
+}
+
+console.log('✅ [FixKelolaLink] Tombol ⚙️ ditambahkan ke card:', doc.nama, '(idx:', docIdx + ')');
+});
+}
+
+/* ================================================================
+* 🎯 MODAL KELOLA LINK (Self-Contained)
+================================================================ */
+function openFixKelolaModal(docIdx) {
+if (typeof DOCS === 'undefined' || !DOCS[docIdx]) {
+if (typeof showToast === 'function') showToast('⚠️ Dokumen tidak ditemukan', 'error');
+return;
+}
+
+const doc = DOCS[docIdx];
+const guru = (typeof GURU !== 'undefined' && GURU[doc.guru]) ? GURU[doc.guru] : { nama: doc.guru };
+const kelasLabel = (typeof KELAS !== 'undefined' && KELAS[doc.kelas]) ? KELAS[doc.kelas] : doc.kelas.toUpperCase();
+
+// Hapus modal lama jika ada
+const oldModal = document.getElementById('fix-kelola-modal');
+if (oldModal) oldModal.remove();
+
+// Buat modal
+const modal = document.createElement('div');
+modal.id = 'fix-kelola-modal';
+modal.style.cssText = [
+'position:fixed', 'inset:0',
+'background:rgba(0,0,0,0.75)',
+'backdrop-filter:blur(10px)',
+'-webkit-backdrop-filter:blur(10px)',
+'display:flex', 'align-items:center', 'justify-content:center',
+'z-index:100004', 'padding:20px', 'overflow-y:auto'
+].join(';');
+
+const box = document.createElement('div');
+box.style.cssText = [
+'background:#fff', 'border-radius:20px',
+'max-width:600px', 'width:100%',
+'max-height:90vh', 'overflow:hidden',
+'display:flex', 'flex-direction:column',
+'box-shadow:0 25px 60px rgba(0,0,0,0.3)',
+'animation:fixKelolaPop 0.35s cubic-bezier(.22,1,.36,1)'
+].join(';');
+
+// Header
+const header = document.createElement('div');
+header.style.cssText = 'background:linear-gradient(135deg,#059669,#047857);color:#fff;padding:20px 24px;';
+header.innerHTML = '<h3 style="font-family:\'Space Grotesk\',sans-serif;font-size:1.1rem;margin-bottom:4px;font-weight:700;">🔗 Kelola Link: ' + esc(doc.nama) + '</h3>' +
+'<p style="font-size:0.85rem;opacity:0.9;">' + esc(guru.nama) + ' • ' + kelasLabel + ' • ' + (typeof KAT !== 'undefined' && KAT[doc.kat] ? KAT[doc.kat][1] : doc.kat) + '</p>';
+
+// Body
+const body = document.createElement('div');
+body.style.cssText = 'padding:20px 24px;flex:1;overflow-y:auto;background:#fff;';
+
+// Tampilkan link yang sudah ada (dari DOCS array + localStorage)
+const localLinks = getDocLinkData(docIdx);
+const docsLink = doc.link && doc.link.trim() !== '' ? doc.link : '';
+
+let listHtml = '<div style="font-size:0.95rem;font-weight:700;color:#047857;margin-bottom:12px;display:flex;align-items:center;gap:8px;">📋 Daftar Link <span style="font-size:0.78rem;color:#047857;font-weight:500;">(' + (localLinks.length + (docsLink ? 1 : 0)) + ' link)</span></div>';
+
+if (localLinks.length === 0 && !docsLink) {
+listHtml += '<div style="text-align:center;padding:30px 20px;color:#047857;background:#ecfdf5;border:2px dashed #a7f3d0;border-radius:12px;">' +
+'<div style="font-size:2.5rem;margin-bottom:8px;opacity:0.6;">🔗</div>' +
+'<div style="font-size:0.88rem;font-weight:600;">Belum ada link dokumen</div>' +
+'<div style="font-size:0.78rem;margin-top:4px;opacity:0.7;">Tambahkan link di bawah ini</div>' +
+'</div>';
+} else {
+listHtml += '<div style="display:flex;flex-direction:column;gap:8px;">';
+
+// Tampilkan link dari DOCS array (jika ada)
+if (docsLink) {
+listHtml += '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,#dbeafe,#bfdbfe);border:1px solid #60a5fa;border-radius:10px;">' +
+'<div style="background:#3b82f6;color:#fff;min-width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;flex-shrink:0;">📌</div>' +
+'<a href="' + esc(docsLink) + '" target="_blank" rel="noopener" style="flex:1;font-size:0.82rem;color:#1e40af;font-family:Consolas,Monaco,monospace;word-break:break-all;text-decoration:none;line-height:1.4;" title="' + esc(docsLink) + '">' + esc(docsLink.length > 60 ? docsLink.substring(0, 57) + '...' : docsLink) + '</a>' +
+'<div style="font-size:0.72rem;color:#60a5fa;font-weight:600;white-space:nowrap;">DOCS</div>' +
+'</div>';
+}
+
+// Tampilkan link dari localStorage
+localLinks.forEach(function(url, i) {
+const displayUrl = url.length > 60 ? url.substring(0, 57) + '...' : url;
+listHtml += '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:1px solid #a7f3d0;border-radius:10px;">' +
+'<div style="background:#10b981;color:#fff;min-width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;flex-shrink:0;">' + (i+1) + '</div>' +
+'<a href="' + esc(url) + '" target="_blank" rel="noopener" style="flex:1;font-size:0.82rem;color:#047857;font-family:Consolas,Monaco,monospace;word-break:break-all;text-decoration:none;line-height:1.4;" title="' + esc(url) + '">' + esc(displayUrl) + '</a>' +
+'<button onclick="fixRemoveLink(' + docIdx + ',' + i + ')" title="Hapus" style="width:30px;height:30px;border-radius:8px;border:none;background:#ef4444;color:#fff;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;flex-shrink:0;">🗑️</button>' +
+'</div>';
+});
+
+listHtml += '</div>';
+}
+
+// Input tambah link
+listHtml += '<div style="margin-top:16px;padding-top:16px;border-top:1px dashed #a7f3d0;display:flex;gap:8px;flex-wrap:wrap;">' +
+'<div style="flex:1;min-width:200px;display:flex;gap:6px;">' +
+'<input type="text" id="fix-input-link-' + docIdx + '" placeholder="Tempel URL dokumen di sini..." style="flex:1;padding:10px 14px;border:2px solid #a7f3d0;border-radius:10px;font-size:0.85rem;outline:none;font-family:inherit;" onkeypress="if(event.key===\'Enter\')fixAddLink(' + docIdx + ')">' +
+'</div>' +
+'<button onclick="fixAddLink(' + docIdx + ')" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;white-space:nowrap;">➕ Tambah Link</button>' +
+'</div>';
+
+body.innerHTML = listHtml;
+
+// Footer
+const footer = document.createElement('div');
+footer.style.cssText = 'padding:14px 24px;background:#ecfdf5;border-top:1px solid #a7f3d0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;';
+footer.innerHTML = '<div style="font-size:0.78rem;color:#047857;font-weight:600;">💾 Link tersimpan permanen di browser ini</div>' +
+'<button onclick="document.getElementById(\'fix-kelola-modal\').remove()" style="background:#f1f5f9;color:#047857;border:none;padding:10px 20px;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:inherit;">✖ Tutup</button>';
+
+box.appendChild(header);
+box.appendChild(body);
+box.appendChild(footer);
+modal.appendChild(box);
+
+// Klik di luar untuk tutup
+modal.onclick = function(e) {
+if (e.target === modal) modal.remove();
+};
+
+// Tambahkan animasi
+const style = document.createElement('style');
+style.textContent = '@keyframes fixKelolaPop{from{opacity:0;transform:translateY(30px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}';
+document.head.appendChild(style);
+
+document.body.appendChild(modal);
+console.log('✅ [FixKelolaLink] Modal dibuka untuk:', doc.nama);
+}
+
+/* ================================================================
+* ➕ Tambah Link
+================================================================ */
+window.fixAddLink = function(docIdx) {
+const input = document.getElementById('fix-input-link-' + docIdx);
+if (!input) return;
+const url = input.value.trim();
+if (!url) {
+if (typeof showToast === 'function') showToast('⚠️ Masukkan URL terlebih dahulu', 'error');
+input.focus();
+return;
+}
+let finalUrl = url;
+if (!/^https?:\/\//i.test(url) && !/^mailto:/i.test(url)) {
+finalUrl = 'https://' + url;
+}
+const data = getDocLinkData(docIdx);
+data.push(finalUrl);
+setDocLinkData(docIdx, data);
+input.value = '';
+if (typeof showToast === 'function') showToast('✅ Link berhasil ditambahkan!', 'success');
+// Refresh modal
+const oldModal = document.getElementById('fix-kelola-modal');
+if (oldModal) oldModal.remove();
+setTimeout(function() { openFixKelolaModal(docIdx); }, 100);
+};
+
+/* ================================================================
+* 🗑️ Hapus Link
+================================================================ */
+window.fixRemoveLink = function(docIdx, linkIdx) {
+if (!confirm('🗑️ Yakin ingin menghapus link ini?')) return;
+const data = getDocLinkData(docIdx);
+if (data[linkIdx] !== undefined) {
+data.splice(linkIdx, 1);
+setDocLinkData(docIdx, data);
+if (typeof showToast === 'function') showToast('🗑️ Link berhasil dihapus', 'info');
+const oldModal = document.getElementById('fix-kelola-modal');
+if (oldModal) oldModal.remove();
+setTimeout(function() { openFixKelolaModal(docIdx); }, 100);
+}
+};
+
+/* ================================================================
+* 🛡️ MutationObserver: Auto-inject tombol saat card berubah
+================================================================ */
+function setupObserver() {
+const grid = document.getElementById(GRID_ID);
+if (!grid) {
+setTimeout(setupObserver, 500);
+return;
+}
+
+const observer = new MutationObserver(function(mutations) {
+let hasChanges = false;
+for (let i = 0; i < mutations.length; i++) {
+if (mutations[i].addedNodes.length > 0 || mutations[i].type === 'childList') {
+hasChanges = true;
+break;
+}
+}
+if (hasChanges) {
+setTimeout(ensureKelolaLinkButtons, 200);
+}
+});
+
+observer.observe(grid, {
+childList: true,
+subtree: true
+});
+
+console.log('✅ [FixKelolaLink] MutationObserver aktif');
+}
+
+/* ================================================================
+* 🚀 INIT
+================================================================ */
+function init() {
+console.log('🚀 [FixKelolaLink] Patch dimulai...');
+console.log('📌 Memperbaiki: Tombol ⚙️ Kelola Link pasti muncul di semua card non-materi');
+
+// Jalankan segera
+ensureKelolaLinkButtons();
+
+// Setup observer
+setupObserver();
+
+// Jalankan beberapa kali untuk memastikan
+setTimeout(ensureKelolaLinkButtons, 1000);
+setTimeout(ensureKelolaLinkButtons, 2500);
+setTimeout(ensureKelolaLinkButtons, 5000);
+
+console.log('✅ [FixKelolaLink] Patch terpasang');
+}
+
+if (document.readyState === 'loading') {
+document.addEventListener('DOMContentLoaded', init);
+} else {
+init();
+}
+
+})();
+</script>
+<!-- ================================================================ -->
+<!-- ========== PATCH FIX: TOMBOL KELOLA LINK PASTI MUNCUL [END] ========== -->
+<!-- ================================================================ -->
 </body></html>
