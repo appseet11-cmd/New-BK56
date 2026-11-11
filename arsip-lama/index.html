@@ -19004,15 +19004,15 @@ document.addEventListener('visibilitychange',function(){
 <!-- ========== PATCH MINIMAL [END] ========== -->
 <!-- ================================================================ -->
 <!-- ================================================================ -->
-<!-- ========== PATCH FINAL FIX: INISIALISASI DOCS + TOMBOL PASTI ========== -->
-<!-- ========== v1.0 - Selesai Masalah Halaliah/Wahyuni/Rizqi ========== -->
+<!-- ========== PATCH FINAL: FIX HALALIAH/WAHYUNI/RIZQI ========== -->
+<!-- ========== v1.0 - Init DOCS + Fallback + Inject Tombol ========== -->
 <!-- ========== Nov 2026 ========== -->
 <!-- ================================================================ -->
 <script>
 (function(){
 "use strict";
 
-const FLAG = '__bk56FinalFixLinkEmbed';
+const FLAG = '__bk56FinalFixHalaliah';
 if (window[FLAG]) {
     console.log('ℹ️ [FinalFix] Patch sudah terpasang, skip');
     return;
@@ -19024,10 +19024,9 @@ const DOC_KEY = 'bk56_doc_links';
 
 /* ================================================================
 * 🔑 LANGKAH 1: Inisialisasi bk56_doc_links dari DOCS bawaan
-*    → Card yang punya link DOCS bawaan sekarang punya entry di localStorage
-*    → Ini yang membuat openDocLinkFinal() bisa bekerja
+*    → Card dengan link DOCS bawaan sekarang punya entry di localStorage
 ================================================================ */
-function initializeDocLinksFromDOCS() {
+function initDocLinksFromDOCS() {
     if (typeof DOCS === 'undefined' || !Array.isArray(DOCS)) return 0;
     
     let existing = {};
@@ -19044,11 +19043,10 @@ function initializeDocLinksFromDOCS() {
         // Jika DOCS punya link bawaan → simpan ke localStorage
         if (doc.link && doc.link.trim() !== '') {
             if (!existing[idx]) existing[idx] = [];
-            // Tambahkan link DOCS bawaan jika belum ada
             if (!existing[idx].includes(doc.link)) {
                 existing[idx].push(doc.link);
                 initialized++;
-                console.log('✅ [FinalFix] Inisialisasi DOCS[' + idx + ']:', doc.nama, '→', doc.link.slice(0, 50));
+                console.log('✅ [FinalFix] Init DOCS[' + idx + ']:', doc.nama, '→', doc.link.slice(0, 50));
             }
         }
     });
@@ -19117,15 +19115,8 @@ if (typeof window.bukaDoc === 'function') {
             return;
         }
         
-        // Jika banyak link → buka modal picker (pakai openDocLinkFinal)
-        if (typeof window.openDocLinkFinal === 'function') {
-            window.openDocLinkFinal(idx);
-        } else {
-            // Fallback: buka link pertama
-            let url = links[0];
-            if (!/^https?:\/\//i.test(url) && !/^mailto:/i.test(url)) url = 'https://' + url;
-            window.open(url, '_blank', 'noopener,noreferrer');
-        }
+        // Jika banyak link → buka modal picker
+        openFinalKelolaModal(idx);
     };
     window.bukaDoc.__finalFixPatched = true;
     console.log('✅ [FinalFix] bukaDoc() di-override dengan fallback DOCS bawaan');
@@ -19134,7 +19125,6 @@ if (typeof window.bukaDoc === 'function') {
 /* ================================================================
 * 🔑 LANGKAH 3: Inject tombol ⚙️ ke SEMUA card non-materi
 *    → Menggunakan MutationObserver yang RELIABLE
-*    → Tidak bergantung pada chain render()
 ================================================================ */
 function injectManageButtons() {
     const grid = document.getElementById(GRID_ID);
@@ -19153,8 +19143,7 @@ function injectManageButtons() {
         
         for (let i = 0; i < allBtns.length; i++) {
             const onclick = allBtns[i].getAttribute('onclick') || '';
-            // Match berbagai pola: bukaDoc, openDocLinkFinal, openMateriFinal, dll
-            const match = onclick.match(/(?:bukaDoc|openDocLinkFinal|openMateriFinal|openMateriModal|bukaVideoLangsungFix)\((\d+)\)/);
+            const match = onclick.match(/(?:bukaDoc|openDocLinkFinal|openMateriFinal)\((\d+)\)/);
             if (match) {
                 docIdx = parseInt(match[1]);
                 break;
@@ -19180,7 +19169,7 @@ function injectManageButtons() {
         
         const doc = DOCS[docIdx];
         
-        // SKIP kategori materi (sudah ada sistem sendiri)
+        // SKIP kategori materi
         if (doc.kat === 'materi') return;
         
         // Buat tombol ⚙️
@@ -19203,7 +19192,7 @@ function injectManageButtons() {
         btn.onclick = function(e) {
             e.stopPropagation();
             e.preventDefault();
-            openFinalFixKelolaModal(docIdx);
+            openFinalKelolaModal(docIdx);
         };
         
         card.style.position = 'relative';
@@ -19218,10 +19207,8 @@ function injectManageButtons() {
 
 /* ================================================================
 * 🔑 LANGKAH 4: Modal Kelola Link (Self-Contained)
-*    → Menampilkan link DOCS bawaan + link localStorage
-*    → User bisa tambah/hapus link
 ================================================================ */
-function openFinalFixKelolaModal(docIdx) {
+function openFinalKelolaModal(docIdx) {
     if (typeof DOCS === 'undefined' || !DOCS[docIdx]) {
         if (typeof showToast === 'function') showToast('⚠️ Dokumen tidak ditemukan', 'error');
         return;
@@ -19248,7 +19235,7 @@ function openFinalFixKelolaModal(docIdx) {
     
     // Tambahkan DOCS bawaan jika belum ada
     if (doc.link && doc.link.trim() !== '' && !links.includes(doc.link)) {
-        links.unshift(doc.link); // DOCS bawaan di awal
+        links.unshift(doc.link);
     }
     
     // Buat modal
@@ -19373,12 +19360,7 @@ window.finalFixAddLink = function(docIdx) {
     // Refresh modal
     const oldModal = document.getElementById('finalfix-kelola-modal');
     if (oldModal) oldModal.remove();
-    setTimeout(function() { openFinalFixKelolaModal(docIdx); }, 100);
-    
-    // Refresh card
-    if (typeof render === 'function') {
-        try { render(true); } catch(e) {}
-    }
+    setTimeout(function() { openFinalKelolaModal(docIdx); }, 100);
 };
 
 window.finalFixRemoveLink = function(docIdx, linkIdx) {
@@ -19400,11 +19382,7 @@ window.finalFixRemoveLink = function(docIdx, linkIdx) {
         
         const oldModal = document.getElementById('finalfix-kelola-modal');
         if (oldModal) oldModal.remove();
-        setTimeout(function() { openFinalFixKelolaModal(docIdx); }, 100);
-        
-        if (typeof render === 'function') {
-            try { render(true); } catch(e) {}
-        }
+        setTimeout(function() { openFinalKelolaModal(docIdx); }, 100);
     }
 };
 
@@ -19462,7 +19440,7 @@ function init() {
     console.log('');
     
     // 1. Inisialisasi docLinks dari DOCS bawaan
-    const initCount = initializeDocLinksFromDOCS();
+    const initCount = initDocLinksFromDOCS();
     if (initCount > 0) {
         console.log('✅ [FinalFix]', initCount, 'card di-inisialisasi');
     }
@@ -19492,7 +19470,7 @@ if (document.readyState === 'loading') {
 })();
 </script>
 <!-- ================================================================ -->
-<!-- ========== PATCH FINAL FIX: INISIALISASI DOCS + TOMBOL PASTI [END] ========== -->
+<!-- ========== PATCH FINAL: FIX HALALIAH/WAHYUNI/RIZQI [END] ========== -->
 <!-- ================================================================ -->
 </body>
 </html>
