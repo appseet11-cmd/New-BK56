@@ -1343,6 +1343,454 @@ box-shadow: 0 8px 22px rgba(0,0,0,0.3);
 }
 </style>
 <!-- ========== MATERI PERMANEN - CSS [END] ========== -->
+ <!-- ========== ABSENSI SISWA - CSS ========== -->
+<style id="absensi-standalone-style">
+/* ================================================================ */
+/* ============ ABSENSI STANDALONE - MODERN & ELEGANT ============= */
+/* ================================================================ */
+.abs-hero {
+  background: linear-gradient(135deg, #0b1e54 0%, #1a369c 50%, #3b82f6 100%);
+  color: #fff; padding: 3rem 1.5rem 4rem;
+  position: relative; overflow: hidden;
+}
+.abs-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255,213,79,.18), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(59,130,246,.25), transparent 40%);
+  pointer-events: none;
+}
+.abs-hero::after {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 40px 40px; pointer-events: none;
+}
+.abs-hero-content {
+  max-width: 1100px; margin: 0 auto;
+  position: relative; z-index: 2; text-align: center;
+}
+.abs-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.12); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.2);
+  padding: 8px 20px; border-radius: 100px;
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1.2rem;
+}
+.abs-badge-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #10b981; box-shadow: 0 0 12px #10b981;
+  animation: absPulse 2s infinite;
+}
+@keyframes absPulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.3); }
+}
+.abs-hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 800; line-height: 1.15; margin-bottom: 0.8rem;
+  letter-spacing: -0.02em;
+}
+.abs-hero h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, #ffd54f, #ff9800);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.abs-hero-sub {
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  opacity: 0.92; max-width: 680px; margin: 0 auto 1.8rem;
+  line-height: 1.6;
+}
+.abs-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem; max-width: 700px; margin: 0 auto;
+}
+.abs-stat {
+  background: rgba(255,255,255,.1); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 14px; padding: 1rem 0.6rem; text-align: center;
+  transition: transform 0.3s ease;
+}
+.abs-stat:hover { transform: translateY(-3px); background: rgba(255,255,255,.15); }
+.abs-stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800;
+  background: linear-gradient(135deg, #ffd54f, #ff9800);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block; line-height: 1;
+}
+.abs-stat-lbl {
+  font-size: 0.72rem; opacity: 0.85;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.3rem;
+}
+.abs-action-bar {
+  max-width: 1100px; margin: -2rem auto 0; padding: 0 1.5rem;
+  position: relative; z-index: 10;
+}
+.abs-action-card {
+  background: #fff; border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(11,30,84,.08);
+  padding: 1.2rem 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+.abs-action-row {
+  display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center;
+  justify-content: space-between;
+}
+.abs-backend-status {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 10px;
+  font-size: 0.82rem; font-weight: 600; flex: 1; min-width: 250px;
+}
+.abs-backend-status.connected {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  color: #065f46; border: 1px solid #10b981;
+}
+.abs-backend-status.disconnected {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #78350f; border: 1px solid #f59e0b;
+}
+.abs-backend-status .status-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  animation: absPulse 2s infinite; flex-shrink: 0;
+}
+.abs-backend-status.connected .status-dot { background: #10b981; }
+.abs-backend-status.disconnected .status-dot { background: #f59e0b; }
+.abs-backend-status small {
+  display: block; font-size: 0.7rem; opacity: 0.85;
+  font-family: Consolas, Monaco, monospace;
+  word-break: break-all; margin-top: 2px;
+}
+.abs-action-buttons { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.abs-act-btn {
+  padding: 11px 18px; border: none; border-radius: 12px;
+  font-size: 0.85rem; font-weight: 700; cursor: pointer;
+  transition: all 0.25s ease; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+}
+.abs-act-btn:hover:not(:disabled) {
+  transform: translateY(-2px); filter: brightness(1.08);
+}
+.abs-act-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.abs-act-btn.sync {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff; box-shadow: 0 4px 14px rgba(16,185,129,.35);
+}
+.abs-act-btn.push {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #fff; box-shadow: 0 4px 14px rgba(59,130,246,.35);
+}
+.abs-permanent-info {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  border-left: 4px solid #10b981;
+  padding: 10px 14px; border-radius: 8px;
+  margin-top: 10px;
+  font-size: 0.78rem; color: #065f46; line-height: 1.5;
+}
+.abs-permanent-info strong { color: #047857; }
+.abs-tabs-standalone {
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(11,30,84,.08);
+  position: sticky; top: 70px; z-index: 100;
+  border-bottom: 3px solid #e2e8f0;
+  margin-top: 1.5rem;
+  max-width: 1100px; margin-left: auto; margin-right: auto;
+  border-radius: 20px 20px 0 0;
+}
+.abs-tabs-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; overflow-x: auto;
+  padding: 0 1rem; gap: 0.3rem;
+  scrollbar-width: thin;
+}
+.abs-tab-btn {
+  background: transparent; border: none;
+  padding: 1.1rem 1.5rem; font-size: 0.92rem; font-weight: 700;
+  color: #64748b; cursor: pointer; white-space: nowrap;
+  border-bottom: 3px solid transparent; margin-bottom: -3px;
+  display: flex; align-items: center; gap: 8px;
+  font-family: inherit; transition: all 0.25s ease;
+}
+.abs-tab-btn:hover { color: #1a369c; background: rgba(26,54,156,.04); }
+.abs-tab-btn.active {
+  color: #1a369c; border-bottom-color: #ff9800;
+  background: rgba(255,152,0,.05);
+}
+.abs-tab-btn .tab-emoji { font-size: 1.1rem; }
+.abs-tab-btn .tab-count {
+  background: #e2e8f0; color: #64748b;
+  padding: 2px 10px; border-radius: 100px;
+  font-size: 0.72rem; font-weight: 800;
+  transition: all 0.25s ease;
+}
+.abs-tab-btn.active .tab-count {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: #fff;
+}
+.abs-container {
+  max-width: 1100px; margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+}
+.abs-panel-header {
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border-left: 5px solid #ff9800;
+  padding: 1.2rem 1.5rem; border-radius: 14px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(255,152,0,.1);
+}
+.abs-panel-header h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.4rem; color: #9a3412; margin: 0 0 0.3rem;
+  display: flex; align-items: center; gap: 10px;
+}
+.abs-panel-header p {
+  color: #c2410c; font-size: 0.88rem; font-weight: 600; margin: 0;
+}
+.abs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+.abs-panel { display: none; animation: absFadeIn 0.4s ease; }
+.abs-panel.active { display: block; }
+@keyframes absFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.abs-card {
+  background: #fff; border-radius: 18px; padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(11,30,84,.06);
+  border: 1px solid #e2e8f0;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.abs-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, #ff9800, #ffd54f, #ff9800);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.abs-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(11,30,84,.12);
+  border-color: #ff9800;
+}
+.abs-card:hover::before { transform: scaleX(1); }
+.abs-card-top {
+  display: flex; align-items: center;
+  gap: 14px; margin-bottom: 1rem;
+}
+.abs-card-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  color: #fff; font-weight: 800;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.abs-card-icon.vii { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+.abs-card-icon.viii { background: linear-gradient(135deg, #10b981, #059669); }
+.abs-card-icon.ix { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.abs-card-info { flex: 1; min-width: 0; }
+.abs-card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.15rem; font-weight: 800;
+  color: #0f172a; margin: 0 0 2px; line-height: 1.2;
+}
+.abs-card-sub {
+  font-size: 0.78rem; color: #64748b;
+  font-weight: 600; letter-spacing: 0.03em;
+}
+.abs-url-box {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border: 1.5px dashed #cbd5e1; border-radius: 10px;
+  padding: 10px 12px; margin-bottom: 1rem;
+  min-height: 50px; display: flex; align-items: center;
+  gap: 8px; transition: all 0.25s ease;
+}
+.abs-url-box.has-link {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  border: 1.5px solid #10b981; border-style: solid;
+}
+.abs-url-box .url-icon { font-size: 1.1rem; flex-shrink: 0; }
+.abs-url-box .url-text {
+  flex: 1; min-width: 0;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.72rem; color: #047857;
+  word-break: break-all; line-height: 1.4;
+  overflow: hidden; text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.abs-url-box.empty .url-text {
+  color: #94a3b8; font-family: inherit;
+  font-style: italic; font-size: 0.78rem;
+}
+.abs-btns {
+  display: grid; grid-template-columns: 1fr 44px;
+  gap: 8px; margin-top: auto;
+}
+.abs-btn-open {
+  background: linear-gradient(135deg, #1a369c, #0b1e54);
+  color: #fff; border: none;
+  padding: 11px 14px; border-radius: 10px;
+  font-size: 0.85rem; font-weight: 700; cursor: pointer;
+  transition: all 0.25s ease; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 12px rgba(11,30,84,.2);
+}
+.abs-btn-open:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(11,30,84,.3);
+  filter: brightness(1.1);
+}
+.abs-btn-open.empty {
+  background: linear-gradient(135deg, #94a3b8, #64748b);
+  box-shadow: 0 4px 12px rgba(100,116,139,.25);
+}
+.abs-btn-manage {
+  background: rgba(255,152,0,.12); color: #f57c00;
+  border: 1.5px solid rgba(255,152,0,.3);
+  width: 44px; height: 44px; border-radius: 10px;
+  cursor: pointer; font-size: 1.1rem;
+  transition: all 0.25s ease;
+  display: flex; align-items: center; justify-content: center;
+}
+.abs-btn-manage:hover {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: #fff; transform: rotate(90deg) scale(1.05);
+  border-color: #ff9800;
+}
+.abs-modal-ov {
+  position: fixed; inset: 0;
+  background: rgba(11,30,84,.85); backdrop-filter: blur(12px);
+  display: none; align-items: center; justify-content: center;
+  z-index: 10000; padding: 20px;
+}
+.abs-modal-ov.show { display: flex; }
+.abs-modal-box {
+  background: #fff; border-radius: 22px;
+  max-width: 480px; width: 100%;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0,0,0,.4);
+  animation: absPop 0.35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes absPop {
+  from { opacity: 0; transform: translateY(30px) scale(.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.abs-modal-hdr {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: #fff; padding: 22px 24px; text-align: center;
+}
+.abs-modal-hdr .hdr-icon {
+  font-size: 2.5rem; margin-bottom: 6px;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.2));
+}
+.abs-modal-hdr h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem; font-weight: 800; margin: 0 0 4px;
+}
+.abs-modal-hdr p { font-size: 0.85rem; opacity: 0.95; margin: 0; }
+.abs-modal-body { padding: 24px; }
+.abs-modal-body label {
+  display: block; font-size: 0.82rem; font-weight: 700;
+  color: #0f172a; margin-bottom: 8px;
+}
+.abs-modal-body input {
+  width: 100%; padding: 12px 14px;
+  border: 2px solid #e2e8f0; border-radius: 10px;
+  font-size: 0.88rem; font-family: Consolas, Monaco, monospace;
+  outline: none; transition: all 0.2s ease; margin-bottom: 14px;
+}
+.abs-modal-body input:focus {
+  border-color: #ff9800;
+  box-shadow: 0 0 0 4px rgba(255,152,0,.12);
+}
+.abs-modal-info {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border-left: 4px solid #3b82f6;
+  padding: 10px 14px; border-radius: 8px;
+  font-size: 0.78rem; color: #1e40af;
+  margin-bottom: 14px; line-height: 1.5;
+}
+.abs-modal-acts {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.abs-modal-btn {
+  padding: 11px; border: none; border-radius: 10px;
+  font-size: 0.88rem; font-weight: 700; cursor: pointer;
+  font-family: inherit; transition: all 0.2s ease;
+}
+.abs-modal-btn.primary {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff; box-shadow: 0 4px 12px rgba(16,185,129,.3);
+}
+.abs-modal-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16,185,129,.4);
+}
+.abs-modal-btn.ghost { background: #f1f5f9; color: #475569; }
+.abs-modal-btn.ghost:hover { background: #e2e8f0; }
+.abs-toast {
+  position: fixed; bottom: 30px; left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #0b1e54; color: #fff;
+  padding: 14px 24px; border-radius: 100px;
+  font-size: 14px; font-weight: 600;
+  box-shadow: 0 12px 32px rgba(11,30,84,.4);
+  z-index: 100001; opacity: 0;
+  transition: all 0.4s ease; pointer-events: none;
+  display: flex; align-items: center; gap: 10px;
+  max-width: 90%;
+}
+.abs-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.abs-toast.success { background: linear-gradient(135deg, #10b981, #059669); }
+.abs-toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.abs-toast.info { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+.abs-footer-section {
+  background: linear-gradient(135deg, #0b1e54, #1a369c);
+  color: rgba(255,255,255,.85);
+  padding: 2rem 1.5rem 1.5rem; text-align: center;
+  margin-top: 2rem; border-radius: 16px;
+}
+.abs-footer-section h4 {
+  color: #ffd54f; font-size: 1.05rem; margin-bottom: 0.5rem;
+}
+.abs-footer-section p { font-size: 0.82rem; margin: 0.3rem 0; opacity: 0.85; }
+.abs-footer-section .div-line {
+  width: 60px; height: 2px;
+  background: linear-gradient(90deg, #ffd54f, #ff9800);
+  margin: 1rem auto; border-radius: 2px;
+}
+.abs-footer-section .copy { font-size: 0.75rem; opacity: 0.55; }
+@media (max-width: 768px) {
+  .abs-hero { padding: 2.5rem 1rem 3.5rem; }
+  .abs-stats { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .abs-stat { padding: 0.8rem 0.4rem; }
+  .abs-container { padding: 1.5rem 1rem 2rem; }
+  .abs-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .abs-tab-btn { padding: 1rem 1rem; font-size: 0.82rem; }
+  .abs-modal-acts { grid-template-columns: 1fr; }
+  .abs-action-row { flex-direction: column; align-items: stretch; }
+  .abs-action-buttons { justify-content: stretch; }
+  .abs-act-btn { flex: 1; justify-content: center; }
+}
+@media (max-width: 480px) {
+  .abs-card { padding: 1.2rem; }
+  .abs-card-icon { width: 48px; height: 48px; font-size: 1.3rem; }
+  .abs-card-title { font-size: 1rem; }
+}
+</style>
+<!-- ========== ABSENSI SISWA - CSS [END] ========== -->
 </head>
 <body class="protected">
 <div id="reading-progress" aria-hidden="true"></div>
@@ -1566,6 +2014,7 @@ Platform pembelajaran Bimbingan Konseling digital terintegrasi yang membantu sis
 📚 Jelajahi Materi
 </button>
 </div>
+
 <div class="hero-stats">
 <div class="stat-item"><div class="stat-number">10+</div><div class="stat-label">Materi BK Lengkap</div></div>
 <div class="stat-item"><div class="stat-number">30+</div><div class="stat-label">Asesmen Interaktif</div></div>
@@ -1573,6 +2022,228 @@ Platform pembelajaran Bimbingan Konseling digital terintegrasi yang membantu sis
 <div class="stat-item"><div class="stat-number">24/7</div><div class="stat-label">Akses Kapan Saja</div></div>
 </div>
 </div>
+<!-- Tombol Kembali ke Website BK (Warna Dinamis + Zoom 30%) -->
+<div style="text-align: center; margin: 30px 0; padding: 20px;">
+  <a href=" https://appseet11-cmd.github.io/New-BK56/" 
+     class="back-to-website-dynamic" 
+     target="_blank" 
+     rel="noopener noreferrer">
+    🌐 Kembali Kekunjungan Website BK SMP 56 Jakarta
+  </a>
+</div>
+
+<style>
+  /* =========================================
+     🎨 PENGATURAN WARNA DINAMIS (UBAH DI SINI)
+     ========================================= */
+  .back-to-website-dynamic {
+    /* 1. GANTI KODE WARNA TEKS DI BAWAH INI */
+    --warna-teks-utama: #00E5FF; /* Warna teks normal (Contoh: Cyan Terang) */
+    --warna-teks-hover: #FFFFFF; /* Warna teks saat di-zoom/disentuh */
+    
+    /* 2. GANTI NILAI RGB UNTUK EFEK CAHAYA (GLOW) */
+    /* Sesuaikan dengan warna utama. Contoh: #00E5FF = 0, 229, 255 */
+    --rgb-glow: 0, 229, 255; 
+
+    /* === PENGATURAN DASAR TOMBOL === */
+    display: inline-block;
+    padding: 14px 28px;
+    background: transparent; /* Tanpa background */
+    border: none;            /* Tanpa border */
+    color: var(--warna-teks-utama);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.5px;
+    
+    /* Efek Cahaya (Glow) berdasarkan warna dinamis */
+    text-shadow: 
+      0 0 5px rgba(var(--rgb-glow), 0.8),
+      0 0 10px rgba(var(--rgb-glow), 0.6),
+      0 0 20px rgba(var(--rgb-glow), 0.4),
+      0 0 40px rgba(var(--rgb-glow), 0.2);
+    
+    /* Transisi Halus dengan Efek Memantul (Bounce) untuk Zoom */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                color 0.3s ease, 
+                text-shadow 0.3s ease;
+    transform-origin: center center; /* Zoom dari titik tengah */
+    will-change: transform; /* Optimasi performa agar tidak lag */
+    cursor: pointer;
+  }
+  
+  /* =========================================
+     🎯 EFEK ZOOM IN 30% (Cursor & Touchscreen)
+     ========================================= */
+  .back-to-website-dynamic:hover,
+  .back-to-website-dynamic:active {
+    /* 🚀 ZOOM IN TEPAT 30% */
+    transform: scale(1.3);
+    
+    /* Warna teks berubah saat di-zoom */
+    color: var(--warna-teks-hover);
+    
+    /* Efek Cahaya (Glow) Makin Intens & Meledak saat di-zoom */
+    text-shadow: 
+      0 0 8px rgba(var(--rgb-glow), 1),
+      0 0 15px rgba(var(--rgb-glow), 0.8),
+      0 0 30px rgba(var(--rgb-glow), 0.6),
+      0 0 50px rgba(var(--rgb-glow), 0.4);
+  }
+  
+  /* Penyesuaian untuk Mobile */
+  @media (max-width: 768px) {
+    .back-to-website-dynamic {
+      padding: 12px 20px;
+      font-size: 13px;
+    }
+  }
+</style>
+
+<style>
+  /* =========================================
+     🎨 PENGATURAN TOMBOL (Dinamis)
+     ========================================= */
+  .btn-bk-dynamic {
+    /* Warna Default Awal (Biru Elektrik) */
+    --warna-teks-utama: #0044FF;
+    --rgb-glow: 0, 68, 255; 
+
+    display: inline-block;
+    padding: 14px 28px;
+    background: transparent;
+    border: none;
+    color: var(--warna-teks-utama);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.5px;
+    
+    /* Efek Cahaya (Glow) */
+    text-shadow: 
+      0 0 5px rgba(var(--rgb-glow), 0.8),
+      0 0 10px rgba(var(--rgb-glow), 0.6),
+      0 0 20px rgba(var(--rgb-glow), 0.4),
+      0 0 40px rgba(var(--rgb-glow), 0.2);
+    
+    /* Transisi Halus dengan Efek Memantul (Bounce) */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                color 0.3s ease, 
+                text-shadow 0.3s ease;
+    transform-origin: center center;
+    will-change: transform;
+    cursor: pointer;
+  }
+  
+  /* Efek Zoom 30% saat Hover/Disentuh */
+  .btn-bk-dynamic:hover,
+  .btn-bk-dynamic:active {
+    transform: scale(1.3);
+    text-shadow: 
+      0 0 8px rgba(var(--rgb-glow), 1),
+      0 0 15px rgba(var(--rgb-glow), 0.8),
+      0 0 30px rgba(var(--rgb-glow), 0.6),
+      0 0 50px rgba(var(--rgb-glow), 0.4);
+  }
+
+  /* =========================================
+     🎨 PENGATURAN KOTAK PALET WARNA
+     ========================================= */
+  .color-palette {
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    display: inline-flex;
+  }
+  
+  .color-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    position: relative;
+  }
+  
+  .color-swatch:hover {
+    transform: scale(1.2) translateY(-3px);
+    border-color: #fff;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  }
+  
+  .color-swatch:active {
+    transform: scale(0.95);
+  }
+  
+  /* Tanda centang untuk warna yang sedang aktif */
+  .color-swatch.active::after {
+    content: '✓';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  }
+</style>
+
+<script>
+  // =========================================
+  // 🎨 DAFTAR WARNA YANG TERSEDIA
+  // =========================================
+  const daftarWarna = [
+    { nama: 'Biru Elektrik', hex: '#0044FF', rgb: '0, 68, 255' },
+    { nama: 'Kakhi Tua',     hex: '#BDB76B', rgb: '189, 183, 107' },
+    { nama: 'Kakhi Terang',  hex: '#F4D03F', rgb: '244, 208, 63' },
+    { nama: 'Tanah Merah',   hex: '#B7410E', rgb: '183, 65, 14' },
+    { nama: 'Emas Mewah',    hex: '#FFD700', rgb: '255, 215, 0' },
+    { nama: 'Ungu Neon',     hex: '#A855F7', rgb: '168, 85, 247' },
+    { nama: 'Hijau Lime',    hex: '#84CC16', rgb: '132, 204, 22' },
+    { nama: 'Merah Menyala', hex: '#EF4444', rgb: '239, 68, 68' },
+    { nama: 'Cyan Terang',   hex: '#00E5FF', rgb: '0, 229, 255' },
+    { nama: 'Putih Bersih',  hex: '#FFFFFF', rgb: '255, 255, 255' },
+    { nama: 'Pink Cerah',    hex: '#EC4899', rgb: '236, 72, 153' },
+    { nama: 'Oranye Api',    hex: '#F97316', rgb: '249, 115, 22' }
+  ];
+
+  const btnBK = document.getElementById('btnBK');
+  const palette = document.getElementById('colorPalette');
+
+  // Generate kotak warna secara otomatis
+  daftarWarna.forEach((warna, index) => {
+    const box = document.createElement('div');
+    box.className = 'color-swatch' + (index === 0 ? ' active' : ''); // Biru Elektrik aktif di awal
+    box.style.backgroundColor = warna.hex;
+    box.title = warna.nama; // Tooltip saat di-hover
+    
+    // Jika warna terang (seperti putih/kuning), ubah warna border centang jadi gelap
+    if (warna.nama === 'Putih Bersih' || warna.nama === 'Kakhi Terang' || warna.nama === 'Emas Mewah') {
+      box.style.setProperty('--check-color', '#000');
+    }
+
+    // EVENT KLIK: Ubah warna tombol
+    box.addEventListener('click', function() {
+      // 1. Hapus tanda aktif dari semua kotak
+      document.querySelectorAll('.color-swatch').forEach(b => b.classList.remove('active'));
+      
+      // 2. Tambahkan tanda aktif ke kotak yang diklik
+      this.classList.add('active');
+      
+      // 3. Ubah CSS Variable pada tombol
+      btnBK.style.setProperty('--warna-teks-utama', warna.hex);
+      btnBK.style.setProperty('--rgb-glow', warna.rgb);
+    });
+
+    palette.appendChild(box);
+  });
+</script>
 </section>
 <section class="features-section" id="features" aria-label="Fitur Platform">
 <div class="features-grid">
@@ -1766,18 +2437,53 @@ Platform pembelajaran Bimbingan Konseling digital terintegrasi yang membantu sis
 <article class="feature-card fc-iq" onclick="go('iq')" role="button" tabindex="0" aria-label="Buka menu Tes IQ">
 <div class="feature-icon">🧠</div><h3>Tes IQ Online</h3><p>Ukur kecerdasan dan potensi kognitif siswa per kelas dengan tes terstandar.</p><span class="feature-link">Mulai Tes IQ →</span>
 </article>
+<!-- Tambahkan di dalam .features-grid -->
 <style>
-.feature-card.fc-ab { position: relative; background-image: url('https://cdn.phototourl.com/member/2026-07-30-8f174ebe-58e3-4ce1-b50e-1b2a0ee65702.png'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-color: #2c3e50; padding: 1.5rem; border-radius: 12px; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.9); min-height: 200px; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; overflow: hidden; border: 2px solid rgba(255,255,255,0.3); isolation: isolate; text-decoration: none; }
-.feature-card.fc-ab::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.3) 100%); border-radius: 12px; z-index: 1; }
-.feature-card.fc-ab:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.6); }
-.feature-card.fc-ab > * { position: relative; z-index: 2; }
-.feature-card.fc-ab h3 { font-size: 1.3rem; margin: 0.5rem 0; font-weight: bold; color: #fff; }
-.feature-card.fc-ab p { font-size: 0.9rem; margin: 0.5rem 0; line-height: 1.5; color: #f0f0f0; }
-.feature-card.fc-ab .feature-link { display: inline-block; margin-top: 0.75rem; font-weight: bold; font-size: 0.9rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.2); border-radius: 6px; transition: background 0.3s ease; text-decoration: none; color: #fff; }
-.feature-card.fc-ab .feature-link:hover { background: rgba(255,255,255,0.35); }
+.feature-card.fc-abs-standalone {
+  position: relative;
+  background-image: url('https://cdn.phototourl.com/member/2026-07-30-8f174ebe-58e3-4ce1-b50e-1b2a0ee65702.png');
+  background-size: cover; background-position: center center;
+  background-repeat: no-repeat; background-color: #2c3e50;
+  padding: 1.5rem; border-radius: 12px; color: white;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+  min-height: 200px; display: flex; flex-direction: column;
+  justify-content: flex-end; cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden; border: 2px solid rgba(255,255,255,0.3);
+  isolation: isolate; text-decoration: none;
+}
+.feature-card.fc-abs-standalone::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.3) 100%);
+  border-radius: 12px; z-index: 1;
+}
+.feature-card.fc-abs-standalone:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  border-color: rgba(255,255,255,0.6);
+}
+.feature-card.fc-abs-standalone > * { position: relative; z-index: 2; }
+.feature-card.fc-abs-standalone h3 {
+  font-size: 1.3rem; margin: 0.5rem 0; font-weight: bold; color: #fff;
+}
+.feature-card.fc-abs-standalone p {
+  font-size: 0.9rem; margin: 0.5rem 0; line-height: 1.5; color: #f0f0f0;
+}
+.feature-card.fc-abs-standalone .feature-link {
+  display: inline-block; margin-top: 0.75rem; font-weight: bold;
+  font-size: 0.9rem; padding: 0.4rem 0.8rem;
+  background: rgba(255,255,255,0.2); border-radius: 6px;
+  transition: background 0.3s ease; text-decoration: none; color: #fff;
+}
+.feature-card.fc-abs-standalone .feature-link:hover {
+  background: rgba(255,255,255,0.35);
+}
 </style>
-<article class="feature-card fc-ab" onclick="go('absensi')" role="button" tabindex="0" aria-label="Buka menu Absensi">
-<div class="feature-icon">📋</div><h3>Absensi Digital</h3><p>Catat kehadiran siswa per kelas secara online, cepat, dan terintegrasi.</p><span class="feature-link">Buka Absensi →</span>
+<article class="feature-card fc-abs-standalone" onclick="go('absensi-standalone')" role="button" tabindex="0" aria-label="Buka Absensi Siswa SMPN 56">
+  <div class="feature-icon">📋</div>
+  <h3>Absensi Siswa Digital</h3>
+  <p>Sistem pencatatan kehadiran siswa terintegrasi untuk Kelas VII, VIII, IX dengan backend permanen lintas device.</p>
+  <span class="feature-link">Buka Absensi →</span>
 </article>
 <style>
 .feature-card.fc-ra { position: relative; background-image: url('https://cdn.phototourl.com/member/2026-10-03-85962753-226d-4bcf-88be-8d9aec1e36c2.png'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-color: #2c3e50; padding: 1.5rem; border-radius: 12px; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.9); min-height: 200px; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; overflow: hidden; border: 2px solid rgba(255,255,255,0.3); isolation: isolate; text-decoration: none; }
@@ -2902,50 +3608,153 @@ aria-label="Buka Suara Aspirasi & Aduan Siswa">
 <div class="link-box"><a onclick="loadExt('https://appseet11-cmd.github.io/TES-IQ-KLS9/','iq')"><span class="link-num">3</span><div class="link-text"><h5>Tes IQ Kelas IX</h5><span>Mulai Tes</span></div><span class="arrow-icon">→</span></a></div>
 </div>
 </div>
-<div id="absensi" class="page ab">
-<button class="back-btn" onclick="go('home')">← Kembali ke Beranda</button>
-<h2 class="page-title">📋 Absensi Siswa</h2>
-<p class="page-desc">Pilih kelas untuk membuka halaman absensi digital. Gunakan filter untuk menampilkan kelas tertentu.</p>
-<div class="absensi-tag-filter">
-<div class="absensi-tag-filter-label">🏷️ Filter Berdasarkan Kelas:</div>
-<button class="absensi-tag-btn active" data-filter="all" onclick="filterAbsensiCards('all',this)">📋 Semua Kelas <span class="tag-count">30</span></button>
-<button class="absensi-tag-btn" data-filter="vii" onclick="filterAbsensiCards('vii',this)">📘 Kelas VII <span class="tag-count">10</span></button>
-<button class="absensi-tag-btn" data-filter="viii" onclick="filterAbsensiCards('viii',this)">📗 Kelas VIII <span class="tag-count">10</span></button>
-<button class="absensi-tag-btn" data-filter="ix" onclick="filterAbsensiCards('ix',this)">📕 Kelas IX <span class="tag-count">10</span></button>
+<!-- ========== HALAMAN ABSENSI SISWA SMPN 56 ========== -->
+<div id="absensi-standalone" class="page absensi-standalone-page">
+  <button class="back-btn" onclick="go('home')">← Kembali ke Beranda</button>
+
+  <!-- HERO HEADER -->
+  <header class="abs-hero">
+    <div class="abs-hero-content">
+      <div class="abs-badge">
+        <span class="abs-badge-dot"></span>
+        <span>Absensi Digital • Permanen • Lintas Device</span>
+      </div>
+      <h1>ABSENSI SISWA<br><em>SMP NEGERI 56 JAKARTA</em></h1>
+      <p class="abs-hero-sub">
+        Sistem pencatatan kehadiran siswa digital terintegrasi untuk Kelas VII, VIII, dan IX.
+        Link tersimpan <strong>permanen</strong> di HTML & Google Sheets.
+      </p>
+      <div class="abs-stats">
+        <div class="abs-stat">
+          <span class="abs-stat-num">10</span>
+          <div class="abs-stat-lbl">Kelas VII</div>
+        </div>
+        <div class="abs-stat">
+          <span class="abs-stat-num">9</span>
+          <div class="abs-stat-lbl">Kelas VIII</div>
+        </div>
+        <div class="abs-stat">
+          <span class="abs-stat-num">9</span>
+          <div class="abs-stat-lbl">Kelas IX</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ACTION BAR -->
+  <div class="abs-action-bar">
+    <div class="abs-action-card">
+      <div class="abs-action-row">
+        <div class="abs-backend-status connected" id="absBackendStatus">
+          <span class="status-dot"></span>
+          <div style="flex:1;">
+            <strong id="absBackendLabel">✅ Backend Terhubung (Permanen)</strong>
+            <small id="absBackendUrl">URL Apps Script sudah tertanam di HTML</small>
+          </div>
+        </div>
+        <div class="abs-action-buttons">
+          <button class="abs-act-btn sync" onclick="absSyncToSheet()" title="Push semua link ke Google Sheets">
+            🔄 Sync dari Sheet
+          </button>
+          <button class="abs-act-btn push" onclick="absPushFromSheet()" title="Ambil link dari Sheet ke card asal">
+            💾 Push dari Sheet
+          </button>
+        </div>
+      </div>
+      <div class="abs-permanent-info">
+        🔒 <strong>Mode Permanen Aktif:</strong> URL Apps Script sudah tertanam langsung di file HTML ini.
+        Backend otomatis aktif begitu halaman dibuka — <strong>tidak perlu konfigurasi ulang</strong>.
+        Berlaku di semua device (HP, PC, tablet) selama file HTML ini digunakan.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB NAVIGATION -->
+  <nav class="abs-tabs-standalone">
+    <div class="abs-tabs-inner">
+      <button class="abs-tab-btn active" data-abs-tab="vii" onclick="absSwitchTab('vii', this)">
+        <span class="tab-emoji">📘</span>
+        <span>Kelas VII</span>
+        <span class="tab-count">10</span>
+      </button>
+      <button class="abs-tab-btn" data-abs-tab="viii" onclick="absSwitchTab('viii', this)">
+        <span class="tab-emoji">📗</span>
+        <span>Kelas VIII</span>
+        <span class="tab-count">9</span>
+      </button>
+      <button class="abs-tab-btn" data-abs-tab="ix" onclick="absSwitchTab('ix', this)">
+        <span class="tab-emoji">📕</span>
+        <span>Kelas IX</span>
+        <span class="tab-count">9</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- CONTAINER -->
+  <div class="abs-container">
+    <div class="abs-panel-header">
+      <h2 id="abs-panel-title">📘 Absensi Kelas VII</h2>
+      <p>Tahun Ajaran 2026/2027 — Fase D • 10 Kelas • Klik ⚙️ untuk menyematkan link absensi</p>
+    </div>
+    <div class="abs-panel active" id="abs-panel-vii">
+      <div class="abs-grid" id="abs-grid-vii"></div>
+    </div>
+    <div class="abs-panel" id="abs-panel-viii">
+      <div class="abs-grid" id="abs-grid-viii"></div>
+    </div>
+    <div class="abs-panel" id="abs-panel-ix">
+      <div class="abs-grid" id="abs-grid-ix"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER SECTION -->
+  <footer class="abs-footer-section">
+    <h4>📋 Absensi Digital SMPN 56 Jakarta</h4>
+    <p>Sistem Pencatatan Kehadiran Siswa Terintegrasi</p>
+    <p>Jl. Jeruk Purut, Cilandak Timur, Pasar Minggu — Jakarta Selatan</p>
+    <div class="div-line"></div>
+    <p class="copy">© 2026 SMP Negeri 56 Jakarta • File Frontend Standalone</p>
+  </footer>
+
+  <!-- MODAL EMBED URL -->
+  <div class="abs-modal-ov" id="abs-modal-embed" role="dialog" aria-modal="true">
+    <div class="abs-modal-box">
+      <div class="abs-modal-hdr">
+        <div class="hdr-icon">🔗</div>
+        <h3 id="abs-modal-title">Sematkan Link Absensi</h3>
+        <p id="abs-modal-subtitle">Kelas VII-A</p>
+      </div>
+      <div class="abs-modal-body">
+        <div class="abs-modal-info">
+          💡 <strong>Cara Pakai:</strong> Tempelkan URL halaman absensi lalu klik <strong>Simpan</strong>.
+          Link akan otomatis tersinkron ke Google Sheets (backend permanen).
+        </div>
+        <label for="abs-url-input">🌐 URL Halaman Absensi:</label>
+        <input type="text" id="abs-url-input" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+        <div class="abs-modal-acts">
+          <button class="abs-modal-btn ghost" onclick="absCloseModal()">Batal</button>
+          <button class="abs-modal-btn primary" onclick="absSaveUrl()">💾 Simpan Link</button>
+        </div>
+        <div id="abs-current-url-box" style="margin-top:14px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="abs-toast" id="abs-toast"></div>
+
+  <!-- EMBEDDED DATA (URL BACKEND PERMANEN) -->
+  <script type="application/json" id="abs-embedded-data">
+  {
+    "absensi": {},
+    "backendUrl": "https://script.google.com/macros/s/AKfycbxAlpkW1S19qqZS2e8NN8CJnod2jXRbL-N7t0TZ-BKfjH89Oea-vG0Qyruu9C89tLSIyA/exec",
+    "version": "2.0",
+    "lastUpdated": "2026-11-15T00:00:00.000Z",
+    "note": "URL Backend Absensi - tertanam permanen di HTML"
+  }
+  </script>
 </div>
-<div class="link-grid">
-<div class="link-box" data-category="vii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbydbhKkQytq50X3VW2WeyBtkizLh7XukdwnprKKZ62mCxAgFq3h9XBvq8leEwAwJC1d/exec','absensi')"><span class="link-num">1</span><div class="link-text"><h5>Absensi Kelas VII-A</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="vii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbxnSIxJxDXhY2ZY56ll2miXVSwDJgAg0Ij1R-ElQ8Oj4nHqkNxIPzObOLm0v6GZdrqu/exec','absensi')"><span class="link-num">2</span><div class="link-text"><h5>Absensi Kelas VII-B</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="vii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbxQp6WKGEtJ4QtONLMJnLL9fU9-5QAfranc79akGD1LJWkCr2MEwaSS2DLzPRJJj2fy/exec','absensi')"><span class="link-num">3</span><div class="link-text"><h5>Absensi Kelas VII-C</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="vii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbwWA3pDvHkMIkDLonLbgsZ_g_5uXTzoxMdx455CFJ4Usq4_kcIZRVcIlsuBTTnZSbGF/exec','absensi')"><span class="link-num">4</span><div class="link-text"><h5>Absensi Kelas VII-D</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="vii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycby7tE6u52mKGPtWFXXwQG8J9CocUZckwevUDa-NRY_qbQz9BXYTYIoFIhrh4klbftFGqw/exec','absensi')"><span class="link-num">5</span><div class="link-text"><h5>Absensi Kelas VII-E</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="vii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbz-QtGHpeFbRvz_b78Xp7TWW48m6FLxaabs9NpscXltYP6mKZkqMosKknpmP29CSXc/exec','absensi')"><span class="link-num">6</span><div class="link-text"><h5>Absensi Kelas VII-F</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="vii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbyWgTNkgx48Knd27bKo24y2KJQiDlQpXT8foZcdv52pX93Yqom_OZFiI5kEpLB_2Pj6DA/exec','absensi')"><span class="link-num">7</span><div class="link-text"><h5>Absensi Kelas VII-G</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="vii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbzCQCeCDPMrxg-W8OgJ0zdYN9o1v8-k3EQcGE-Ne7qDDhhclwfBtiWt3_GyLAgjZMy6QA/exec','absensi')"><span class="link-num">8</span><div class="link-text"><h5>Absensi Kelas VII-H</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="vii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbw8KThRZbjy_hgxsB9pjP0wCjwNs9fOMDJ410M0pKMWJ_MRsoJR17JpKoahZUIbGvpo/exec','absensi')"><span class="link-num">9</span><div class="link-text"><h5>Absensi Kelas VII-I</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="vii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbwAgQGT_1ENzH_R8Ci9qK9OqzXsobBrEhyaSN3OEh5b1OGz18f-s9coB5sTS_wZRJGS/exec','absensi')"><span class="link-num">10</span><div class="link-text"><h5>Absensi Kelas VII-J</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="viii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbz3M_MhwF_2qgatqX39JnNVt9Y3U3B05F2H6OcvqBFJHpnoYuDFF4FeWFY-Std-cv99Sg/exec','absensi')"><span class="link-num">11</span><div class="link-text"><h5>Absensi Kelas VIII-A</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="viii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbxtA1zFeaUNo0Y2OwG4ipTNJV3hsUrXfXYiNgx0jWXgOk3LPpcMJJxUS0sUBxQiHSirew/exec','absensi')"><span class="link-num">12</span><div class="link-text"><h5>Absensi Kelas VIII-B</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="viii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbz7Nfi_fcr9jM5cC_sVwQLjQ8Onw4UAnQySFKVZ5Yjh4qCkTLLpPOdkJx1R4cP7zLU0/exec','absensi')"><span class="link-num">13</span><div class="link-text"><h5>Absensi Kelas VIII-C</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="viii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbz9DZ9Ubc2XhzgwFEBsvKqAVGjA6-w5btko3bBOT9-1IDHGZoHQcoMFgsEg34OI9YksMA/exec','absensi')"><span class="link-num">14</span><div class="link-text"><h5>Absensi Kelas VIII-D</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="viii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbzblZ4PZ7EzKFw2O9A5ER16SkLehScg43051KhB1z-VeD7FT8gKpQjcyjbrcx6-rjmR/exec','absensi')"><span class="link-num">15</span><div class="link-text"><h5>Absensi Kelas VIII-E</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="viii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbwePrjp4hpJm9rKlKvKgoriw1oZ4SVWsQlkRk2asP-e_SKShGvWE8naSp7hDBvob-8-/exec','absensi')"><span class="link-num">16</span><div class="link-text"><h5>Absensi Kelas VIII-F</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="viii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbwBtmfgv4x3BG83amfJzLIBnD0XcMtRlpHO-NRPixvPks2tm2V0kx6p2Ied_9mBOwnX/exec','absensi')"><span class="link-num">17</span><div class="link-text"><h5>Absensi Kelas VIII-G</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="viii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbyH9N_J_2kM7s33914bxsG9PMALwliq0-owomHaxmBMc2NgOcvAAtR194K06sFl4aH-Uw/exec','absensi')"><span class="link-num">18</span><div class="link-text"><h5>Absensi Kelas VIII-H</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="viii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbwVodL8bhYXA9N5qcrZ51ug6UYjZi3WOAGyQsBB9SRYU2tCfNIwVmu-y69AmlaZEjFu/exec','absensi')"><span class="link-num">19</span><div class="link-text"><h5>Absensi Kelas VIII-I</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="viii"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbwwyA2qzkpIkYF27r3-ZuQg9MlDHeXm0rHjbTTFxcg8IaOwQ08C5Q97o51OcQoq1A_kOQ/exec','absensi')"><span class="link-num">20</span><div class="link-text"><h5>Absensi Kelas VIII-J</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="ix"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbxGx-HVonC2trYKTtBhZfyir9qQCd4__Im5hp1CKljptJOT1tKow-Ii7DUGsnSOEJ0OHQ/exec','absensi')"><span class="link-num">21</span><div class="link-text"><h5>Absensi Kelas IX-A</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="ix"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbyIPl5Jo1y169-otDviqGn7_srdigC5DpDqAAyrcLoib-6A_NF3swFwAvs-W-GzqDUk9A/exec','absensi')"><span class="link-num">22</span><div class="link-text"><h5>Absensi Kelas IX-B</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="ix"><a onclick="loadExt('https://appseet11-cmd.github.io/Abesnsi-Kelas-IXC/','absensi')"><span class="link-num">23</span><div class="link-text"><h5>Absensi Kelas IX-C</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="ix"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbxnxqBJUuLGRxQcxj8D98eH6A5ZJ46b9SFhrGKzOBTn7wh-gDmRh4LW-Lz-nlHA9KDX/exec','absensi')"><span class="link-num">24</span><div class="link-text"><h5>Absensi Kelas IX-D</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="ix"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbw24jXdqQk64WTdcFMq7BQAPLv5ExUDEXSJ5Sz6y9_AhUAoBO_4w53g-kgIzrilCRHiAg/exec','absensi')"><span class="link-num">25</span><div class="link-text"><h5>Absensi Kelas IX-E</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="ix"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbwzgdnlZMr1XJPZuqfTTa99kcX5QXSBikuaQG279TZnyyRUxnv1hcqUyVoV0h_BDg_1yA/exec','absensi')"><span class="link-num">26</span><div class="link-text"><h5>Absensi Kelas IX-F</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="ix"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbyWOOYUXgJwg-G9w9bp24PaSxu7a3_DsFZxaDIsk8X-27IKzOKG9fL-Z0q6WXJ9uFDe/exec','absensi')"><span class="link-num">27</span><div class="link-text"><h5>Absensi Kelas IX-G</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="ix"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbxmBRMAj7MdL6hs5ulvHCGbWxp3VctqcVEWHzNJSvdE1KCZGJ_fltPEAH_Xya80rSG-FA/exec','absensi')"><span class="link-num">28</span><div class="link-text"><h5>Absensi Kelas IX-H</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="ix"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbwsmq3rFMOOB0SlpPsPVB8prtPWlNTJGsdZ_zV9Txep_dodGP2pApTOHKqZqOH1yJu9Kw/exec','absensi')"><span class="link-num">29</span><div class="link-text"><h5>Absensi Kelas IX-I</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-<div class="link-box" data-category="ix"><a onclick="loadExt('https://script.google.com/macros/s/AKfycbzJj_YF5Rno7saI2V-AqGmoIFCvK2jfUfyf01WX6OHyGyM2g0Vp7OxWF5xU5E11S5WjjA/exec','absensi')"><span class="link-num">30</span><div class="link-text"><h5>Absensi Kelas IX-J</h5><span>Buka Absensi</span></div><span class="arrow-icon">→</span></a></div>
-</div>
-</div>
+<!-- ========== HALAMAN ABSENSI SISWA [END] ========== -->
 <div id="rekap" class="page ra">
 <button class="back-btn" onclick="go('home')">← Kembali ke Beranda</button>
 <h2 class="page-title">📈 Rekap Absensi Siswa</h2>
@@ -3331,14 +4140,23 @@ updateBreadcrumb('home');
 }
 });
 const BREADCRUMB_MAP = {
-'home': 'Platform BK Digital', 'adminbk56': 'Administrasi BK56',
-'instrumen6c': 'Instrument 6C', 'panduanbk-dl': 'Panduan BK Deep Learning',
-'templatebk-dl': 'Template BK Deep Learning',
-'materi': 'Materi Pembelajaran', 'latihan': 'Refleksi', 'asesmen': 'Asesmen Awal',
-'quiz': 'Quiz Interaktif', 'video': 'Video Pembelajaran',
-'game': 'Game Edukatif', 'analisis': 'Analisis Siswa',
-'iq': 'Tes IQ', 'absensi': 'Absensi Siswa', 'rekap': 'Rekap Absensi',
-'carinis': 'Cari NIS Siswa'
+  'home': 'Platform BK Digital',
+  'adminbk56': 'Administrasi BK56',
+  'instrumen6c': 'Instrument 6C',
+  'panduanbk-dl': 'Panduan BK Deep Learning',
+  'templatebk-dl': 'Template BK Deep Learning',
+  'materi': 'Materi Pembelajaran',
+  'latihan': 'Refleksi',
+  'asesmen': 'Asesmen Awal',
+  'quiz': 'Quiz Interaktif',
+  'video': 'Video Pembelajaran',
+  'game': 'Game Edukatif',
+  'analisis': 'Analisis Siswa',
+  'iq': 'Tes IQ',
+  'absensi': 'Absensi Siswa',           // ← Biarkan (untuk kompatibilitas)
+  'absensi-standalone': 'Absensi Digital',  // ← TAMBAHKAN INI
+  'rekap': 'Rekap Absensi',
+  'carinis': 'Cari NIS Siswa'
 };
 function updateBreadcrumb(id) {
 var current = document.getElementById('breadcrumb-current');
@@ -19181,5 +19999,882 @@ console.log('✅ [NoScroll] Patch aktif — semua tombol kini TAP LANGSUNG tanpa
 <!-- ================================================================ -->
 <!-- ========== PATCH NO-SCROLL: TAP LANGSUNG KE HALAMAN [END] ========== -->
 <!-- ================================================================ -->
+ <!-- ========== ABSENSI SISWA - JAVASCRIPT ========== -->
+<script>
+(function(){
+"use strict";
+/* ================================================================
+ * ABSENSI STANDALONE - BACKEND PERMANEN (TERTANAM DI HTML)
+ * ================================================================ */
+const ABS_KEY = 'absensi_smpn56_links';
+const EMB_ID  = 'abs-embedded-data';
+
+const DEFAULT_BACKEND_URL = 'https://script.google.com/macros/s/AKfycbxAlpkW1S19qqZS2e8NN8CJnod2jXRbL-N7t0TZ-BKfjH89Oea-vG0Qyruu9C89tLSIyA/exec';
+
+/* ================================================================
+ * DATA KELAS (28 card)
+================================================================ */
+const ABS_DATA = {
+  vii: [
+    { id: 'vii-a', label: 'VII-A', title: 'Kelas VII-A', sub: 'Fase D • Kelas 7A' },
+    { id: 'vii-b', label: 'VII-B', title: 'Kelas VII-B', sub: 'Fase D • Kelas 7B' },
+    { id: 'vii-c', label: 'VII-C', title: 'Kelas VII-C', sub: 'Fase D • Kelas 7C' },
+    { id: 'vii-d', label: 'VII-D', title: 'Kelas VII-D', sub: 'Fase D • Kelas 7D' },
+    { id: 'vii-e', label: 'VII-E', title: 'Kelas VII-E', sub: 'Fase D • Kelas 7E' },
+    { id: 'vii-f', label: 'VII-F', title: 'Kelas VII-F', sub: 'Fase D • Kelas 7F' },
+    { id: 'vii-g', label: 'VII-G', title: 'Kelas VII-G', sub: 'Fase D • Kelas 7G' },
+    { id: 'vii-h', label: 'VII-H', title: 'Kelas VII-H', sub: 'Fase D • Kelas 7H' },
+    { id: 'vii-i', label: 'VII-I', title: 'Kelas VII-I', sub: 'Fase D • Kelas 7I' },
+    { id: 'vii-j', label: 'VII-J', title: 'Kelas VII-J', sub: 'Fase D • Kelas 7J' }
+  ],
+  viii: [
+    { id: 'viii-a', label: 'VIII-A', title: 'Kelas VIII-A', sub: 'Fase D • Kelas 8A' },
+    { id: 'viii-b', label: 'VIII-B', title: 'Kelas VIII-B', sub: 'Fase D • Kelas 8B' },
+    { id: 'viii-c', label: 'VIII-C', title: 'Kelas VIII-C', sub: 'Fase D • Kelas 8C' },
+    { id: 'viii-d', label: 'VIII-D', title: 'Kelas VIII-D', sub: 'Fase D • Kelas 8D' },
+    { id: 'viii-e', label: 'VIII-E', title: 'Kelas VIII-E', sub: 'Fase D • Kelas 8E' },
+    { id: 'viii-f', label: 'VIII-F', title: 'Kelas VIII-F', sub: 'Fase D • Kelas 8F' },
+    { id: 'viii-g', label: 'VIII-G', title: 'Kelas VIII-G', sub: 'Fase D • Kelas 8G' },
+    { id: 'viii-h', label: 'VIII-H', title: 'Kelas VIII-H', sub: 'Fase D • Kelas 8H' },
+    { id: 'viii-i', label: 'VIII-I', title: 'Kelas VIII-I', sub: 'Fase D • Kelas 8I' }
+  ],
+  ix: [
+    { id: 'ix-a', label: 'IX-A', title: 'Kelas IX-A', sub: 'Fase D • Kelas 9A' },
+    { id: 'ix-b', label: 'IX-B', title: 'Kelas IX-B', sub: 'Fase D • Kelas 9B' },
+    { id: 'ix-c', label: 'IX-C', title: 'Kelas IX-C', sub: 'Fase D • Kelas 9C' },
+    { id: 'ix-d', label: 'IX-D', title: 'Kelas IX-D', sub: 'Fase D • Kelas 9D' },
+    { id: 'ix-e', label: 'IX-E', title: 'Kelas IX-E', sub: 'Fase D • Kelas 9E' },
+    { id: 'ix-f', label: 'IX-F', title: 'Kelas IX-F', sub: 'Fase D • Kelas 9F' },
+    { id: 'ix-g', label: 'IX-G', title: 'Kelas IX-G', sub: 'Fase D • Kelas 9G' },
+    { id: 'ix-h', label: 'IX-H', title: 'Kelas IX-H', sub: 'Fase D • Kelas 9H' },
+    { id: 'ix-i', label: 'IX-I', title: 'Kelas IX-I', sub: 'Fase D • Kelas 9I' }
+  ]
+};
+
+/* ================================================================
+ * STORAGE HELPERS
+================================================================ */
+function absReadEmb() {
+  try {
+    const el = document.getElementById(EMB_ID);
+    return el ? JSON.parse(el.textContent) : null;
+  } catch(e) { return null; }
+}
+function absWriteEmb(data) {
+  try {
+    const el = document.getElementById(EMB_ID);
+    if (el) { el.textContent = JSON.stringify(data); return true; }
+    return false;
+  } catch(e) { return false; }
+}
+function absLoadLinks() {
+  try {
+    const raw = localStorage.getItem(ABS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') return parsed;
+    }
+  } catch(e) {}
+  try {
+    const emb = absReadEmb();
+    if (emb && emb.absensi && Object.keys(emb.absensi).length > 0) {
+      localStorage.setItem(ABS_KEY, JSON.stringify(emb.absensi));
+      return emb.absensi;
+    }
+  } catch(e) {}
+  return {};
+}
+function absSaveLinks(data) {
+  try {
+    localStorage.setItem(ABS_KEY, JSON.stringify(data || {}));
+    const emb = absReadEmb() || {};
+    emb.absensi = data || {};
+    emb.lastUpdated = new Date().toISOString();
+    absWriteEmb(emb);
+  } catch(e) {
+    absToast('❌ Gagal menyimpan: ' + e.message, 'error');
+  }
+}
+
+function absLoadConfig() {
+  const emb = absReadEmb();
+  if (emb && emb.backendUrl && emb.backendUrl.trim()) {
+    return emb.backendUrl.trim();
+  }
+  if (DEFAULT_BACKEND_URL && DEFAULT_BACKEND_URL.trim()) {
+    return DEFAULT_BACKEND_URL.trim();
+  }
+  return '';
+}
+
+/* ================================================================
+ * TOAST
+================================================================ */
+let toastTimer;
+function absToast(message, type) {
+  type = type || 'info';
+  const toast = document.getElementById('abs-toast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.className = 'abs-toast ' + type;
+  clearTimeout(toastTimer);
+  setTimeout(() => toast.classList.add('show'), 10);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+/* ================================================================
+ * RENDER CARDS
+================================================================ */
+function absRenderCards() {
+  const links = absLoadLinks();
+  ['vii', 'viii', 'ix'].forEach(function(kelas) {
+    const grid = document.getElementById('abs-grid-' + kelas);
+    if (!grid) return;
+    const items = ABS_DATA[kelas];
+    let html = '';
+    items.forEach(function(item) {
+      const url = links[item.id] || '';
+      const hasLink = url && url.trim() !== '';
+      html += '<div class="abs-card" data-abs-id="' + item.id + '">' +
+        '<div class="abs-card-top">' +
+          '<div class="abs-card-icon ' + kelas + '">' + item.label.split('-')[1] + '</div>' +
+          '<div class="abs-card-info">' +
+            '<h3 class="abs-card-title">' + item.title + '</h3>' +
+            '<div class="abs-card-sub">' + item.sub + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="abs-url-box ' + (hasLink ? 'has-link' : 'empty') + '">' +
+          '<span class="url-icon">' + (hasLink ? '🔗' : '📭') + '</span>' +
+          '<span class="url-text">' + (hasLink ? absEscapeHtml(url) : 'Belum ada link absensi') + '</span>' +
+        '</div>' +
+        '<div class="abs-btns">' +
+          '<button class="abs-btn-open ' + (hasLink ? '' : 'empty') + '" onclick="absOpenLink(\'' + item.id + '\')">' +
+            '<span>' + (hasLink ? '📂' : '⚠️') + '</span>' +
+            '<span>' + (hasLink ? 'Buka Absensi' : 'Belum Ada Link') + '</span>' +
+          '</button>' +
+          '<button class="abs-btn-manage" onclick="absOpenModal(\'' + item.id + '\')" title="Kelola Link">⚙️</button>' +
+        '</div>' +
+      '</div>';
+    });
+    grid.innerHTML = html;
+  });
+}
+function absEscapeHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ================================================================
+ * TAB SWITCHING
+================================================================ */
+window.absSwitchTab = function(kelas, btn) {
+  document.querySelectorAll('.abs-tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.abs-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('abs-panel-' + kelas);
+  if (panel) panel.classList.add('active');
+  const titles = {
+    vii: '📘 Absensi Kelas VII',
+    viii: '📗 Absensi Kelas VIII',
+    ix: '📕 Absensi Kelas IX'
+  };
+  const subs = {
+    vii: 'Tahun Ajaran 2026/2027 — Fase D • 10 Kelas (A-J)',
+    viii: 'Tahun Ajaran 2026/2027 — Fase D • 9 Kelas (A-I)',
+    ix: 'Tahun Ajaran 2026/2027 — Fase D • 9 Kelas (A-I)'
+  };
+  const titleEl = document.getElementById('abs-panel-title');
+  if (titleEl) {
+    titleEl.innerHTML = titles[kelas];
+    titleEl.nextElementSibling.textContent = subs[kelas];
+  }
+};
+
+/* ================================================================
+ * MODAL FUNCTIONS
+================================================================ */
+let currentAbsId = null;
+window.absOpenModal = function(id) {
+  currentAbsId = id;
+  const links = absLoadLinks();
+  const currentUrl = links[id] || '';
+  let itemInfo = null;
+  ['vii', 'viii', 'ix'].forEach(k => {
+    ABS_DATA[k].forEach(item => {
+      if (item.id === id) itemInfo = item;
+    });
+  });
+  document.getElementById('abs-modal-title').textContent = '🔗 Sematkan Link Absensi';
+  document.getElementById('abs-modal-subtitle').textContent = itemInfo ? itemInfo.title : id;
+  document.getElementById('abs-url-input').value = currentUrl;
+  const box = document.getElementById('abs-current-url-box');
+  if (currentUrl) {
+    box.innerHTML = '<div style="background:#ecfdf5;border:1px solid #10b981;border-radius:8px;padding:10px;font-size:0.78rem;color:#065f46;">' +
+      '<strong>✅ Link saat ini:</strong><br>' +
+      '<span style="font-family:Consolas,monospace;word-break:break-all;font-size:0.72rem;">' + absEscapeHtml(currentUrl) + '</span>' +
+      '<br><button onclick="absClearUrl()" style="margin-top:8px;background:#fee2e2;color:#dc2626;border:none;padding:6px 12px;border-radius:6px;font-size:0.75rem;font-weight:700;cursor:pointer;">🗑️ Hapus Link</button>' +
+    '</div>';
+  } else {
+    box.innerHTML = '';
+  }
+  document.getElementById('abs-modal-embed').classList.add('show');
+  setTimeout(() => {
+    document.getElementById('abs-url-input').focus();
+    document.getElementById('abs-url-input').select();
+  }, 300);
+};
+window.absCloseModal = function() {
+  document.getElementById('abs-modal-embed').classList.remove('show');
+  currentAbsId = null;
+};
+window.absSaveUrl = function() {
+  if (!currentAbsId) return;
+  const input = document.getElementById('abs-url-input');
+  let url = input.value.trim();
+  if (!url) {
+    absToast('⚠️ URL tidak boleh kosong', 'error');
+    return;
+  }
+  if (!/^https?:\/\//i.test(url) && !/^mailto:/i.test(url)) {
+    url = 'https://' + url;
+  }
+  const links = absLoadLinks();
+  links[currentAbsId] = url;
+  absSaveLinks(links);
+  absCloseModal();
+  absRenderCards();
+  absToast('✅ Link absensi disimpan! Klik "🔄 Sync dari Sheet" untuk push ke Google Sheets.', 'success');
+};
+window.absClearUrl = function() {
+  if (!currentAbsId) return;
+  if (!confirm('🗑️ Hapus link absensi untuk kelas ini?')) return;
+  const links = absLoadLinks();
+  delete links[currentAbsId];
+  absSaveLinks(links);
+  absCloseModal();
+  absRenderCards();
+  absToast('🗑️ Link dihapus', 'info');
+};
+window.absOpenLink = function(id) {
+  const links = absLoadLinks();
+  const url = links[id];
+  if (!url || !url.trim()) {
+    absToast('⚠️ Link belum disematkan. Klik ⚙️ untuk menambah.', 'error');
+    return;
+  }
+  absToast('📂 Membuka absensi...', 'success');
+  setTimeout(() => { window.open(url, '_blank', 'noopener,noreferrer'); }, 300);
+};
+
+/* ================================================================
+ * UPDATE STATUS BACKEND
+================================================================ */
+function absUpdateBackendStatus() {
+  const url = absLoadConfig();
+  const status = document.getElementById('absBackendStatus');
+  const label = document.getElementById('absBackendLabel');
+  const urlEl = document.getElementById('absBackendUrl');
+  if (!status) return;
+  if (url && url.trim()) {
+    status.className = 'abs-backend-status connected';
+    label.innerHTML = '✅ Backend Terhubung (Permanen)';
+    urlEl.textContent = 'URL Apps Script tertanam di HTML';
+  } else {
+    status.className = 'abs-backend-status disconnected';
+    label.innerHTML = '⚠️ Backend Belum Dikonfigurasi';
+    urlEl.textContent = 'Edit DEFAULT_BACKEND_URL di HTML';
+  }
+}
+
+/* ================================================================
+ * SYNC & PUSH
+================================================================ */
+window.absSyncToSheet = async function() {
+  const backendUrl = absLoadConfig();
+  if (!backendUrl) {
+    absToast('⚠️ URL backend tidak ditemukan di HTML', 'error');
+    return;
+  }
+  const links = absLoadLinks();
+  const keys = Object.keys(links);
+  if (keys.length === 0) {
+    absToast('⚠️ Belum ada link yang disematkan', 'error');
+    return;
+  }
+  if (!confirm('🔄 Sync ' + keys.length + ' link ke Google Sheets?')) return;
+  absToast('🔄 Sedang sync ke Google Sheets...', 'info');
+  try {
+    const batchLinks = [];
+    keys.forEach(id => {
+      let kelas = '', nama = '';
+      ['vii', 'viii', 'ix'].forEach(k => {
+        ABS_DATA[k].forEach(item => {
+          if (item.id === id) {
+            kelas = k.toUpperCase();
+            nama = item.title;
+          }
+        });
+      });
+      batchLinks.push({ id: id, kelas: kelas, nama: nama, url: links[id] });
+    });
+    const res = await fetch(backendUrl, {
+      method: 'POST', redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'batchUpsert', links: batchLinks })
+    });
+    const json = await res.json();
+    if (json.success) {
+      absToast('✅ ' + keys.length + ' link berhasil di-sync ke Google Sheets!', 'success');
+    } else {
+      absToast('❌ Gagal sync: ' + (json.message || ''), 'error');
+    }
+  } catch(e) {
+    absToast('❌ Gagal koneksi: ' + e.message, 'error');
+  }
+};
+
+window.absPushFromSheet = async function() {
+  const backendUrl = absLoadConfig();
+  if (!backendUrl) {
+    absToast('⚠️ URL backend tidak ditemukan di HTML', 'error');
+    return;
+  }
+  if (!confirm('💾 Ambil link dari Google Sheets?')) return;
+  absToast('🔄 Sedang mengambil data dari Google Sheets...', 'info');
+  try {
+    const res = await fetch(backendUrl, { method: 'GET', redirect: 'follow' });
+    const json = await res.json();
+    if (!json.success || !Array.isArray(json.data)) {
+      absToast('❌ Response tidak valid dari Sheet', 'error');
+      return;
+    }
+    const sheetData = json.data;
+    if (sheetData.length === 0) {
+      absToast('ℹ️ Tidak ada data di Google Sheets', 'info');
+      return;
+    }
+    const links = absLoadLinks();
+    let restored = 0;
+    sheetData.forEach(row => {
+      const id = String(row.ID || '').trim();
+      const url = String(row.URL || '').trim();
+      if (!id || !url) return;
+      let validId = false;
+      ['vii', 'viii', 'ix'].forEach(k => {
+        ABS_DATA[k].forEach(item => {
+          if (item.id === id) validId = true;
+        });
+      });
+      if (!validId) return;
+      if (!links[id] || links[id] !== url) {
+        links[id] = url;
+        restored++;
+      }
+    });
+    if (restored === 0) {
+      absToast('ℹ️ Semua link sudah sinkron dengan Sheet', 'info');
+      return;
+    }
+    absSaveLinks(links);
+    absRenderCards();
+    absToast('💾 ' + restored + ' link berhasil dipulihkan ke card asalnya!', 'success');
+  } catch(e) {
+    absToast('❌ Gagal mengambil data: ' + e.message, 'error');
+  }
+};
+
+/* ================================================================
+ * KEYBOARD & CLICK HANDLERS
+================================================================ */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const modal1 = document.getElementById('abs-modal-embed');
+    if (modal1 && modal1.classList.contains('show')) absCloseModal();
+  }
+  if (e.key === 'Enter') {
+    const input1 = document.getElementById('abs-url-input');
+    const modal1 = document.getElementById('abs-modal-embed');
+    if (modal1 && modal1.classList.contains('show') && document.activeElement === input1) {
+      absSaveUrl();
+    }
+  }
+});
+document.addEventListener('click', function(e) {
+  const modal1 = document.getElementById('abs-modal-embed');
+  if (modal1 && e.target === modal1) absCloseModal();
+}, true);
+
+/* ================================================================
+ * 🚀 INIT
+================================================================ */
+function absInit() {
+  console.log('🚀 [Absensi Standalone] Backend Permanen dimulai...');
+  const url = absLoadConfig();
+  if (url) {
+    console.log('✅ Backend URL aktif (tertanam permanen):', url.slice(0, 60) + '...');
+  }
+  absRenderCards();
+  absUpdateBackendStatus();
+}
+
+// Jalankan init saat halaman absensi dibuka
+const _origGoAbs = window.go;
+window.go = function(id) {
+  if (typeof _origGoAbs === 'function') _origGoAbs.apply(this, arguments);
+  if (id === 'absensi-standalone') {
+    setTimeout(absInit, 200);
+  }
+};
+
+// Init awal jika halaman sudah aktif
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    const page = document.getElementById('absensi-standalone');
+    if (page && page.classList.contains('active')) absInit();
+  });
+} else {
+  const page = document.getElementById('absensi-standalone');
+  if (page && page.classList.contains('active')) absInit();
+}
+})();
+</script>
+<!-- ========== ABSENSI SISWA - JAVASCRIPT [END] ========== --><!-- ========== ABSENSI SISWA - JAVASCRIPT ========== -->
+<script>
+(function(){
+"use strict";
+/* ================================================================
+ * ABSENSI STANDALONE - BACKEND PERMANEN (TERTANAM DI HTML)
+ * ================================================================ */
+const ABS_KEY = 'absensi_smpn56_links';
+const EMB_ID  = 'abs-embedded-data';
+
+const DEFAULT_BACKEND_URL = 'https://script.google.com/macros/s/AKfycbxAlpkW1S19qqZS2e8NN8CJnod2jXRbL-N7t0TZ-BKfjH89Oea-vG0Qyruu9C89tLSIyA/exec';
+
+/* ================================================================
+ * DATA KELAS (28 card)
+================================================================ */
+const ABS_DATA = {
+  vii: [
+    { id: 'vii-a', label: 'VII-A', title: 'Kelas VII-A', sub: 'Fase D • Kelas 7A' },
+    { id: 'vii-b', label: 'VII-B', title: 'Kelas VII-B', sub: 'Fase D • Kelas 7B' },
+    { id: 'vii-c', label: 'VII-C', title: 'Kelas VII-C', sub: 'Fase D • Kelas 7C' },
+    { id: 'vii-d', label: 'VII-D', title: 'Kelas VII-D', sub: 'Fase D • Kelas 7D' },
+    { id: 'vii-e', label: 'VII-E', title: 'Kelas VII-E', sub: 'Fase D • Kelas 7E' },
+    { id: 'vii-f', label: 'VII-F', title: 'Kelas VII-F', sub: 'Fase D • Kelas 7F' },
+    { id: 'vii-g', label: 'VII-G', title: 'Kelas VII-G', sub: 'Fase D • Kelas 7G' },
+    { id: 'vii-h', label: 'VII-H', title: 'Kelas VII-H', sub: 'Fase D • Kelas 7H' },
+    { id: 'vii-i', label: 'VII-I', title: 'Kelas VII-I', sub: 'Fase D • Kelas 7I' },
+    { id: 'vii-j', label: 'VII-J', title: 'Kelas VII-J', sub: 'Fase D • Kelas 7J' }
+  ],
+  viii: [
+    { id: 'viii-a', label: 'VIII-A', title: 'Kelas VIII-A', sub: 'Fase D • Kelas 8A' },
+    { id: 'viii-b', label: 'VIII-B', title: 'Kelas VIII-B', sub: 'Fase D • Kelas 8B' },
+    { id: 'viii-c', label: 'VIII-C', title: 'Kelas VIII-C', sub: 'Fase D • Kelas 8C' },
+    { id: 'viii-d', label: 'VIII-D', title: 'Kelas VIII-D', sub: 'Fase D • Kelas 8D' },
+    { id: 'viii-e', label: 'VIII-E', title: 'Kelas VIII-E', sub: 'Fase D • Kelas 8E' },
+    { id: 'viii-f', label: 'VIII-F', title: 'Kelas VIII-F', sub: 'Fase D • Kelas 8F' },
+    { id: 'viii-g', label: 'VIII-G', title: 'Kelas VIII-G', sub: 'Fase D • Kelas 8G' },
+    { id: 'viii-h', label: 'VIII-H', title: 'Kelas VIII-H', sub: 'Fase D • Kelas 8H' },
+    { id: 'viii-i', label: 'VIII-I', title: 'Kelas VIII-I', sub: 'Fase D • Kelas 8I' }
+  ],
+  ix: [
+    { id: 'ix-a', label: 'IX-A', title: 'Kelas IX-A', sub: 'Fase D • Kelas 9A' },
+    { id: 'ix-b', label: 'IX-B', title: 'Kelas IX-B', sub: 'Fase D • Kelas 9B' },
+    { id: 'ix-c', label: 'IX-C', title: 'Kelas IX-C', sub: 'Fase D • Kelas 9C' },
+    { id: 'ix-d', label: 'IX-D', title: 'Kelas IX-D', sub: 'Fase D • Kelas 9D' },
+    { id: 'ix-e', label: 'IX-E', title: 'Kelas IX-E', sub: 'Fase D • Kelas 9E' },
+    { id: 'ix-f', label: 'IX-F', title: 'Kelas IX-F', sub: 'Fase D • Kelas 9F' },
+    { id: 'ix-g', label: 'IX-G', title: 'Kelas IX-G', sub: 'Fase D • Kelas 9G' },
+    { id: 'ix-h', label: 'IX-H', title: 'Kelas IX-H', sub: 'Fase D • Kelas 9H' },
+    { id: 'ix-i', label: 'IX-I', title: 'Kelas IX-I', sub: 'Fase D • Kelas 9I' }
+  ]
+};
+
+/* ================================================================
+ * STORAGE HELPERS
+================================================================ */
+function absReadEmb() {
+  try {
+    const el = document.getElementById(EMB_ID);
+    return el ? JSON.parse(el.textContent) : null;
+  } catch(e) { return null; }
+}
+function absWriteEmb(data) {
+  try {
+    const el = document.getElementById(EMB_ID);
+    if (el) { el.textContent = JSON.stringify(data); return true; }
+    return false;
+  } catch(e) { return false; }
+}
+function absLoadLinks() {
+  try {
+    const raw = localStorage.getItem(ABS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') return parsed;
+    }
+  } catch(e) {}
+  try {
+    const emb = absReadEmb();
+    if (emb && emb.absensi && Object.keys(emb.absensi).length > 0) {
+      localStorage.setItem(ABS_KEY, JSON.stringify(emb.absensi));
+      return emb.absensi;
+    }
+  } catch(e) {}
+  return {};
+}
+function absSaveLinks(data) {
+  try {
+    localStorage.setItem(ABS_KEY, JSON.stringify(data || {}));
+    const emb = absReadEmb() || {};
+    emb.absensi = data || {};
+    emb.lastUpdated = new Date().toISOString();
+    absWriteEmb(emb);
+  } catch(e) {
+    absToast('❌ Gagal menyimpan: ' + e.message, 'error');
+  }
+}
+
+function absLoadConfig() {
+  const emb = absReadEmb();
+  if (emb && emb.backendUrl && emb.backendUrl.trim()) {
+    return emb.backendUrl.trim();
+  }
+  if (DEFAULT_BACKEND_URL && DEFAULT_BACKEND_URL.trim()) {
+    return DEFAULT_BACKEND_URL.trim();
+  }
+  return '';
+}
+
+/* ================================================================
+ * TOAST
+================================================================ */
+let toastTimer;
+function absToast(message, type) {
+  type = type || 'info';
+  const toast = document.getElementById('abs-toast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.className = 'abs-toast ' + type;
+  clearTimeout(toastTimer);
+  setTimeout(() => toast.classList.add('show'), 10);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+/* ================================================================
+ * RENDER CARDS
+================================================================ */
+function absRenderCards() {
+  const links = absLoadLinks();
+  ['vii', 'viii', 'ix'].forEach(function(kelas) {
+    const grid = document.getElementById('abs-grid-' + kelas);
+    if (!grid) return;
+    const items = ABS_DATA[kelas];
+    let html = '';
+    items.forEach(function(item) {
+      const url = links[item.id] || '';
+      const hasLink = url && url.trim() !== '';
+      html += '<div class="abs-card" data-abs-id="' + item.id + '">' +
+        '<div class="abs-card-top">' +
+          '<div class="abs-card-icon ' + kelas + '">' + item.label.split('-')[1] + '</div>' +
+          '<div class="abs-card-info">' +
+            '<h3 class="abs-card-title">' + item.title + '</h3>' +
+            '<div class="abs-card-sub">' + item.sub + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="abs-url-box ' + (hasLink ? 'has-link' : 'empty') + '">' +
+          '<span class="url-icon">' + (hasLink ? '🔗' : '📭') + '</span>' +
+          '<span class="url-text">' + (hasLink ? absEscapeHtml(url) : 'Belum ada link absensi') + '</span>' +
+        '</div>' +
+        '<div class="abs-btns">' +
+          '<button class="abs-btn-open ' + (hasLink ? '' : 'empty') + '" onclick="absOpenLink(\'' + item.id + '\')">' +
+            '<span>' + (hasLink ? '📂' : '⚠️') + '</span>' +
+            '<span>' + (hasLink ? 'Buka Absensi' : 'Belum Ada Link') + '</span>' +
+          '</button>' +
+          '<button class="abs-btn-manage" onclick="absOpenModal(\'' + item.id + '\')" title="Kelola Link">⚙️</button>' +
+        '</div>' +
+      '</div>';
+    });
+    grid.innerHTML = html;
+  });
+}
+function absEscapeHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ================================================================
+ * TAB SWITCHING
+================================================================ */
+window.absSwitchTab = function(kelas, btn) {
+  document.querySelectorAll('.abs-tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.abs-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('abs-panel-' + kelas);
+  if (panel) panel.classList.add('active');
+  const titles = {
+    vii: '📘 Absensi Kelas VII',
+    viii: '📗 Absensi Kelas VIII',
+    ix: '📕 Absensi Kelas IX'
+  };
+  const subs = {
+    vii: 'Tahun Ajaran 2026/2027 — Fase D • 10 Kelas (A-J)',
+    viii: 'Tahun Ajaran 2026/2027 — Fase D • 9 Kelas (A-I)',
+    ix: 'Tahun Ajaran 2026/2027 — Fase D • 9 Kelas (A-I)'
+  };
+  const titleEl = document.getElementById('abs-panel-title');
+  if (titleEl) {
+    titleEl.innerHTML = titles[kelas];
+    titleEl.nextElementSibling.textContent = subs[kelas];
+  }
+};
+
+/* ================================================================
+ * MODAL FUNCTIONS
+================================================================ */
+let currentAbsId = null;
+window.absOpenModal = function(id) {
+  currentAbsId = id;
+  const links = absLoadLinks();
+  const currentUrl = links[id] || '';
+  let itemInfo = null;
+  ['vii', 'viii', 'ix'].forEach(k => {
+    ABS_DATA[k].forEach(item => {
+      if (item.id === id) itemInfo = item;
+    });
+  });
+  document.getElementById('abs-modal-title').textContent = '🔗 Sematkan Link Absensi';
+  document.getElementById('abs-modal-subtitle').textContent = itemInfo ? itemInfo.title : id;
+  document.getElementById('abs-url-input').value = currentUrl;
+  const box = document.getElementById('abs-current-url-box');
+  if (currentUrl) {
+    box.innerHTML = '<div style="background:#ecfdf5;border:1px solid #10b981;border-radius:8px;padding:10px;font-size:0.78rem;color:#065f46;">' +
+      '<strong>✅ Link saat ini:</strong><br>' +
+      '<span style="font-family:Consolas,monospace;word-break:break-all;font-size:0.72rem;">' + absEscapeHtml(currentUrl) + '</span>' +
+      '<br><button onclick="absClearUrl()" style="margin-top:8px;background:#fee2e2;color:#dc2626;border:none;padding:6px 12px;border-radius:6px;font-size:0.75rem;font-weight:700;cursor:pointer;">🗑️ Hapus Link</button>' +
+    '</div>';
+  } else {
+    box.innerHTML = '';
+  }
+  document.getElementById('abs-modal-embed').classList.add('show');
+  setTimeout(() => {
+    document.getElementById('abs-url-input').focus();
+    document.getElementById('abs-url-input').select();
+  }, 300);
+};
+window.absCloseModal = function() {
+  document.getElementById('abs-modal-embed').classList.remove('show');
+  currentAbsId = null;
+};
+window.absSaveUrl = function() {
+  if (!currentAbsId) return;
+  const input = document.getElementById('abs-url-input');
+  let url = input.value.trim();
+  if (!url) {
+    absToast('⚠️ URL tidak boleh kosong', 'error');
+    return;
+  }
+  if (!/^https?:\/\//i.test(url) && !/^mailto:/i.test(url)) {
+    url = 'https://' + url;
+  }
+  const links = absLoadLinks();
+  links[currentAbsId] = url;
+  absSaveLinks(links);
+  absCloseModal();
+  absRenderCards();
+  absToast('✅ Link absensi disimpan! Klik "🔄 Sync dari Sheet" untuk push ke Google Sheets.', 'success');
+};
+window.absClearUrl = function() {
+  if (!currentAbsId) return;
+  if (!confirm('🗑️ Hapus link absensi untuk kelas ini?')) return;
+  const links = absLoadLinks();
+  delete links[currentAbsId];
+  absSaveLinks(links);
+  absCloseModal();
+  absRenderCards();
+  absToast('🗑️ Link dihapus', 'info');
+};
+window.absOpenLink = function(id) {
+  const links = absLoadLinks();
+  const url = links[id];
+  if (!url || !url.trim()) {
+    absToast('⚠️ Link belum disematkan. Klik ⚙️ untuk menambah.', 'error');
+    return;
+  }
+  absToast('📂 Membuka absensi...', 'success');
+  setTimeout(() => { window.open(url, '_blank', 'noopener,noreferrer'); }, 300);
+};
+
+/* ================================================================
+ * UPDATE STATUS BACKEND
+================================================================ */
+function absUpdateBackendStatus() {
+  const url = absLoadConfig();
+  const status = document.getElementById('absBackendStatus');
+  const label = document.getElementById('absBackendLabel');
+  const urlEl = document.getElementById('absBackendUrl');
+  if (!status) return;
+  if (url && url.trim()) {
+    status.className = 'abs-backend-status connected';
+    label.innerHTML = '✅ Backend Terhubung (Permanen)';
+    urlEl.textContent = 'URL Apps Script tertanam di HTML';
+  } else {
+    status.className = 'abs-backend-status disconnected';
+    label.innerHTML = '⚠️ Backend Belum Dikonfigurasi';
+    urlEl.textContent = 'Edit DEFAULT_BACKEND_URL di HTML';
+  }
+}
+
+/* ================================================================
+ * SYNC & PUSH
+================================================================ */
+window.absSyncToSheet = async function() {
+  const backendUrl = absLoadConfig();
+  if (!backendUrl) {
+    absToast('⚠️ URL backend tidak ditemukan di HTML', 'error');
+    return;
+  }
+  const links = absLoadLinks();
+  const keys = Object.keys(links);
+  if (keys.length === 0) {
+    absToast('⚠️ Belum ada link yang disematkan', 'error');
+    return;
+  }
+  if (!confirm('🔄 Sync ' + keys.length + ' link ke Google Sheets?')) return;
+  absToast('🔄 Sedang sync ke Google Sheets...', 'info');
+  try {
+    const batchLinks = [];
+    keys.forEach(id => {
+      let kelas = '', nama = '';
+      ['vii', 'viii', 'ix'].forEach(k => {
+        ABS_DATA[k].forEach(item => {
+          if (item.id === id) {
+            kelas = k.toUpperCase();
+            nama = item.title;
+          }
+        });
+      });
+      batchLinks.push({ id: id, kelas: kelas, nama: nama, url: links[id] });
+    });
+    const res = await fetch(backendUrl, {
+      method: 'POST', redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'batchUpsert', links: batchLinks })
+    });
+    const json = await res.json();
+    if (json.success) {
+      absToast('✅ ' + keys.length + ' link berhasil di-sync ke Google Sheets!', 'success');
+    } else {
+      absToast('❌ Gagal sync: ' + (json.message || ''), 'error');
+    }
+  } catch(e) {
+    absToast('❌ Gagal koneksi: ' + e.message, 'error');
+  }
+};
+
+window.absPushFromSheet = async function() {
+  const backendUrl = absLoadConfig();
+  if (!backendUrl) {
+    absToast('⚠️ URL backend tidak ditemukan di HTML', 'error');
+    return;
+  }
+  if (!confirm('💾 Ambil link dari Google Sheets?')) return;
+  absToast('🔄 Sedang mengambil data dari Google Sheets...', 'info');
+  try {
+    const res = await fetch(backendUrl, { method: 'GET', redirect: 'follow' });
+    const json = await res.json();
+    if (!json.success || !Array.isArray(json.data)) {
+      absToast('❌ Response tidak valid dari Sheet', 'error');
+      return;
+    }
+    const sheetData = json.data;
+    if (sheetData.length === 0) {
+      absToast('ℹ️ Tidak ada data di Google Sheets', 'info');
+      return;
+    }
+    const links = absLoadLinks();
+    let restored = 0;
+    sheetData.forEach(row => {
+      const id = String(row.ID || '').trim();
+      const url = String(row.URL || '').trim();
+      if (!id || !url) return;
+      let validId = false;
+      ['vii', 'viii', 'ix'].forEach(k => {
+        ABS_DATA[k].forEach(item => {
+          if (item.id === id) validId = true;
+        });
+      });
+      if (!validId) return;
+      if (!links[id] || links[id] !== url) {
+        links[id] = url;
+        restored++;
+      }
+    });
+    if (restored === 0) {
+      absToast('ℹ️ Semua link sudah sinkron dengan Sheet', 'info');
+      return;
+    }
+    absSaveLinks(links);
+    absRenderCards();
+    absToast('💾 ' + restored + ' link berhasil dipulihkan ke card asalnya!', 'success');
+  } catch(e) {
+    absToast('❌ Gagal mengambil data: ' + e.message, 'error');
+  }
+};
+
+/* ================================================================
+ * KEYBOARD & CLICK HANDLERS
+================================================================ */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const modal1 = document.getElementById('abs-modal-embed');
+    if (modal1 && modal1.classList.contains('show')) absCloseModal();
+  }
+  if (e.key === 'Enter') {
+    const input1 = document.getElementById('abs-url-input');
+    const modal1 = document.getElementById('abs-modal-embed');
+    if (modal1 && modal1.classList.contains('show') && document.activeElement === input1) {
+      absSaveUrl();
+    }
+  }
+});
+document.addEventListener('click', function(e) {
+  const modal1 = document.getElementById('abs-modal-embed');
+  if (modal1 && e.target === modal1) absCloseModal();
+}, true);
+
+/* ================================================================
+ * 🚀 INIT
+================================================================ */
+function absInit() {
+  console.log('🚀 [Absensi Standalone] Backend Permanen dimulai...');
+  const url = absLoadConfig();
+  if (url) {
+    console.log('✅ Backend URL aktif (tertanam permanen):', url.slice(0, 60) + '...');
+  }
+  absRenderCards();
+  absUpdateBackendStatus();
+}
+
+// Jalankan init saat halaman absensi dibuka
+const _origGoAbs = window.go;
+window.go = function(id) {
+  if (typeof _origGoAbs === 'function') _origGoAbs.apply(this, arguments);
+  if (id === 'absensi-standalone') {
+    setTimeout(absInit, 200);
+  }
+};
+
+// Init awal jika halaman sudah aktif
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    const page = document.getElementById('absensi-standalone');
+    if (page && page.classList.contains('active')) absInit();
+  });
+} else {
+  const page = document.getElementById('absensi-standalone');
+  if (page && page.classList.contains('active')) absInit();
+}
+})();
+</script>
+<!-- ========== ABSENSI SISWA - JAVASCRIPT [END] ========== -->
 </body>
 </html>
