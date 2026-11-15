@@ -21311,33 +21311,41 @@ if (document.readyState === 'loading') {
 })();
 </script>
 <!-- ================================================================ -->
-<!-- PATCH AUTO-SYNC ABSENSI: TANPA BACKUP PERMANEN                   -->
-<!-- Link otomatis tersimpan ke Google Sheets & dipulihkan otomatis   -->
+<!-- PATCH: AUTO-RESTORE ABSENSI DARI GOOGLE SHEETS                  -->
+<!-- Link otomatis pulih setelah clear browser / ganti device        -->
 <!-- ================================================================ -->
 <script>
 (function(){
 "use strict";
 
-var FLAG = '__absAutoSyncNoBackup';
+/* ================================================================
+* ANTI-DOUBLE PATCH
+================================================================ */
+var FLAG = '__absAutoRestoreV1';
 if (window[FLAG]) return;
 window[FLAG] = true;
 
-var ABS_KEY   = 'absensi_smpn56_links';
-var EMB_ID    = 'abs-embedded-data';
-var SYNC_FLAG = 'absensi_last_sync_time';
-var PUSHING   = false;
-var PULLING   = false;
+var ABS_KEY      = 'absensi_smpn56_links';
+var EMB_ID       = 'abs-embedded-data';
+var RESTORE_FLAG = 'abs_last_auto_restore';
+var PUSHING      = false;
 
 /* ================================================================
 * HELPER
 ================================================================ */
-function getBackendUrl() {
+function readEmb() {
   try {
     var el = document.getElementById(EMB_ID);
-    if (!el) return '';
-    var data = JSON.parse(el.textContent);
-    return (data && data.backendUrl) ? data.backendUrl.trim() : '';
-  } catch(e) { return ''; }
+    return el ? JSON.parse(el.textContent) : null;
+  } catch(e) { return null; }
+}
+
+function writeEmb(data) {
+  try {
+    var el = document.getElementById(EMB_ID);
+    if (el) { el.textContent = JSON.stringify(data); return true; }
+  } catch(e) {}
+  return false;
 }
 
 function loadLocal() {
@@ -21352,10 +21360,21 @@ function saveLocal(data) {
   try { localStorage.setItem(ABS_KEY, JSON.stringify(data || {})); } catch(e) {}
 }
 
-function countLinks(data) {
-  var n = 0;
-  for (var k in data) { if (data[k] && data[k].trim()) n++; }
-  return n;
+function getBackendUrl() {
+  var emb = readEmb();
+  if (emb && emb.backendUrl && emb.backendUrl.trim() &&
+      emb.backendUrl.indexOf('PASTE_URL') === -1) {
+    return emb.backendUrl.trim();
+  }
+  return '';
+}
+
+function countLinks() {
+  var l = loadLocal();
+  if (l) { var n = 0; for (var k in l) { if (l[k] && l[k].trim()) n++; } if (n > 0) return n; }
+  var e = readEmb();
+  if (e && e.absensi) { var n2 = 0; for (var k2 in e.absensi) { if (e.absensi[k2] && e.absensi[k2].trim()) n2++; } if (n2 > 0) return n2; }
+  return 0;
 }
 
 function absToastAuto(msg, type) {
@@ -21364,189 +21383,247 @@ function absToastAuto(msg, type) {
   t.textContent = msg;
   t.className = 'abs-toast ' + (type || 'info');
   setTimeout(function(){ t.classList.add('show'); }, 10);
-  setTimeout(function(){ t.classList.remove('show'); }, 3500);
+  setTimeout(function(){ t.classList.remove('show'); }, 4000);
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+         .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 /* ================================================================
-* 🔼 AUTO-PUSH: Kirim link ke Google Sheets secara otomatis
-*    Dipanggil setiap kali user simpan link di card
+* 🔄 AUTO-RESTORE: Ambil link dari Google Sheets saat data kosong
 ================================================================ */
-function autoPushToSheet() {
-  if (PUSHING) return;
+async function autoRestoreFromSheet() {
+  // Hanya restore jika data BENAR-BENAR kosong
+  if (countLinks() > 0) return;
+
+  // Anti-spam: hanya coba 1x per 30 detik
+  var last = parseInt(localStorage.getItem(RESTORE_FLAG) || '0');
+  if (Date.now() - last < 30000) return;
+  localStorage.setItem(RESTORE_FLAG, String(Date.now()));
+
   var backendUrl = getBackendUrl();
   if (!backendUrl) return;
 
-  var links = loadLocal();
-  var keys = Object.keys(links).filter(function(k){ return links[k] && links[k].trim(); });
-  if (keys.length === 0) return;
+  console.log('🔄 [AutoRestore] Data kosong, mencoba pull dari Google Sheets...');
 
-  PUSHING = true;
-  console.log('🔄 [AutoSync] Push ' + keys.length + ' link ke Sheet...');
+  try {
+    var res = await fetch(backendUrl, { method: 'GET', redirect: 'follow' });
+    var json = await res.json();
 
-  var batch = [];
-  keys.forEach(function(id) {
-    batch.push({ id: id, url: links[id] });
-  });
+    if (!json.success || !Array.isArray(json.data)) return;
+    if (json.data.length === 0) return;
 
-  fetch(backendUrl, {
-    method: 'POST',
-    redirect: 'follow',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ action: 'batchUpsert', links: batch })
-  })
-  .then(function(res){ return res.json(); })
-  .then(function(json) {
-    PUSHING = false;
-    if (json.success) {
-      localStorage.setItem(SYNC_FLAG, new Date().toISOString());
-      console.log('✅ [AutoSync] Push berhasil');
-    }
-  })
-  .catch(function(e) {
-    PUSHING = false;
-    console.warn('⚠️ [AutoSync] Push gagal:', e);
-  });
-}
-
-/* ================================================================
-* 🔽 AUTO-PULL: Ambil link dari Google Sheets secara otomatis
-*    Dipanggil saat halaman Absensi dibuka
-================================================================ */
-function autoPullFromSheet(callback) {
-  if (PULLING) { if (callback) callback(); return; }
-  var backendUrl = getBackendUrl();
-  if (!backendUrl) { if (callback) callback(); return; }
-
-  PULLING = true;
-  console.log('🔄 [AutoSync] Pull dari Sheet...');
-
-  fetch(backendUrl, { method: 'GET', redirect: 'follow' })
-  .then(function(res){ return res.json(); })
-  .then(function(json) {
-    PULLING = false;
-    if (!json.success || !Array.isArray(json.data)) {
-      if (callback) callback();
-      return;
-    }
-
-    var sheetData = json.data;
-    var localLinks = loadLocal() || {};
-    var updated = 0;
-
-    sheetData.forEach(function(row) {
-      var id  = String(row.ID || '').trim();
+    var links = {};
+    json.data.forEach(function(row) {
+      var id  = String(row.ID  || '').trim();
       var url = String(row.URL || '').trim();
-      if (!id || !url) return;
-
-      // Hanya update jika belum ada di lokal atau berbeda
-      if (!localLinks[id] || localLinks[id] !== url) {
-        localLinks[id] = url;
-        updated++;
-      }
+      if (id && url) links[id] = url;
     });
 
-    if (updated > 0) {
-      saveLocal(localLinks);
-      console.log('✅ [AutoSync] Pull berhasil: ' + updated + ' link dipulihkan');
-    }
-    if (callback) callback();
-  })
-  .catch(function(e) {
-    PULLING = false;
-    console.warn('⚠️ [AutoSync] Pull gagal:', e);
-    if (callback) callback();
+    var count = Object.keys(links).length;
+    if (count === 0) return;
+
+    // Simpan ke localStorage (Lapis 2)
+    saveLocal(links);
+
+    // Simpan ke Embedded JSON di DOM (Lapis 1 - sesi ini)
+    var emb = readEmb() || {};
+    emb.absensi = links;
+    emb.lastUpdated = new Date().toISOString();
+    writeEmb(emb);
+
+    // Render ulang card secara langsung
+    renderCardsFromData(links);
+
+    console.log('✅ [AutoRestore] ' + count + ' link dipulihkan dari Google Sheets');
+    absToastAuto('🔄 ' + count + ' link dipulihkan otomatis dari Google Sheets', 'success');
+
+  } catch(e) {
+    console.warn('⚠️ [AutoRestore] Gagal:', e);
+  }
+}
+
+/* ================================================================
+* 🎨 RENDER ULANG CARD (tanpa bergantung fungsi internal)
+================================================================ */
+function renderCardsFromData(links) {
+  var ABS_DATA = {
+    vii: [
+      {id:'vii-a',label:'VII-A',title:'Kelas VII-A',sub:'Fase D • 7A'},
+      {id:'vii-b',label:'VII-B',title:'Kelas VII-B',sub:'Fase D • 7B'},
+      {id:'vii-c',label:'VII-C',title:'Kelas VII-C',sub:'Fase D • 7C'},
+      {id:'vii-d',label:'VII-D',title:'Kelas VII-D',sub:'Fase D • 7D'},
+      {id:'vii-e',label:'VII-E',title:'Kelas VII-E',sub:'Fase D • 7E'},
+      {id:'vii-f',label:'VII-F',title:'Kelas VII-F',sub:'Fase D • 7F'},
+      {id:'vii-g',label:'VII-G',title:'Kelas VII-G',sub:'Fase D • 7G'},
+      {id:'vii-h',label:'VII-H',title:'Kelas VII-H',sub:'Fase D • 7H'},
+      {id:'vii-i',label:'VII-I',title:'Kelas VII-I',sub:'Fase D • 7I'},
+      {id:'vii-j',label:'VII-J',title:'Kelas VII-J',sub:'Fase D • 7J'}
+    ],
+    viii: [
+      {id:'viii-a',label:'VIII-A',title:'Kelas VIII-A',sub:'Fase D • 8A'},
+      {id:'viii-b',label:'VIII-B',title:'Kelas VIII-B',sub:'Fase D • 8B'},
+      {id:'viii-c',label:'VIII-C',title:'Kelas VIII-C',sub:'Fase D • 8C'},
+      {id:'viii-d',label:'VIII-D',title:'Kelas VIII-D',sub:'Fase D • 8D'},
+      {id:'viii-e',label:'VIII-E',title:'Kelas VIII-E',sub:'Fase D • 8E'},
+      {id:'viii-f',label:'VIII-F',title:'Kelas VIII-F',sub:'Fase D • 8F'},
+      {id:'viii-g',label:'VIII-G',title:'Kelas VIII-G',sub:'Fase D • 8G'},
+      {id:'viii-h',label:'VIII-H',title:'Kelas VIII-H',sub:'Fase D • 8H'},
+      {id:'viii-i',label:'VIII-I',title:'Kelas VIII-I',sub:'Fase D • 8I'}
+    ],
+    ix: [
+      {id:'ix-a',label:'IX-A',title:'Kelas IX-A',sub:'Fase D • 9A'},
+      {id:'ix-b',label:'IX-B',title:'Kelas IX-B',sub:'Fase D • 9B'},
+      {id:'ix-c',label:'IX-C',title:'Kelas IX-C',sub:'Fase D • 9C'},
+      {id:'ix-d',label:'IX-D',title:'Kelas IX-D',sub:'Fase D • 9D'},
+      {id:'ix-e',label:'IX-E',title:'Kelas IX-E',sub:'Fase D • 9E'},
+      {id:'ix-f',label:'IX-F',title:'Kelas IX-F',sub:'Fase D • 9F'},
+      {id:'ix-g',label:'IX-G',title:'Kelas IX-G',sub:'Fase D • 9G'},
+      {id:'ix-h',label:'IX-H',title:'Kelas IX-H',sub:'Fase D • 9H'},
+      {id:'ix-i',label:'IX-I',title:'Kelas IX-I',sub:'Fase D • 9I'}
+    ]
+  };
+
+  ['vii','viii','ix'].forEach(function(kelas) {
+    var grid = document.getElementById('abs-grid-' + kelas);
+    if (!grid) return;
+    var html = '';
+    ABS_DATA[kelas].forEach(function(item) {
+      var url = links[item.id] || '';
+      var has = url && url.trim() !== '';
+      html += '<div class="abs-card" data-abs-id="' + item.id + '">' +
+        '<div class="abs-card-top">' +
+        '<div class="abs-card-icon ' + kelas + '">' + item.label.split('-')[1] + '</div>' +
+        '<div class="abs-card-info">' +
+        '<h3 class="abs-card-title">' + item.title + '</h3>' +
+        '<div class="abs-card-sub">' + item.sub + '</div>' +
+        '</div></div>' +
+        '<div class="abs-url-box ' + (has ? 'has-link' : 'empty') + '">' +
+        '<span class="url-icon">' + (has ? '🔗' : '📭') + '</span>' +
+        '<span class="url-text">' + (has ? esc(url) : 'Belum ada link absensi') + '</span>' +
+        '</div>' +
+        '<div class="abs-btns">' +
+        '<button class="abs-btn-open ' + (has ? '' : 'empty') + '" onclick="absOpenLink(\'' + item.id + '\')">' +
+        '<span>' + (has ? '📂' : '⚠️') + '</span>' +
+        '<span>' + (has ? 'Buka Absensi' : 'Belum Ada Link') + '</span>' +
+        '</button>' +
+        '<button class="abs-btn-manage" onclick="absOpenModal(\'' + item.id + '\')" title="Kelola Link">⚙️</button>' +
+        '</div></div>';
+    });
+    grid.innerHTML = html;
   });
 }
 
 /* ================================================================
-* 🎯 HOOK 1: Setelah user simpan link → auto-push ke Sheet
+* 💾 AUTO-PUSH: Kirim link ke Sheet setiap kali user simpan
 ================================================================ */
 function hookSaveUrl() {
-  if (typeof window.absSaveUrl !== 'function' || window.absSaveUrl.__autoSyncHooked) return;
-
+  if (typeof window.absSaveUrl !== 'function' || window.absSaveUrl.__autoPushHooked) return;
   var _orig = window.absSaveUrl;
   window.absSaveUrl = function() {
     _orig.apply(this, arguments);
-    // Tunggu sebentar agar localStorage ter-update, lalu auto-push
     setTimeout(autoPushToSheet, 800);
   };
-  window.absSaveUrl.__autoSyncHooked = true;
-  console.log('✅ [AutoSync] absSaveUrl di-hook → auto-push aktif');
+  window.absSaveUrl.__autoPushHooked = true;
 }
 
-/* ================================================================
-* 🎯 HOOK 2: Setelah user hapus link → auto-push ke Sheet
-================================================================ */
 function hookClearUrl() {
-  if (typeof window.absClearUrl !== 'function' || window.absClearUrl.__autoSyncHooked) return;
-
+  if (typeof window.absClearUrl !== 'function' || window.absClearUrl.__autoPushHooked) return;
   var _orig = window.absClearUrl;
   window.absClearUrl = function() {
     _orig.apply(this, arguments);
     setTimeout(autoPushToSheet, 800);
   };
-  window.absClearUrl.__autoSyncHooked = true;
-  console.log('✅ [AutoSync] absClearUrl di-hook → auto-push aktif');
+  window.absClearUrl.__autoPushHooked = true;
 }
 
-/* ================================================================
-* 🎯 HOOK 3: Saat halaman Absensi dibuka → auto-pull dari Sheet
-================================================================ */
-function hookGoFunction() {
-  if (typeof window.go !== 'function' || window.go.__autoSyncHooked) return;
+async function autoPushToSheet() {
+  if (PUSHING) return;
+  var backendUrl = getBackendUrl();
+  if (!backendUrl) return;
 
-  var _orig = window.go;
-  window.go = function(id) {
-    _orig.apply(this, arguments);
+  var links = loadLocal();
+  if (!links) return;
+  var keys = Object.keys(links).filter(function(k){ return links[k] && links[k].trim(); });
+  if (keys.length === 0) return;
 
-    if (id === 'absensi-standalone') {
-      // Auto-pull dari Sheet, lalu render ulang card
-      setTimeout(function() {
-        autoPullFromSheet(function() {
-          // Render ulang setelah pull selesai
-          if (typeof window.absRenderCards === 'function') {
-            window.absRenderCards();
-          } else {
-            // Fallback: cari dan panggil fungsi render
-            try { renderCards && renderCards(); } catch(e) {}
-          }
-        });
-      }, 600);
+  PUSHING = true;
+  try {
+    var batch = [];
+    keys.forEach(function(id) {
+      var kelas = '', nama = '';
+      var ABS_MAP = {
+        'vii-a':'VII|Kelas VII-A','vii-b':'VII|Kelas VII-B','vii-c':'VII|Kelas VII-C',
+        'vii-d':'VII|Kelas VII-D','vii-e':'VII|Kelas VII-E','vii-f':'VII|Kelas VII-F',
+        'vii-g':'VII|Kelas VII-G','vii-h':'VII|Kelas VII-H','vii-i':'VII|Kelas VII-I',
+        'vii-j':'VII|Kelas VII-J',
+        'viii-a':'VIII|Kelas VIII-A','viii-b':'VIII|Kelas VIII-B','viii-c':'VIII|Kelas VIII-C',
+        'viii-d':'VIII|Kelas VIII-D','viii-e':'VIII|Kelas VIII-E','viii-f':'VIII|Kelas VIII-F',
+        'viii-g':'VIII|Kelas VIII-G','viii-h':'VIII|Kelas VIII-H','viii-i':'VIII|Kelas VIII-I',
+        'ix-a':'IX|Kelas IX-A','ix-b':'IX|Kelas IX-B','ix-c':'IX|Kelas IX-C',
+        'ix-d':'IX|Kelas IX-D','ix-e':'IX|Kelas IX-E','ix-f':'IX|Kelas IX-F',
+        'ix-g':'IX|Kelas IX-G','ix-h':'IX|Kelas IX-H','ix-i':'IX|Kelas IX-I'
+      };
+      var info = ABS_MAP[id] ? ABS_MAP[id].split('|') : ['', id];
+      batch.push({ id: id, kelas: info[0], namaKelas: info[1], url: links[id] });
+    });
+
+    var res = await fetch(backendUrl, {
+      method: 'POST', redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'batchUpsert', links: batch })
+    });
+    var json = await res.json();
+    if (json.success) {
+      console.log('✅ [AutoPush] ' + keys.length + ' link tersinkron ke Sheet');
     }
-  };
-  window.go.__autoSyncHooked = true;
-  console.log('✅ [AutoSync] go() di-hook → auto-pull saat buka halaman Absensi');
+  } catch(e) {
+    console.warn('⚠️ [AutoPush] Gagal:', e);
+  }
+  PUSHING = false;
 }
-
-/* ================================================================
-* 🎯 HOOK 4: Tombol Push & Pull manual tetap ada (sebagai backup)
-*    Tidak perlu diubah — biarkan seperti semula
-================================================================ */
 
 /* ================================================================
 * 🚀 INIT
 ================================================================ */
 function init() {
-  console.log('🚀 [AutoSync] Patch aktif — TANPA BACKUP PERMANEN');
+  console.log('🚀 [AutoRestore] Patch aktif');
   console.log('📌 Alur baru:');
-  console.log('   ✅ Simpan link → otomatis push ke Google Sheets');
-  console.log('   ✅ Buka halaman Absensi → otomatis pull dari Google Sheets');
-  console.log('   ✅ Link tetap ada di SEMUA perangkat tanpa backup HTML');
-  console.log('   ❌ TIDAK PERLU klik "Backup Permanen" lagi');
+  console.log('   ✅ Clear browser → auto-pull dari Google Sheets');
+  console.log('   ✅ Ganti device  → auto-pull dari Google Sheets');
+  console.log('   ✅ Simpan link   → auto-push ke Google Sheets');
+  console.log('   ❌ TIDAK PERLU Backup Permanen');
+  console.log('   ❌ TIDAK PERLU klik Pull manual');
 
   hookSaveUrl();
   hookClearUrl();
-  hookGoFunction();
 
-  // Jika halaman absensi sudah aktif saat load, langsung pull
+  // Auto-restore saat halaman absensi dibuka
+  var _origGo = window.go;
+  window.go = function(id) {
+    if (typeof _origGo === 'function') _origGo.apply(this, arguments);
+    if (id === 'absensi-standalone') {
+      setTimeout(autoRestoreFromSheet, 1200);
+    }
+  };
+
+  // Jika halaman sudah aktif saat load
   var page = document.getElementById('absensi-standalone');
   if (page && page.classList.contains('active')) {
-    setTimeout(function() {
-      autoPullFromSheet(function() {
-        try { renderCards && renderCards(); } catch(e) {}
-      });
-    }, 800);
+    setTimeout(autoRestoreFromSheet, 1500);
   }
+
+  // Auto-restore saat user kembali ke tab
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+      var p = document.getElementById('absensi-standalone');
+      if (p && p.classList.contains('active')) {
+        setTimeout(autoRestoreFromSheet, 500);
+      }
+    }
+  });
 }
 
 if (document.readyState === 'loading') {
@@ -21558,7 +21635,7 @@ if (document.readyState === 'loading') {
 })();
 </script>
 <!-- ================================================================ -->
-<!-- PATCH AUTO-SYNC ABSENSI [END]                                    -->
+<!-- PATCH: AUTO-RESTORE ABSENSI [END]                               -->
 <!-- ================================================================ -->
 </body>
 </html>
