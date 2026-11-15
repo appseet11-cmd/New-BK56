@@ -3608,151 +3608,117 @@ aria-label="Buka Suara Aspirasi & Aduan Siswa">
 <div class="link-box"><a onclick="loadExt('https://appseet11-cmd.github.io/TES-IQ-KLS9/','iq')"><span class="link-num">3</span><div class="link-text"><h5>Tes IQ Kelas IX</h5><span>Mulai Tes</span></div><span class="arrow-icon">→</span></a></div>
 </div>
 </div>
-<!-- ========== HALAMAN ABSENSI SISWA SMPN 56 ========== -->
+<!-- ================================================================ -->
+<!-- ========== HALAMAN ABSENSI SISWA SMPN 56 - PERMANEN ========== -->
+<!-- ================================================================ -->
 <div id="absensi-standalone" class="page absensi-standalone-page">
-  <button class="back-btn" onclick="go('home')">← Kembali ke Beranda</button>
+<button class="back-btn" onclick="go('home')">← Kembali ke Beranda</button>
 
-  <!-- HERO HEADER -->
-  <header class="abs-hero">
-    <div class="abs-hero-content">
-      <div class="abs-badge">
-        <span class="abs-badge-dot"></span>
-        <span>Absensi Digital • Permanen • Lintas Device</span>
-      </div>
-      <h1>ABSENSI SISWA<br><em>SMP NEGERI 56 JAKARTA</em></h1>
-      <p class="abs-hero-sub">
-        Sistem pencatatan kehadiran siswa digital terintegrasi untuk Kelas VII, VIII, dan IX.
-        Link tersimpan <strong>permanen</strong> di HTML & Google Sheets.
-      </p>
-      <div class="abs-stats">
-        <div class="abs-stat">
-          <span class="abs-stat-num">10</span>
-          <div class="abs-stat-lbl">Kelas VII</div>
-        </div>
-        <div class="abs-stat">
-          <span class="abs-stat-num">9</span>
-          <div class="abs-stat-lbl">Kelas VIII</div>
-        </div>
-        <div class="abs-stat">
-          <span class="abs-stat-num">9</span>
-          <div class="abs-stat-lbl">Kelas IX</div>
-        </div>
-      </div>
-    </div>
-  </header>
+<!-- HERO -->
+<header class="abs-hero">
+<div class="abs-hero-content">
+<div class="abs-badge"><span class="abs-badge-dot"></span><span>Absensi Digital • Permanen • Lintas Device</span></div>
+<h1>ABSENSI SISWA<br><em>SMP NEGERI 56 JAKARTA</em></h1>
+<p class="abs-hero-sub">Sistem pencatatan kehadiran siswa digital terintegrasi untuk Kelas VII, VIII, dan IX. Link tersimpan <strong>permanen</strong> di HTML, browser, dan Google Sheets.</p>
+<div class="abs-stats">
+<div class="abs-stat"><span class="abs-stat-num">10</span><div class="abs-stat-lbl">Kelas VII</div></div>
+<div class="abs-stat"><span class="abs-stat-num">9</span><div class="abs-stat-lbl">Kelas VIII</div></div>
+<div class="abs-stat"><span class="abs-stat-num">9</span><div class="abs-stat-lbl">Kelas IX</div></div>
+</div>
+</div>
+</header>
 
-  <!-- ACTION BAR -->
-  <div class="abs-action-bar">
-    <div class="abs-action-card">
-      <div class="abs-action-row">
-        <div class="abs-backend-status connected" id="absBackendStatus">
-          <span class="status-dot"></span>
-          <div style="flex:1;">
-            <strong id="absBackendLabel">✅ Backend Terhubung (Permanen)</strong>
-            <small id="absBackendUrl">URL Apps Script sudah tertanam di HTML</small>
-          </div>
-        </div>
-        <div class="abs-action-buttons">
-          <button class="abs-act-btn sync" onclick="absSyncToSheet()" title="Push semua link ke Google Sheets">
-            🔄 Sync dari Sheet
-          </button>
-          <button class="abs-act-btn push" onclick="absPushFromSheet()" title="Ambil link dari Sheet ke card asal">
-            💾 Push dari Sheet
-          </button>
-        </div>
-      </div>
-      <div class="abs-permanent-info">
-        🔒 <strong>Mode Permanen Aktif:</strong> URL Apps Script sudah tertanam langsung di file HTML ini.
-        Backend otomatis aktif begitu halaman dibuka — <strong>tidak perlu konfigurasi ulang</strong>.
-        Berlaku di semua device (HP, PC, tablet) selama file HTML ini digunakan.
-      </div>
-    </div>
-  </div>
+<!-- ACTION BAR -->
+<div class="abs-action-bar">
+<div class="abs-action-card">
+<div class="abs-action-row">
+<div class="abs-backend-status connected" id="absBackendStatus">
+<span class="status-dot"></span>
+<div style="flex:1;">
+<strong id="absBackendLabel">✅ Backend Terhubung (Permanen)</strong>
+<small id="absBackendUrl">URL Apps Script tertanam di HTML</small>
+</div>
+</div>
+<div class="abs-action-buttons">
+<button class="abs-act-btn push" onclick="absPushToSheet()" title="Kirim semua link ke Google Sheets">💾 Push ke Sheet</button>
+<button class="abs-act-btn sync" onclick="absPullFromSheet()" title="Ambil link dari Sheet ke card asal">🔄 Pull dari Sheet</button>
+</div>
+</div>
+<div class="abs-permanent-info">
+🔒 <strong>Mode Permanen 3 Lapis Aktif:</strong><br>
+① Link tertanam di file HTML ini (bertahan ganti device)<br>
+② Link tersimpan di browser (bertahan hard refresh)<br>
+③ Link tersimpan di Google Sheets (backup cloud otomatis)<br>
+<strong>Push ke Sheet</strong> = kirim link ke cloud • <strong>Pull dari Sheet</strong> = pulihkan link ke card asal
+</div>
+</div>
+</div>
 
-  <!-- TAB NAVIGATION -->
-  <nav class="abs-tabs-standalone">
-    <div class="abs-tabs-inner">
-      <button class="abs-tab-btn active" data-abs-tab="vii" onclick="absSwitchTab('vii', this)">
-        <span class="tab-emoji">📘</span>
-        <span>Kelas VII</span>
-        <span class="tab-count">10</span>
-      </button>
-      <button class="abs-tab-btn" data-abs-tab="viii" onclick="absSwitchTab('viii', this)">
-        <span class="tab-emoji">📗</span>
-        <span>Kelas VIII</span>
-        <span class="tab-count">9</span>
-      </button>
-      <button class="abs-tab-btn" data-abs-tab="ix" onclick="absSwitchTab('ix', this)">
-        <span class="tab-emoji">📕</span>
-        <span>Kelas IX</span>
-        <span class="tab-count">9</span>
-      </button>
-    </div>
-  </nav>
+<!-- TABS -->
+<nav class="abs-tabs-standalone">
+<div class="abs-tabs-inner">
+<button class="abs-tab-btn active" data-abs-tab="vii" onclick="absSwitchTab('vii',this)"><span class="tab-emoji">📘</span><span>Kelas VII</span><span class="tab-count">10</span></button>
+<button class="abs-tab-btn" data-abs-tab="viii" onclick="absSwitchTab('viii',this)"><span class="tab-emoji">📗</span><span>Kelas VIII</span><span class="tab-count">9</span></button>
+<button class="abs-tab-btn" data-abs-tab="ix" onclick="absSwitchTab('ix',this)"><span class="tab-emoji">📕</span><span>Kelas IX</span><span class="tab-count">9</span></button>
+</div>
+</nav>
 
-  <!-- CONTAINER -->
-  <div class="abs-container">
-    <div class="abs-panel-header">
-      <h2 id="abs-panel-title">📘 Absensi Kelas VII</h2>
-      <p>Tahun Ajaran 2026/2027 — Fase D • 10 Kelas • Klik ⚙️ untuk menyematkan link absensi</p>
-    </div>
-    <div class="abs-panel active" id="abs-panel-vii">
-      <div class="abs-grid" id="abs-grid-vii"></div>
-    </div>
-    <div class="abs-panel" id="abs-panel-viii">
-      <div class="abs-grid" id="abs-grid-viii"></div>
-    </div>
-    <div class="abs-panel" id="abs-panel-ix">
-      <div class="abs-grid" id="abs-grid-ix"></div>
-    </div>
-  </div>
+<!-- PANELS -->
+<div class="abs-container">
+<div class="abs-panel-header">
+<h2 id="abs-panel-title">📘 Absensi Kelas VII</h2>
+<p id="abs-panel-sub">Tahun Ajaran 2026/2027 — Fase D • 10 Kelas (A–J) • Klik ⚙️ untuk menyematkan link</p>
+</div>
+<div class="abs-panel active" id="abs-panel-vii"><div class="abs-grid" id="abs-grid-vii"></div></div>
+<div class="abs-panel" id="abs-panel-viii"><div class="abs-grid" id="abs-grid-viii"></div></div>
+<div class="abs-panel" id="abs-panel-ix"><div class="abs-grid" id="abs-grid-ix"></div></div>
+</div>
 
-  <!-- FOOTER SECTION -->
-  <footer class="abs-footer-section">
-    <h4>📋 Absensi Digital SMPN 56 Jakarta</h4>
-    <p>Sistem Pencatatan Kehadiran Siswa Terintegrasi</p>
-    <p>Jl. Jeruk Purut, Cilandak Timur, Pasar Minggu — Jakarta Selatan</p>
-    <div class="div-line"></div>
-    <p class="copy">© 2026 SMP Negeri 56 Jakarta • File Frontend Standalone</p>
-  </footer>
+<!-- FOOTER -->
+<footer class="abs-footer-section">
+<h4>📋 Absensi Digital SMPN 56 Jakarta</h4>
+<p>Sistem Pencatatan Kehadiran Siswa Terintegrasi — Permanen Lintas Device</p>
+<p>Jl. Jeruk Purut, Cilandak Timur, Pasar Minggu — Jakarta Selatan</p>
+<div class="div-line"></div>
+<p class="copy">© 2026 SMP Negeri 56 Jakarta</p>
+</footer>
 
-  <!-- MODAL EMBED URL -->
-  <div class="abs-modal-ov" id="abs-modal-embed" role="dialog" aria-modal="true">
-    <div class="abs-modal-box">
-      <div class="abs-modal-hdr">
-        <div class="hdr-icon">🔗</div>
-        <h3 id="abs-modal-title">Sematkan Link Absensi</h3>
-        <p id="abs-modal-subtitle">Kelas VII-A</p>
-      </div>
-      <div class="abs-modal-body">
-        <div class="abs-modal-info">
-          💡 <strong>Cara Pakai:</strong> Tempelkan URL halaman absensi lalu klik <strong>Simpan</strong>.
-          Link akan otomatis tersinkron ke Google Sheets (backend permanen).
-        </div>
-        <label for="abs-url-input">🌐 URL Halaman Absensi:</label>
-        <input type="text" id="abs-url-input" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
-        <div class="abs-modal-acts">
-          <button class="abs-modal-btn ghost" onclick="absCloseModal()">Batal</button>
-          <button class="abs-modal-btn primary" onclick="absSaveUrl()">💾 Simpan Link</button>
-        </div>
-        <div id="abs-current-url-box" style="margin-top:14px;"></div>
-      </div>
-    </div>
-  </div>
+<!-- MODAL EMBED URL -->
+<div class="abs-modal-ov" id="abs-modal-embed" role="dialog" aria-modal="true">
+<div class="abs-modal-box">
+<div class="abs-modal-hdr">
+<div class="hdr-icon">🔗</div>
+<h3 id="abs-modal-title">Sematkan Link Absensi</h3>
+<p id="abs-modal-subtitle">Kelas VII-A</p>
+</div>
+<div class="abs-modal-body">
+<div class="abs-modal-info">💡 Tempelkan URL halaman absensi → klik <strong>Simpan</strong>. Link otomatis tersimpan di HTML, browser, dan siap di-push ke Google Sheets.</div>
+<label for="abs-url-input">🌐 URL Halaman Absensi:</label>
+<input type="text" id="abs-url-input" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+<div class="abs-modal-acts">
+<button class="abs-modal-btn ghost" onclick="absCloseModal()">Batal</button>
+<button class="abs-modal-btn primary" onclick="absSaveUrl()">💾 Simpan Link</button>
+</div>
+<div id="abs-current-url-box" style="margin-top:14px;"></div>
+</div>
+</div>
+</div>
 
-  <!-- TOAST -->
-  <div class="abs-toast" id="abs-toast"></div>
+<!-- TOAST -->
+<div class="abs-toast" id="abs-toast"></div>
 
-  <!-- EMBEDDED DATA (URL BACKEND PERMANEN) -->
-  <script type="application/json" id="abs-embedded-data">
-  {
-    "absensi": {},
-    "backendUrl": "https://script.google.com/macros/s/AKfycbxAlpkW1S19qqZS2e8NN8CJnod2jXRbL-N7t0TZ-BKfjH89Oea-vG0Qyruu9C89tLSIyA/exec",
-    "version": "2.0",
-    "lastUpdated": "2026-11-15T00:00:00.000Z",
-    "note": "URL Backend Absensi - tertanam permanen di HTML"
-  }
-  </script>
+<!-- ============================================================ -->
+<!-- EMBEDDED DATA: LINK + BACKEND URL (PERMANEN DI HTML)        -->
+<!-- ============================================================ -->
+<script type="application/json" id="abs-embedded-data">
+{
+  "absensi": {},
+  "backendUrl": "https://script.google.com/macros/s/AKfycbzqFZrtCPoo8qFejCBGfkjya_Lv3AZXT_JQ5tIQ2GEOn_9W-IP0qIA-GvN5xiFHWjbT/exec",
+  "version": "3.0",
+  "lastUpdated": "",
+  "note": "Data permanen — bertahan ganti device, hard refresh, clear browser"
+}
+</script>
 </div>
 <!-- ========== HALAMAN ABSENSI SISWA [END] ========== -->
 <div id="rekap" class="page ra">
@@ -20876,5 +20842,473 @@ if (document.readyState === 'loading') {
 })();
 </script>
 <!-- ========== ABSENSI SISWA - JAVASCRIPT [END] ========== -->
+ <script>
+(function(){
+"use strict";
+
+/* ================================================================
+* ABSENSI SMPN 56 — SISTEM PERMANEN 3 LAPIS
+* ================================================================
+* LAPIS 1: Embedded JSON di HTML  → bertahan ganti device
+* LAPIS 2: localStorage browser   → bertahan hard refresh
+* LAPIS 3: Google Sheets (cloud)  → backup & restore otomatis
+*
+* ALUR:
+* User simpan link → Layer 2 (localStorage) + Layer 1 (embedded)
+* User klik Push   → Layer 2 → Layer 3 (Google Sheets)
+* User klik Pull   → Layer 3 → Layer 2 → Layer 1 → Render card
+* Clear browser    → Layer 1 auto-restore ke Layer 2
+* Ganti device     → Layer 1 sudah ada di file HTML
+* ================================================================ */
+
+var ABS_KEY  = 'absensi_smpn56_links';
+var EMB_ID   = 'abs-embedded-data';
+var FLAG     = '__absensiPermanentV3';
+if (window[FLAG]) return;
+window[FLAG] = true;
+
+/* ================================================================
+* DATA 28 KELAS
+================================================================ */
+var ABS_DATA = {
+  vii: [
+    {id:'vii-a',label:'VII-A',title:'Kelas VII-A',sub:'Fase D • 7A'},
+    {id:'vii-b',label:'VII-B',title:'Kelas VII-B',sub:'Fase D • 7B'},
+    {id:'vii-c',label:'VII-C',title:'Kelas VII-C',sub:'Fase D • 7C'},
+    {id:'vii-d',label:'VII-D',title:'Kelas VII-D',sub:'Fase D • 7D'},
+    {id:'vii-e',label:'VII-E',title:'Kelas VII-E',sub:'Fase D • 7E'},
+    {id:'vii-f',label:'VII-F',title:'Kelas VII-F',sub:'Fase D • 7F'},
+    {id:'vii-g',label:'VII-G',title:'Kelas VII-G',sub:'Fase D • 7G'},
+    {id:'vii-h',label:'VII-H',title:'Kelas VII-H',sub:'Fase D • 7H'},
+    {id:'vii-i',label:'VII-I',title:'Kelas VII-I',sub:'Fase D • 7I'},
+    {id:'vii-j',label:'VII-J',title:'Kelas VII-J',sub:'Fase D • 7J'}
+  ],
+  viii: [
+    {id:'viii-a',label:'VIII-A',title:'Kelas VIII-A',sub:'Fase D • 8A'},
+    {id:'viii-b',label:'VIII-B',title:'Kelas VIII-B',sub:'Fase D • 8B'},
+    {id:'viii-c',label:'VIII-C',title:'Kelas VIII-C',sub:'Fase D • 8C'},
+    {id:'viii-d',label:'VIII-D',title:'Kelas VIII-D',sub:'Fase D • 8D'},
+    {id:'viii-e',label:'VIII-E',title:'Kelas VIII-E',sub:'Fase D • 8E'},
+    {id:'viii-f',label:'VIII-F',title:'Kelas VIII-F',sub:'Fase D • 8F'},
+    {id:'viii-g',label:'VIII-G',title:'Kelas VIII-G',sub:'Fase D • 8G'},
+    {id:'viii-h',label:'VIII-H',title:'Kelas VIII-H',sub:'Fase D • 8H'},
+    {id:'viii-i',label:'VIII-I',title:'Kelas VIII-I',sub:'Fase D • 8I'}
+  ],
+  ix: [
+    {id:'ix-a',label:'IX-A',title:'Kelas IX-A',sub:'Fase D • 9A'},
+    {id:'ix-b',label:'IX-B',title:'Kelas IX-B',sub:'Fase D • 9B'},
+    {id:'ix-c',label:'IX-C',title:'Kelas IX-C',sub:'Fase D • 9C'},
+    {id:'ix-d',label:'IX-D',title:'Kelas IX-D',sub:'Fase D • 9D'},
+    {id:'ix-e',label:'IX-E',title:'Kelas IX-E',sub:'Fase D • 9E'},
+    {id:'ix-f',label:'IX-F',title:'Kelas IX-F',sub:'Fase D • 9F'},
+    {id:'ix-g',label:'IX-G',title:'Kelas IX-G',sub:'Fase D • 9G'},
+    {id:'ix-h',label:'IX-H',title:'Kelas IX-H',sub:'Fase D • 9H'},
+    {id:'ix-i',label:'IX-I',title:'Kelas IX-I',sub:'Fase D • 9I'}
+  ]
+};
+
+/* ================================================================
+* HELPER: Baca / Tulis Embedded JSON (LAPIS 1)
+================================================================ */
+function readEmb() {
+  try {
+    var el = document.getElementById(EMB_ID);
+    return el ? JSON.parse(el.textContent) : null;
+  } catch(e) { return null; }
+}
+
+function writeEmb(data) {
+  try {
+    var el = document.getElementById(EMB_ID);
+    if (el) { el.textContent = JSON.stringify(data); return true; }
+  } catch(e) {}
+  return false;
+}
+
+/* ================================================================
+* HELPER: Baca / Tulis localStorage (LAPIS 2)
+================================================================ */
+function loadLocal() {
+  try {
+    var raw = localStorage.getItem(ABS_KEY);
+    if (raw) { var p = JSON.parse(raw); if (p && typeof p === 'object') return p; }
+  } catch(e) {}
+  return null;
+}
+
+function saveLocal(data) {
+  try { localStorage.setItem(ABS_KEY, JSON.stringify(data || {})); } catch(e) {}
+}
+
+/* ================================================================
+* HELPER: URL Backend (dari embedded)
+================================================================ */
+function getBackendUrl() {
+  var emb = readEmb();
+  if (emb && emb.backendUrl && emb.backendUrl.trim() &&
+      emb.backendUrl.indexOf('PASTE_URL') === -1) {
+    return emb.backendUrl.trim();
+  }
+  return '';
+}
+
+/* ================================================================
+* 🔑 FUNGSI UTAMA: Load link dengan prioritas 3 lapis
+*    1. localStorage (tercepat)
+*    2. Embedded JSON (jika localStorage kosong → clear browser)
+*    3. Google Sheets (jika keduanya kosong → ganti device)
+================================================================ */
+function loadLinks() {
+  // LAPIS 2: localStorage
+  var local = loadLocal();
+  if (local && Object.keys(local).length > 0) return local;
+
+  // LAPIS 1: Embedded JSON
+  var emb = readEmb();
+  if (emb && emb.absensi && Object.keys(emb.absensi).length > 0) {
+    saveLocal(emb.absensi); // sync ke localStorage
+    return emb.absensi;
+  }
+
+  return {};
+}
+
+/* ================================================================
+* 🔑 FUNGSI UTAMA: Simpan link ke LAPIS 1 + LAPIS 2 sekaligus
+================================================================ */
+function saveLinks(data) {
+  saveLocal(data);                    // LAPIS 2
+  var emb = readEmb() || {};         // LAPIS 1
+  emb.absensi = data;
+  emb.lastUpdated = new Date().toISOString();
+  writeEmb(emb);
+}
+
+/* ================================================================
+* TOAST
+================================================================ */
+var toastTimer;
+function absToast(msg, type) {
+  type = type || 'info';
+  var t = document.getElementById('abs-toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'abs-toast ' + type;
+  clearTimeout(toastTimer);
+  setTimeout(function(){ t.classList.add('show'); }, 10);
+  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 4000);
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ================================================================
+* RENDER CARDS
+================================================================ */
+function renderCards() {
+  var links = loadLinks();
+  ['vii','viii','ix'].forEach(function(kelas) {
+    var grid = document.getElementById('abs-grid-' + kelas);
+    if (!grid) return;
+    var html = '';
+    ABS_DATA[kelas].forEach(function(item) {
+      var url = links[item.id] || '';
+      var has = url && url.trim() !== '';
+      html += '<div class="abs-card" data-abs-id="' + item.id + '">' +
+        '<div class="abs-card-top">' +
+          '<div class="abs-card-icon ' + kelas + '">' + item.label.split('-')[1] + '</div>' +
+          '<div class="abs-card-info">' +
+            '<h3 class="abs-card-title">' + item.title + '</h3>' +
+            '<div class="abs-card-sub">' + item.sub + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="abs-url-box ' + (has ? 'has-link' : 'empty') + '">' +
+          '<span class="url-icon">' + (has ? '🔗' : '📭') + '</span>' +
+          '<span class="url-text">' + (has ? esc(url) : 'Belum ada link absensi') + '</span>' +
+        '</div>' +
+        '<div class="abs-btns">' +
+          '<button class="abs-btn-open ' + (has ? '' : 'empty') + '" onclick="absOpenLink(\'' + item.id + '\')">' +
+            '<span>' + (has ? '📂' : '⚠️') + '</span>' +
+            '<span>' + (has ? 'Buka Absensi' : 'Belum Ada Link') + '</span>' +
+          '</button>' +
+          '<button class="abs-btn-manage" onclick="absOpenModal(\'' + item.id + '\')" title="Kelola Link">⚙️</button>' +
+        '</div>' +
+      '</div>';
+    });
+    grid.innerHTML = html;
+  });
+}
+
+/* ================================================================
+* TAB SWITCHING
+================================================================ */
+window.absSwitchTab = function(kelas, btn) {
+  document.querySelectorAll('.abs-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.abs-panel').forEach(function(p){ p.classList.remove('active'); });
+  var panel = document.getElementById('abs-panel-' + kelas);
+  if (panel) panel.classList.add('active');
+  var titles = { vii:'📘 Absensi Kelas VII', viii:'📗 Absensi Kelas VIII', ix:'📕 Absensi Kelas IX' };
+  var subs = {
+    vii:'Tahun Ajaran 2026/2027 — Fase D • 10 Kelas (A–J)',
+    viii:'Tahun Ajaran 2026/2027 — Fase D • 9 Kelas (A–I)',
+    ix:'Tahun Ajaran 2026/2027 — Fase D • 9 Kelas (A–I)'
+  };
+  var t = document.getElementById('abs-panel-title');
+  var s = document.getElementById('abs-panel-sub');
+  if (t) t.textContent = titles[kelas];
+  if (s) s.textContent = subs[kelas];
+};
+
+/* ================================================================
+* MODAL
+================================================================ */
+var currentAbsId = null;
+
+window.absOpenModal = function(id) {
+  currentAbsId = id;
+  var links = loadLinks();
+  var cur = links[id] || '';
+  var info = null;
+  ['vii','viii','ix'].forEach(function(k){
+    ABS_DATA[k].forEach(function(it){ if(it.id===id) info=it; });
+  });
+  document.getElementById('abs-modal-title').textContent = '🔗 Sematkan Link Absensi';
+  document.getElementById('abs-modal-subtitle').textContent = info ? info.title : id;
+  document.getElementById('abs-url-input').value = cur;
+  var box = document.getElementById('abs-current-url-box');
+  if (cur) {
+    box.innerHTML = '<div style="background:#ecfdf5;border:1px solid #10b981;border-radius:8px;padding:10px;font-size:.78rem;color:#065f46;">' +
+      '<strong>✅ Link saat ini:</strong><br>' +
+      '<span style="font-family:Consolas,monospace;word-break:break-all;font-size:.72rem;">' + esc(cur) + '</span><br>' +
+      '<button onclick="absClearUrl()" style="margin-top:8px;background:#fee2e2;color:#dc2626;border:none;padding:6px 12px;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer;">🗑️ Hapus Link</button></div>';
+  } else { box.innerHTML = ''; }
+  document.getElementById('abs-modal-embed').classList.add('show');
+  setTimeout(function(){
+    var inp = document.getElementById('abs-url-input');
+    if(inp){ inp.focus(); inp.select(); }
+  }, 300);
+};
+
+window.absCloseModal = function() {
+  document.getElementById('abs-modal-embed').classList.remove('show');
+  currentAbsId = null;
+};
+
+window.absSaveUrl = function() {
+  if (!currentAbsId) return;
+  var inp = document.getElementById('abs-url-input');
+  var url = inp.value.trim();
+  if (!url) { absToast('⚠️ URL tidak boleh kosong','error'); return; }
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+
+  var links = loadLinks();
+  links[currentAbsId] = url;
+  saveLinks(links);   // ← LAPIS 1 + LAPIS 2 sekaligus
+
+  absCloseModal();
+  renderCards();
+  absToast('✅ Link tersimpan permanen! Klik "💾 Push ke Sheet" untuk backup ke cloud.','success');
+};
+
+window.absClearUrl = function() {
+  if (!currentAbsId) return;
+  if (!confirm('🗑️ Hapus link absensi untuk kelas ini?')) return;
+  var links = loadLinks();
+  delete links[currentAbsId];
+  saveLinks(links);
+  absCloseModal();
+  renderCards();
+  absToast('🗑️ Link dihapus','info');
+};
+
+window.absOpenLink = function(id) {
+  var links = loadLinks();
+  var url = links[id];
+  if (!url || !url.trim()) {
+    absToast('⚠️ Link belum ada. Klik ⚙️ untuk menambah.','error');
+    return;
+  }
+  window.open(url, '_blank', 'noopener,noreferrer');
+};
+
+/* ================================================================
+* 💾 PUSH KE SHEET (LAPIS 2 → LAPIS 3)
+*    Kirim semua link dari browser ke Google Sheets
+================================================================ */
+window.absPushToSheet = async function() {
+  var backendUrl = getBackendUrl();
+  if (!backendUrl) {
+    absToast('⚠️ URL backend belum dikonfigurasi di HTML','error');
+    return;
+  }
+  var links = loadLinks();
+  var keys = Object.keys(links);
+  if (keys.length === 0) {
+    absToast('⚠️ Belum ada link untuk di-push','error');
+    return;
+  }
+  if (!confirm('💾 Push ' + keys.length + ' link ke Google Sheets?')) return;
+  absToast('🔄 Sedang push ke Google Sheets...','info');
+
+  try {
+    var batch = [];
+    keys.forEach(function(id) {
+      var kelas = '', nama = '';
+      ['vii','viii','ix'].forEach(function(k){
+        ABS_DATA[k].forEach(function(it){
+          if (it.id === id) { kelas = k.toUpperCase(); nama = it.title; }
+        });
+      });
+      batch.push({ id:id, kelas:kelas, namaKelas:nama, url:links[id], device:navigator.userAgent.slice(0,50) });
+    });
+
+    var res = await fetch(backendUrl, {
+      method:'POST', redirect:'follow',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ action:'batchUpsert', links:batch })
+    });
+    var json = await res.json();
+    if (json.success) {
+      absToast('✅ ' + keys.length + ' link berhasil di-push ke Google Sheets!','success');
+    } else {
+      absToast('❌ Gagal: ' + (json.message||''),'error');
+    }
+  } catch(e) {
+    absToast('❌ Gagal koneksi: ' + e.message,'error');
+  }
+};
+
+/* ================================================================
+* 🔄 PULL DARI SHEET (LAPIS 3 → LAPIS 2 → LAPIS 1 → CARD)
+*    Ambil semua link dari Google Sheets → kembalikan ke card asal
+================================================================ */
+window.absPullFromSheet = async function() {
+  var backendUrl = getBackendUrl();
+  if (!backendUrl) {
+    absToast('⚠️ URL backend belum dikonfigurasi di HTML','error');
+    return;
+  }
+  if (!confirm('🔄 Pull semua link dari Google Sheets ke card asal?')) return;
+  absToast('🔄 Sedang mengambil data dari Google Sheets...','info');
+
+  try {
+    var res = await fetch(backendUrl, { method:'GET', redirect:'follow' });
+    var json = await res.json();
+    if (!json.success || !Array.isArray(json.data)) {
+      absToast('❌ Response tidak valid dari Sheet','error');
+      return;
+    }
+    if (json.data.length === 0) {
+      absToast('ℹ️ Tidak ada data di Google Sheets','info');
+      return;
+    }
+
+    var links = loadLinks();
+    var restored = 0;
+
+    json.data.forEach(function(row) {
+      var id  = String(row.ID || '').trim();
+      var url = String(row.URL || '').trim();
+      if (!id || !url) return;
+
+      // Validasi: ID harus ada di ABS_DATA
+      var valid = false;
+      ['vii','viii','ix'].forEach(function(k){
+        ABS_DATA[k].forEach(function(it){
+          if (it.id === id) valid = true;
+        });
+      });
+      if (!valid) return;
+
+      // Kembalikan ke card asal
+      if (!links[id] || links[id] !== url) {
+        links[id] = url;
+        restored++;
+      }
+    });
+
+    if (restored === 0) {
+      absToast('ℹ️ Semua link sudah sinkron dengan Sheet','info');
+      return;
+    }
+
+    saveLinks(links);  // ← LAPIS 1 + LAPIS 2
+    renderCards();     // ← Render ulang card
+    absToast('💾 ' + restored + ' link berhasil dipulihkan ke card asalnya!','success');
+
+  } catch(e) {
+    absToast('❌ Gagal pull: ' + e.message,'error');
+  }
+};
+
+/* ================================================================
+* UPDATE STATUS BACKEND
+================================================================ */
+function updateBackendStatus() {
+  var url = getBackendUrl();
+  var st = document.getElementById('absBackendStatus');
+  var lb = document.getElementById('absBackendLabel');
+  var ue = document.getElementById('absBackendUrl');
+  if (!st) return;
+  if (url) {
+    st.className = 'abs-backend-status connected';
+    lb.innerHTML = '✅ Backend Terhubung (Permanen)';
+    ue.textContent = 'URL Apps Script tertanam di HTML';
+  } else {
+    st.className = 'abs-backend-status disconnected';
+    lb.innerHTML = '⚠️ Backend Belum Dikonfigurasi';
+    ue.textContent = 'Edit "backendUrl" di embedded JSON HTML';
+  }
+}
+
+/* ================================================================
+* KEYBOARD & CLICK
+================================================================ */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    var m = document.getElementById('abs-modal-embed');
+    if (m && m.classList.contains('show')) absCloseModal();
+  }
+  if (e.key === 'Enter') {
+    var m2 = document.getElementById('abs-modal-embed');
+    if (m2 && m2.classList.contains('show') &&
+        document.activeElement === document.getElementById('abs-url-input')) {
+      absSaveUrl();
+    }
+  }
+});
+document.addEventListener('click', function(e) {
+  var m = document.getElementById('abs-modal-embed');
+  if (m && e.target === m) absCloseModal();
+}, true);
+
+/* ================================================================
+* 🚀 INIT
+================================================================ */
+function absInit() {
+  renderCards();
+  updateBackendStatus();
+}
+
+var _origGo = window.go;
+window.go = function(id) {
+  if (typeof _origGo === 'function') _origGo.apply(this, arguments);
+  if (id === 'absensi-standalone') setTimeout(absInit, 200);
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    var p = document.getElementById('absensi-standalone');
+    if (p && p.classList.contains('active')) absInit();
+  });
+} else {
+  var p = document.getElementById('absensi-standalone');
+  if (p && p.classList.contains('active')) absInit();
+}
+
+})();
+</script>
 </body>
 </html>
