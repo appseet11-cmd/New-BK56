@@ -21310,5 +21310,255 @@ if (document.readyState === 'loading') {
 
 })();
 </script>
+<!-- ================================================================ -->
+<!-- PATCH AUTO-SYNC ABSENSI: TANPA BACKUP PERMANEN                   -->
+<!-- Link otomatis tersimpan ke Google Sheets & dipulihkan otomatis   -->
+<!-- ================================================================ -->
+<script>
+(function(){
+"use strict";
+
+var FLAG = '__absAutoSyncNoBackup';
+if (window[FLAG]) return;
+window[FLAG] = true;
+
+var ABS_KEY   = 'absensi_smpn56_links';
+var EMB_ID    = 'abs-embedded-data';
+var SYNC_FLAG = 'absensi_last_sync_time';
+var PUSHING   = false;
+var PULLING   = false;
+
+/* ================================================================
+* HELPER
+================================================================ */
+function getBackendUrl() {
+  try {
+    var el = document.getElementById(EMB_ID);
+    if (!el) return '';
+    var data = JSON.parse(el.textContent);
+    return (data && data.backendUrl) ? data.backendUrl.trim() : '';
+  } catch(e) { return ''; }
+}
+
+function loadLocal() {
+  try {
+    var raw = localStorage.getItem(ABS_KEY);
+    if (raw) { var p = JSON.parse(raw); if (p && typeof p === 'object') return p; }
+  } catch(e) {}
+  return null;
+}
+
+function saveLocal(data) {
+  try { localStorage.setItem(ABS_KEY, JSON.stringify(data || {})); } catch(e) {}
+}
+
+function countLinks(data) {
+  var n = 0;
+  for (var k in data) { if (data[k] && data[k].trim()) n++; }
+  return n;
+}
+
+function absToastAuto(msg, type) {
+  var t = document.getElementById('abs-toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'abs-toast ' + (type || 'info');
+  setTimeout(function(){ t.classList.add('show'); }, 10);
+  setTimeout(function(){ t.classList.remove('show'); }, 3500);
+}
+
+/* ================================================================
+* 🔼 AUTO-PUSH: Kirim link ke Google Sheets secara otomatis
+*    Dipanggil setiap kali user simpan link di card
+================================================================ */
+function autoPushToSheet() {
+  if (PUSHING) return;
+  var backendUrl = getBackendUrl();
+  if (!backendUrl) return;
+
+  var links = loadLocal();
+  var keys = Object.keys(links).filter(function(k){ return links[k] && links[k].trim(); });
+  if (keys.length === 0) return;
+
+  PUSHING = true;
+  console.log('🔄 [AutoSync] Push ' + keys.length + ' link ke Sheet...');
+
+  var batch = [];
+  keys.forEach(function(id) {
+    batch.push({ id: id, url: links[id] });
+  });
+
+  fetch(backendUrl, {
+    method: 'POST',
+    redirect: 'follow',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'batchUpsert', links: batch })
+  })
+  .then(function(res){ return res.json(); })
+  .then(function(json) {
+    PUSHING = false;
+    if (json.success) {
+      localStorage.setItem(SYNC_FLAG, new Date().toISOString());
+      console.log('✅ [AutoSync] Push berhasil');
+    }
+  })
+  .catch(function(e) {
+    PUSHING = false;
+    console.warn('⚠️ [AutoSync] Push gagal:', e);
+  });
+}
+
+/* ================================================================
+* 🔽 AUTO-PULL: Ambil link dari Google Sheets secara otomatis
+*    Dipanggil saat halaman Absensi dibuka
+================================================================ */
+function autoPullFromSheet(callback) {
+  if (PULLING) { if (callback) callback(); return; }
+  var backendUrl = getBackendUrl();
+  if (!backendUrl) { if (callback) callback(); return; }
+
+  PULLING = true;
+  console.log('🔄 [AutoSync] Pull dari Sheet...');
+
+  fetch(backendUrl, { method: 'GET', redirect: 'follow' })
+  .then(function(res){ return res.json(); })
+  .then(function(json) {
+    PULLING = false;
+    if (!json.success || !Array.isArray(json.data)) {
+      if (callback) callback();
+      return;
+    }
+
+    var sheetData = json.data;
+    var localLinks = loadLocal() || {};
+    var updated = 0;
+
+    sheetData.forEach(function(row) {
+      var id  = String(row.ID || '').trim();
+      var url = String(row.URL || '').trim();
+      if (!id || !url) return;
+
+      // Hanya update jika belum ada di lokal atau berbeda
+      if (!localLinks[id] || localLinks[id] !== url) {
+        localLinks[id] = url;
+        updated++;
+      }
+    });
+
+    if (updated > 0) {
+      saveLocal(localLinks);
+      console.log('✅ [AutoSync] Pull berhasil: ' + updated + ' link dipulihkan');
+    }
+    if (callback) callback();
+  })
+  .catch(function(e) {
+    PULLING = false;
+    console.warn('⚠️ [AutoSync] Pull gagal:', e);
+    if (callback) callback();
+  });
+}
+
+/* ================================================================
+* 🎯 HOOK 1: Setelah user simpan link → auto-push ke Sheet
+================================================================ */
+function hookSaveUrl() {
+  if (typeof window.absSaveUrl !== 'function' || window.absSaveUrl.__autoSyncHooked) return;
+
+  var _orig = window.absSaveUrl;
+  window.absSaveUrl = function() {
+    _orig.apply(this, arguments);
+    // Tunggu sebentar agar localStorage ter-update, lalu auto-push
+    setTimeout(autoPushToSheet, 800);
+  };
+  window.absSaveUrl.__autoSyncHooked = true;
+  console.log('✅ [AutoSync] absSaveUrl di-hook → auto-push aktif');
+}
+
+/* ================================================================
+* 🎯 HOOK 2: Setelah user hapus link → auto-push ke Sheet
+================================================================ */
+function hookClearUrl() {
+  if (typeof window.absClearUrl !== 'function' || window.absClearUrl.__autoSyncHooked) return;
+
+  var _orig = window.absClearUrl;
+  window.absClearUrl = function() {
+    _orig.apply(this, arguments);
+    setTimeout(autoPushToSheet, 800);
+  };
+  window.absClearUrl.__autoSyncHooked = true;
+  console.log('✅ [AutoSync] absClearUrl di-hook → auto-push aktif');
+}
+
+/* ================================================================
+* 🎯 HOOK 3: Saat halaman Absensi dibuka → auto-pull dari Sheet
+================================================================ */
+function hookGoFunction() {
+  if (typeof window.go !== 'function' || window.go.__autoSyncHooked) return;
+
+  var _orig = window.go;
+  window.go = function(id) {
+    _orig.apply(this, arguments);
+
+    if (id === 'absensi-standalone') {
+      // Auto-pull dari Sheet, lalu render ulang card
+      setTimeout(function() {
+        autoPullFromSheet(function() {
+          // Render ulang setelah pull selesai
+          if (typeof window.absRenderCards === 'function') {
+            window.absRenderCards();
+          } else {
+            // Fallback: cari dan panggil fungsi render
+            try { renderCards && renderCards(); } catch(e) {}
+          }
+        });
+      }, 600);
+    }
+  };
+  window.go.__autoSyncHooked = true;
+  console.log('✅ [AutoSync] go() di-hook → auto-pull saat buka halaman Absensi');
+}
+
+/* ================================================================
+* 🎯 HOOK 4: Tombol Push & Pull manual tetap ada (sebagai backup)
+*    Tidak perlu diubah — biarkan seperti semula
+================================================================ */
+
+/* ================================================================
+* 🚀 INIT
+================================================================ */
+function init() {
+  console.log('🚀 [AutoSync] Patch aktif — TANPA BACKUP PERMANEN');
+  console.log('📌 Alur baru:');
+  console.log('   ✅ Simpan link → otomatis push ke Google Sheets');
+  console.log('   ✅ Buka halaman Absensi → otomatis pull dari Google Sheets');
+  console.log('   ✅ Link tetap ada di SEMUA perangkat tanpa backup HTML');
+  console.log('   ❌ TIDAK PERLU klik "Backup Permanen" lagi');
+
+  hookSaveUrl();
+  hookClearUrl();
+  hookGoFunction();
+
+  // Jika halaman absensi sudah aktif saat load, langsung pull
+  var page = document.getElementById('absensi-standalone');
+  if (page && page.classList.contains('active')) {
+    setTimeout(function() {
+      autoPullFromSheet(function() {
+        try { renderCards && renderCards(); } catch(e) {}
+      });
+    }, 800);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+})();
+</script>
+<!-- ================================================================ -->
+<!-- PATCH AUTO-SYNC ABSENSI [END]                                    -->
+<!-- ================================================================ -->
 </body>
 </html>
