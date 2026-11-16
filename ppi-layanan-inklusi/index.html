@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPI - SMPN 56 Jakarta</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 10px; }
+  .container { max-width: 1400px; margin: 0 auto; background: #fff; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+  .header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 20px; text-align: center; }
+  .header h1 { font-size: 24px; margin-bottom: 5px; }
+  .header h2 { font-size: 16px; font-weight: normal; opacity: 0.9; }
+  .header p { font-size: 12px; margin-top: 5px; }
+  
+  .tabs { display: flex; background: #f5f5f5; border-bottom: 2px solid #ddd; overflow-x: auto; }
+  .tab { padding: 12px 18px; cursor: pointer; border: none; background: none; font-size: 13px; font-weight: 600; color: #555; white-space: nowrap; transition: all 0.3s; border-bottom: 3px solid transparent; }
+  .tab:hover { background: #e0e0e0; }
+  .tab.active { color: #1e3c72; border-bottom-color: #1e3c72; background: #fff; }
+  
+  .content { padding: 20px; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  
+  .section-title { background: #4a86e8; color: white; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+  .info-box { background: #e8f0fe; border-left: 4px solid #4a86e8; padding: 12px 15px; border-radius: 6px; margin: 15px 0; }
+  .info-box.success { background: #d4edda; border-color: #28a745; }
+  .info-box.warning { background: #fff3cd; border-color: #ffc107; }
+  .info-box.info { background: #d1ecf1; border-color: #17a2b8; }
+  
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 15px; padding: 15px; background: #f9f9f9; border-radius: 8px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600; color: #333; margin-bottom: 4px; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 13px; }
+  .form-group textarea { resize: vertical; min-height: 60px; }
+  
+  .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s; margin: 3px; }
+  .btn-primary { background: #4a86e8; color: white; }
+  .btn-success { background: #28a745; color: white; }
+  .btn-danger { background: #dc3545; color: white; }
+  .btn-warning { background: #ffc107; color: #000; }
+  .btn-info { background: #17a2b8; color: white; }
+  .btn-lg { font-size: 16px; padding: 15px 30px; }
+  .btn-group { margin: 15px 0; text-align: center; }
+  .alert .btn { display: inline-block; line-height: 1.2; }
+  
+  table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
+  th { background: #4a86e8; color: white; padding: 8px; text-align: left; font-size: 11px; }
+  td { padding: 6px 8px; border: 1px solid #ddd; vertical-align: top; }
+  tr:nth-child(even) { background: #f9f9f9; }
+  tr:hover { background: #e8f0fe; }
+  .table-wrapper { overflow-x: auto; border: 1px solid #ddd; border-radius: 8px; }
+  
+  .alert { padding: 12px; border-radius: 6px; margin: 10px 0; display: none; white-space: pre-line; }
+  .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  .alert-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+  .stat-card { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; border-radius: 10px; text-align: center; }
+  .stat-card h3 { font-size: 28px; margin: 5px 0; }
+  .stat-card p { font-size: 12px; opacity: 0.9; }
+  
+  .signature-container { border: 2px dashed #4a86e8; border-radius: 8px; padding: 10px; margin: 10px 0; background: #f9f9f9; }
+  .signature-pad { width: 100%; height: 150px; background: white; border: 1px solid #ccc; border-radius: 5px; cursor: crosshair; touch-action: none; }
+  .signature-preview { max-width: 200px; max-height: 100px; border: 1px solid #ccc; margin: 5px; }
+  
+  .loading { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center; color: white; font-size: 18px; }
+  .loading.show { display: flex; }
+  .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-right: 15px; }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  
+  .data-status { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+  .status-loaded { background: #28a745; color: white; }
+  .status-empty { background: #ffc107; color: #000; }
+  .sub-section { background: #f0f4ff; border-left: 4px solid #1e3c72; padding: 10px 15px; margin: 15px 0; border-radius: 5px; }
+  .sub-section h4 { color: #1e3c72; margin-bottom: 8px; }
+  
+  /* ===== GRAFIK ===== */
+  .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin: 20px 0; }
+  .chart-card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+  .chart-card h3 { color: #1e3c72; font-size: 15px; margin-bottom: 10px; text-align: center; padding-bottom: 10px; border-bottom: 2px solid #4a86e8; }
+  .chart-source { font-size: 10px; color: #888; text-align: center; font-style: italic; margin-bottom: 10px; }
+  .chart-container { position: relative; height: 320px; width: 100%; }
+  .chart-empty { display: flex; align-items: center; justify-content: center; height: 320px; color: #999; font-style: italic; background: #f9f9f9; border-radius: 8px; text-align: center; padding: 20px; }
+  
+  @media (max-width: 768px) {
+    .charts-grid { grid-template-columns: 1fr; }
+    .chart-container { height: 280px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading"><div class="spinner"></div><span id="loadingText">Memproses...</span></div>
+
+<div class="container">
+  <div class="header">
+    <h1>SMP NEGERI 56 JAKARTA</h1>
+    <h2>PROGRAM PEMBELAJARAN INDIVIDUAL (PPI) & LAYANAN INKLUSI</h2>
+    <p>Tahun Ajaran 2026/2027 | Disusun oleh Guru Bimbingan & Konseling</p>
+  </div>
+  
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('dashboard', event)">📊 Dashboard</button>
+    <button class="tab" onclick="showTab('ppsi', event)">🧠 PPI Psikologis</button>
+    <button class="tab" onclick="showTab('fisik', event)">🏥 PPI Fisik/Medis</button>
+    <button class="tab" onclick="showTab('monitoring', event)">📋 Monitoring BK</button>
+    <button class="tab" onclick="showTab('pejabat', event)">👔 Pejabat & TTD</button>
+    <button class="tab" onclick="showTab('generate', event)">📄 Generate PDF</button>
+  </div>
+  
+  <div class="content">
+    <div id="alertBox" class="alert"></div>
+    
+    <!-- ============ DASHBOARD ============ -->
+    <div id="dashboard" class="tab-content active">
+      <div class="section-title">
+        <span>📊 Dashboard PPI - SMPN 56 Jakarta</span>
+        <span id="statusDashboard" class="data-status status-empty">Belum dimuat</span>
+      </div>
+      
+      <div class="info-box warning">
+        <strong>💡 Cara Menggunakan:</strong><br>
+        1. Klik <strong>"📥 MUAT SEMUA DATA LAMA"</strong><br>
+        2. Grafik akan otomatis terbentuk dari data sheet Proporsi & Sebaran<br>
+        3. Jika sheet kosong, sistem otomatis ambil data dari Dashboard_Rekap (fallback)
+      </div>
+      
+      <div class="btn-group">
+        <button class="btn btn-primary btn-lg" onclick="muatDataLama()">📥 MUAT SEMUA DATA LAMA</button>
+      </div>
+      
+      <!-- ===== GRAFIK SECTION ===== -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>🥧 Proporsi Kebutuhan Khusus PDBK</h3>
+          <div id="chartProporsiSource" class="chart-source"></div>
+          <div class="chart-container">
+            <canvas id="chartProporsi"></canvas>
+            <div id="chartProporsiEmpty" class="chart-empty">
+              Muat data untuk menampilkan grafik
+            </div>
+          </div>
+        </div>
+        
+        <div class="chart-card">
+          <h3>📊 Sebaran PDBK per Jenjang Kelas</h3>
+          <div id="chartSebaranSource" class="chart-source"></div>
+          <div class="chart-container">
+            <canvas id="chartSebaran"></canvas>
+            <div id="chartSebaranEmpty" class="chart-empty">
+              Muat data untuk menampilkan grafik
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+      <div id="statsContainer"></div>
+      <div id="dashboardContent">
+        <p style="text-align:center; color:#999; padding:30px;">Klik "Muat Semua Data Lama" untuk menampilkan data</p>
+      </div>
+      
+      <div class="section-title" style="background: #28a745; font-size: 14px; margin-top: 30px;">
+        ➕ Tambah Data Sebaran PDBK
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Pilih Kelas</label>
+          <input type="text" id="db_kelas" list="kelas-list" placeholder="Ketik atau pilih kelas...">
+          <datalist id="kelas-list"></datalist>
+        </div>
+        <div class="form-group"><label>ABK Psikologis/Kognitif</label><input type="number" id="db_psi" min="0" value="0"></div>
+        <div class="form-group"><label>ABK Fisik/Medis</label><input type="number" id="db_fis" min="0" value="0"></div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-success" onclick="addSebaran()">➕ Tambah Data Baru</button>
+      </div>
+    </div>
+    
+    <!-- ============ PPI PSIKOLOGIS ============ -->
+    <div id="ppsi" class="tab-content">
+      <div class="section-title">
+        <span>🧠 Matriks PPI - Kognitif & Psikologis</span>
+        <span id="statusPpsi" class="data-status status-empty">Belum dimuat</span>
+      </div>
+      <div id="ppsiContent"><p style="text-align:center; color:#999; padding:30px;">Klik "Muat Semua Data Lama" di Dashboard</p></div>
+      
+      <div class="section-title" style="background: #28a745; font-size: 14px; margin-top: 30px;">➕ Tambah Data Baru</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Kelas</label><input type="text" id="psi_kelas" list="kelas-list-psi" placeholder="Contoh: 8A"><datalist id="kelas-list-psi"></datalist></div>
+        <div class="form-group"><label>Nama Siswa</label><input type="text" id="psi_nama"></div>
+        <div class="form-group"><label>Kategori & Diagnosa</label><input type="text" id="psi_kategori"></div>
+        <div class="form-group"><label>Skor IQ / Skala</label><input type="text" id="psi_iq"></div>
+        <div class="form-group"><label>Rujukan Klinis</label><input type="text" id="psi_rujukan"></div>
+        <div class="form-group"><label>Tingkat Prioritas</label>
+          <select id="psi_prioritas"><option value="Tinggi">Tinggi</option><option value="Sedang">Sedang</option><option value="Rendah">Rendah</option></select>
+        </div>
+        <div class="form-group" style="grid-column: 1/-1;"><label>Gejala Utama</label><textarea id="psi_gejala"></textarea></div>
+        <div class="form-group" style="grid-column: 1/-1;"><label>Target Capaian PPI</label><textarea id="psi_target"></textarea></div>
+        <div class="form-group" style="grid-column: 1/-1;"><label>Strategi Pembelajaran</label><textarea id="psi_strategi"></textarea></div>
+        <div class="form-group" style="grid-column: 1/-1;"><label>Bentuk Penilaian</label><textarea id="psi_penilaian"></textarea></div>
+      </div>
+      <div class="btn-group"><button class="btn btn-success" onclick="addPpsi()">➕ Tambah Data Baru</button></div>
+    </div>
+    
+    <!-- ============ PPI FISIK MEDIS ============ -->
+    <div id="fisik" class="tab-content">
+      <div class="section-title">
+        <span>🏥 Matriks Akomodasi & Perlindungan Medis</span>
+        <span id="statusFisik" class="data-status status-empty">Belum dimuat</span>
+      </div>
+      <div id="fisikContent"><p style="text-align:center; color:#999; padding:30px;">Klik "Muat Semua Data Lama" di Dashboard</p></div>
+      
+      <div class="section-title" style="background: #28a745; font-size: 14px; margin-top: 30px;">➕ Tambah Data Baru</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Kelas</label><input type="text" id="fis_kelas" list="kelas-list-fis" placeholder="Contoh: 9F"><datalist id="kelas-list-fis"></datalist></div>
+        <div class="form-group"><label>Nama Siswa</label><input type="text" id="fis_nama"></div>
+        <div class="form-group"><label>Riwayat Kesehatan</label><input type="text" id="fis_riwayat"></div>
+        <div class="form-group"><label>Keterangan Klinis</label><input type="text" id="fis_klinis"></div>
+        <div class="form-group" style="grid-column: 1/-1;"><label>Target Perlindungan</label><textarea id="fis_target"></textarea></div>
+        <div class="form-group" style="grid-column: 1/-1;"><label>Akomodasi Lingkungan/PJOK</label><textarea id="fis_akomodasi"></textarea></div>
+        <div class="form-group" style="grid-column: 1/-1;"><label>Protokol Darurat</label><textarea id="fis_protokol"></textarea></div>
+      </div>
+      <div class="btn-group"><button class="btn btn-success" onclick="addFisik()">➕ Tambah Data Baru</button></div>
+    </div>
+    
+    <!-- ============ MONITORING ============ -->
+    <div id="monitoring" class="tab-content">
+      <div class="section-title">
+        <span>📋 Monitoring & Evaluasi Bulanan</span>
+        <span id="statusMonitoring" class="data-status status-empty">Belum dimuat</span>
+      </div>
+      <div id="monitoringContent"><p style="text-align:center; color:#999; padding:30px;">Klik "Muat Semua Data Lama" di Dashboard</p></div>
+      
+      <div class="section-title" style="background: #28a745; font-size: 14px; margin-top: 30px;">➕ Tambah Data Baru</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Bulan Evaluasi</label><input type="month" id="mon_bulan"></div>
+        <div class="form-group"><label>Kelas</label><input type="text" id="mon_kelas" list="kelas-list-mon" placeholder="Contoh: 7D"><datalist id="kelas-list-mon"></datalist></div>
+        <div class="form-group"><label>Nama Siswa</label><input type="text" id="mon_nama"></div>
+        <div class="form-group"><label>Kategori Kebutuhan</label><input type="text" id="mon_kategori"></div>
+        <div class="form-group"><label>Status Capaian</label>
+          <select id="mon_status"><option value="Dalam Proses">Dalam Proses</option><option value="Tercapai">Tercapai</option><option value="Belum Tercapai">Belum Tercapai</option></select>
+        </div>
+        <div class="form-group" style="grid-column: 1/-1;"><label>Perkembangan Perilaku & Akademik</label><textarea id="mon_perkembangan"></textarea></div>
+        <div class="form-group" style="grid-column: 1/-1;"><label>Tindak Lanjut</label><textarea id="mon_tindak"></textarea></div>
+      </div>
+      <div class="btn-group"><button class="btn btn-success" onclick="addMonitoring()">➕ Tambah Data Baru</button></div>
+    </div>
+    
+    <!-- ============ PEJABAT ============ -->
+    <div id="pejabat" class="tab-content">
+      <div class="section-title">👔 Data Pejabat & Tanda Tangan</div>
+      
+      <h3 style="margin: 15px 0 10px; color: #1e3c72;">Kepala Sekolah</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Nama</label><input type="text" id="ks_nama"></div>
+        <div class="form-group"><label>NIP</label><input type="text" id="ks_nip"></div>
+        <div class="form-group"><label>Pangkat</label><input type="text" id="ks_pangkat"></div>
+      </div>
+      <div class="signature-container">
+        <label style="font-weight: bold;">Tanda Tangan Kepala Sekolah</label>
+        <canvas id="sigKS" class="signature-pad"></canvas>
+        <div style="margin-top: 8px;">
+          <button class="btn btn-warning" onclick="clearSignature('sigKS')">🗑️ Hapus</button>
+          <button class="btn btn-success" onclick="saveSignature('Kepala Sekolah', 'sigKS')">💾 Simpan TTD</button>
+          <label class="btn btn-info" style="display: inline-block;">📤 Upload<input type="file" accept="image/*" onchange="uploadSignature('Kepala Sekolah', this)" style="display:none;"></label>
+        </div>
+        <div id="previewKS" style="margin-top: 10px;"></div>
+      </div>
+      
+      <h3 style="margin: 20px 0 10px; color: #1e3c72;">Guru Bimbingan & Konseling</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Nama</label><input type="text" id="bk_nama"></div>
+        <div class="form-group"><label>NIP</label><input type="text" id="bk_nip"></div>
+        <div class="form-group"><label>Pangkat</label><input type="text" id="bk_pangkat"></div>
+      </div>
+      <div class="signature-container">
+        <label style="font-weight: bold;">Tanda Tangan Guru BK</label>
+        <canvas id="sigBK" class="signature-pad"></canvas>
+        <div style="margin-top: 8px;">
+          <button class="btn btn-warning" onclick="clearSignature('sigBK')">🗑️ Hapus</button>
+          <button class="btn btn-success" onclick="saveSignature('Guru BK', 'sigBK')">💾 Simpan TTD</button>
+          <label class="btn btn-info" style="display: inline-block;">📤 Upload<input type="file" accept="image/*" onchange="uploadSignature('Guru BK', this)" style="display:none;"></label>
+        </div>
+        <div id="previewBK" style="margin-top: 10px;"></div>
+      </div>
+      
+      <div class="btn-group"><button class="btn btn-primary" onclick="savePejabat()">💾 Simpan Data Pejabat</button></div>
+    </div>
+    
+    <!-- ============ GENERATE PDF ============ -->
+    <div id="generate" class="tab-content">
+      <div class="section-title">📄 Generate Laporan PDF</div>
+      <div id="dataSummary" class="info-box warning"><strong>⚠️ Muat data lama terlebih dahulu</strong> di tab Dashboard.</div>
+      <div class="info-box info">🖼️ Grafik dashboard (Diagram Lingkaran Proporsi & Diagram Batang Sebaran) otomatis disertakan sebagai gambar di PDF selama grafik sudah tampil di tab Dashboard.</div>
+      <div class="btn-group"><button class="btn btn-success btn-lg" onclick="generatePDF()">📄 GENERATE PDF SEKARANG</button></div>
+      <div id="pdfResult" style="margin-top: 20px;"></div>
+    </div>
+  </div>
+</div>
+<div id="editModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:10000; justify-content:center; align-items:center; padding:15px;">
+<div style="background:#fff; border-radius:12px; max-width:760px; width:100%; max-height:88vh; overflow:auto; padding:18px;">
+<h3 id="editModalTitle" style="color:#1e3c72; margin-bottom:12px;">Edit Data</h3>
+<div id="editModalBody" class="form-grid" style="margin-bottom:10px;"></div>
+<div class="btn-group">
+<button class="btn btn-success" onclick="saveEdit()">💾 Simpan Perubahan</button>
+<button class="btn btn-danger" onclick="closeEdit()">Batal</button>
+</div>
+</div>
+</div>
+<script>
+// ==================== KONFIGURASI ====================
+const URL_APPS = 'https://script.google.com/macros/s/AKfycbzroV32dh7ld4SS8PdtD8GVbZJ2fd--U5Oq1ZqoiBV6isyG1FzreK1PollfCsPkRcoT/exec';
+
+// ==================== STATE ====================
+let allData = { proporsi: null, sebaran: null, ppsi: null, fisik: null, monitoring: null };
+let chartProporsiInstance = null;
+let chartSebaranInstance = null;
+
+// ==================== DAFTAR KELAS ====================
+function generateClassList() {
+  const classes = [];
+  for (let i = 0; i < 10; i++) classes.push('7' + String.fromCharCode(65 + i));
+  for (let i = 0; i < 9; i++) classes.push('8' + String.fromCharCode(65 + i));
+  classes.push('9A', '9AB');
+  for (let i = 2; i < 9; i++) classes.push('9' + String.fromCharCode(65 + i));
+  return classes;
+}
+
+function populateClassDataLists() {
+  const classList = generateClassList();
+  ['kelas-list', 'kelas-list-psi', 'kelas-list-fis', 'kelas-list-mon'].forEach(id => {
+    const dl = document.getElementById(id);
+    if (dl) dl.innerHTML = classList.map(c => `<option value="${c}">`).join('');
+  });
+}
+
+// ==================== TAB NAVIGATION ====================
+function showTab(tabId, event) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  if (event && event.target) event.target.classList.add('active');
+}
+
+// ==================== LOADING & ALERT ====================
+function showLoading(text = 'Memproses...') {
+  document.getElementById('loadingText').textContent = text;
+  document.getElementById('loading').classList.add('show');
+}
+function hideLoading() { document.getElementById('loading').classList.remove('show'); }
+function showAlert(msg, type = 'success') {
+  const box = document.getElementById('alertBox');
+  box.className = 'alert alert-' + type;
+  box.textContent = msg;
+  box.style.display = 'block';
+  setTimeout(() => { box.style.display = 'none'; }, 10000);
+}
+
+// ==================== CALL BACKEND ====================
+function callBackend(functionName, ...args) {
+  return new Promise((resolve, reject) => {
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(resolve)
+        .withFailureHandler(reject)
+        [functionName](...args);
+    } else {
+      fetch(URL_APPS, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ function: functionName, args: args })
+      })
+      .then(r => r.json())
+      .then(resolve)
+      .catch(reject);
+    }
+  });
+}
+
+// ==================== LOAD ALL DATA ====================
+async function loadAllData() {
+  showLoading('Memuat semua data lama dari spreadsheet...');
+  try {
+    const result = await callBackend('loadAllExistingData');
+    
+    if (!result) { showAlert('❌ Response kosong dari server', 'danger'); hideLoading(); return; }
+    if (result.success === false) { showAlert('❌ ' + (result.error || result.message || 'Gagal'), 'danger'); hideLoading(); return; }
+    
+    allData = {
+      proporsi: result.proporsi || { title: '', headers: [], rows: [] },
+      sebaran: result.sebaran || { title: '', headers: [], rows: [] },
+      ppsi: result.ppsi || { title: '', headers: [], rows: [] },
+      fisik: result.fisik || { title: '', headers: [], rows: [] },
+      monitoring: result.monitoring || { title: '', headers: [], rows: [] }
+    };
+    
+    ['proporsi', 'sebaran', 'ppsi', 'fisik', 'monitoring'].forEach(key => {
+      if (!allData[key].rows) allData[key].rows = [];
+      if (!allData[key].headers) allData[key].headers = [];
+    });
+    
+    renderCharts();
+    renderDashboard();
+    renderPpsi();
+    renderFisik();
+    renderMonitoring();
+    
+    const counts = {
+      proporsi: allData.proporsi.rows.length,
+      sebaran: allData.sebaran.rows.length,
+      ppsi: allData.ppsi.rows.length,
+      fisik: allData.fisik.rows.length,
+      monitoring: allData.monitoring.rows.length
+    };
+    
+    const total = counts.proporsi + counts.sebaran + counts.ppsi + counts.fisik + counts.monitoring;
+    
+    updateStatus('statusDashboard', counts.proporsi + counts.sebaran);
+    updateStatus('statusPpsi', counts.ppsi);
+    updateStatus('statusFisik', counts.fisik);
+    updateStatus('statusMonitoring', counts.monitoring);
+    
+    showAlert(result.message || `✅ Data berhasil dimuat! Total: ${total} baris`, 'success');
+    
+    document.getElementById('dataSummary').innerHTML = `
+      <strong>✅ Data siap di-generate:</strong><br>
+      • Proporsi: <strong>${counts.proporsi}</strong> (sumber: ${allData.proporsi.source || '-'})<br>
+      • Sebaran: <strong>${counts.sebaran}</strong> (sumber: ${allData.sebaran.source || '-'})<br>
+      • PPI Psikologis: <strong>${counts.ppsi}</strong><br>
+      • PPI Fisik/Medis: <strong>${counts.fisik}</strong><br>
+      • Monitoring: <strong>${counts.monitoring}</strong><br>
+      <strong>Total: ${total} data</strong>
+    `;
+    document.getElementById('dataSummary').className = 'info-box success';
+    
+    hideLoading();
+  } catch (err) {
+    hideLoading();
+    showAlert('❌ Gagal memuat data: ' + err.message, 'danger');
+    console.error('Load error:', err);
+  }
+}
+
+function updateStatus(elementId, count) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  if (count > 0) {
+    el.textContent = count + ' data dimuat';
+    el.className = 'data-status status-loaded';
+  } else {
+    el.textContent = 'Tidak ada data';
+    el.className = 'data-status status-empty';
+  }
+}
+async function muatDataLama() {
+  showLoading('Menghapus penanda hijau & memuat data...');
+  try { await callBackend('clearGreenHighlights'); } catch (e) {}
+  await loadAllData();
+}
+// ==================== RENDER GRAFIK ====================
+function renderCharts() {
+  renderChartProporsi();
+  renderChartSebaran();
+
+}
+
+/**
+ * 🥧 PIE CHART: Proporsi Kebutuhan Khusus
+ */
+function renderChartProporsi() {
+  const canvas = document.getElementById('chartProporsi');
+  const emptyDiv = document.getElementById('chartProporsiEmpty');
+  const sourceDiv = document.getElementById('chartProporsiSource');
+  
+  if (!allData.proporsi || allData.proporsi.rows.length === 0) {
+    canvas.style.display = 'none';
+    emptyDiv.style.display = 'flex';
+    emptyDiv.textContent = '⚠️ Tidak ada data Proporsi Kebutuhan Khusus';
+    sourceDiv.textContent = '';
+    if (chartProporsiInstance) { chartProporsiInstance.destroy(); chartProporsiInstance = null; }
+    return;
+  }
+  
+  canvas.style.display = 'block';
+  emptyDiv.style.display = 'none';
+  
+  // Ekstrak data
+  const labels = allData.proporsi.rows.map(r => String(r[0] || '').trim());
+  const values = allData.proporsi.rows.map(r => {
+    const v = parseInt(r[1]);
+    return isNaN(v) ? 0 : v;
+  });
+  
+  // Tampilkan sumber data
+  const sourceText = allData.proporsi.source === 'sheet' ? '📊 Sumber: Sheet Proporsi Kebutuhan Khusus' :
+                     allData.proporsi.source === 'dashboard-fallback' ? '🔄 Sumber: Fallback dari Dashboard_Rekap' :
+                     `📊 Sumber: ${allData.proporsi.source || 'data'}`;
+  sourceDiv.textContent = sourceText;
+  
+  const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF', '#7BC043', '#FF6B6B', '#4ECDC4'];
+  
+  if (chartProporsiInstance) chartProporsiInstance.destroy();
+  
+  chartProporsiInstance = new Chart(canvas, {
+    type: 'pie',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: values,
+        backgroundColor: colors.slice(0, labels.length),
+        borderColor: '#fff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10, boxWidth: 12 } },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const label = context.label || '';
+              const value = context.parsed || 0;
+              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+              const pct = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+              return `${label}: ${value} siswa (${pct}%)`;
+            }
+          }
+        },
+        title: {
+          display: true,
+          text: `Total: ${values.reduce((a, b) => a + b, 0)} Siswa PDBK`,
+          font: { size: 13, weight: 'bold' },
+          color: '#1e3c72',
+          padding: { bottom: 10 }
+        }
+      }
+    }
+  });
+}
+
+/**
+ * 📊 BAR CHART: Sebaran PDBK per Jenjang Kelas
+ */
+function renderChartSebaran() {
+  const canvas = document.getElementById('chartSebaran');
+  const emptyDiv = document.getElementById('chartSebaranEmpty');
+  const sourceDiv = document.getElementById('chartSebaranSource');
+  
+  if (!allData.sebaran || allData.sebaran.rows.length === 0) {
+    canvas.style.display = 'none';
+    emptyDiv.style.display = 'flex';
+    emptyDiv.textContent = '⚠️ Tidak ada data Sebaran PDBK';
+    sourceDiv.textContent = '';
+    if (chartSebaranInstance) { chartSebaranInstance.destroy(); chartSebaranInstance = null; }
+    return;
+  }
+  
+  canvas.style.display = 'block';
+  emptyDiv.style.display = 'none';
+  
+  const rows = allData.sebaran.rows;
+  const headers = allData.sebaran.headers;
+  
+  // Deteksi struktur data
+  // Struktur A (4 kolom): Jenjang, ABK Psi, ABK Fis, Total
+  // Struktur B (2 kolom): Jenjang, Jumlah Siswa
+  const numCols = headers.length;
+  
+  let labels = [];
+  let psiValues = [];
+  let fisValues = [];
+  
+  if (numCols >= 4) {
+    // Struktur lengkap: Jenjang, ABK Psi, ABK Fis, Total
+    labels = rows.map(r => String(r[0] || '').trim());
+    psiValues = rows.map(r => { const v = parseInt(r[1]); return isNaN(v) ? 0 : v; });
+    fisValues = rows.map(r => { const v = parseInt(r[2]); return isNaN(v) ? 0 : v; });
+  } else if (numCols >= 2) {
+    // Struktur sederhana: Jenjang, Jumlah Siswa
+    labels = rows.map(r => String(r[0] || '').trim());
+    psiValues = rows.map(r => { const v = parseInt(r[1]); return isNaN(v) ? 0 : v; });
+    fisValues = rows.map(() => 0);
+  }
+  
+  // Tampilkan sumber data
+  const sourceText = allData.sebaran.source === 'sheet' ? '📊 Sumber: Sheet Sebaran PDBK' :
+                     allData.sebaran.source === 'dashboard-fallback' ? '🔄 Sumber: Fallback dari Dashboard_Rekap' :
+                     `📊 Sumber: ${allData.sebaran.source || 'data'}`;
+  sourceDiv.textContent = sourceText;
+  
+  if (chartSebaranInstance) chartSebaranInstance.destroy();
+  
+  const datasets = [];
+  
+  if (numCols >= 4) {
+    datasets.push({
+      label: 'ABK Psikologis/Kognitif',
+      data: psiValues,
+      backgroundColor: 'rgba(255, 99, 132, 0.8)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+      borderWidth: 2,
+      borderRadius: 5
+    });
+    datasets.push({
+      label: 'ABK Fisik/Medis',
+      data: fisValues,
+      backgroundColor: 'rgba(54, 162, 235, 0.8)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+      borderWidth: 2,
+      borderRadius: 5
+    });
+  } else {
+    datasets.push({
+      label: 'Jumlah Siswa PDBK',
+      data: psiValues,
+      backgroundColor: 'rgba(75, 192, 192, 0.8)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 2,
+      borderRadius: 5
+    });
+  }
+  
+  chartSebaranInstance = new Chart(canvas, {
+    type: 'bar',
+    data: { labels: labels, datasets: datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { font: { size: 11 }, padding: 10, boxWidth: 12 } },
+        title: {
+          display: true,
+          text: `Total PDBK: ${psiValues.reduce((a,b)=>a+b,0) + fisValues.reduce((a,b)=>a+b,0)} Siswa`,
+          font: { size: 13, weight: 'bold' },
+          color: '#1e3c72',
+          padding: { bottom: 10 }
+        },
+        tooltip: {
+          callbacks: {
+            afterBody: function(context) {
+              const idx = context[0].dataIndex;
+              const total = psiValues[idx] + fisValues[idx];
+              return `Total: ${total} siswa`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 1, font: { size: 11 } },
+          title: { display: true, text: 'Jumlah Siswa', font: { size: 12, weight: 'bold' } },
+          grid: { color: 'rgba(0,0,0,0.05)' }
+        },
+        x: { ticks: { font: { size: 12, weight: 'bold' } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ==================== RENDER DASHBOARD ====================
+// ==================== RENDER DASHBOARD ====================
+function renderDashboard() {
+  const container = document.getElementById('dashboardContent');
+  const statsContainer = document.getElementById('statsContainer');
+  let html = '';
+  let totalPsi = 0, totalFis = 0;
+  if (allData.sebaran && allData.sebaran.rows.length > 0) {
+    const numCols = allData.sebaran.headers.length;
+    allData.sebaran.rows.forEach(row => {
+      if (numCols >= 4) { totalPsi += parseInt(row[1]) || 0; totalFis += parseInt(row[2]) || 0; }
+      else { totalPsi += parseInt(row[1]) || 0; }
+    });
+  }
+  statsContainer.innerHTML = `
+<div class="stats-grid">
+<div class="stat-card"><p>Total PDBK</p><h3>${totalPsi + totalFis}</h3></div>
+<div class="stat-card" style="background: linear-gradient(135deg, #f093fb, #f5576c);"><p>Psikologis/Kognitif</p><h3>${totalPsi}</h3></div>
+<div class="stat-card" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"><p>Fisik/Medis</p><h3>${totalFis}</h3></div>
+<div class="stat-card" style="background: linear-gradient(135deg, #43e97b, #38f9d7);"><p>Kategori</p><h3>${allData.proporsi?.rows.length || 0}</h3></div>
+</div>`;
+  if (allData.sebaran && allData.sebaran.rows.length > 0) {
+    html += `<div class="sub-section"><h4>📊 ${allData.sebaran.title}</h4>
+<p style="font-size:11px; color:#666;">Sumber data: <em>${allData.sebaran.source || '-'}</em></p></div>`;
+    html += renderTableAksi(allData.sebaran.headers, allData.sebaran.rows, 'sebaran');
+  }
+  if (allData.proporsi && allData.proporsi.rows.length > 0) {
+    html += `<div class="sub-section"><h4>📋 ${allData.proporsi.title}</h4>
+<p style="font-size:11px; color:#666;">Sumber data: <em>${allData.proporsi.source || '-'}</em></p></div>`;
+    html += renderTableAksi(allData.proporsi.headers, allData.proporsi.rows, 'proporsi');
+  }
+  if (!html) html = '<p style="text-align:center; color:#999; padding:30px;">Tidak ada data</p>';
+  container.innerHTML = html;
+}
+// ==================== RENDER PPI PSIKOLOGIS ====================
+function renderPpsi() {
+  const container = document.getElementById('ppsiContent');
+  if (!allData.ppsi || allData.ppsi.rows.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:#999; padding:30px;">Tidak ada data</p>';
+    return;
+  }
+  let html = `<div class="sub-section"><h4>📋 ${allData.ppsi.title}</h4><p>Total: <strong>${allData.ppsi.rows.length}</strong> siswa</p></div>`;
+  html += renderTableAksi(allData.ppsi.headers, allData.ppsi.rows, 'ppsi');
+  container.innerHTML = html;
+}
+// ==================== RENDER PPI FISIK ====================
+function renderFisik() {
+  const container = document.getElementById('fisikContent');
+  if (!allData.fisik || allData.fisik.rows.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:#999; padding:30px;">Tidak ada data</p>';
+    return;
+  }
+  let html = `<div class="sub-section"><h4>📋 ${allData.fisik.title}</h4><p>Total: <strong>${allData.fisik.rows.length}</strong> siswa</p></div>`;
+  html += renderTableAksi(allData.fisik.headers, allData.fisik.rows, 'fisik');
+  container.innerHTML = html;
+}
+// ==================== RENDER MONITORING ====================
+function renderMonitoring() {
+  const container = document.getElementById('monitoringContent');
+  if (!allData.monitoring || allData.monitoring.rows.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:#999; padding:30px;">Tidak ada data</p>';
+    return;
+  }
+  let html = `<div class="sub-section"><h4>📋 ${allData.monitoring.title}</h4><p>Total: <strong>${allData.monitoring.rows.length}</strong> log</p></div>`;
+  html += renderTableAksi(allData.monitoring.headers, allData.monitoring.rows, 'monitoring');
+  container.innerHTML = html;
+}
+
+function renderTable(headers, rows) {
+  if (!headers || headers.length === 0 || !rows || rows.length === 0) return '<p><em>Tidak ada data</em></p>';
+  let html = '<div class="table-wrapper"><table><thead><tr>';
+  headers.forEach(h => { html += `<th>${h}</th>`; });
+  html += '</tr></thead><tbody>';
+  rows.forEach(row => {
+    html += '<tr>';
+    for (let i = 0; i < headers.length; i++) {
+      html += `<td>${row[i] !== undefined ? row[i] : ''}</td>`;
+    }
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  return html;
+}
+// ==================== TABEL DENGAN KOLOM AKSI ====================
+function renderTableAksi(headers, rows, sheetKey) {
+  if (!headers || headers.length === 0 || !rows || rows.length === 0) return '<p><em>Tidak ada data</em></p>';
+  let html = '<div class="table-wrapper"><table><thead><tr>';
+  headers.forEach(h => { html += `<th>${h}</th>`; });
+  html += '<th style="width:90px;">Aksi</th></tr></thead><tbody>';
+  rows.forEach((row, idx) => {
+    html += '<tr>';
+    for (let i = 0; i < headers.length; i++) {
+      html += `<td>${row[i] !== undefined ? row[i] : ''}</td>`;
+    }
+    html += `<td style="white-space:nowrap;">
+<button class="btn btn-warning" style="padding:4px 8px;font-size:11px;margin:1px;" onclick="editRow('${sheetKey}', ${idx})" title="Edit baris">✏️</button>
+<button class="btn btn-danger" style="padding:4px 8px;font-size:11px;margin:1px;" onclick="hapusRow('${sheetKey}', ${idx})" title="Hapus baris">🗑️</button></td>`;
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  return html;
+}
+
+// ==================== TAMBAH DATA ====================
+async function addSebaran() {
+  const kelas = document.getElementById('db_kelas').value.trim();
+  const psi = parseInt(document.getElementById('db_psi').value) || 0;
+  const fis = parseInt(document.getElementById('db_fis').value) || 0;
+  if (!kelas) return showAlert('Kelas wajib diisi', 'danger');
+  
+  showLoading('Menambah data...');
+  try {
+    await callBackend('appendData', 'Sebaran PDBK', [kelas, psi, fis, psi + fis]);
+    showAlert('✅ Data ditambahkan di urutan PALING AKHIR', 'success');
+    document.getElementById('db_psi').value = 0;
+    document.getElementById('db_fis').value = 0;
+    document.getElementById('db_kelas').value = '';
+    await loadAllData();
+    hideLoading();
+  } catch (err) {
+    hideLoading();
+    showAlert('❌ Gagal: ' + err.message, 'danger');
+  }
+}
+
+async function addPpsi() {
+  const data = ['', document.getElementById('psi_kelas').value, document.getElementById('psi_nama').value,
+    document.getElementById('psi_kategori').value, document.getElementById('psi_iq').value,
+    document.getElementById('psi_rujukan').value, document.getElementById('psi_gejala').value,
+    document.getElementById('psi_target').value, document.getElementById('psi_strategi').value,
+    document.getElementById('psi_penilaian').value, document.getElementById('psi_prioritas').value];
+  if (!data[1] || !data[2]) return showAlert('Kelas dan Nama wajib diisi', 'danger');
+  
+  showLoading('Menambah data...');
+  try {
+    await callBackend('appendData', 'PPI_Psikologis', data);
+    showAlert('✅ Data ditambahkan di urutan PALING AKHIR', 'success');
+    document.querySelectorAll('#ppsi input, #ppsi textarea').forEach(el => el.value = '');
+    await loadAllData();
+    hideLoading();
+  } catch (err) {
+    hideLoading();
+    showAlert('❌ Gagal: ' + err.message, 'danger');
+  }
+}
+
+async function addFisik() {
+  const data = ['', document.getElementById('fis_kelas').value, document.getElementById('fis_nama').value,
+    document.getElementById('fis_riwayat').value, document.getElementById('fis_klinis').value,
+    document.getElementById('fis_target').value, document.getElementById('fis_akomodasi').value,
+    document.getElementById('fis_protokol').value];
+  if (!data[1] || !data[2]) return showAlert('Kelas dan Nama wajib diisi', 'danger');
+  
+  showLoading('Menambah data...');
+  try {
+    await callBackend('appendData', 'PPI_Fisik_Medis', data);
+    showAlert('✅ Data ditambahkan di urutan PALING AKHIR', 'success');
+    document.querySelectorAll('#fisik input, #fisik textarea').forEach(el => el.value = '');
+    await loadAllData();
+    hideLoading();
+  } catch (err) {
+    hideLoading();
+    showAlert('❌ Gagal: ' + err.message, 'danger');
+  }
+}
+
+async function addMonitoring() {
+  const data = ['', document.getElementById('mon_bulan').value, document.getElementById('mon_kelas').value,
+    document.getElementById('mon_nama').value, document.getElementById('mon_kategori').value,
+    document.getElementById('mon_perkembangan').value, document.getElementById('mon_status').value,
+    document.getElementById('mon_tindak').value];
+  if (!data[2] || !data[3]) return showAlert('Kelas dan Nama wajib diisi', 'danger');
+  
+  showLoading('Menambah data...');
+  try {
+    await callBackend('appendData', 'Log_Monitoring_BK', data);
+    showAlert('✅ Data ditambahkan di urutan PALING AKHIR', 'success');
+    document.querySelectorAll('#monitoring input, #monitoring textarea').forEach(el => el.value = '');
+    await loadAllData();
+    hideLoading();
+  } catch (err) {
+    hideLoading();
+    showAlert('❌ Gagal: ' + err.message, 'danger');
+  }
+}
+
+// ==================== PEJABAT ====================
+async function loadPejabat() {
+  try {
+    const result = await callBackend('getPejabat');
+    if (!result || !result.kepalaSekolah) return;
+    document.getElementById('ks_nama').value = result.kepalaSekolah.nama || '';
+    document.getElementById('ks_nip').value = result.kepalaSekolah.nip || '';
+    document.getElementById('ks_pangkat').value = result.kepalaSekolah.pangkat || '';
+    document.getElementById('bk_nama').value = result.guruBK.nama || '';
+    document.getElementById('bk_nip').value = result.guruBK.nip || '';
+    document.getElementById('bk_pangkat').value = result.guruBK.pangkat || '';
+    if (result.kepalaSekolah.ttd) document.getElementById('previewKS').innerHTML = `<img src="${result.kepalaSekolah.ttd}" class="signature-preview">`;
+    if (result.guruBK.ttd) document.getElementById('previewBK').innerHTML = `<img src="${result.guruBK.ttd}" class="signature-preview">`;
+  } catch (err) { console.error(err); }
+}
+
+async function savePejabat() {
+  showLoading('Menyimpan...');
+  try {
+    await callBackend('updatePejabat', 'Kepala Sekolah',
+      document.getElementById('ks_nama').value, document.getElementById('ks_nip').value, document.getElementById('ks_pangkat').value);
+    await callBackend('updatePejabat', 'Guru Bimbingan & Konseling',
+      document.getElementById('bk_nama').value, document.getElementById('bk_nip').value, document.getElementById('bk_pangkat').value);
+    showAlert('✅ Data pejabat berhasil disimpan', 'success');
+    hideLoading();
+  } catch (err) {
+    hideLoading();
+    showAlert('❌ Gagal: ' + err.message, 'danger');
+  }
+}
+
+// ==================== SIGNATURE PAD ====================
+const signaturePads = {};
+
+function initSignaturePad(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  
+  let drawing = false, lastX = 0, lastY = 0;
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches ? e.touches[0] : e;
+    return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+  }
+  function start(e) { e.preventDefault(); drawing = true; const pos = getPos(e); lastX = pos.x; lastY = pos.y; }
+  function draw(e) {
+    if (!drawing) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(pos.x, pos.y); ctx.stroke();
+    lastX = pos.x; lastY = pos.y;
+  }
+  function end() { drawing = false; }
+  
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', end);
+  canvas.addEventListener('mouseleave', end);
+  canvas.addEventListener('touchstart', start);
+  canvas.addEventListener('touchmove', draw);
+  canvas.addEventListener('touchend', end);
+  signaturePads[canvasId] = canvas;
+}
+
+function clearSignature(canvasId) {
+  const canvas = signaturePads[canvasId];
+  if (!canvas) return;
+  canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+}
+
+async function saveSignature(jabatan, canvasId) {
+  const canvas = signaturePads[canvasId];
+  if (!canvas) return;
+  const dataUrl = canvas.toDataURL('image/png');
+  showLoading('Menyimpan TTD...');
+  try {
+    await callBackend('saveSignature', jabatan, dataUrl);
+    const previewId = jabatan === 'Kepala Sekolah' ? 'previewKS' : 'previewBK';
+    document.getElementById(previewId).innerHTML = `<img src="${dataUrl}" class="signature-preview">`;
+    showAlert('✅ TTD berhasil disimpan', 'success');
+    hideLoading();
+  } catch (err) {
+    hideLoading();
+    showAlert('❌ Gagal: ' + err.message, 'danger');
+  }
+}
+
+async function uploadSignature(jabatan, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    showLoading('Mengupload TTD...');
+    try {
+      await callBackend('saveSignature', jabatan, e.target.result);
+      const previewId = jabatan === 'Kepala Sekolah' ? 'previewKS' : 'previewBK';
+      document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" class="signature-preview">`;
+      showAlert('✅ TTD berhasil diupload', 'success');
+      hideLoading();
+    } catch (err) {
+      hideLoading();
+      showAlert('❌ Gagal: ' + err.message, 'danger');
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// ==================== GENERATE PDF (+ KIRIM GAMBAR GRAFIK) ====================
+function chartToPngWhite(chart) {
+  try {
+    const src = chart.canvas;
+    const off = document.createElement('canvas');
+    off.width = src.width; off.height = src.height;
+    const ctx = off.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, off.width, off.height);
+    ctx.drawImage(src, 0, 0);
+    return off.toDataURL('image/png');
+  } catch (e) { return ''; }
+}
+
+async function generatePDF() {
+  const total = (allData.proporsi?.rows.length || 0) + (allData.sebaran?.rows.length || 0) +
+                (allData.ppsi?.rows.length || 0) + (allData.fisik?.rows.length || 0) +
+                (allData.monitoring?.rows.length || 0);
+  if (total === 0) {
+    showAlert('⚠️ Belum ada data. Klik "Muat Semua Data Lama" di Dashboard!', 'danger');
+    return;
+  }
+  const nChart = (chartProporsiInstance ? 1 : 0) + (chartSebaranInstance ? 1 : 0);
+  if (!confirm(`Generate PDF dari ${total} data?\nGrafik yang akan disertakan: ${nChart} gambar (Pie Proporsi & Bar Sebaran).`)) return;
+
+  showLoading('Menangkap gambar grafik & membuat PDF... Mohon tunggu (30-60 detik).');
+  try {
+    const chartImages = {
+      proporsi: chartProporsiInstance ? chartToPngWhite(chartProporsiInstance) : '',
+      sebaran:  chartSebaranInstance  ? chartToPngWhite(chartSebaranInstance)  : ''
+    };
+    const result = await callBackend('generatePDF', chartImages);
+    hideLoading();
+    if (result && result.success) {
+  document.getElementById('pdfResult').innerHTML = `
+<div class="alert alert-success" style="display: block;">
+<h3>✅ PDF Berhasil Dibuat!</h3>
+<p><strong>File:</strong> ${result.fileName}</p>
+<p><strong>Grafik disertakan:</strong> ${result.chartsIncluded || 0} gambar</p>
+<div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
+<a href="${result.downloadUrl}" class="btn btn-primary" target="_blank" rel="noopener" style="margin:0;">📥 Download PDF</a>
+<a href="${result.fileUrl}" class="btn btn-info" target="_blank" rel="noopener" style="margin:0;">👁️ Lihat di Drive</a>
+</div>
+</div>`;
+  showAlert('✅ PDF berhasil dibuat' + (result.chartsIncluded ? ' lengkap dengan ' + result.chartsIncluded + ' gambar grafik!' : '.'), 'success');
+} else {
+  showAlert('❌ Gagal: ' + (result?.error || 'Unknown error'), 'danger');
+}
+  } catch (err) {
+    hideLoading();
+    showAlert('❌ Gagal generate PDF: ' + err.message, 'danger');
+  }
+}
+// ==================== EDIT & HAPUS DATA ====================
+const SHEET_NAMES = {
+  proporsi: 'Proporsi Kebutuhan Khusus', sebaran: 'Sebaran PDBK',
+  ppsi: 'PPI_Psikologis', fisik: 'PPI_Fisik_Medis',
+  monitoring: 'Log_Monitoring_BK', dashboardRekap: 'Dashboard_Rekap'
+};
+function targetSheetFor(key) {
+  if ((key === 'proporsi' || key === 'sebaran') && allData[key] && allData[key].source === 'dashboard-fallback') return SHEET_NAMES.dashboardRekap;
+  return SHEET_NAMES[key];
+}
+function keyLabel(key) { return { proporsi: 'Proporsi', sebaran: 'Sebaran PDBK', ppsi: 'PPI Psikologis', fisik: 'PPI Fisik/Medis', monitoring: 'Monitoring' }[key] || key; }
+function escapeHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function escapeAttr(s) { return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+let editCtx = null;
+function closeEdit() { editCtx = null; document.getElementById('editModal').style.display = 'none'; }
+function editRow(key, idx) {
+  const row = allData[key] && allData[key].rows[idx];
+  if (!row) return;
+  const headers = allData[key].headers;
+  editCtx = { key: key, idx: idx, oldRow: row.slice() };
+  document.getElementById('editModalBody').innerHTML = headers.map((h, i) => {
+    const val = row[i] !== undefined ? row[i] : '';
+    const long = String(val).length > 60;
+    return `<div class="form-group" style="${long ? 'grid-column:1/-1;' : ''}">
+<label>${escapeHtml(h || ('Kolom ' + (i + 1)))}</label>
+${long ? `<textarea id="edit_f_${i}">${escapeHtml(val)}</textarea>` : `<input id="edit_f_${i}" value="${escapeAttr(val)}">`}
+</div>`;
+  }).join('');
+  document.getElementById('editModalTitle').textContent = '✏️ Edit Data — ' + keyLabel(key) + ' (baris ' + (idx + 1) + ')';
+  document.getElementById('editModal').style.display = 'flex';
+}
+async function saveEdit() {
+  if (!editCtx) return;
+  const key = editCtx.key;
+  const headers = allData[key].headers;
+  const newRow = headers.map((h, i) => {
+    const el = document.getElementById('edit_f_' + i);
+    if (!el) return editCtx.oldRow[i];
+    const v = el.value;
+    const orig = editCtx.oldRow[i];
+    if (typeof orig === 'number' && v.trim() !== '' && !isNaN(Number(v))) return Number(v);
+    return v;
+  });
+  showLoading('Menyimpan perubahan...');
+  try {
+    const r = await callBackend('updateRowExact', targetSheetFor(key), editCtx.oldRow, newRow);
+    hideLoading();
+    if (r && r.success) { closeEdit(); showAlert('✅ ' + (r.message || 'Data diperbarui.'), 'success'); await loadAllData(); }
+    else showAlert('❌ ' + ((r && r.error) || 'Gagal memperbarui data.'), 'danger');
+  } catch (e) { hideLoading(); showAlert('❌ ' + e.message, 'danger'); }
+}
+async function hapusRow(key, idx) {
+  const row = allData[key] && allData[key].rows[idx];
+  if (!row) return;
+  if (!confirm(`Hapus baris ini dari sheet "${targetSheetFor(key)}"?\n\n` + row.slice(0, 4).join(' | '))) return;
+  showLoading('Menghapus baris...');
+  try {
+    const r = await callBackend('deleteRowExact', targetSheetFor(key), row);
+    hideLoading();
+    if (r && r.success) { showAlert('✅ ' + (r.message || 'Baris dihapus.'), 'success'); await loadAllData(); }
+    else showAlert('❌ ' + ((r && r.error) || 'Gagal menghapus.'), 'danger');
+  } catch (e) { hideLoading(); showAlert('❌ ' + e.message, 'danger'); }
+}
+// ==================== INIT ====================
+window.addEventListener('load', () => {
+  populateClassDataLists();
+  initSignaturePad('sigKS');
+  initSignaturePad('sigBK');
+  loadPejabat();
+});
+
+window.addEventListener('resize', () => {
+  setTimeout(() => {
+    initSignaturePad('sigKS');
+    initSignaturePad('sigBK');
+  }, 100);
+});
+</script>
+
+</body>
+</html>
