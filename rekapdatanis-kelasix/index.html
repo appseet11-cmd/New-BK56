@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SMP NEGERI 56 JAKARTA — Rekap BK</title>
+<style>
+:root{--pri:#1e40af;--pri2:#0ea5e9;--teal:#0f766e;--bg:#f1f5f9;--card:#fff;--line:#e2e8f0;--txt:#0f172a;--mut:#64748b;--red:#b91c1c;--pink:#be185d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;background:var(--bg);color:var(--txt);font-size:14px}
+.hidden{display:none!important}.muted{color:var(--mut)}.grow{flex:1}
+button{cursor:pointer;font:inherit}input,select{font:inherit}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;font-weight:600;transition:.15s;text-decoration:none;color:inherit;display:inline-block}
+.btn:hover{filter:brightness(.97)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border:none}
+.btn-ghost{background:#f8fafc}.btn-sm{padding:5px 10px;font-size:12px;border-radius:8px}
+.btn-danger{background:#fef2f2;border-color:#fecaca;color:var(--red)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 1px 3px rgba(15,23,42,.06);margin-bottom:14px}
+.card.accent{border-left:5px solid var(--teal)}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.4px}
+.badge.matrix{background:#fef3c7;color:#b45309}.badge.biasa{background:#e0f2fe;color:#0369a1}
+.badge.nonis{background:#fee2e2;color:var(--red)}.badge.multi{background:#dcfce7;color:#166534}
+.chip{display:inline-block;background:#f1f5f9;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600}
+.chip.warn{background:#fff7ed;border-color:#fed7aa;color:#c2410c}.chip-strong{background:#eff6ff;border-color:#bfdbfe;color:var(--pri)}
+.chip.ok{background:#f0fdf4;border-color:#bbf7d0;color:#166534}
+.chip.mini{padding:2px 8px;font-size:11px}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:rot .7s linear infinite;vertical-align:-2px}
+@keyframes rot{to{transform:rotate(360deg)}}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#0f172a;color:#fff;padding:11px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:99;max-width:90vw;text-align:center;line-height:1.5}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}#toast.err{background:var(--red)}#toast.ok{background:#166534}
+/* LOGIN */
+#loginView{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#1e3a8a 0%,#0f766e 100%)}
+.login-card{background:#fff;border-radius:18px;padding:30px 28px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.35);text-align:center}
+.crest{width:70px;height:70px;margin:0 auto 12px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--teal));color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;box-shadow:0 6px 16px rgba(30,64,175,.4);overflow:hidden}
+.crest img{width:100%;height:100%;object-fit:contain}
+.login-card h1{font-size:19px;color:var(--pri);letter-spacing:.5px}
+.login-card .sub{font-size:11px;font-weight:700;color:#334155;margin:7px 0 3px;line-height:1.5}
+.login-card .addr{font-size:11px;color:var(--mut);margin-bottom:18px}
+.fld{text-align:left;margin-bottom:12px}
+.fld label{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;font-weight:700;margin-bottom:5px;color:#334155}
+.fld input,.fld select{width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff}
+.fld input:focus,.fld select:focus{outline:2px solid #bfdbfe;border-color:var(--pri2)}
+/* ★ CAPTCHA: besar, jelas, tidak tertutup */
+.capcode{display:inline-block;min-width:72px;text-align:center;padding:4px 14px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:8px;color:var(--pri);font-weight:900;letter-spacing:6px;cursor:pointer;font-family:'Courier New',monospace;font-size:18px;user-select:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.5);text-decoration:line-through;text-decoration-color:rgba(30,64,175,.15)}
+.capcode:hover{background:#dbeafe;border-color:var(--pri2)}
+.cap-refresh{background:none;border:none;color:var(--pri);font-size:16px;padding:4px 6px;cursor:pointer}
+#btnLogin{width:100%;padding:12px;font-size:15px;margin-top:4px}
+#btnLogin:disabled{background:#cbd5e1;cursor:not-allowed}
+#loginMsg{margin-top:12px;font-size:12.5px;color:var(--red);font-weight:600;min-height:16px}
+/* APP */
+#appView{max-width:1180px;margin:0 auto;padding:14px}
+.topbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.topbar .brand{font-weight:800;color:var(--pri)}
+.kop{background:#fff;border:1px solid var(--line);border-bottom:4px double var(--pri);border-radius:14px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.kop-logo{flex:0 0 auto;display:flex;align-items:center;justify-content:center;min-height:90px}
+.kop-logo img{max-height:90px;max-width:110px;object-fit:contain;display:block}
+.kop-logo.empty{width:90px;height:90px;border:1px dashed #cbd5e1;border-radius:10px;color:#94a3b8;font-size:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:4px;line-height:1.3}
+.kop-center{flex:1;text-align:center;min-width:0}
+.kop-center h1{font-size:clamp(17px,3vw,26px);color:var(--pri);letter-spacing:1px}
+.kop-center .sub{font-size:clamp(10px,1.5vw,13px);font-weight:700;margin-top:4px;line-height:1.5}
+.kop-center .addr{font-size:12px;color:var(--mut);margin-top:3px}
+.grid-ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.inline{display:flex;gap:8px}.inline select,.inline input{flex:1;min-width:0}
+.help{margin-top:12px;font-size:12.5px;color:#334155}
+.help summary{cursor:pointer;font-weight:700;color:var(--pri)}
+.help ul{margin:8px 0 0 18px;line-height:1.7}
+.meta-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.cols{display:flex;flex-wrap:wrap;gap:6px}
+.colchk{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#f8fafc;border-radius:8px;padding:5px 9px;font-size:12px;cursor:pointer;user-select:none}
+.colchk input{accent-color:var(--pri)}
+.colchk.lock{background:#eff6ff;border-color:#bfdbfe;cursor:default}
+.res-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.stu{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:12px}
+.stu .k{font-size:11px;color:var(--mut);font-weight:700;text-transform:uppercase}
+.stu .v{font-size:15px;font-weight:800}
+.hist{margin-top:10px;font-size:12px;color:#334155;border-top:1px dashed var(--line);padding-top:9px}
+.hist b{color:var(--teal)}
+.hist ol{margin:5px 0 0 20px;line-height:1.85;max-height:132px;overflow:auto}
+.blk-head{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.blk-no{width:28px;height:28px;flex:none;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--teal));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+.blk-title{font-weight:800;font-size:14.5px}
+.blk-sub{font-size:12px;color:var(--mut);margin-top:2px}
+.blk-tools{display:flex;gap:7px;align-items:center;margin-left:auto;flex-wrap:wrap}
+.chk-print{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:4px 9px;cursor:pointer;user-select:none}
+.chk-print input{accent-color:#16a34a}
+.chk-print.off{color:#94a3b8;background:#f8fafc;border-color:var(--line)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.tbl{border-collapse:collapse;width:100%;font-size:12.5px;white-space:nowrap}
+.tbl th{background:#eff6ff;color:var(--pri);text-align:left;padding:8px 10px;border-bottom:2px solid #bfdbfe;position:sticky;top:0}
+.tbl td{padding:7px 10px;border-bottom:1px solid var(--line)}
+.tbl tr:nth-child(even) td{background:#f8fafc}
+.skip summary{cursor:pointer;font-weight:700;color:#c2410c;font-size:13px}
+.skip ul{margin:8px 0 0 18px;font-size:12.5px;color:#7c2d12;line-height:1.7}
+.empty{text-align:center;padding:30px;color:var(--mut);line-height:1.7}
+footer{text-align:center;font-size:11.5px;color:var(--mut);padding:10px 0 20px}
+/* PANEL ASET COLLAPSIBLE */
+.assets-toggle{width:100%;display:flex;align-items:center;gap:10px;background:none;border:none;padding:0;text-align:left;cursor:pointer}
+.assets-title{font-weight:900;font-size:15px;color:var(--pink)}
+.assets-title small{display:block;font-weight:600;font-size:11.5px;color:#9d174d;margin-top:2px}
+.assets-chevron{margin-left:auto;font-size:18px;color:var(--pink);transition:transform .2s}
+.assets-body{margin-top:14px;border-top:1px dashed #fbcfe8;padding-top:14px}
+.assets-head-actions{display:flex;justify-content:flex-end;margin-bottom:10px}
+.assets-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.slot{background:#fff;border:1.5px dashed #f9a8d4;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.slot.has{border-style:solid;border-color:#f472b6;background:#fdf2f8}
+.slot-head{display:flex;align-items:center;gap:8px}
+.slot-title{font-weight:800;font-size:13px;color:#9d174d}
+.slot-sub{font-size:11px;color:#9d174d;line-height:1.4}
+.slot-preview{background:#fff;border:1px solid #fbcfe8;border-radius:8px;min-height:90px;display:flex;align-items:center;justify-content:center;padding:6px;overflow:hidden}
+.slot-preview img{max-width:100%;max-height:140px;object-fit:contain}
+.slot-preview.empty{color:#94a3b8;font-size:11px;text-align:center}
+.slot-actions{display:flex;gap:6px;flex-wrap:wrap}
+.slot-meta{font-size:10.5px;color:#9d174d;line-height:1.5;word-break:break-all}
+/* CETAK */
+#printArea{display:none}
+@media print{
+body{background:#fff}
+body>*:not(#printArea){display:none!important}
+#printArea{display:block!important;color:#000;font-family:'Segoe UI',Arial,sans-serif}
+.p-kop{display:flex;align-items:center;gap:12px;margin-bottom:2px}
+.p-logo{flex:0 0 auto;display:flex;align-items:center;justify-content:center;min-height:70px}
+.p-logo img{max-height:90px;max-width:110px;object-fit:contain}
+.p-logo.empty{width:80px;height:80px}
+.p-center{flex:1;text-align:center;min-width:0}
+.p-name{font-size:16pt;font-weight:800;letter-spacing:1px}
+.p-sub{font-size:10.5pt;font-weight:700;margin-top:2px}
+.p-addr{font-size:9.5pt;margin-top:2px}
+.p-line{border:none;border-bottom:3px double #000;margin:8px 0 12px}
+.p-title{text-align:center;font-size:12pt;font-weight:800;text-decoration:underline;margin-bottom:10px}
+.p-id{border-collapse:collapse;margin-bottom:12px;font-size:10pt}
+.p-id td{padding:2px 10px 2px 0;vertical-align:top}
+.p-sec{margin-top:12px;page-break-inside:avoid}
+.p-sec h3{font-size:10.5pt;margin-bottom:2px}
+.p-meta{font-size:8.5pt;margin-bottom:4px}
+.p-tbl{border-collapse:collapse;width:100%;font-size:9pt}
+.p-tbl th,.p-tbl td{border:1px solid #000;padding:4px 6px;text-align:left;word-break:break-word}
+.p-tbl th{background:#eee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.p-sign{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;margin-top:26px;font-size:10pt;page-break-inside:avoid}
+.p-box{min-width:230px;text-align:left}
+.p-sign-img{display:block;max-height:70px;max-width:200px;margin:8px 0 4px;object-fit:contain}
+.p-nm{margin-top:62px;font-weight:700;text-decoration:underline}
+.p-nm.has-sign{margin-top:4px;text-decoration:none}
+.p-foot{margin-top:16px;font-size:8pt;color:#444}
+}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<!-- ================= LAYAR LOGIN ================= -->
+<section id="loginView">
+<div class="login-card" id="loginCard" autocomplete="off">
+<div class="crest" id="loginCrest">56</div>
+<h1 id="loginName">SMP NEGERI 56 JAKARTA</h1>
+<div class="sub" id="loginSub">REKAPITULASI DATA SISWA DARI BERBAGAI PELAKSANAAN BIMBINGAN &amp; KONSELING</div>
+<div class="addr" id="loginAddr">Alamat Sekolah</div>
+<div class="fld"><label>👤 Username</label>
+<input id="loginUser" type="text" autocomplete="off" spellcheck="false"></div>
+<div class="fld"><label>🔒 Password</label>
+<input id="loginPass" type="password" autocomplete="off"></div>
+<div class="fld">
+  <label>🔢 Ketik kode ini
+    <span class="capcode" id="captchaCode" title="Klik untuk kode baru">····</span>
+    <button type="button" class="cap-refresh" id="captchaRefresh" title="Perbarui kode">↻</button>
+  </label>
+  <input id="captchaInput" type="text" autocomplete="off" inputmode="numeric" maxlength="4" placeholder="Ketik 4 angka di atas">
+</div>
+<button class="btn btn-primary" id="btnLogin" type="button" disabled>Masuk Aplikasi</button>
+<div id="loginMsg"></div>
+</div>
+</section>
+
+<!-- ================= APLIKASI ================= -->
+<section id="appView" class="hidden">
+<div class="topbar">
+<span class="brand">📚 Aplikasi Rekap BK</span>
+<span class="grow"></span>
+<span class="chip" id="connChip"></span>
+<a id="linkUsers" class="btn btn-ghost btn-sm hidden" target="_blank" rel="noopener">👥 Pengguna</a>
+<a id="linkSources" class="btn btn-ghost btn-sm hidden" target="_blank" rel="noopener">🗄 Sumber</a>
+<a id="linkSettings" class="btn btn-ghost btn-sm hidden" target="_blank" rel="noopener">⚙️ TTD</a>
+<a id="linkAssets" class="btn btn-ghost btn-sm hidden" target="_blank" rel="noopener">🎨 Sheet Aset</a>
+<span class="chip" id="userChip"></span>
+<button class="btn btn-ghost btn-sm" id="btnLogout" type="button">⎋ Keluar</button>
+</div>
+
+<header class="kop">
+<div class="kop-logo" id="kopLogoL"><div class="empty">Logo<br>Kiri</div></div>
+<div class="kop-center">
+<h1 id="kopName">SMP NEGERI 56 JAKARTA</h1>
+<div class="sub" id="kopSub">REKAPITULASI DATA SISWA DARI BERBAGAI PELAKSANAAN BIMBINGAN &amp; KONSELING</div>
+<div class="addr" id="kopAddr">Alamat Sekolah</div>
+</div>
+<div class="kop-logo" id="kopLogoR"><div class="empty">Logo<br>Kanan</div></div>
+</header>
+
+<main>
+<div class="card">
+<div class="grid-ctl">
+<div class="fld"><label>🗄 Sumber Spreadsheet</label><select id="srcSel"></select></div>
+<div class="fld"><label>📑 Sheet</label>
+<div class="inline"><select id="sheetSel"></select>
+<button class="btn btn-ghost btn-sm" id="btnReloadSheets" type="button">⟳</button></div>
+</div>
+<div class="fld"><label>🧭 Mode Header</label>
+<select id="modeSel">
+<option value="auto">Otomatis (deteksi)</option>
+<option value="matrix">Paksa Matriks</option>
+<option value="biasa">Paksa Biasa (No. Urut)</option>
+</select>
+</div>
+<div class="fld"><label>🎯 NIS Siswa (kunci rekap)</label>
+<div class="inline"><input id="nisInput" placeholder="cth: 2410001" inputmode="numeric">
+<button class="btn btn-primary" id="btnSearch" type="button">🔍 Lacak</button></div>
+</div>
+</div>
+<details class="help"><summary>ℹ️ Petunjuk singkat • akumulasi NIS</summary>
+<ul>
+<li><b>AKUMULASI NIS SAMA:</b> lacak ke-2 dengan NIS sama (label/sheet berbeda) akan <b>menambah</b> hasil — hasil ke-1 tetap di atas. Semua dicetak sekaligus.</li>
+<li><b>Header MATRIKS</b>: seluruh matriks dicetak. <b>Header BIASA</b>: hanya baris bernomor urut.</li>
+<li><b>Aset Visual (admin):</b> panel unggah Logo &amp; TTD ada di <b>bawah</b> dan bisa <b>dibuka/ditutup</b> agar halaman rapi.</li>
+<li>Sumber, user, nama/NIP TTD diedit di spreadsheet — <b>tanpa deploy ulang</b> (maks 2 menit baru aktif).</li>
+<li>Cetak PDF: TTD <b>Kepala Sekolah di kiri</b>, <b>Guru BK di kanan</b>.</li>
+</ul>
+</details>
+</div>
+
+<div class="card" id="metaPanel"><div id="metaBody"></div></div>
+
+<!-- HASIL LACAK -->
+<div id="resultArea"></div>
+
+<!-- ★★★ PANEL ASET: COLLAPSIBLE, DI HALAMAN BAWAH ★★★ -->
+<div class="card hidden" id="assetsPanel" style="border-left:5px solid #db2777">
+<button class="assets-toggle" id="assetsToggle" type="button" aria-expanded="false">
+<span class="assets-title">🎨 Aset Visual (Logo &amp; Tanda Tangan)
+<small>Diunggah → tersimpan permanen di Google Drive → link direkap di sheet ASSETS. Klik untuk buka/tutup.</small></span>
+<span class="assets-chevron" id="assetsChevron">▸</span>
+</button>
+<div class="assets-body hidden" id="assetsBody">
+<div class="assets-head-actions">
+<button class="btn btn-ghost btn-sm" id="btnSyncAssets" type="button">⟳ Sinkron dari Spreadsheet</button>
+</div>
+<div class="assets-grid" id="assetsGrid"></div>
+</div>
+</div>
+</main>
+<footer>Rekap Kumulatif per NIS • Aset permanen di Google Drive • © SMP Negeri 56 Jakarta</footer>
+</section>
+
+<div id="printArea"></div>
+<style id="printPageStyle"></style>
+
+<script>
+/* ================================================================
+ * ★★★ URL APPS SCRIPT DITANAM DI SINI ★★★
+ * Tempel URL /exec dari deployment backend (Code.gs).
+ * ================================================================ */
+const API_URL = 'https://script.google.com/macros/s/AKfycbxEbkwh-e-NuslWRUCkNcfAdrbLJRG3K06pj4ZbJ-xdCfUdr53n-0k1EhcfVnWo4-4i/exec';
+/* ================================================================ */
+const URL_OK = /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/(exec|dev)\/?$/.test(String(API_URL).trim());
+const DEMO_MODE = !URL_OK;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nowTime = () => new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+const tokenStore = {
+  get(){ try{return sessionStorage.getItem('bk_token')}catch(e){return null} },
+  set(v){ try{sessionStorage.setItem('bk_token',v)}catch(e){} },
+  del(){ try{sessionStorage.removeItem('bk_token')}catch(e){} }
+};
+let toastT;
+function toast(msg,type){ const t=$('toast'); t.textContent=msg; t.className='show '+(type||''); clearTimeout(toastT); toastT=setTimeout(()=>t.className='',4200); }
+
+const ASSET_KEYS = ['logo_left','logo_right','sign_kepsek','sign_guru'];
+const ASSET_META = {
+  logo_left:{label:'Logo Kiri',desc:'Muncul di kop kiri (layar & cetak).'},
+  logo_right:{label:'Logo Kanan',desc:'Muncul di kop kanan (layar & cetak).'},
+  sign_kepsek:{label:'TTD Kepala Sekolah',desc:'Muncul di atas nama Kepala Sekolah saat cetak.'},
+  sign_guru:{label:'TTD Guru BK',desc:'Muncul di atas nama Guru BK saat cetak.'}
+};
+const state = { token:null, info:null, user:null, meta:null, sel:new Set(),
+  nis:'', student:{nis:'',nama:'',kelas:''}, blocks:[], skipped:[], history:[], round:0, lastScanned:0, assets:{}, captchaId:'' };
+let sheetsReqId = 0;
+
+/* ================== KOMUNIKASI (GET cepat; POST utk upload) ================== */
+function jsonp(action,payload){
+  return new Promise((res,rej)=>{
+    const cb='bkcb_'+Math.random().toString(36).slice(2)+Date.now();
+    const s=document.createElement('script');
+    const t=setTimeout(()=>{cleanup();rej(new Error('Waktu habis. Periksa koneksi & URL /exec.'));},45000);
+    function cleanup(){clearTimeout(t);try{delete window[cb]}catch(e){window[cb]=undefined}s.remove();}
+    window[cb]=d=>{cleanup();res(d);};
+    s.onerror=()=>{cleanup();rej(new Error('Gagal terhubung ke server.'));};
+    const qs='action='+encodeURIComponent(action)+'&data='+encodeURIComponent(JSON.stringify(payload||{}))+'&callback='+cb;
+    s.src=API_URL.trim()+(API_URL.indexOf('?')>=0?'&':'?')+qs;
+    document.head.appendChild(s);
+  });
+}
+async function postJSON(action,payload){
+  const body=JSON.stringify(Object.assign({action:action},payload||{}));
+  const ctl=new AbortController();
+  const to=setTimeout(()=>ctl.abort(),120000);
+  try{
+    const r=await fetch(API_URL.trim(),{method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},body:body,signal:ctl.signal});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return await r.json();
+  }catch(e){
+    if(e.name==='AbortError') throw new Error('Waktu unggah habis. Coba lagi atau perkecil gambar.');
+    throw e;
+  } finally{ clearTimeout(to); }
+}
+async function call(action,payload){
+  if(DEMO_MODE){ await new Promise(r=>setTimeout(r,200)); return DEMO[action](payload||{}); }
+  if(action==='setAsset') return postJSON(action,payload);
+  return jsonp(action,payload);
+}
+async function api(action,payload){
+  const r=await call(action,payload);
+  if(!r||typeof r.ok==='undefined') throw new Error('Respons server tidak valid. Pastikan URL /exec benar.');
+  if(r.ok===false){ if(r.code==='AUTH') forceLogin(r.message); throw new Error(r.message||'Terjadi kesalahan.'); }
+  return r.data;
+}
+const apiAuth=(action,payload)=>api(action,Object.assign({token:state.token},payload||{}));
+
+/* ====================== NAVIGASI ====================== */
+function showLogin(msg){
+  $('appView').classList.add('hidden');
+  $('loginView').classList.remove('hidden');
+  $('loginMsg').textContent=msg||'';
+  $('loginUser').value=''; $('loginPass').value=''; $('captchaInput').value='';
+  $('btnLogin').disabled=true;
+  loadCaptcha();
+  setTimeout(()=>$('loginUser').focus(),50);
+}
+function forceLogin(msg){ state.token=null; tokenStore.del(); resetCollection(); showLogin(msg||'Sesi berakhir.'); }
+function showApp(){ $('loginView').classList.add('hidden'); $('appView').classList.remove('hidden'); }
+function setLink(id,url){ const a=$(id); if(url){a.href=url;a.classList.remove('hidden');} else a.classList.add('hidden'); }
+
+async function bootApp(info){
+  state.info=info; state.user=info.user;
+  state.assets=info.assets||{};
+  const sc=info.school;
+  ['kopName','loginName'].forEach(id=>$(id).textContent=sc.name);
+  ['kopSub','loginSub'].forEach(id=>$(id).textContent=sc.subtitle);
+  ['kopAddr','loginAddr'].forEach(id=>$(id).textContent=sc.address);
+  document.title=sc.name+' — Rekap BK';
+  $('userChip').textContent='👤 '+info.user.nama+' • '+String(info.user.peran).toUpperCase();
+  $('connChip').textContent='🟢 Terhubung';
+  $('connChip').className='chip ok';
+  const L=info.links||{};
+  if(info.user.peran==='admin'){
+    setLink('linkUsers',L.users); setLink('linkSources',L.sources);
+    setLink('linkSettings',L.settings); setLink('linkAssets',L.assets);
+    $('assetsPanel').classList.remove('hidden');
+  } else {
+    ['linkUsers','linkSources','linkSettings','linkAssets'].forEach(id=>$(id).classList.add('hidden'));
+    $('assetsPanel').classList.add('hidden');
+  }
+  showApp();
+  const valid=(info.sources||[]).filter(s=>s.id);
+  $('srcSel').innerHTML=['<option value="ALL">🌐 Semua Spreadsheet</option>']
+    .concat(valid.map(s=>`<option value="${esc(s.sid)}">${esc(s.label)}${s.sheet?' • '+esc(s.sheet):''}</option>`)).join('');
+  $('srcSel').value=valid.length?valid[0].sid:'ALL';
+  if(!valid.length) toast('⚠ Belum ada sumber aktif. Admin: isi sheet SOURCES.','err');
+  renderCollection(); renderAssetsPanel(); renderKopLogos(); renderLoginCrest();
+  await loadSheets();
+}
+async function loadSheets(){
+  const src=$('srcSel').value, sel=$('sheetSel');
+  const myReq=++sheetsReqId;
+  if(src==='ALL'){
+    sel.innerHTML='<option value="ALL">Semua Sheet</option>';
+    sel.disabled=true; $('btnReloadSheets').disabled=true; renderMeta(null); return;
+  }
+  $('btnReloadSheets').disabled=false;
+  sel.disabled=true;
+  sel.innerHTML='<option value="ALL">⏳ Memuat daftar sheet…</option>';
+  renderMeta(null);
+  try{
+    const d=await apiAuth('listSheets',{sid:src});
+    if(myReq!==sheetsReqId) return;
+    const list=Array.isArray(d)?d:(d.list||[]);
+    const pref=(d&&d.preferred)||'';
+    sel.innerHTML='<option value="ALL">🗂 Semua Sheet</option>'
+      +list.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('');
+    sel.disabled=false;
+    sel.value=(pref && list.some(x=>x.name===pref))?pref:'ALL';
+    onSheetChange();
+  }catch(e){
+    if(myReq===sheetsReqId){
+      toast(e.message,'err');
+      sel.innerHTML='<option value="ALL">⚠ Gagal memuat</option>';
+      sel.disabled=false;
+    }
+  }
+}
+async function onSheetChange(){
+  const src=$('srcSel').value, nm=$('sheetSel').value;
+  if(src==='ALL'||nm==='ALL'){ renderMeta(null); return; }
+  try{ renderMeta(await apiAuth('sheetMeta',{sid:src,sheetName:nm})); }
+  catch(e){ toast(e.message,'err'); renderMeta(null); }
+}
+function currentLabel(){
+  if($('srcSel').value==='ALL') return 'Semua Spreadsheet';
+  const s=(state.info.sources||[]).find(x=>x.sid===$('srcSel').value);
+  return s?s.label:$('srcSel').value;
+}
+
+/* ====================== META / KOLOM ====================== */
+function badge(type){
+  if(type==='matrix') return '<span class="badge matrix">MATRIKS</span>';
+  if(type==='biasa')  return '<span class="badge biasa">BIASA / NO. URUT</span>';
+  if(type==='no-nis') return '<span class="badge nonis">TANPA NIS</span>';
+  return '<span class="badge multi">LACAK MASSAL</span>';
+}
+function mandatoryCols(meta){ return meta.headers.filter(h=>h.isNo||h.isNis||h.i===meta.namaCol).map(h=>h.i); }
+function renderMeta(meta){
+  state.meta=meta;
+  const body=$('metaBody');
+  if(!meta){ state.sel=new Set(); body.innerHTML=badge('multi')+' <span class="muted">Pilih <b>satu sheet</b> untuk mencentang kolom.</span>'; return; }
+  const avail=meta.headers.filter(h=>h.label!=='');
+  state.sel=new Set(avail.map(h=>h.i));
+  const mand=new Set(mandatoryCols(meta));
+  let info=meta.type==='matrix'?`${meta.matrixCols.length} kolom matriks`:meta.type==='biasa'?`${meta.numberedCount} baris bernomor urut`:'⚠ Kolom NIS tidak ditemukan.';
+  const boxes=avail.map(h=>{
+    const lock=mand.has(h.i);
+    return `<label class="colchk${lock?' lock':''}"><input type="checkbox" data-i="${h.i}" checked ${lock?'disabled':''}> ${esc(h.label)}</label>`;
+  }).join('');
+  body.innerHTML=`<div class="meta-head">${badge(meta.type)}
+<span class="muted">Header baris <b>${meta.headerRow}</b> • ${info}</span>
+<span class="grow"></span>
+<button class="btn btn-ghost btn-sm" type="button" onclick="colAll()">Pilih Semua</button>
+<button class="btn btn-ghost btn-sm" type="button" onclick="colNone()">Bersihkan</button>
+<span class="chip" id="colCount"></span></div>
+<div class="cols">${boxes||'<span class="muted">Tidak ada kolom.</span>'}</div>`;
+  updateColCount();
+}
+function updateColCount(){ const el=$('colCount'); if(el&&state.meta) el.textContent=state.sel.size+' / '+state.meta.headers.filter(h=>h.label!=='').length+' kolom dipilih'; }
+function colAll(){ if(!state.meta)return; state.sel=new Set(state.meta.headers.filter(h=>h.label!=='').map(h=>h.i)); renderMetaKeep(); }
+function colNone(){ if(!state.meta)return; state.sel=new Set(mandatoryCols(state.meta)); renderMetaKeep(); }
+function renderMetaKeep(){ const keep=new Set(state.sel); renderMeta(state.meta); state.sel=keep;
+  $('metaBody').querySelectorAll('input[data-i]').forEach(cb=>cb.checked=keep.has(+cb.dataset.i)||cb.disabled); updateColCount(); }
+
+/* ====================== AKUMULASI NIS ====================== */
+function resetCollection(){
+  state.nis=''; state.student={nis:'',nama:'',kelas:''};
+  state.blocks=[]; state.skipped=[]; state.history=[]; state.round=0; state.lastScanned=0;
+}
+function blockKey(h){ return String(h.spreadsheetId||h.source||'')+'#'+String(h.sheetName||'').toLowerCase(); }
+function blockSig(h){ return String(h.sheetName||'').toLowerCase()+'|'+h.type+'|'+h.columns.join('~')+'|'+JSON.stringify(h.rows); }
+function renumber(){ state.blocks.forEach((b,i)=>b.no=i+1); }
+function mergeSearch(res,ctx){
+  state.nis=res.nis;
+  state.student.nis=res.nis;
+  if(!state.student.nama && res.student && res.student.nama) state.student.nama=res.student.nama;
+  if(!state.student.kelas && res.student && res.student.kelas) state.student.kelas=res.student.kelas;
+  state.round++;
+  state.lastScanned=(res.summary&&res.summary.sheetsScanned)||0;
+  let added=0, updated=0;
+  (res.hits||[]).forEach(h=>{
+    const key=blockKey(h), sig=blockSig(h);
+    let idx=state.blocks.findIndex(b=>b.key===key);
+    if(idx<0) idx=state.blocks.findIndex(b=>b.sig===sig);
+    const blk={key,sig,source:h.source,sheetName:h.sheetName,type:h.type,headerRow:h.headerRow,columns:h.columns,rows:h.rows,nomorUruts:h.nomorUruts,ignoredUnnumbered:h.ignoredUnnumbered||0,round:state.round,at:nowTime(),updatedAt:'',aliases:[],print:true};
+    if(idx>=0){
+      const old=state.blocks[idx];
+      blk.no=old.no; blk.round=old.round; blk.at=old.at; blk.print=old.print; blk.updatedAt=nowTime();
+      blk.aliases=(old.aliases||[]).slice();
+      if(old.source!==blk.source && blk.aliases.indexOf(blk.source)<0) blk.aliases.push(blk.source);
+      state.blocks[idx]=blk; updated++;
+    } else { state.blocks.push(blk); added++; }
+  });
+  renumber();
+  (res.skipped||[]).forEach(s=>{
+    const k=String(s.source)+'#'+String(s.sheetName)+'#'+String(s.reason);
+    if(!state.skipped.some(x=>x.k===k)) state.skipped.push({k,source:s.source,sheetName:s.sheetName,reason:s.reason});
+  });
+  state.history.push({round:state.round,label:ctx.label,sheet:ctx.sheet,nis:res.nis,found:(res.hits||[]).length,rows:(res.summary&&res.summary.totalMatches)||0,at:nowTime()});
+  const n=state.blocks.length;
+  if(added&&updated) toast(`✅ ${added} label baru + ${updated} diperbarui. Total ${n} label.`,'ok');
+  else if(added) toast(`✅ ${added} label ditambahkan. Total ${n} label — siap dicetak bersama.`,'ok');
+  else if(updated) toast(`🔄 ${updated} label diperbarui. Total ${n} label tetap.`,'ok');
+  else toast(n?`ℹ️ Tidak ada data baru. ${n} label tetap dipertahankan.`:'ℹ️ Tidak ada data ditemukan.','');
+  renderCollection();
+}
+function totals(){ return {labels:state.blocks.length,rows:state.blocks.reduce((a,b)=>a+b.rows.length,0),selected:state.blocks.filter(b=>b.print).length}; }
+
+/* ====================== PENCARIAN ====================== */
+async function doSearch(){
+  const nis=$('nisInput').value.trim();
+  if(!nis){ toast('Isi NIS siswa terlebih dahulu.','err'); $('nisInput').focus(); return; }
+  if(state.blocks.length && state.nis && state.nis!==nis){
+    if(!confirm('NIS berbeda: '+state.nis+' → '+nis+'.\n\nMulai rekap baru?\nSemua hasil rekap NIS '+state.nis+' akan dihapus.')){ $('nisInput').value=state.nis; return; }
+    resetCollection();
+  }
+  const single=state.meta&&$('srcSel').value!=='ALL'&&$('sheetSel').value!=='ALL';
+  const q={sid:$('srcSel').value,sheetName:$('sheetSel').value,nis:nis,mode:$('modeSel').value,columns:single?Array.from(state.sel).sort((a,b)=>a-b):null};
+  const ctx={label:currentLabel(),sheet:q.sheetName==='ALL'?'Semua Sheet':q.sheetName};
+  const btn=$('btnSearch'), old=btn.innerHTML;
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> Melacak…';
+  if(!state.blocks.length) $('resultArea').innerHTML='<div class="card empty"><span class="spin" style="border-color:#94a3b8;border-top-color:transparent"></span> Melacak NIS…</div>';
+  try{ mergeSearch(await apiAuth('search',q),ctx); }
+  catch(e){ toast(e.message,'err'); if(!state.blocks.length) $('resultArea').innerHTML=''; }
+  finally{ btn.disabled=false; btn.innerHTML=old; }
+}
+
+/* ====================== RENDER HASIL ====================== */
+function tableHTML(cols,rows,forPrint){
+  const th=cols.map(c=>`<th>${esc(c)}</th>`).join('');
+  const tb=rows.map(r=>'<tr>'+r.map(v=>`<td>${forPrint?esc(v):(esc(v)||'–')}</td>`).join('')+'</tr>').join('');
+  return `<table class="${forPrint?'p-tbl':'tbl'}"><thead><tr>${th}</tr></thead><tbody>${tb}</tbody></table>`;
+}
+function blockSub(b){
+  let s=`Header baris ${b.headerRow} • ${b.rows.length} baris cocok`;
+  s+=b.type==='biasa'?` • No. Urut: ${b.nomorUruts.join(', ')}`:` • ${b.columns.length} kolom matriks`;
+  s+=` • #${b.round} (${b.at})`;
+  if(b.updatedAt) s+=` • diperbarui ${b.updatedAt}`;
+  if(b.ignoredUnnumbered) s+=` • ⚠ ${b.ignoredUnnumbered} baris tanpa No. Urut diabaikan`;
+  if(b.aliases&&b.aliases.length) s+=` • label sama: ${b.aliases.join(', ')}`;
+  return s;
+}
+function renderCollection(){
+  const t=totals();
+  if(!state.blocks.length){
+    $('resultArea').innerHTML=`<div class="card empty">📭 Belum ada hasil rekap.<br><span class="muted">Masukkan NIS → <b>🔍 Lacak</b>. Ulangi pada <b>label/sheet berbeda</b> dengan NIS yang sama → hasil ditambahkan, lalu cetak semuanya.</span></div>`;
+    return;
+  }
+  let html=`<div class="card accent">
+<div class="stu">
+<div><div class="k">NIS</div><div class="v">${esc(state.student.nis)}</div></div>
+<div><div class="k">Nama Siswa</div><div class="v">${esc(state.student.nama||'—')}</div></div>
+<div><div class="k">Kelas</div><div class="v">${esc(state.student.kelas||'—')}</div></div>
+<div><div class="k">Label Terkumpul</div><div class="v">${t.labels} label • ${t.rows} baris</div></div>
+</div>
+<div class="res-bar">
+<div class="chips">
+<span class="chip ok">📚 ${t.labels} label tersimpan</span>
+<span class="chip">🔁 ${state.round} kali pelacakan</span>
+${state.skipped.length?`<span class="chip warn">⚠ ${state.skipped.length} dilewati</span>`:''}
+</div>
+<button class="btn btn-primary" type="button" onclick="printSelected()" ${t.selected?'':'disabled'}>🖨 Cetak (${t.selected} label)</button>
+<button class="btn btn-danger btn-sm" type="button" onclick="clearAll()">🧹 Rekap Baru</button>
+</div>
+<div class="hist"><b>Riwayat pelacakan (NIS ${esc(state.nis)}):</b>
+<ol>${state.history.map(h=>`<li>#${h.round} ${esc(h.label)} — ${esc(h.sheet)} • ${h.found} sheet / ${h.rows} baris • ${esc(h.at)}</li>`).join('')}</ol>
+</div></div>`;
+  html+=state.blocks.map((b,i)=>`<div class="card">
+<div class="blk-head">
+<div class="blk-no">${b.no}</div>
+<div><div class="blk-title">${esc(b.source)} — ${esc(b.sheetName)}</div>
+<div class="blk-sub">${blockSub(b)}</div></div>
+<div class="blk-tools">
+${badge(b.type)}
+<label class="chk-print${b.print?'':' off'}"><input type="checkbox" data-print="${i}" ${b.print?'checked':''}> Ikut cetak</label>
+<button class="btn btn-ghost btn-sm" type="button" onclick="printOne(${i})">🖨</button>
+<button class="btn btn-danger btn-sm" type="button" onclick="removeBlock(${i})">🗑</button>
+</div></div>
+<div class="tbl-wrap">${tableHTML(b.columns,b.rows,false)}</div>
+</div>`).join('');
+  if(state.skipped.length){
+    html+=`<div class="card skip"><details><summary>⚠ ${state.skipped.length} dilewati</summary>
+<ul>${state.skipped.map(s=>`<li><b>${esc(s.source)} — ${esc(s.sheetName)}</b>: ${esc(s.reason)}</li>`).join('')}</ul></details></div>`;
+  }
+  $('resultArea').innerHTML=html;
+}
+function removeBlock(i){
+  const b=state.blocks[i]; if(!b) return;
+  if(!confirm('Hapus label "'+b.source+' — '+b.sheetName+'"?')) return;
+  state.blocks.splice(i,1); renumber(); renderCollection();
+  toast('🗑 1 label dihapus. Sisa '+state.blocks.length+'.','');
+}
+function clearAll(){
+  if(!state.blocks.length) return;
+  if(!confirm('Mulai rekap baru?\nSemua '+state.blocks.length+' label untuk NIS '+state.nis+' akan dihapus.')) return;
+  resetCollection(); $('nisInput').value=''; renderCollection();
+  toast('🧹 Rekap dikosongkan.','');
+}
+
+/* ====================== ASET (LINK DRIVE) + PANEL BUKA/TUTUP ====================== */
+function assetSrc(key){ const a=state.assets[key]; return (a && a.present && a.link) ? a.link : null; }
+function renderKopLogos(){
+  ['logo_left','logo_right'].forEach(k=>{
+    const el=$(k==='logo_left'?'kopLogoL':'kopLogoR');
+    const src=assetSrc(k);
+    if(src) el.innerHTML=`<img src="${src}" alt="${ASSET_META[k].label}">`;
+    else el.innerHTML=`<div class="empty">${ASSET_META[k].label.replace('Logo ','Logo<br>')}</div>`;
+  });
+}
+function renderLoginCrest(){ const src=assetSrc('logo_left'); $('loginCrest').innerHTML = src ? `<img src="${src}" alt="logo">` : '56'; }
+function renderAssetsPanel(){
+  $('assetsGrid').innerHTML=ASSET_KEYS.map(k=>{
+    const m=ASSET_META[k]; const a=state.assets[k];
+    const has=!!(a&&a.present); const src=assetSrc(k);
+    return `<div class="slot${has?' has':''}" data-key="${k}">
+<div class="slot-head"><div class="slot-title">${m.label}</div><span class="grow"></span>
+<span class="chip mini ${has?'ok':''}">${has?'✓ Tersimpan di Drive':'Kosong'}</span></div>
+<div class="slot-sub">${m.desc}</div>
+<div class="slot-preview${has?'':' empty'}">${has?`<img src="${src}" alt="${m.label}">`:'Belum ada gambar'}</div>
+${has?`<div class="slot-meta">🔗 <a href="${esc(a.driveLink||'')}" target="_blank" rel="noopener">Lihat di Drive</a><br>Oleh <b>${esc(a.by||'-')}</b> • ${esc(a.at||'')}</div>`:''}
+<div class="slot-actions">
+<label class="btn btn-primary btn-sm" style="cursor:pointer">📤 ${has?'Ganti':'Unggah'}
+<input type="file" accept="image/*" data-upload="${k}" style="display:none"></label>
+${has?`<button class="btn btn-danger btn-sm" data-del="${k}">🗑 Hapus</button>`:''}
+</div></div>`;
+  }).join('');
+}
+function toggleAssets(){
+  const body=$('assetsBody'), chev=$('assetsChevron'), btn=$('assetsToggle');
+  const open=!body.classList.contains('hidden');
+  if(open){ body.classList.add('hidden'); chev.textContent='▸'; btn.setAttribute('aria-expanded','false'); }
+  else{ body.classList.remove('hidden'); chev.textContent='▾'; btn.setAttribute('aria-expanded','true'); }
+}
+async function syncAllAssets(){
+  const btn=$('btnSyncAssets'); const old=btn.innerHTML;
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> Sinkron…';
+  try{
+    state.assets=await apiAuth('getAssets',{})||{};
+    renderKopLogos(); renderLoginCrest(); renderAssetsPanel();
+    toast('⟳ Aset tersinkron dari sheet ASSETS.','ok');
+  }catch(e){ toast(e.message,'err'); }
+  finally{ btn.disabled=false; btn.innerHTML='⟳ Sinkron dari Spreadsheet'; }
+}
+function compressImage(file,maxDim){
+  maxDim=maxDim||700;
+  return new Promise((res,rej)=>{
+    if(!file){ res(null); return; }
+    if(!/^image\//.test(file.type)){ rej(new Error('File harus berupa gambar.')); return; }
+    const fr=new FileReader();
+    fr.onerror=()=>rej(new Error('Gagal membaca file.'));
+    fr.onload=()=>{
+      const img=new Image();
+      img.onerror=()=>rej(new Error('Gambar tidak valid.'));
+      img.onload=()=>{
+        const scale=Math.min(1,maxDim/Math.max(img.width,img.height));
+        const w=Math.max(1,Math.round(img.width*scale));
+        const h=Math.max(1,Math.round(img.height*scale));
+        const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+        cv.getContext('2d').drawImage(img,0,0,w,h);
+        res(cv.toDataURL('image/png'));
+      };
+      img.src=fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+async function uploadAsset(key,file){
+  try{
+    toast('🗜 Mengompres & mengunggah '+ASSET_META[key].label+' ke Google Drive…','');
+    const dataUri=await compressImage(file,700);
+    if(!dataUri) return;
+    const d=await apiAuth('setAsset',{key:key,data:dataUri});
+    state.assets[key]=d;
+    renderKopLogos(); renderLoginCrest(); renderAssetsPanel();
+    toast('✅ '+ASSET_META[key].label+' tersimpan di Drive & direkap ke sheet ASSETS.','ok');
+  }catch(e){ toast(e.message,'err'); }
+}
+async function deleteAsset(key){
+  if(!confirm('Hapus '+ASSET_META[key].label+' dari Drive & sheet ASSETS?')) return;
+  try{ await apiAuth('delAsset',{key:key}); state.assets[key]=null;
+    renderKopLogos(); renderLoginCrest(); renderAssetsPanel();
+    toast('🗑 '+ASSET_META[key].label+' dihapus.',''); }
+  catch(e){ toast(e.message,'err'); }
+}
+
+/* ====== CETAK — KEPALA SEKOLAH KIRI • GURU BK KANAN ====== */
+function printSelected(){ const sel=state.blocks.filter(b=>b.print); if(!sel.length){toast('Tidak ada label yang dicentang.','err');return;} doPrint(sel); }
+function printOne(i){ const b=state.blocks[i]; if(!b){toast('Label tidak ditemukan.','err');return;} doPrint([b]); }
+function logoHtml(key){ const src=assetSrc(key); return src?`<div class="p-logo"><img src="${src}" alt=""></div>`:`<div class="p-logo empty"></div>`; }
+function signHtml(key){ const src=assetSrc(key); return src?`<img class="p-sign-img" src="${src}" alt="">`:''; }
+function doPrint(blocks){
+  const sc=state.info.school, pr=state.info.print||{}, st=state.student;
+  const tgl=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  const landscape=blocks.some(h=>h.type==='matrix');
+  const dots='.................................';
+  const headName=pr.headmaster||dots, headNip=pr.headmasterNip||'';
+  const counselorName=pr.counselorName||state.user.nama||dots, counselorNip=pr.counselorNip||'';
+  const signKepsek=signHtml('sign_kepsek'), signGuru=signHtml('sign_guru');
+  const totalRows=blocks.reduce((a,b)=>a+b.rows.length,0);
+  const generatedAt=new Date().toLocaleString('id-ID')+' WIB';
+  let counter=0;
+  const secs=blocks.map(h=>{
+    counter++;
+    const meta=['Jenis: '+(h.type==='matrix'?'MATRIKS':'BIASA (NOMOR URUT)'),'Header baris '+h.headerRow];
+    if(h.type==='biasa') meta.push('No. Urut: '+h.nomorUruts.join(', '));
+    meta.push('Pelacakan #'+h.round+' ('+h.at+')');
+    if(h.ignoredUnnumbered) meta.push(h.ignoredUnnumbered+' baris tanpa No. Urut diabaikan');
+    return `<div class="p-sec"><h3>${counter}. ${esc(h.source)} — ${esc(h.sheetName)}</h3>
+<div class="p-meta">${meta.join(' • ')}</div>${tableHTML(h.columns,h.rows,true)}</div>`;
+  }).join('');
+  $('printPageStyle').textContent='@page{size:A4 '+(landscape?'landscape':'portrait')+';margin:14mm}';
+  $('printArea').innerHTML=`
+<div class="p-kop">
+${logoHtml('logo_left')}
+<div class="p-center"><div class="p-name">${esc(sc.name)}</div>
+<div class="p-sub">${esc(sc.subtitle)}</div><div class="p-addr">${esc(sc.address)}</div></div>
+${logoHtml('logo_right')}
+</div>
+<hr class="p-line">
+<div class="p-title">REKAP DATA BIMBINGAN &amp; KONSELING SISWA</div>
+<table class="p-id">
+<tr><td>NIS</td><td>: <b>${esc(st.nis)}</b></td><td>Tanggal Cetak</td><td>: ${esc(tgl)}</td></tr>
+<tr><td>Nama Siswa</td><td>: <b>${esc(st.nama||'—')}</b></td><td>Dicetak Oleh</td><td>: ${esc(state.user.nama)}</td></tr>
+<tr><td>Kelas</td><td>: ${esc(st.kelas||'—')}</td><td>Label / Baris Data</td><td>: ${blocks.length} label / ${totalRows} baris</td></tr>
+<tr><td>Total Pelacakan</td><td>: ${state.round} kali</td><td>Waktu Rekap</td><td>: ${esc(generatedAt)}</td></tr>
+</table>
+${secs}
+<div class="p-sign">
+<div class="p-box"><div>Mengetahui,</div><div>Kepala Sekolah,</div>
+${signKepsek}<div class="p-nm${signKepsek?' has-sign':''}">${esc(headName)}</div><div>${esc(headNip)||'&nbsp;'}</div></div>
+<div class="p-box"><div>${esc(pr.city||'Jakarta')}, ${esc(tgl)}</div>
+<div>${esc(pr.counselorTitle||'Guru Bimbingan dan Konseling')},</div>
+${signGuru}<div class="p-nm${signGuru?' has-sign':''}">${esc(counselorName)}</div><div>${esc(counselorNip)||'&nbsp;'}</div></div>
+</div>
+<div class="p-foot">Dicetak otomatis dari Aplikasi Rekap BK ${esc(sc.name)} — Rekap kumulatif NIS ${esc(st.nis)} (${state.round} pelacakan)</div>`;
+  window.print();
+}
+
+/* ====================== LOGIN + KODE KEAMANAN ====================== */
+async function loadCaptcha(){
+  const el=$('captchaCode');
+  el.textContent='····';
+  try{
+    const d=await api('captcha',{});
+    state.captchaId=d.id;
+    el.textContent=d.code;
+  }catch(e){
+    el.textContent='????';
+    el.title='Gagal memuat kode. Klik ↻ untuk coba lagi.';
+  }
+}
+$('captchaCode').addEventListener('click',()=>{ $('captchaInput').value=''; loadCaptcha(); checkLoginReady(); });
+$('captchaRefresh').addEventListener('click',()=>{ $('captchaInput').value=''; loadCaptcha(); checkLoginReady(); });
+function checkLoginReady(){
+  const ready=$('loginUser').value.trim() && $('loginPass').value && $('captchaInput').value.trim();
+  $('btnLogin').disabled=!ready;
+}
+$('loginUser').addEventListener('input',checkLoginReady);
+$('loginPass').addEventListener('input',checkLoginReady);
+$('captchaInput').addEventListener('input',checkLoginReady);
+async function tryLogin(){
+  const u=$('loginUser').value.trim(), p=$('loginPass').value, c=$('captchaInput').value.trim();
+  if(!u){ $('loginMsg').textContent='Username wajib diisi.'; $('loginUser').focus(); return; }
+  if(!p){ $('loginMsg').textContent='Password wajib diisi.'; $('loginPass').focus(); return; }
+  if(!c){ $('loginMsg').textContent='Kode keamanan wajib diisi.'; $('captchaInput').focus(); return; }
+  const btn=$('btnLogin'), old=btn.innerHTML;
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> Memeriksa…'; $('loginMsg').textContent='';
+  try{
+    const d=await api('login',{username:u,password:p,captchaId:state.captchaId,captchaCode:c});
+    state.token=d.token;
+    tokenStore.set(d.token);
+    resetCollection();
+    await bootApp(d.info || await apiAuth('appInfo'));
+    toast('Selamat datang, '+d.user.nama+' 👋','ok');
+  }catch(err){
+    $('loginMsg').textContent=err.message;
+    $('captchaInput').value='';
+    loadCaptcha();
+    checkLoginReady();
+  }
+  finally{ btn.disabled=false; btn.innerHTML=old; }
+}
+$('btnLogin').addEventListener('click',e=>{ e.preventDefault(); tryLogin(); });
+$('loginPass').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); $('captchaInput').focus(); } });
+$('captchaInput').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); tryLogin(); } });
+
+$('btnLogout').addEventListener('click',async()=>{
+  try{ await apiAuth('logout'); }catch(e){}
+  forceLogin('Anda telah keluar.');
+});
+$('srcSel').addEventListener('change',loadSheets);
+$('sheetSel').addEventListener('change',onSheetChange);
+$('btnReloadSheets').addEventListener('click',loadSheets);
+$('btnSearch').addEventListener('click',doSearch);
+$('nisInput').addEventListener('keydown',e=>{ if(e.key==='Enter')doSearch(); });
+$('metaPanel').addEventListener('change',e=>{
+  if(e.target.matches('input[data-i]')){
+    const i=+e.target.dataset.i;
+    e.target.checked?state.sel.add(i):state.sel.delete(i);
+    updateColCount();
+  }
+});
+$('assetsToggle').addEventListener('click',toggleAssets);
+$('assetsGrid').addEventListener('change',e=>{
+  if(e.target.matches('input[data-upload]')){
+    const key=e.target.dataset.upload;
+    const file=e.target.files&&e.target.files[0];
+    if(file) uploadAsset(key,file);
+    e.target.value='';
+  }
+});
+$('assetsGrid').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-del]');
+  if(b) deleteAsset(b.dataset.del);
+});
+$('btnSyncAssets').addEventListener('click',syncAllAssets);
+$('resultArea').addEventListener('change',e=>{
+  if(e.target.matches('input[data-print]')){
+    const i=+e.target.dataset.print;
+    if(state.blocks[i]){ state.blocks[i].print=e.target.checked; renderCollection(); }
+  }
+});
+window.addEventListener('afterprint',()=>{ $('printArea').innerHTML=''; });
+
+/* ★ INIT: tanpa auto-login permanen */
+(function init(){
+  const t=tokenStore.get();
+  if(t){
+    state.token=t;
+    apiAuth('appInfo').then(info=>bootApp(info)).catch(()=>{ tokenStore.del(); state.token=null; showLogin(); });
+  } else {
+    showLogin();
+  }
+})();
+</script>
+</body>
+</html>
