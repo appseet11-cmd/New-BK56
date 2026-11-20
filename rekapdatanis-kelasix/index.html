@@ -40,7 +40,7 @@ button{cursor:pointer;font:inherit}input,select{font:inherit}
 .fld label{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;font-weight:700;margin-bottom:5px;color:#334155}
 .fld input,.fld select{width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff}
 .fld input:focus,.fld select:focus{outline:2px solid #bfdbfe;border-color:var(--pri2)}
-.capcode{display:inline-block;min-width:72px;text-align:center;padding:4px 14px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:8px;color:var(--pri);font-weight:900;letter-spacing:6px;cursor:pointer;font-family:'Courier New',monospace;font-size:18px;user-select:none;text-decoration:line-through;text-decoration-color:rgba(30,64,175,.15)}
+.capcode{display:inline-block;min-width:72px;text-align:center;padding:4px 14px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:8px;color:var(--pri);font-weight:900;letter-spacing:6px;cursor:pointer;font-family:'Courier New',monospace;font-size:18px;user-select:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.5);text-decoration:line-through;text-decoration-color:rgba(30,64,175,.15)}
 .capcode:hover{background:#dbeafe;border-color:var(--pri2)}
 .cap-refresh{background:none;border:none;color:var(--pri);font-size:16px;padding:4px 6px;cursor:pointer}
 #btnLogin{width:100%;padding:12px;font-size:15px;margin-top:4px}
@@ -96,7 +96,6 @@ button{cursor:pointer;font:inherit}input,select{font:inherit}
 .skip ul{margin:8px 0 0 18px;font-size:12.5px;color:#7c2d12;line-height:1.7}
 .empty{text-align:center;padding:30px;color:var(--mut);line-height:1.7}
 footer{text-align:center;font-size:11.5px;color:var(--mut);padding:10px 0 20px}
-/* PANEL ASET COLLAPSIBLE */
 .assets-toggle{width:100%;display:flex;align-items:center;gap:10px;background:none;border:none;padding:0;text-align:left;cursor:pointer}
 .assets-title{font-weight:900;font-size:15px;color:var(--pink)}
 .assets-title small{display:block;font-weight:600;font-size:11.5px;color:#9d174d;margin-top:2px}
@@ -132,11 +131,9 @@ body>*:not(#printArea){display:none!important}
 .p-title{text-align:center;font-size:12pt;font-weight:800;text-decoration:underline;margin-bottom:10px}
 .p-id{border-collapse:collapse;margin-bottom:12px;font-size:10pt}
 .p-id td{padding:2px 10px 2px 0;vertical-align:top}
-/* ★ HAPUS page-break-inside:avoid — biarkan section terpecah antar halaman */
 .p-sec{margin-top:10px}
 .p-sec h3{font-size:10.5pt;margin-bottom:4px;color:#1e40af;border-bottom:1px solid #bfdbfe;padding-bottom:2px}
 .p-meta{font-size:8.5pt;margin-bottom:4px;color:#475569;font-style:italic}
-/* ★ FORMAT LAPORAN FORMAL VERTIKAL */
 .p-records{width:100%;border-collapse:collapse;font-size:10pt;margin:4px 0 8px}
 .p-records td{padding:3px 10px;border-bottom:1px dotted #cbd5e1;vertical-align:top;line-height:1.4}
 .p-records td.p-label{width:200px;font-weight:700;color:#334155;background:#f8fafc;white-space:nowrap}
@@ -144,11 +141,6 @@ body>*:not(#printArea){display:none!important}
 .p-records tr.p-subhead td{background:#eff6ff;color:#1e40af;font-weight:700;border-bottom:1px solid #bfdbfe;padding:4px 10px;font-size:9.5pt}
 .p-records tr.p-sep td{border-top:2px solid #64748b;padding:0;border-bottom:none;height:5px}
 .p-records .pdf-link{font-size:9pt;padding:1px 5px;background:#eff6ff;border:1px solid #bfdbfe}
-/* ★ TABEL biasa (jika ada) juga boleh terpecah */
-.p-tbl{border-collapse:collapse;width:100%;font-size:9pt}
-.p-tbl th,.p-tbl td{border:1px solid #000;padding:4px 6px;text-align:left;word-break:break-word;vertical-align:top}
-.p-tbl th{background:#eee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.p-tbl thead{display:table-header-group}
 .p-sign{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;margin-top:20px;font-size:10pt}
 .p-box{min-width:230px;text-align:left}
 .p-sign-img{display:block;max-height:70px;max-width:200px;margin:8px 0 4px;object-fit:contain}
@@ -228,8 +220,8 @@ body>*:not(#printArea){display:none!important}
 </div>
 <details class="help"><summary>ℹ️ Petunjuk singkat</summary>
 <ul>
-<li><b>AKUMULASI NIS SAMA:</b> lacak ke-2 dengan NIS sama (label/sheet berbeda) akan <b>menambah</b> hasil — hasil ke-1 tetap di atas. Semua dicetak sekaligus.</li>
-<li><b>Format cetak:</b> hasil ditampilkan sebagai <b>daftar vertikal formal</b> (label : nilai), bukan tabel — sesuai standar laporan resmi.</li>
+<li><b>AKUMULASI NIS SAMA:</b> lacak ke-2 dengan NIS sama akan <b>menambah</b> hasil — hasil ke-1 tetap di atas.</li>
+<li><b>Format cetak:</b> daftar vertikal formal (label : nilai), bukan tabel.</li>
 <li><b>Link PDF otomatis:</b> sel berisi URL Drive/Docs/.pdf jadi link 📄 clickable.</li>
 <li><b>Aset Visual (admin):</b> panel unggah Logo &amp; TTD di <b>bawah</b>, bisa dibuka/tutup.</li>
 <li>Cetak PDF: TTD <b>Kepala Sekolah di kiri</b>, <b>Guru BK di kanan</b>.</li>
@@ -254,7 +246,7 @@ body>*:not(#printArea){display:none!important}
 </div>
 </div>
 </main>
-<footer>Rekap Kumulatif per NIS • Format Laporan Formal • © SMP Negeri 56 Jakarta</footer>
+<footer>Rekap Kumulatif per NIS • © SMP Negeri 56 Jakarta</footer>
 </section>
 
 <div id="printArea"></div>
@@ -272,11 +264,14 @@ const DEMO_MODE = !URL_OK;
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nowTime = () => new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+
+/* ★★★ FIX: pakai sessionStorage (hilang saat tab ditutup) — BUKAN localStorage ★★★ */
 const tokenStore = {
   get(){ try{return sessionStorage.getItem('bk_token')}catch(e){return null} },
   set(v){ try{sessionStorage.setItem('bk_token',v)}catch(e){} },
   del(){ try{sessionStorage.removeItem('bk_token')}catch(e){} }
 };
+
 let toastT;
 function toast(msg,type){ const t=$('toast'); t.textContent=msg; t.className='show '+(type||''); clearTimeout(toastT); toastT=setTimeout(()=>t.className='',4200); }
 
@@ -509,7 +504,7 @@ async function doSearch(){
   finally{ btn.disabled=false; btn.innerHTML=old; }
 }
 
-/* ====================== ★ DETEKSI LINK PDF ====================== */
+/* ====================== DETEKSI LINK PDF ====================== */
 function isPdfLink(v){
   const s = String(v == null ? '' : v).trim();
   if(!s) return false;
@@ -525,78 +520,56 @@ function formatCellValue(v, forPrint){
       url = url.replace(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/, 'drive.google.com/file/d/$1/view');
       url = url.replace(/drive\.google\.com\/uc\?id=([a-zA-Z0-9_-]+)/, 'drive.google.com/file/d/$1/view');
       const label = s.length > 50 ? s.substring(0, 47) + '...' : s;
-      return `<a href="${esc(url)}" target="_blank" rel="noopener" class="pdf-link" title="${esc(url)}"><span class="pdf-label">${esc(label)}</span></a>`;
+      return `<a href="${esc(url)}" target="_blank" rel="noopener" class="pdf-link" title="${esc(url)}"><span>${esc(label)}</span></a>`;
     }
   }
   return forPrint ? esc(s) : (esc(s) || '–');
 }
 
-/* ====================== ★ FORMAT LAPORAN FORMAL VERTIKAL (UNTUK CETAK) ====================== */
-// Kolom yang dianggap "identitas" — nilainya sering sama antar baris → ditampilkan sekali
+/* ====================== FORMAT LAPORAN FORMAL VERTIKAL ====================== */
 const IDENTITY_KEYWORDS = ['no','nomor','stt','nis','nisn','nama','kelas','rombel'];
 function isIdentityCol(colLabel){
   const n = String(colLabel||'').trim().toLowerCase();
   return IDENTITY_KEYWORDS.some(k => n===k || n.startsWith(k+'.') || n.startsWith(k+' '));
 }
-
-/**
- * Format vertikal formal untuk CETAK:
- *   - Kolom identitas (No, NIS, Nama, Kelas) ditampilkan SEKALI di atas
- *   - Jika ada beberapa baris dengan identitas sama → hanya detail non-identitas yang diulang
- *   - Jika identitas berbeda → identitas baru ditampilkan, lalu detailnya
- *   - Link PDF tetap clickable
- */
 function formatVertical(cols, rows){
   if(!rows || !rows.length) return '<div class="p-meta">(tidak ada data)</div>';
-
-  // Identifikasi kolom identitas
   const identityIdx = [];
   cols.forEach((c,i)=>{ if(isIdentityCol(c)) identityIdx.push(i); });
-
   let html = '<table class="p-records">';
   let lastIdentityKey = null;
   let dataCounter = 0;
-
-  // Hitung grup identitas untuk tahu apakah perlu "Data ke-N"
   const groupCount = {};
   rows.forEach(row=>{
     const key = identityIdx.map(i=>String(row[i]||'').trim()).join('||');
     groupCount[key] = (groupCount[key]||0) + 1;
   });
-
   rows.forEach((row, ri)=>{
     const curKey = identityIdx.map(i=>String(row[i]||'').trim()).join('||');
     const sameAsPrev = curKey === lastIdentityKey;
     const groupSize = groupCount[curKey] || 1;
-
     if(!sameAsPrev){
       dataCounter = 0;
       if(ri > 0) html += '<tr class="p-sep"><td colspan="2"></td></tr>';
-      // Tampilkan identitas
       identityIdx.forEach(i=>{
         html += `<tr><td class="p-label">${esc(cols[i])}</td><td class="p-val">${esc(row[i]||'–')}</td></tr>`;
       });
     }
     lastIdentityKey = curKey;
     dataCounter++;
-
-    // Sub-header jika ada multiple data dengan identitas sama
     if(groupSize > 1){
       html += `<tr class="p-subhead"><td colspan="2">Data ke-${dataCounter}</td></tr>`;
     }
-
-    // Tampilkan kolom non-identitas
     cols.forEach((c,i)=>{
       if(identityIdx.indexOf(i) >= 0) return;
       html += `<tr><td class="p-label">${esc(c)}</td><td class="p-val">${formatCellValue(row[i], true)}</td></tr>`;
     });
   });
-
   html += '</table>';
   return html;
 }
 
-/* ====================== RENDER HASIL (LAYAR TETAP TABEL) ====================== */
+/* ====================== RENDER HASIL ====================== */
 function tableHTMLScreen(cols,rows){
   const th=cols.map(c=>`<th>${esc(c)}</th>`).join('');
   const tb=rows.map(r=>'<tr>'+r.map(v=>`<td>${formatCellValue(v, false)}</td>`).join('')+'</tr>').join('');
@@ -757,7 +730,7 @@ async function deleteAsset(key){
   catch(e){ toast(e.message,'err'); }
 }
 
-/* ====== CETAK — FORMAT LAPORAN FORMAL VERTIKAL ====== */
+/* ====== CETAK ====== */
 function printSelected(){ const sel=state.blocks.filter(b=>b.print); if(!sel.length){toast('Tidak ada label yang dicentang.','err');return;} doPrint(sel); }
 function printOne(i){ const b=state.blocks[i]; if(!b){toast('Label tidak ditemukan.','err');return;} doPrint([b]); }
 function logoHtml(key){ const src=assetSrc(key); return src?`<div class="p-logo"><img src="${src}" alt=""></div>`:`<div class="p-logo empty"></div>`; }
@@ -772,8 +745,6 @@ function doPrint(blocks){
   const signKepsek=signHtml('sign_kepsek'), signGuru=signHtml('sign_guru');
   const totalRows=blocks.reduce((a,b)=>a+b.rows.length,0);
   const generatedAt=new Date().toLocaleString('id-ID')+' WIB';
-
-  // ★ Format vertikal formal untuk setiap sheet
   let counter=0;
   const secs=blocks.map(h=>{
     counter++;
@@ -789,8 +760,6 @@ function doPrint(blocks){
 ${formatVertical(h.columns, h.rows)}
 </div>`;
   }).join('');
-
-  // ★ HAPUS page-break paksa — biarkan browser mengisi halaman secara natural
   $('printPageStyle').textContent='@page{size:A4 '+(landscape?'landscape':'portrait')+';margin:12mm}';
   $('printArea').innerHTML=`
 <div class="p-kop">
@@ -848,8 +817,7 @@ const DEMO=(()=>{
   const DB={
     d1:{'Layanan Konseling':[
       ['No','NIS','Nama Siswa','Kelas','Orientasi','Konseling Individu','Konseling Kelompok','Bimbingan Belajar'],
-      [1,'2410001','Adi Pratama','VII-A','√','√','–','√'],
-      [2,'2410002','Bunga Lestari','VII-A','√','–','√','√']]},
+      [1,'2410001','Adi Pratama','VII-A','√','√','–','√']]},
     d2:{'Kehadiran Layanan':[
       ['No','NIS','Nama','Kelas','Klasikal Sep','Klasikal Okt'],
       [1,'2410001','Adi Pratama','VIII-A','√','√']]}
@@ -858,11 +826,11 @@ const DEMO=(()=>{
   let DEMO_CAP='';
   const ok=d=>({ok:true,data:d}), er=(m,c)=>({ok:false,message:m,code:c||''});
   const guard=t=>SESS[t]?ok(SESS[t]):er('Sesi berakhir.','AUTH');
-  function demoInfo(s){ return {school:SCHOOL,print:PRINT,sources:SRC,user:{username:s.u,nama:s.n,peran:s.p},matrixMinCols:4,links:{},assets:ASSETS}; }
+  function demoInfo(s){ return {school:SCHOOL,print:PRINT,sources:SRC,user:{username:s.u,nama:s.n,peran:s.p},assets:ASSETS,links:{}}; }
   return {
     captcha(){ const code=String(Math.floor(1000+Math.random()*9000)); DEMO_CAP=code; return ok({id:'demo',code:code}); },
     login(p){
-      if(DEMO_CAP && String(p.captchaCode||'')!==DEMO_CAP) return er('Kode keamanan salah.');
+      if(DEMO_CAP&&String(p.captchaCode||'')!==DEMO_CAP) return er('Kode keamanan salah.');
       const row=USERS.find(r=>r[0]===String(p.username||'').trim().toLowerCase()&&r[1]===String(p.password||''));
       if(!row)return er('Username atau password salah.');
       const t='demo-'+row[0]+'-'+Date.now(); SESS[t]={u:row[0],n:row[2],p:row[3]};
@@ -950,13 +918,15 @@ async function tryLogin(){
   btn.disabled=true; btn.innerHTML='<span class="spin"></span> Memeriksa…'; $('loginMsg').textContent='';
   try{
     const d=await api('login',{username:u,password:p,captchaId:state.captchaId,captchaCode:c});
-    state.token=d.token; tokenStore.set(d.token); resetCollection();
+    state.token=d.token; tokenStore.set(d.token);
+    resetCollection();
     await bootApp(d.info || await apiAuth('appInfo'));
     toast('Selamat datang, '+d.user.nama+' 👋','ok');
   }catch(err){
     $('loginMsg').textContent=err.message;
     $('captchaInput').value='';
-    loadCaptcha(); checkLoginReady();
+    loadCaptcha();
+    checkLoginReady();
   }
   finally{ btn.disabled=false; btn.innerHTML=old; }
 }
@@ -1002,14 +972,11 @@ $('resultArea').addEventListener('change',e=>{
 });
 window.addEventListener('afterprint',()=>{ $('printArea').innerHTML=''; });
 
+/* ★★★ FIX UTAMA: TIDAK ADA AUTO-LOGIN ★★★
+   Setiap buka halaman WAJIB login manual + captcha.
+   Token hanya di sessionStorage (hilang saat tab ditutup). */
 (function init(){
-  const t=tokenStore.get();
-  if(t){
-    state.token=t;
-    apiAuth('appInfo').then(info=>bootApp(info)).catch(()=>{ tokenStore.del(); state.token=null; showLogin(); });
-  } else {
-    showLogin();
-  }
+  showLogin();
 })();
 </script>
 </body>
