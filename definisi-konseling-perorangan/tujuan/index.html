@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tujuan Layanan Konseling Perorangan BK - SMP Negeri 56 Jakarta</title>
+<meta name="description" content="Tujuan lengkap Layanan Konseling Perorangan Bimbingan dan Konseling Standar Nasional Tingkat SMP di SMP Negeri 56 Jakarta.">
+<meta name="keywords" content="tujuan konseling perorangan, konseling individual, bimbingan konseling, BK SMP, SMP Negeri 56 Jakarta, layanan konseling standar nasional">
+<meta name="author" content="Unit BK SMP Negeri 56 Jakarta">
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Segoe UI', 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+}
+html {
+scroll-padding-top: 140px;
+}
+body {
+background: #f4f1ec;
+color: #333;
+line-height: 1.7;
+overflow-x: hidden;
+}
+/* ================= STICKY WRAPPER ================= */
+.sticky-wrapper {
+position: sticky;
+top: 0;
+z-index: 1000;
+background: #fff;
+box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+transition: box-shadow 0.3s ease;
+}
+.sticky-wrapper.scrolled {
+box-shadow: 0 6px 25px rgba(92,64,51,0.2);
+}
+/* ================= HEADER GROUND COAT ================= */
+.header {
+position: relative;
+background: linear-gradient(135deg, #3E2723 0%, #5D4037 30%, #795548 60%, #A1887F 100%);
+color: #fff;
+padding: 25px 30px 55px;
+text-align: center;
+overflow: hidden;
+}
+.header::before {
+content: '';
+position: absolute;
+inset: 0;
+background: radial-gradient(circle at 20% 30%, rgba(161,136,127,0.30) 0%, transparent 50%),
+radial-gradient(circle at 80% 70%, rgba(121,85,72,0.25) 0%, transparent 50%);
+animation: floatBg 15s ease-in-out infinite alternate;
+}
+@keyframes floatBg {
+0%   { transform: translate(0, 0) scale(1); }
+100% { transform: translate(-30px, 20px) scale(1.1); }
+}
+.blob {
+position: absolute;
+border-radius: 50%;
+filter: blur(50px);
+opacity: 0.40;
+z-index: 0;
+}
+.blob-1 {
+width: 180px; height: 180px;
+background: #A1887F;
+top: -50px; left: -50px;
+animation: blobMove 12s ease-in-out infinite alternate;
+}
+.blob-2 {
+width: 150px; height: 150px;
+background: #BCAAA4;
+bottom: -40px; right: -40px;
+animation: blobMove 10s ease-in-out infinite alternate-reverse;
+}
+@keyframes blobMove {
+0%   { transform: translate(0, 0); }
+100% { transform: translate(30px, -20px); }
+}
+.header-content {
+position: relative;
+z-index: 2;
+max-width: 1100px;
+margin: 0 auto;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 20px;
+flex-wrap: wrap;
+animation: fadeUp 0.9s ease-out;
+}
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(20px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+.logo-wrapper {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+.logo {
+width: 62px;
+height: 62px;
+background: linear-gradient(135deg, #BCAAA4, #A1887F);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 24px;
+color: #3E2723;
+font-weight: 800;
+box-shadow: 0 6px 20px rgba(121,85,72,0.5), inset 0 0 12px rgba(255,255,255,0.3);
+position: relative;
+flex-shrink: 0;
+}
+.logo::after {
+content: '';
+position: absolute;
+inset: -4px;
+border-radius: 50%;
+border: 2px dashed rgba(255,255,255,0.5);
+animation: spin 15s linear infinite;
+}
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+.header-text {
+text-align: left;
+}
+.header-text h1 {
+font-size: clamp(16px, 2.5vw, 22px);
+font-weight: 700;
+letter-spacing: 0.5px;
+line-height: 1.2;
+margin-bottom: 2px;
+text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+.header-text h2 {
+font-size: clamp(11px, 1.6vw, 13px);
+font-weight: 400;
+opacity: 0.95;
+letter-spacing: 0.3px;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+.header-right {
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 5px;
+}
+.badge {
+display: inline-block;
+background: rgba(255,255,255,0.20);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+border: 1px solid rgba(255,255,255,0.35);
+padding: 4px 14px;
+border-radius: 20px;
+font-size: 11px;
+letter-spacing: 1px;
+text-transform: uppercase;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+.tagline {
+font-size: 11px;
+font-style: italic;
+opacity: 0.95;
+font-weight: 300;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+/* Wave divider */
+.wave-divider {
+position: absolute;
+bottom: -1px;
+left: 0;
+width: 100%;
+line-height: 0;
+z-index: 1;
+}
+.wave-divider svg {
+display: block;
+width: 100%;
+height: 40px;
+}
+/* ================= NAVIGATION ================= */
+.nav-tabs {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 4px;
+background: rgba(255,255,255,0.98);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+padding: 8px 15px;
+border-top: 1px solid #EFEBE9;
+transition: all 0.3s ease;
+}
+.nav-tabs a {
+padding: 7px 14px;
+text-decoration: none;
+color: #555;
+font-weight: 500;
+font-size: 13px;
+border-radius: 20px;
+transition: all 0.3s ease;
+white-space: nowrap;
+cursor: pointer;
+}
+.nav-tabs a:hover {
+color: #5D4037;
+background: #EFEBE9;
+transform: translateY(-1px);
+}
+.nav-tabs a.active {
+color: #fff;
+background: linear-gradient(135deg, #5D4037, #795548);
+box-shadow: 0 4px 12px rgba(93,64,55,0.4);
+text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+/* ================= CONTAINER ================= */
+.container {
+max-width: 1100px;
+margin: 0 auto;
+background: #fff;
+box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+overflow: hidden;
+}
+.content {
+padding: 40px 50px;
+}
+.section {
+margin-bottom: 45px;
+padding-bottom: 35px;
+border-bottom: 1px dashed #e0d8d0;
+scroll-margin-top: 150px;
+animation: fadeIn 0.6s ease-out;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(15px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+.section:last-of-type {
+border-bottom: none;
+margin-bottom: 0;
+}
+.section-title {
+color: #3E2723;
+font-size: 22px;
+margin-bottom: 18px;
+padding-left: 18px;
+border-left: 5px solid #795548;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+.section-title .icon {
+font-size: 26px;
+}
+.section p {
+text-align: justify;
+margin-bottom: 15px;
+color: #444;
+font-size: 15px;
+}
+.highlight-box {
+background: linear-gradient(135deg, #EFEBE9 0%, #D7CCC8 100%);
+border-left: 5px solid #795548;
+padding: 20px 24px;
+border-radius: 10px;
+margin: 20px 0;
+box-shadow: 0 2px 10px rgba(121,85,72,0.15);
+}
+.highlight-box strong { color: #5D4037; }
+/* LIST */
+.list-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 15px;
+margin-top: 18px;
+}
+.list-item {
+background: #FAF8F5;
+padding: 16px 18px;
+border-radius: 12px;
+border-left: 4px solid #5D4037;
+transition: all 0.3s ease;
+display: flex;
+align-items: flex-start;
+gap: 12px;
+}
+.list-item:hover {
+transform: translateY(-3px);
+box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+background: #EFEBE9;
+border-left-color: #795548;
+}
+.list-item .num {
+background: linear-gradient(135deg, #5D4037, #795548);
+color: #fff;
+width: 28px; height: 28px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+font-size: 12px;
+flex-shrink: 0;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+.list-item .text strong {
+color: #3E2723;
+display: block;
+margin-bottom: 4px;
+font-size: 14px;
+}
+.list-item .text span {
+font-size: 13px;
+color: #666;
+}
+/* STEPS */
+.steps {
+counter-reset: step;
+margin-top: 20px;
+}
+.step {
+position: relative;
+padding: 18px 20px 18px 70px;
+margin-bottom: 12px;
+background: #fff;
+border: 2px solid #EFEBE9;
+border-radius: 12px;
+transition: all 0.3s ease;
+}
+.step:hover {
+border-color: #795548;
+box-shadow: 0 6px 18px rgba(121,85,72,0.15);
+transform: translateX(5px);
+}
+.step::before {
+counter-increment: step;
+content: counter(step);
+position: absolute;
+left: 18px;
+top: 50%;
+transform: translateY(-50%);
+width: 36px; height: 36px;
+background: linear-gradient(135deg, #5D4037, #795548);
+color: #fff;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+font-size: 15px;
+box-shadow: 0 3px 10px rgba(93,64,55,0.4);
+text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+.step strong {
+color: #3E2723;
+display: block;
+margin-bottom: 4px;
+font-size: 14px;
+}
+.step span { color: #555; font-size: 13.5px; }
+/* TABLE */
+table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 18px;
+background: #fff;
+border-radius: 10px;
+overflow: hidden;
+box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+table thead {
+background: linear-gradient(135deg, #5D4037, #795548);
+color: #fff;
+}
+table th, table td {
+padding: 12px 15px;
+text-align: left;
+border-bottom: 1px solid #eee;
+font-size: 14px;
+}
+table th { text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+table tbody tr:hover { background: #EFEBE9; }
+/* BACK TO TOP */
+.back-to-top {
+position: fixed;
+bottom: 25px;
+right: 25px;
+width: 46px;
+height: 46px;
+background: linear-gradient(135deg, #5D4037, #795548);
+color: #fff;
+border: none;
+border-radius: 50%;
+cursor: pointer;
+font-size: 20px;
+box-shadow: 0 4px 15px rgba(93,64,55,0.5);
+opacity: 0;
+visibility: hidden;
+transform: translateY(20px);
+transition: all 0.3s ease;
+z-index: 999;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+.back-to-top.show {
+opacity: 1;
+visibility: visible;
+transform: translateY(0);
+}
+.back-to-top:hover {
+background: linear-gradient(135deg, #795548, #A1887F);
+color: #3E2723;
+transform: translateY(-3px);
+}
+/* FOOTER */
+.footer {
+background: linear-gradient(135deg, #3E2723, #5D4037);
+color: #fff;
+padding: 25px 30px;
+text-align: center;
+}
+.footer p { margin: 5px 0; font-size: 14px; }
+.footer .motto {
+font-style: italic;
+color: #BCAAA4;
+margin-top: 10px;
+}
+/* RESPONSIVE */
+@media (max-width: 768px) {
+html { scroll-padding-top: 130px; }
+.header { padding: 18px 20px 45px; }
+.header-content { justify-content: center; text-align: center; }
+.logo { width: 52px; height: 52px; font-size: 20px; }
+.header-right { align-items: center; }
+.content { padding: 25px 20px; }
+.nav-tabs a { padding: 6px 11px; font-size: 12px; }
+.section-title { font-size: 18px; }
+.step { padding-left: 60px; }
+.section { scroll-margin-top: 140px; }
+.wave-divider svg { height: 30px; }
+}
+@media print {
+body { background: #fff; }
+.sticky-wrapper { position: static; box-shadow: none; }
+.nav-tabs { display: none; }
+.back-to-top { display: none; }
+.container { box-shadow: none; }
+.header { background: #5D4037 !important; }
+}
+</style>
+</head>
+<body>
+<!-- ================= STICKY WRAPPER ================= -->
+<div class="sticky-wrapper" id="stickyWrapper">
+<!-- HEADER COMPACT - GROUND COAT -->
+<header class="header" role="banner">
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="header-content">
+<div class="logo-wrapper">
+<div class="logo" aria-label="Logo SMP Negeri 56 Jakarta">56</div>
+<div class="header-text">
+<h1>SMP NEGERI 56 JAKARTA</h1>
+<h2>Unit Layanan Bimbingan dan Konseling</h2>
+</div>
+</div>
+<div class="header-right">
+<div class="badge">🤝 Tujuan Konseling Perorangan Standar Nasional Tingkat SMP</div>
+<p class="tagline">"Ruang Aman untuk Berbagi, Bertumbuh, dan Berubah"</p>
+</div>
+</div>
+<!-- Wave divider kurva indah 2 layer -->
+<div class="wave-divider" aria-hidden="true">
+<svg viewBox="0 0 1440 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0,15 C180,35 360,0 540,18 C720,36 900,0 1080,18 C1260,36 1380,10 1440,15 L1440,40 L0,40 Z"
+fill="#ffffff" opacity="0.5"/>
+<path d="M0,22 C240,40 480,5 720,22 C960,39 1200,5 1440,22 L1440,40 L0,40 Z"
+fill="#ffffff"/>
+</svg>
+</div>
+</header>
+<!-- NAVIGATION -->
+<nav class="nav-tabs" id="navTabs" role="navigation" aria-label="Menu navigasi tujuan konseling perorangan">
+<a href="#pengertian">Pengertian</a>
+<a href="#umum">Tujuan Umum</a>
+<a href="#khusus">Tujuan Khusus</a>
+<a href="#fungsi">Fungsi Layanan</a>
+<a href="#siswa">Bagi Peserta Didik</a>
+<a href="#sekolah">Bagi Sekolah</a>
+<a href="#indikator">Indikator</a>
+</nav>
+</div>
+<!-- ================= MAIN CONTENT ================= -->
+<main class="container">
+<div class="content">
+<!-- PENGERTIAN -->
+<section class="section" id="pengertian">
+<h2 class="section-title"><span class="icon">📖</span> Pengertian Tujuan Konseling Perorangan</h2>
+<p>
+<strong>Tujuan Layanan Konseling Perorangan</strong> merupakan arah dan sasaran yang ingin dicapai melalui pelaksanaan layanan konseling individual dalam program Bimbingan dan Konseling di sekolah. Tujuan ini menjadi pedoman bagi guru BK dalam merancang, melaksanakan, dan mengevaluasi layanan agar berjalan efektif, terarah, profesional, dan berdampak positif bagi peserta didik sesuai <strong>Standar Nasional Tingkat SMP</strong>.
+</p>
+<p>
+Secara umum, tujuan konseling perorangan di <strong>SMP Negeri 56 Jakarta</strong> adalah membantu peserta didik secara individual untuk memahami diri sendiri, mengatasi permasalahan pribadi-sosial-belajar-karir yang sedang dihadapi, serta mengembangkan potensi diri secara optimal melalui hubungan tatap muka yang profesional, empatik, dan penuh kepercayaan antara konselor dengan klien.
+</p>
+<div class="highlight-box">
+<strong>📌 Inti Tujuan:</strong><br>
+Tujuan Konseling Perorangan adalah memfasilitasi perubahan positif pada diri peserta didik melalui proses eksplorasi diri, pemahaman masalah, dan pengambilan keputusan mandiri dalam suasana hubungan helping relationship yang aman, rahasia, dan berorientasi pada kepentingan terbaik klien sesuai Standar Nasional Tingkat SMP.
+</div>
+</section>
+<!-- TUJUAN UMUM -->
+<section class="section" id="umum">
+<h2 class="section-title"><span class="icon">🌐</span> Tujuan Umum Konseling Perorangan</h2>
+<p>Tujuan umum layanan konseling perorangan di SMP Negeri 56 Jakarta meliputi hal-hal berikut:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Mengentaskan Permasalahan Klien</strong><span>Membantu peserta didik mengatasi masalah pribadi, sosial, belajar, atau karir yang sedang dihadapi sehingga tidak menghambat perkembangan.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Memahami Diri Sendiri</strong><span>Memfasilitasi klien mengenal kekuatan, kelemahan, nilai, minat, dan potensi diri secara realistis dan utuh.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Mengembangkan Keterampilan Coping</strong><span>Membekali klien dengan strategi menghadapi stres, mengelola emosi, dan menyelesaikan masalah secara mandiri.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Mendorong Pengambilan Keputusan Mandiri</strong><span>Memberdayakan klien untuk membuat pilihan hidup yang bertanggung jawab dan sesuai dengan nilai diri.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Meningkatkan Kesejahteraan Psikologis</strong><span>Menciptakan kondisi mental-emotional yang stabil, percaya diri, resilien, dan bahagia pada peserta didik.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Mendukung Pencapaian Tujuan Pendidikan</strong><span>Ikut serta membentuk peserta didik yang beriman, berakhlak mulia, sehat, berilmu, dan bertanggung jawab.</span></div></div>
+</div>
+</section>
+<!-- TUJUAN KHUSUS -->
+<section class="section" id="khusus">
+<h2 class="section-title"><span class="icon">🎯</span> Tujuan Khusus Konseling Perorangan</h2>
+<p>Selain tujuan umum, layanan konseling perorangan di SMP Negeri 56 Jakarta juga memiliki tujuan khusus sebagai berikut sesuai Standar Nasional Tingkat SMP:</p>
+<div class="steps">
+<div class="step"><strong>Mengurangi Gejala Distress Psikologis</strong><span>Menurunkan tingkat kecemasan, depresi, stres, atau gangguan emosional lainnya yang dialami klien.</span></div>
+<div class="step"><strong>Memperbaiki Hubungan Interpersonal</strong><span>Membantu klien membangun komunikasi dan relasi yang sehat dengan teman sebaya, keluarga, dan guru.</span></div>
+<div class="step"><strong>Mengatasi Hambatan Belajar</strong><span>Mengidentifikasi dan menangani faktor-faktor psikologis yang menghambat prestasi akademik klien.</span></div>
+<div class="step"><strong>Menyelesaikan Konflik Internal/Eksternal</strong><span>Memfasilitasi resolusi konflik dalam diri klien atau dengan pihak lain secara konstruktif.</span></div>
+<div class="step"><strong>Membangun Konsep Diri Positif</strong><span>Menguatkan harga diri, kepercayaan diri, dan penerimaan diri klien terhadap kondisinya.</span></div>
+<div class="step"><strong>Mempersiapkan Transisi Perkembangan</strong><span>Membantu klien menghadapi fase transisi (SD-SMP, SMP-SMA/SMK) dengan kesiapan mental dan emosional.</span></div>
+<div class="step"><strong>Mencegah Eskalasi Masalah</strong><span>Melakukan intervensi dini agar masalah ringan tidak berkembang menjadi krisis atau gangguan serius.</span></div>
+</div>
+</section>
+<!-- FUNGSI LAYANAN -->
+<section class="section" id="fungsi">
+<h2 class="section-title"><span class="icon">⚙️</span> Fungsi Layanan Konseling Perorangan</h2>
+<p>Sesuai Standar Nasional BK, konseling perorangan menjalankan empat fungsi utama yang saling melengkapi:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">A</div><div class="text"><strong>Fungsi Pemahaman</strong><span>Membantu klien memahami diri sendiri, masalahnya, akar penyebab, dan sumber daya yang dimiliki secara lebih jelas dan objektif.</span></div></div>
+<div class="list-item"><div class="num">B</div><div class="text"><strong>Fungsi Pencegahan</strong><span>Mencegah berkembangnya masalah ringan menjadi berat melalui intervensi dini, penguatan resiliensi, dan pengembangan keterampilan coping.</span></div></div>
+<div class="list-item"><div class="num">C</div><div class="text"><strong>Fungsi Pengentasan</strong><span>Mengatasi masalah yang sedang dialami klien sehingga tidak lagi menghambat perkembangan, pembelajaran, dan kesejahteraan psikologisnya.</span></div></div>
+<div class="list-item"><div class="num">D</div><div class="text"><strong>Fungsi Pengembangan</strong><span>Mengoptimalkan potensi, bakat, minat, dan karakter positif klien untuk pencapaian diri yang utuh dan bermakna.</span></div></div>
+</div>
+</section>
+<!-- BAGI PESERTA DIDIK -->
+<section class="section" id="siswa">
+<h2 class="section-title"><span class="icon">🎓</span> Tujuan bagi Peserta Didik</h2>
+<p>Layanan konseling perorangan ditujukan untuk memberikan manfaat langsung bagi peserta didik SMP Negeri 56 Jakarta, antara lain:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Merasa Didengar dan Diterima</strong><span>Klien merasa didengarkan, dipahami, dan diterima tanpa penghakiman dalam ruang yang aman dan rahasia.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Memperoleh Perspektif Baru</strong><span>Klien mendapatkan sudut pandang alternatif terhadap masalahnya yang membuka wawasan dan kemungkinan solusi baru.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Mengembangkan Kemandirian</strong><span>Klien belajar mengambil keputusan dan menyelesaikan masalah secara mandiri tanpa ketergantungan pada konselor.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Meningkatkan Prestasi Akademik</strong><span>Hambatan belajar teratasi, konsentrasi meningkat, motivasi pulih, dan prestasi akademik membaik.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Membangun Hubungan Sosial Sehat</strong><span>Klien mampu berkomunikasi asertif, mengelola konflik, dan menjalin relasi positif dengan orang lain.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Mencapai Kesejahteraan Psikologis</strong><span>Klien mengalami penurunan distress emosional dan peningkatan rasa bahagia, tenang, dan percaya diri.</span></div></div>
+</div>
+</section>
+<!-- BAGI SEKOLAH -->
+<section class="section" id="sekolah">
+<h2 class="section-title"><span class="icon">🏫</span> Tujuan bagi Sekolah</h2>
+<p>Secara institusional, layanan konseling perorangan di SMP Negeri 56 Jakarta bertujuan untuk:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Mewujudkan Sekolah Ramah Anak</strong><span>Menciptakan lingkungan sekolah yang aman, nyaman, inklusif, dan mendukung kesejahteraan psikologis seluruh warga sekolah.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Meningkatkan Mutu Pendidikan</strong><span>Berkontribusi pada peningkatan prestasi akademik dan non-akademik sekolah melalui penanganan hambatan belajar siswa.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Menurunkan Angka Pelanggaran</strong><span>Mengurangi kasus pelanggaran tata tertib, bullying, dan perilaku berisiko melalui intervensi konseling individual.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Memperkuat Citra Sekolah</strong><span>Meningkatkan kepercayaan masyarakat terhadap kualitas layanan pendidikan dan kepedulian sekolah terhadap kesejahteraan siswa.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Memenuhi Standar Nasional Pendidikan</strong><span>Menyelenggarakan layanan BK sesuai Permendikbud No. 111 Tahun 2014 dan regulasi terkait.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Membangun Budaya Peduli</strong><span>Menanamkan nilai empati, kepedulian, dan dukungan psikososial sebagai bagian dari budaya sekolah.</span></div></div>
+</div>
+</section>
+<!-- INDIKATOR KEBERHASILAN -->
+<section class="section" id="indikator">
+<h2 class="section-title"><span class="icon">📊</span> Indikator Keberhasilan Tujuan</h2>
+<p>Keberhasilan pencapaian tujuan konseling perorangan di SMP Negeri 56 Jakarta dapat diukur melalui indikator berikut sesuai Standar Nasional Tingkat SMP:</p>
+<table>
+<thead>
+<tr><th>No</th><th>Indikator</th><th>Keterangan</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td><strong>Penurunan Gejala Distress</strong></td><td>Berkurangnya keluhan kecemasan, stres, atau masalah emosional klien setelah konseling.</td></tr>
+<tr><td>2</td><td><strong>Peningkatan Pemahaman Diri</strong></td><td>Klien mampu menjelaskan kekuatan, kelemahan, dan nilai dirinya dengan lebih jelas.</td></tr>
+<tr><td>3</td><td><strong>Kemampuan Mengambil Keputusan</strong></td><td>Klien menunjukkan kemampuan membuat pilihan yang bertanggung jawab dan rasional.</td></tr>
+<tr><td>4</td><td><strong>Perbaikan Hubungan Sosial</strong></td><td>Terjadi perbaikan interaksi klien dengan teman, keluarga, atau guru.</td></tr>
+<tr><td>5</td><td><strong>Peningkatan Prestasi Akademik</strong></td><td>Nilai akademik stabil atau meningkat setelah hambatan belajar teratasi.</td></tr>
+<tr><td>6</td><td><strong>Kepuasan Klien</strong></td><td>Umpan balik positif dari klien terhadap proses dan hasil konseling.</td></tr>
+<tr><td>7</td><td><strong>Kemandirian Klien</strong></td><td>Klien mampu menangani masalah serupa secara mandiri di masa depan.</td></tr>
+<tr><td>8</td><td><strong>Dokumentasi Lengkap</strong></td><td>Seluruh proses konseling tercatat rapi dalam catatan kasus sesuai standar.</td></tr>
+</tbody>
+</table>
+</section>
+<!-- PENUTUP -->
+<section class="section">
+<div class="highlight-box">
+<strong>💡 Pesan Layanan BK:</strong><br>
+"Meminta bantuan bukan tanda kelemahan, melainkan tanda keberanian dan kebijaksanaan. Ruang konseling perorangan di SMP Negeri 56 Jakarta selalu terbuka untukmu — tempat di mana kamu bisa menjadi dirimu sendiri, didengar tanpa dihakimi, dan didampingi menuju versi terbaik dari dirimu. Kamu tidak sendirian."
+</div>
+</section>
+</div>
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+<p><strong>UNIT LAYANAN BIMBINGAN DAN KONSELING</strong></p>
+<p>SMP NEGERI 56 JAKARTA</p>
+<p>Jl. Jeruk Purut I, Cilandak Timur, Jakarta Selatan</p>
+<p class="motto">"Cerdas dalam Berpikir, Mulia dalam Bertindak"</p>
+<p style="margin-top: 10px; font-size: 12px; opacity: 0.8;">© 2026 SMP Negeri 56 Jakarta — Dokumen Resmi Tujuan Layanan Konseling Perorangan Standar Nasional Tingkat SMP</p>
+</footer>
+</main>
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" aria-label="Kembali ke atas" title="Kembali ke atas">↑</button>
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+// 1. Sticky wrapper shadow saat scroll
+const stickyWrapper = document.getElementById('stickyWrapper');
+const backToTopBtn = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+if (window.scrollY > 10) {
+stickyWrapper.classList.add('scrolled');
+backToTopBtn.classList.add('show');
+} else {
+stickyWrapper.classList.remove('scrolled');
+backToTopBtn.classList.remove('show');
+}
+});
+// 2. LANGSUNG JUMP (tanpa smooth scroll) saat klik menu
+const navLinks = document.querySelectorAll('.nav-tabs a');
+navLinks.forEach(link => {
+link.addEventListener('click', function(e) {
+e.preventDefault();
+const targetId = this.getAttribute('href');
+const targetSection = document.querySelector(targetId);
+if (targetSection) {
+const stickyHeight = stickyWrapper.offsetHeight;
+const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - stickyHeight - 10;
+window.scrollTo({
+top: targetPosition
+});
+history.pushState(null, null, targetId);
+navLinks.forEach(l => l.classList.remove('active'));
+this.classList.add('active');
+}
+});
+});
+// 3. Highlight menu aktif saat scroll (tetap berjalan)
+const sections = document.querySelectorAll('.section[id]');
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+const id = entry.target.getAttribute('id');
+navLinks.forEach(link => {
+link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+});
+}
+});
+}, {
+rootMargin: '-150px 0px -70% 0px',
+threshold: 0
+});
+sections.forEach(section => observer.observe(section));
+if (navLinks.length > 0) navLinks[0].classList.add('active');
+// 4. Back to top (langsung jump ke atas)
+backToTopBtn.addEventListener('click', () => {
+window.scrollTo({ top: 0 });
+});
+// 5. Handle hash URL saat halaman dibuka (langsung jump)
+window.addEventListener('load', () => {
+if (window.location.hash) {
+const target = document.querySelector(window.location.hash);
+if (target) {
+setTimeout(() => {
+const stickyHeight = stickyWrapper.offsetHeight;
+const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - stickyHeight - 10;
+window.scrollTo({ top: targetPosition });
+}, 50);
+}
+}
+});
+</script>
+</body>
+</html>
