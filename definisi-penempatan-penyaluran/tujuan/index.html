@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tujuan Layanan Penempatan & Penyaluran BK - SMP Negeri 56 Jakarta</title>
+<meta name="description" content="Tujuan lengkap Layanan Penempatan dan Penyaluran Bimbingan dan Konseling Standar Nasional Tingkat SMP di SMP Negeri 56 Jakarta.">
+<meta name="keywords" content="tujuan layanan penempatan, tujuan layanan penyaluran, bimbingan konseling, BK SMP, SMP Negeri 56 Jakarta">
+<meta name="author" content="Unit BK SMP Negeri 56 Jakarta">
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Segoe UI', 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+}
+html {
+scroll-padding-top: 140px;
+}
+body {
+background: #fff8f0;
+color: #333;
+line-height: 1.7;
+overflow-x: hidden;
+}
+/* ================= STICKY WRAPPER ================= */
+.sticky-wrapper {
+position: sticky;
+top: 0;
+z-index: 1000;
+background: #fff;
+box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+transition: box-shadow 0.3s ease;
+}
+.sticky-wrapper.scrolled {
+box-shadow: 0 6px 25px rgba(255,107,0,0.15);
+}
+/* ================= HEADER COMPACT - ORANGE ================= */
+.header {
+position: relative;
+background: linear-gradient(135deg, #CC5500 0%, #FF6B00 30%, #FF8C00 60%, #FFA500 100%);
+color: #fff;
+padding: 25px 30px 55px;
+text-align: center;
+overflow: hidden;
+}
+.header::before {
+content: '';
+position: absolute;
+inset: 0;
+background: radial-gradient(circle at 20% 30%, rgba(255,184,77,0.30) 0%, transparent 50%),
+radial-gradient(circle at 80% 70%, rgba(255,165,0,0.25) 0%, transparent 50%);
+animation: floatBg 15s ease-in-out infinite alternate;
+}
+@keyframes floatBg {
+0%   { transform: translate(0, 0) scale(1); }
+100% { transform: translate(-30px, 20px) scale(1.1); }
+}
+.blob {
+position: absolute;
+border-radius: 50%;
+filter: blur(50px);
+opacity: 0.40;
+z-index: 0;
+}
+.blob-1 {
+width: 180px; height: 180px;
+background: #FFB84D;
+top: -50px; left: -50px;
+animation: blobMove 12s ease-in-out infinite alternate;
+}
+.blob-2 {
+width: 150px; height: 150px;
+background: #FFA500;
+bottom: -40px; right: -40px;
+animation: blobMove 10s ease-in-out infinite alternate-reverse;
+}
+@keyframes blobMove {
+0%   { transform: translate(0, 0); }
+100% { transform: translate(30px, -20px); }
+}
+.header-content {
+position: relative;
+z-index: 2;
+max-width: 1100px;
+margin: 0 auto;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 20px;
+flex-wrap: wrap;
+animation: fadeUp 0.9s ease-out;
+}
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(20px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+.logo-wrapper {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+.logo {
+width: 62px;
+height: 62px;
+background: linear-gradient(135deg, #FFB84D, #FFA500);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 24px;
+color: #CC5500;
+font-weight: 800;
+box-shadow: 0 6px 20px rgba(255,140,0,0.6), inset 0 0 12px rgba(255,255,255,0.4);
+position: relative;
+flex-shrink: 0;
+}
+.logo::after {
+content: '';
+position: absolute;
+inset: -4px;
+border-radius: 50%;
+border: 2px dashed rgba(255,255,255,0.6);
+animation: spin 15s linear infinite;
+}
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+.header-text {
+text-align: left;
+}
+.header-text h1 {
+font-size: clamp(16px, 2.5vw, 22px);
+font-weight: 700;
+letter-spacing: 0.5px;
+line-height: 1.2;
+margin-bottom: 2px;
+}
+.header-text h2 {
+font-size: clamp(11px, 1.6vw, 13px);
+font-weight: 400;
+opacity: 0.95;
+letter-spacing: 0.3px;
+}
+.header-right {
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 5px;
+}
+.badge {
+display: inline-block;
+background: rgba(255,255,255,0.20);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+border: 1px solid rgba(255,255,255,0.35);
+padding: 4px 14px;
+border-radius: 20px;
+font-size: 11px;
+letter-spacing: 1px;
+text-transform: uppercase;
+}
+.tagline {
+font-size: 11px;
+font-style: italic;
+opacity: 0.92;
+font-weight: 300;
+}
+/* Wave divider */
+.wave-divider {
+position: absolute;
+bottom: -1px;
+left: 0;
+width: 100%;
+line-height: 0;
+z-index: 1;
+}
+.wave-divider svg {
+display: block;
+width: 100%;
+height: 40px;
+}
+/* ================= NAVIGATION ================= */
+.nav-tabs {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 4px;
+background: rgba(255,255,255,0.98);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+padding: 8px 15px;
+border-top: 1px solid #ffe8cc;
+transition: all 0.3s ease;
+}
+.nav-tabs a {
+padding: 7px 14px;
+text-decoration: none;
+color: #555;
+font-weight: 500;
+font-size: 13px;
+border-radius: 20px;
+transition: all 0.3s ease;
+white-space: nowrap;
+cursor: pointer;
+}
+.nav-tabs a:hover {
+color: #FF6B00;
+background: #fff5e6;
+transform: translateY(-1px);
+}
+.nav-tabs a.active {
+color: #fff;
+background: linear-gradient(135deg, #FF6B00, #FFA500);
+box-shadow: 0 4px 12px rgba(255,107,0,0.4);
+}
+/* ================= CONTAINER ================= */
+.container {
+max-width: 1100px;
+margin: 0 auto;
+background: #fff;
+box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+overflow: hidden;
+}
+.content {
+padding: 40px 50px;
+}
+.section {
+margin-bottom: 45px;
+padding-bottom: 35px;
+border-bottom: 1px dashed #e0e0e0;
+scroll-margin-top: 150px;
+animation: fadeIn 0.6s ease-out;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(15px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+.section:last-of-type {
+border-bottom: none;
+margin-bottom: 0;
+}
+.section-title {
+color: #CC5500;
+font-size: 22px;
+margin-bottom: 18px;
+padding-left: 18px;
+border-left: 5px solid #FFA500;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+.section-title .icon {
+font-size: 26px;
+}
+.section p {
+text-align: justify;
+margin-bottom: 15px;
+color: #444;
+font-size: 15px;
+}
+.highlight-box {
+background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%);
+border-left: 5px solid #FFA500;
+padding: 20px 24px;
+border-radius: 10px;
+margin: 20px 0;
+box-shadow: 0 2px 10px rgba(255,165,0,0.2);
+}
+.highlight-box strong { color: #FF6B00; }
+/* LIST */
+.list-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 15px;
+margin-top: 18px;
+}
+.list-item {
+background: #fffbf5;
+padding: 16px 18px;
+border-radius: 12px;
+border-left: 4px solid #FF8C00;
+transition: all 0.3s ease;
+display: flex;
+align-items: flex-start;
+gap: 12px;
+}
+.list-item:hover {
+transform: translateY(-3px);
+box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+background: #fff5e6;
+border-left-color: #FFA500;
+}
+.list-item .num {
+background: linear-gradient(135deg, #FF6B00, #FFA500);
+color: #fff;
+width: 28px; height: 28px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+font-size: 12px;
+flex-shrink: 0;
+}
+.list-item .text strong {
+color: #CC5500;
+display: block;
+margin-bottom: 4px;
+font-size: 14px;
+}
+.list-item .text span {
+font-size: 13px;
+color: #666;
+}
+/* STEPS */
+.steps {
+counter-reset: step;
+margin-top: 20px;
+}
+.step {
+position: relative;
+padding: 18px 20px 18px 70px;
+margin-bottom: 12px;
+background: #fff;
+border: 2px solid #ffe8cc;
+border-radius: 12px;
+transition: all 0.3s ease;
+}
+.step:hover {
+border-color: #FFA500;
+box-shadow: 0 6px 18px rgba(255,165,0,0.2);
+transform: translateX(5px);
+}
+.step::before {
+counter-increment: step;
+content: counter(step);
+position: absolute;
+left: 18px;
+top: 50%;
+transform: translateY(-50%);
+width: 36px; height: 36px;
+background: linear-gradient(135deg, #FF6B00, #FFA500);
+color: #fff;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+font-size: 15px;
+box-shadow: 0 3px 10px rgba(255,107,0,0.4);
+}
+.step strong {
+color: #CC5500;
+display: block;
+margin-bottom: 4px;
+font-size: 14px;
+}
+.step span { color: #555; font-size: 13.5px; }
+/* TABLE */
+table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 18px;
+background: #fff;
+border-radius: 10px;
+overflow: hidden;
+box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+table thead {
+background: linear-gradient(135deg, #FF6B00, #FFA500);
+color: #fff;
+}
+table th, table td {
+padding: 12px 15px;
+text-align: left;
+border-bottom: 1px solid #eee;
+font-size: 14px;
+}
+table tbody tr:hover { background: #fff5e6; }
+/* BACK TO TOP */
+.back-to-top {
+position: fixed;
+bottom: 25px;
+right: 25px;
+width: 46px;
+height: 46px;
+background: linear-gradient(135deg, #FF6B00, #FFA500);
+color: #fff;
+border: none;
+border-radius: 50%;
+cursor: pointer;
+font-size: 20px;
+box-shadow: 0 4px 15px rgba(255,107,0,0.5);
+opacity: 0;
+visibility: hidden;
+transform: translateY(20px);
+transition: all 0.3s ease;
+z-index: 999;
+}
+.back-to-top.show {
+opacity: 1;
+visibility: visible;
+transform: translateY(0);
+}
+.back-to-top:hover {
+background: linear-gradient(135deg, #FFA500, #FFB84D);
+color: #CC5500;
+transform: translateY(-3px);
+}
+/* FOOTER */
+.footer {
+background: linear-gradient(135deg, #CC5500, #FF6B00);
+color: #fff;
+padding: 25px 30px;
+text-align: center;
+}
+.footer p { margin: 5px 0; font-size: 14px; }
+.footer .motto {
+font-style: italic;
+color: #FFB84D;
+margin-top: 10px;
+}
+/* RESPONSIVE */
+@media (max-width: 768px) {
+html { scroll-padding-top: 130px; }
+.header { padding: 18px 20px 45px; }
+.header-content { justify-content: center; text-align: center; }
+.logo { width: 52px; height: 52px; font-size: 20px; }
+.header-right { align-items: center; }
+.content { padding: 25px 20px; }
+.nav-tabs a { padding: 6px 11px; font-size: 12px; }
+.section-title { font-size: 18px; }
+.step { padding-left: 60px; }
+.section { scroll-margin-top: 140px; }
+.wave-divider svg { height: 30px; }
+}
+@media print {
+body { background: #fff; }
+.sticky-wrapper { position: static; box-shadow: none; }
+.nav-tabs { display: none; }
+.back-to-top { display: none; }
+.container { box-shadow: none; }
+.header { background: #FF6B00 !important; }
+}
+</style>
+</head>
+<body>
+<!-- ================= STICKY WRAPPER ================= -->
+<div class="sticky-wrapper" id="stickyWrapper">
+<!-- HEADER COMPACT - ORANGE -->
+<header class="header" role="banner">
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="header-content">
+<div class="logo-wrapper">
+<div class="logo" aria-label="Logo SMP Negeri 56 Jakarta">56</div>
+<div class="header-text">
+<h1>SMP NEGERI 56 JAKARTA</h1>
+<h2>Unit Layanan Bimbingan dan Konseling</h2>
+</div>
+</div>
+<div class="header-right">
+<div class="badge">🎯 Tujuan Layanan Penempatan & Penyaluran Standar Nasional Tingkat SMP</div>
+<p class="tagline">"Tepat Posisi, Tepat Pengembangan, Tepat Masa Depan"</p>
+</div>
+</div>
+<!-- Wave divider kurva indah 2 layer -->
+<div class="wave-divider" aria-hidden="true">
+<svg viewBox="0 0 1440 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0,15 C180,35 360,0 540,18 C720,36 900,0 1080,18 C1260,36 1380,10 1440,15 L1440,40 L0,40 Z"
+fill="#ffffff" opacity="0.5"/>
+<path d="M0,22 C240,40 480,5 720,22 C960,39 1200,5 1440,22 L1440,40 L0,40 Z"
+fill="#ffffff"/>
+</svg>
+</div>
+</header>
+<!-- NAVIGATION -->
+<nav class="nav-tabs" id="navTabs" role="navigation" aria-label="Menu navigasi tujuan penempatan penyaluran">
+<a href="#pengertian">Pengertian</a>
+<a href="#umum">Tujuan Umum</a>
+<a href="#khusus">Tujuan Khusus</a>
+<a href="#siswa">Bagi Peserta Didik</a>
+<a href="#ortu">Bagi Orang Tua</a>
+<a href="#guru">Bagi Guru</a>
+<a href="#sekolah">Bagi Sekolah</a>
+<a href="#indikator">Indikator</a>
+</nav>
+</div>
+<!-- ================= MAIN CONTENT ================= -->
+<main class="container">
+<div class="content">
+<!-- PENGERTIAN -->
+<section class="section" id="pengertian">
+<h2 class="section-title"><span class="icon">📖</span> Pengertian Tujuan Layanan Penempatan & Penyaluran</h2>
+<p>
+<strong>Tujuan Layanan Penempatan dan Penyaluran</strong> merupakan arah dan sasaran yang ingin dicapai melalui pelaksanaan layanan penempatan dan penyaluran dalam program Bimbingan dan Konseling di sekolah. Tujuan ini menjadi pedoman bagi guru BK dalam merancang, melaksanakan, dan mengevaluasi proses penempatan dan penyaluran agar berjalan efektif, tepat sasaran, dan berdampak positif bagi perkembangan peserta didik sesuai Standar Nasional Tingkat SMP.
+</p>
+<p>
+Secara umum, tujuan layanan penempatan dan penyaluran di <strong>SMP Negeri 56 Jakarta</strong> adalah membantu peserta didik memperoleh posisi, peran, atau jalur yang tepat sesuai dengan minat, bakat, kemampuan, dan kondisi pribadi-sosialnya — baik dalam konteks penempatan di kelas, penyaluran ke kegiatan ekstrakurikuler, maupun penyaluran untuk studi lanjut — sehingga peserta didik dapat berkembang secara optimal dan meraih prestasi terbaik sesuai Standar Nasional Tingkat SMP.
+</p>
+<div class="highlight-box">
+<strong>📌 Inti Tujuan:</strong><br>
+Tujuan Layanan Penempatan dan Penyaluran adalah memastikan setiap peserta didik berada di posisi yang tepat untuk mengembangkan potensi dirinya secara maksimal, mencegah kesalahan penempatan yang dapat menghambat perkembangan, serta memfasilitasi transisi yang mulus ke jenjang pendidikan atau kegiatan pengembangan diri yang sesuai sesuai Standar Nasional Tingkat SMP.
+</div>
+</section>
+<!-- TUJUAN UMUM -->
+<section class="section" id="umum">
+<h2 class="section-title"><span class="icon">🌐</span> Tujuan Umum Layanan Penempatan & Penyaluran</h2>
+<p>Tujuan umum layanan penempatan dan penyaluran di SMP Negeri 56 Jakarta sesuai Standar Nasional Tingkat SMP meliputi hal-hal berikut:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Menempatkan Siswa Sesuai Potensi</strong><span>Memastikan peserta didik berada di kelas, kelompok belajar, atau posisi yang sesuai dengan kemampuan akademik dan karakteristiknya.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Menyalurkan Minat dan Bakat</strong><span>Memfasilitasi peserta didik untuk mengembangkan minat dan bakat melalui kegiatan ekstrakurikuler, organisasi, atau kompetisi yang tepat.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Mendukung Studi Lanjut</strong><span>Membantu peserta didik kelas 9 memilih dan mempersiapkan diri untuk studi lanjut ke SMA/SMK/MA sesuai minat, bakat, dan kemampuan.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Mencegah Kesalahan Penempatan</strong><span>Menghindari penempatan yang tidak tepat yang dapat menghambat perkembangan, menurunkan motivasi, atau menimbulkan masalah belajar.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Mengoptimalkan Perkembangan Diri</strong><span>Memastikan peserta didik berkembang secara optimal sesuai potensi yang dimilikinya melalui wadah yang tepat.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Mendukung Pencapaian Tujuan Pendidikan Nasional</strong><span>Ikut serta membentuk peserta didik yang beriman, berakhlak mulia, sehat, berilmu, dan bertanggung jawab melalui penempatan yang tepat.</span></div></div>
+</div>
+</section>
+<!-- TUJUAN KHUSUS -->
+<section class="section" id="khusus">
+<h2 class="section-title"><span class="icon">🎯</span> Tujuan Khusus Layanan Penempatan & Penyaluran</h2>
+<p>Selain tujuan umum, layanan penempatan dan penyaluran di SMP Negeri 56 Jakarta juga memiliki tujuan khusus sebagai berikut sesuai Standar Nasional Tingkat SMP:</p>
+<div class="steps">
+<div class="step"><strong>Memetakan Potensi Peserta Didik</strong><span>Melakukan asesmen komprehensif untuk mengidentifikasi minat, bakat, kemampuan akademik, dan kebutuhan khusus setiap siswa.</span></div>
+<div class="step"><strong>Menyusun Rekomendasi Penempatan</strong><span>Memberikan rekomendasi penempatan kelas, kelompok belajar, atau kegiatan berdasarkan hasil asesmen yang objektif.</span></div>
+<div class="step"><strong>Memfasilitasi Penyaluran Ekstrakurikuler</strong><span>Mengarahkan siswa ke kegiatan ekstrakurikuler yang sesuai dengan minat dan bakatnya untuk pengembangan diri optimal.</span></div>
+<div class="step"><strong>Mendukung Penyaluran Organisasi Siswa</strong><span>Memfasilitasi penempatan siswa dalam organisasi siswa (OSIS, MPK) sesuai minat kepemimpinan dan sosial.</span></div>
+<div class="step"><strong>Membantu Pemilihan Studi Lanjut</strong><span>Memberikan informasi dan pertimbangan profesional untuk membantu siswa kelas 9 memilih SMA/SMK/MA yang tepat.</span></div>
+<div class="step"><strong>Menyalurkan Siswa Berprestasi</strong><span>Mengarahkan siswa berprestasi ke lomba, kompetisi, atau program pengembangan khusus sesuai potensinya.</span></div>
+<div class="step"><strong>Memfasilitasi Penyaluran Beasiswa</strong><span>Memberikan informasi dan membantu penyaluran siswa yang memenuhi syarat untuk memperoleh beasiswa pendidikan.</span></div>
+<div class="step"><strong>Mendukung Penempatan Magang</strong><span>Menyalurkan siswa untuk kegiatan magang, kunjungan industri, atau program pengenalan dunia kerja.</span></div>
+</div>
+</section>
+<!-- BAGI PESERTA DIDIK -->
+<section class="section" id="siswa">
+<h2 class="section-title"><span class="icon">🎓</span> Tujuan bagi Peserta Didik</h2>
+<p>Layanan penempatan dan penyaluran ditujukan untuk memberikan manfaat langsung bagi peserta didik SMP Negeri 56 Jakarta, antara lain:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Berada di Posisi yang Tepat</strong><span>Siswa ditempatkan di kelas atau kelompok belajar yang sesuai dengan kemampuan sehingga dapat belajar dengan optimal.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Mengembangkan Minat dan Bakat</strong><span>Siswa disalurkan ke kegiatan ekstrakurikuler yang sesuai sehingga minat dan bakatnya berkembang maksimal.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Meningkatkan Prestasi Belajar</strong><span>Penempatan yang tepat menciptakan kondisi belajar kondusif sehingga prestasi akademik meningkat.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Membangun Kepercayaan Diri</strong><span>Siswa merasa percaya diri karena berada di posisi yang sesuai dengan kemampuannya.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Merencanakan Masa Depan</strong><span>Siswa kelas 9 dapat memilih studi lanjut yang tepat sesuai minat, bakat, dan kemampuan.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Memperoleh Kesempatan Pengembangan</strong><span>Siswa berprestasi memperoleh kesempatan untuk mengikuti lomba, kompetisi, atau program khusus.</span></div></div>
+</div>
+</section>
+<!-- BAGI ORANG TUA -->
+<section class="section" id="ortu">
+<h2 class="section-title"><span class="icon">👨‍👩‍👧</span> Tujuan bagi Orang Tua / Wali</h2>
+<p>Layanan penempatan dan penyaluran juga bertujuan membantu orang tua/wali dalam mendampingi putra-putrinya, yaitu:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Memahami Potensi Anak</strong><span>Orang tua memperoleh gambaran utuh mengenai minat, bakat, dan kemampuan anak berdasarkan hasil asesmen profesional.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Mendapat Pertimbangan Penempatan</strong><span>Orang tua mendapat pertimbangan profesional dalam mendampingi anak memilih kelas, ekskul, atau jalur studi lanjut.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Mendukung Pilihan Studi Lanjut</strong><span>Orang tua mendapat informasi dan arahan dalam mendampingi anak memilih SMA/SMK/MA yang sesuai.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Menjalin Komunikasi dengan Sekolah</strong><span>Terbangunnya komunikasi aktif dan sinergis antara orang tua dengan pihak sekolah terkait penempatan anak.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Ikut Memutuskan Penempatan</strong><span>Orang tua dilibatkan secara konstruktif dalam proses pengambilan keputusan penempatan dan penyaluran anak.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Menciptakan Dukungan di Rumah</strong><span>Orang tua mampu menciptakan suasana rumah yang mendukung perkembangan anak sesuai penempatan yang diterima.</span></div></div>
+</div>
+</section>
+<!-- BAGI GURU -->
+<section class="section" id="guru">
+<h2 class="section-title"><span class="icon">👩‍🏫</span> Tujuan bagi Guru dan Tenaga Kependidikan</h2>
+<p>Bagi guru mata pelajaran, wali kelas, dan tenaga kependidikan, layanan penempatan dan penyaluran bertujuan untuk:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Memperoleh Data Potensi Siswa</strong><span>Guru memperoleh data komprehensif tentang minat, bakat, dan kemampuan siswa untuk pendekatan pembelajaran yang tepat.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Menyesuaikan Metode Pembelajaran</strong><span>Guru dapat menyesuaikan metode pembelajaran dengan karakteristik kelas atau kelompok belajar yang ditanganinya.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Mendukung Pembinaan Ekstrakurikuler</strong><span>Guru pembina ekskul memperoleh data siswa yang sesuai untuk dibina sehingga pencapaian optimal.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Memperkuat Kerjasama Tim</strong><span>Terjalinnya kolaborasi yang baik antara wali kelas, guru mapel, dan guru BK dalam penempatan siswa.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Mendukung Pengambilan Keputusan</strong><span>Guru mendapat pertimbangan profesional terkait penempatan siswa di kelas atau rekomendasi lainnya.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Meningkatkan Efektivitas Pengajaran</strong><span>Penempatan siswa yang tepat membantu guru mengajar lebih efektif dan mencapai target pembelajaran.</span></div></div>
+</div>
+</section>
+<!-- BAGI SEKOLAH -->
+<section class="section" id="sekolah">
+<h2 class="section-title"><span class="icon">🏫</span> Tujuan bagi Sekolah</h2>
+<p>Secara institusional, layanan penempatan dan penyaluran di SMP Negeri 56 Jakarta bertujuan untuk:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Mewujudkan Sekolah Ramah Anak</strong><span>Menciptakan lingkungan sekolah yang mendukung perkembangan seluruh peserta didik sesuai potensinya.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Meningkatkan Mutu Pendidikan</strong><span>Berkontribusi pada peningkatan prestasi akademik dan non-akademik sekolah secara keseluruhan.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Mengoptimalkan Pemanfaatan Sumber Daya</strong><span>Menempatkan siswa secara tepat sehingga sarana dan prasarana sekolah termanfaatkan optimal.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Memperkuat Citra Sekolah</strong><span>Meningkatkan kepercayaan masyarakat terhadap kualitas layanan pendidikan di SMP Negeri 56 Jakarta.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Memenuhi Standar Nasional Pendidikan</strong><span>Menyelenggarakan layanan BK sesuai Permendikbud No. 111 Tahun 2014 dan regulasi terkait.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Menjalin Kemitraan Strategis</strong><span>Membangun kerjasama dengan SMA/SMK/MA, perguruan tinggi, dan dunia usaha untuk penyaluran siswa.</span></div></div>
+</div>
+</section>
+<!-- INDIKATOR KEBERHASILAN -->
+<section class="section" id="indikator">
+<h2 class="section-title"><span class="icon">📊</span> Indikator Keberhasilan Tujuan</h2>
+<p>Keberhasilan pencapaian tujuan layanan penempatan dan penyaluran di SMP Negeri 56 Jakarta dapat diukur melalui indikator berikut sesuai Standar Nasional Tingkat SMP:</p>
+<table>
+<thead>
+<tr><th>No</th><th>Indikator</th><th>Keterangan</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td><strong>Kesesuaian Penempatan</strong></td><td>Persentase siswa yang ditempatkan di kelas/kelompok belajar sesuai hasil asesmen minimal 90%.</td></tr>
+<tr><td>2</td><td><strong>Peningkatan Prestasi Belajar</strong></td><td>Kenaikan rata-rata nilai akademik siswa setelah penempatan yang tepat.</td></tr>
+<tr><td>3</td><td><strong>Partisipasi Ekstrakurikuler</strong></td><td>Persentase siswa yang aktif mengikuti ekskul sesuai minat dan bakat minimal 80%.</td></tr>
+<tr><td>4</td><td><strong>Kepuasan Siswa dan Orang Tua</strong></td><td>Umpan balik positif dari siswa dan orang tua terhadap proses penempatan dan penyaluran.</td></tr>
+<tr><td>5</td><td><strong>Penyaluran Studi Lanjut</strong></td><td>Persentase siswa kelas 9 yang tersalurkan ke SMA/SMK/MA sesuai pilihan minimal 95%.</td></tr>
+<tr><td>6</td><td><strong>Prestasi Kompetisi</strong></td><td>Jumlah siswa yang meraih prestasi di lomba/kompetisi akademik/non-akademik.</td></tr>
+<tr><td>7</td><td><strong>Dokumentasi Layanan Lengkap</strong></td><td>Seluruh proses penempatan dan penyaluran tercatat rapi dalam arsip BK.</td></tr>
+<tr><td>8</td><td><strong>Iklim Sekolah Kondusif</strong></td><td>Terwujudnya suasana belajar yang harmonis, disiplin, dan menyenangkan.</td></tr>
+</tbody>
+</table>
+</section>
+<!-- PENUTUP -->
+<section class="section">
+<div class="highlight-box">
+<strong>💡 Pesan Layanan BK:</strong><br>
+"Setiap peserta didik adalah unik dan memiliki potensi yang luar biasa. Tujuan layanan penempatan dan penyaluran adalah memastikan bahwa setiap potensi tersebut menemukan wadah yang tepat untuk berkembang. Kami berkomitmen mendampingi Anda menemukan posisi terbaik, menyalurkan bakat terbaik, dan mempersiapkan masa depan terbaik sesuai Standar Nasional Tingkat SMP."
+</div>
+</section>
+</div>
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+<p><strong>UNIT LAYANAN BIMBINGAN DAN KONSELING</strong></p>
+<p>SMP NEGERI 56 JAKARTA</p>
+<p>Jl. Jeruk Purut I, Cilandak Timur, Jakarta Selatan</p>
+<p class="motto">"Cerdas dalam Berpikir, Mulia dalam Bertindak"</p>
+<p style="margin-top: 10px; font-size: 12px; opacity: 0.8;">© 2026 SMP Negeri 56 Jakarta — Dokumen Resmi Tujuan Layanan Penempatan & Penyaluran Standar Nasional Tingkat SMP</p>
+</footer>
+</main>
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" aria-label="Kembali ke atas" title="Kembali ke atas">↑</button>
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+// 1. Sticky wrapper shadow saat scroll
+const stickyWrapper = document.getElementById('stickyWrapper');
+const backToTopBtn = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+if (window.scrollY > 10) {
+stickyWrapper.classList.add('scrolled');
+backToTopBtn.classList.add('show');
+} else {
+stickyWrapper.classList.remove('scrolled');
+backToTopBtn.classList.remove('show');
+}
+});
+// 2. LANGSUNG JUMP (tanpa smooth scroll) saat klik menu
+const navLinks = document.querySelectorAll('.nav-tabs a');
+navLinks.forEach(link => {
+link.addEventListener('click', function(e) {
+e.preventDefault();
+const targetId = this.getAttribute('href');
+const targetSection = document.querySelector(targetId);
+if (targetSection) {
+const stickyHeight = stickyWrapper.offsetHeight;
+const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - stickyHeight - 10;
+window.scrollTo({
+top: targetPosition
+});
+history.pushState(null, null, targetId);
+navLinks.forEach(l => l.classList.remove('active'));
+this.classList.add('active');
+}
+});
+});
+// 3. Highlight menu aktif saat scroll (tetap berjalan)
+const sections = document.querySelectorAll('.section[id]');
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+const id = entry.target.getAttribute('id');
+navLinks.forEach(link => {
+link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+});
+}
+});
+}, {
+rootMargin: '-150px 0px -70% 0px',
+threshold: 0
+});
+sections.forEach(section => observer.observe(section));
+if (navLinks.length > 0) navLinks[0].classList.add('active');
+// 4. Back to top (langsung jump ke atas)
+backToTopBtn.addEventListener('click', () => {
+window.scrollTo({ top: 0 });
+});
+// 5. Handle hash URL saat halaman dibuka (langsung jump)
+window.addEventListener('load', () => {
+if (window.location.hash) {
+const target = document.querySelector(window.location.hash);
+if (target) {
+setTimeout(() => {
+const stickyHeight = stickyWrapper.offsetHeight;
+const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - stickyHeight - 10;
+window.scrollTo({ top: targetPosition });
+}, 50);
+}
+}
+});
+</script>
+</body>
+</html>
