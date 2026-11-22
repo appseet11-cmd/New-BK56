@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tujuan Layanan Alih Tangan (Referral) BK - SMP Negeri 56 Jakarta</title>
+<meta name="description" content="Tujuan lengkap Layanan Alih Tangan (Referral) Bimbingan dan Konseling SMP Negeri 56 Jakarta.">
+<meta name="keywords" content="tujuan layanan alih tangan, referral BK, bimbingan konseling, BK SMP, SMP Negeri 56 Jakarta">
+<meta name="author" content="Unit BK SMP Negeri 56 Jakarta">
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Segoe UI', 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+}
+html {
+/* ✅ Dihapus scroll-behavior: smooth agar langsung jump */
+scroll-padding-top: 140px;
+}
+body {
+background: #f5f7fa;
+color: #333;
+line-height: 1.7;
+overflow-x: hidden;
+}
+/* ================= STICKY WRAPPER ================= */
+.sticky-wrapper {
+position: sticky;
+top: 0;
+z-index: 1000;
+background: #fff;
+box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+transition: box-shadow 0.3s ease;
+}
+.sticky-wrapper.scrolled {
+box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+}
+/* ================= HEADER COMPACT - HIJAU TOSKA ================= */
+.header {
+position: relative;
+background: linear-gradient(135deg, #004d40 0%, #00796b 40%, #009688 100%);
+color: #fff;
+padding: 25px 30px 55px;
+text-align: center;
+overflow: hidden;
+}
+.header::before {
+content: '';
+position: absolute;
+inset: 0;
+background: radial-gradient(circle at 20% 30%, rgba(128,203,196,0.25) 0%, transparent 50%),
+radial-gradient(circle at 80% 70%, rgba(77,208,225,0.20) 0%, transparent 50%);
+animation: floatBg 15s ease-in-out infinite alternate;
+}
+@keyframes floatBg {
+0%   { transform: translate(0, 0) scale(1); }
+100% { transform: translate(-30px, 20px) scale(1.1); }
+}
+.blob {
+position: absolute;
+border-radius: 50%;
+filter: blur(50px);
+opacity: 0.35;
+z-index: 0;
+}
+.blob-1 {
+width: 180px; height: 180px;
+background: #4dd0e1;
+top: -50px; left: -50px;
+animation: blobMove 12s ease-in-out infinite alternate;
+}
+.blob-2 {
+width: 150px; height: 150px;
+background: #80deea;
+bottom: -40px; right: -40px;
+animation: blobMove 10s ease-in-out infinite alternate-reverse;
+}
+@keyframes blobMove {
+0%   { transform: translate(0, 0); }
+100% { transform: translate(30px, -20px); }
+}
+.header-content {
+position: relative;
+z-index: 2;
+max-width: 1100px;
+margin: 0 auto;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 20px;
+flex-wrap: wrap;
+animation: fadeUp 0.9s ease-out;
+}
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(20px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+.logo-wrapper {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+.logo {
+width: 62px;
+height: 62px;
+background: linear-gradient(135deg, #80cbc4, #4db6ac);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 24px;
+color: #004d40;
+font-weight: 800;
+box-shadow: 0 6px 20px rgba(77,208,225,0.5), inset 0 0 12px rgba(255,255,255,0.3);
+position: relative;
+flex-shrink: 0;
+}
+/* Lingkaran bergerak */
+.logo::after {
+content: '';
+position: absolute;
+inset: -4px;
+border-radius: 50%;
+border: 2px dashed rgba(255,255,255,0.5);
+animation: spin 15s linear infinite;
+}
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+.header-text {
+text-align: left;
+}
+.header-text h1 {
+font-size: clamp(16px, 2.5vw, 22px);
+font-weight: 700;
+letter-spacing: 0.5px;
+line-height: 1.2;
+margin-bottom: 2px;
+}
+.header-text h2 {
+font-size: clamp(11px, 1.6vw, 13px);
+font-weight: 400;
+opacity: 0.92;
+letter-spacing: 0.3px;
+}
+.header-right {
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 5px;
+}
+.badge {
+display: inline-block;
+background: rgba(255,255,255,0.15);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+border: 1px solid rgba(255,255,255,0.25);
+padding: 4px 14px;
+border-radius: 20px;
+font-size: 11px;
+letter-spacing: 1px;
+text-transform: uppercase;
+}
+.tagline {
+font-size: 11px;
+font-style: italic;
+opacity: 0.85;
+font-weight: 300;
+}
+/* Wave divider - kurva indah */
+.wave-divider {
+position: absolute;
+bottom: -1px;
+left: 0;
+width: 100%;
+line-height: 0;
+z-index: 1;
+}
+.wave-divider svg {
+display: block;
+width: 100%;
+height: 40px;
+}
+/* ================= NAVIGATION ================= */
+.nav-tabs {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 4px;
+background: rgba(255,255,255,0.98);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+padding: 8px 15px;
+border-top: 1px solid #e0f2f1;
+transition: all 0.3s ease;
+}
+.nav-tabs a {
+padding: 7px 14px;
+text-decoration: none;
+color: #555;
+font-weight: 500;
+font-size: 13px;
+border-radius: 20px;
+transition: all 0.3s ease;
+white-space: nowrap;
+cursor: pointer;
+}
+.nav-tabs a:hover {
+color: #00796b;
+background: #e0f2f1;
+transform: translateY(-1px);
+}
+.nav-tabs a.active {
+color: #fff;
+background: linear-gradient(135deg, #00796b, #009688);
+box-shadow: 0 4px 12px rgba(0,121,107,0.3);
+}
+/* ================= CONTAINER ================= */
+.container {
+max-width: 1100px;
+margin: 0 auto;
+background: #fff;
+box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+overflow: hidden;
+}
+.content {
+padding: 40px 50px;
+}
+.section {
+margin-bottom: 45px;
+padding-bottom: 35px;
+border-bottom: 1px dashed #e0e0e0;
+scroll-margin-top: 150px;
+animation: fadeIn 0.6s ease-out;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(15px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+.section:last-of-type {
+border-bottom: none;
+margin-bottom: 0;
+}
+.section-title {
+color: #004d40;
+font-size: 22px;
+margin-bottom: 18px;
+padding-left: 18px;
+border-left: 5px solid #009688;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+.section-title .icon {
+font-size: 26px;
+}
+.section p {
+text-align: justify;
+margin-bottom: 15px;
+color: #444;
+font-size: 15px;
+}
+.highlight-box {
+background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+border-left: 5px solid #009688;
+padding: 20px 24px;
+border-radius: 10px;
+margin: 20px 0;
+box-shadow: 0 2px 10px rgba(0,150,136,0.15);
+}
+.highlight-box strong { color: #00796b; }
+/* LIST */
+.list-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 15px;
+margin-top: 18px;
+}
+.list-item {
+background: #f8f9fa;
+padding: 16px 18px;
+border-radius: 12px;
+border-left: 4px solid #00796b;
+transition: all 0.3s ease;
+display: flex;
+align-items: flex-start;
+gap: 12px;
+}
+.list-item:hover {
+transform: translateY(-3px);
+box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+background: #e0f2f1;
+border-left-color: #009688;
+}
+.list-item .num {
+background: linear-gradient(135deg, #00796b, #009688);
+color: #fff;
+width: 28px; height: 28px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+font-size: 12px;
+flex-shrink: 0;
+}
+.list-item .text strong {
+color: #004d40;
+display: block;
+margin-bottom: 4px;
+font-size: 14px;
+}
+.list-item .text span {
+font-size: 13px;
+color: #666;
+}
+/* STEPS */
+.steps {
+counter-reset: step;
+margin-top: 20px;
+}
+.step {
+position: relative;
+padding: 18px 20px 18px 70px;
+margin-bottom: 12px;
+background: #fff;
+border: 2px solid #e0f2f1;
+border-radius: 12px;
+transition: all 0.3s ease;
+}
+.step:hover {
+border-color: #009688;
+box-shadow: 0 6px 18px rgba(0,150,136,0.15);
+transform: translateX(5px);
+}
+.step::before {
+counter-increment: step;
+content: counter(step);
+position: absolute;
+left: 18px;
+top: 50%;
+transform: translateY(-50%);
+width: 36px; height: 36px;
+background: linear-gradient(135deg, #00796b, #009688);
+color: #fff;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+font-size: 15px;
+box-shadow: 0 3px 10px rgba(0,121,107,0.3);
+}
+.step strong {
+color: #004d40;
+display: block;
+margin-bottom: 4px;
+font-size: 14px;
+}
+.step span { color: #555; font-size: 13.5px; }
+/* TABLE */
+table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 18px;
+background: #fff;
+border-radius: 10px;
+overflow: hidden;
+box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+table thead {
+background: linear-gradient(135deg, #00796b, #009688);
+color: #fff;
+}
+table th, table td {
+padding: 12px 15px;
+text-align: left;
+border-bottom: 1px solid #eee;
+font-size: 14px;
+}
+table tbody tr:hover { background: #e0f2f1; }
+/* BACK TO TOP */
+.back-to-top {
+position: fixed;
+bottom: 25px;
+right: 25px;
+width: 46px;
+height: 46px;
+background: linear-gradient(135deg, #00796b, #009688);
+color: #fff;
+border: none;
+border-radius: 50%;
+cursor: pointer;
+font-size: 20px;
+box-shadow: 0 4px 15px rgba(0,121,107,0.4);
+opacity: 0;
+visibility: hidden;
+transform: translateY(20px);
+transition: all 0.3s ease;
+z-index: 999;
+}
+.back-to-top.show {
+opacity: 1;
+visibility: visible;
+transform: translateY(0);
+}
+.back-to-top:hover {
+background: linear-gradient(135deg, #4db6ac, #80cbc4);
+color: #004d40;
+transform: translateY(-3px);
+}
+/* FOOTER */
+.footer {
+background: linear-gradient(135deg, #004d40, #00796b);
+color: #fff;
+padding: 25px 30px;
+text-align: center;
+}
+.footer p { margin: 5px 0; font-size: 14px; }
+.footer .motto {
+font-style: italic;
+color: #80cbc4;
+margin-top: 10px;
+}
+/* RESPONSIVE */
+@media (max-width: 768px) {
+html { scroll-padding-top: 130px; }
+.header { padding: 18px 20px 45px; }
+.header-content { justify-content: center; text-align: center; }
+.logo { width: 52px; height: 52px; font-size: 20px; }
+.header-right { align-items: center; }
+.content { padding: 25px 20px; }
+.nav-tabs a { padding: 6px 11px; font-size: 12px; }
+.section-title { font-size: 18px; }
+.step { padding-left: 60px; }
+.section { scroll-margin-top: 140px; }
+.wave-divider svg { height: 30px; }
+}
+@media print {
+body { background: #fff; }
+.sticky-wrapper { position: static; box-shadow: none; }
+.nav-tabs { display: none; }
+.back-to-top { display: none; }
+.container { box-shadow: none; }
+.header { background: #00796b !important; }
+}
+</style>
+</head>
+<body>
+<!-- ================= STICKY WRAPPER ================= -->
+<div class="sticky-wrapper" id="stickyWrapper">
+<!-- HEADER COMPACT - HIJAU TOSKA -->
+<header class="header" role="banner">
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="header-content">
+<div class="logo-wrapper">
+<div class="logo" aria-label="Logo SMP Negeri 56 Jakarta">56</div>
+<div class="header-text">
+<h1>SMP NEGERI 56 JAKARTA</h1>
+<h2>Unit Layanan Bimbingan dan Konseling</h2>
+</div>
+</div>
+<div class="header-right">
+<div class="badge">🔗 Tujuan Layanan Alih Tangan (Referral) Tingkat SMP</div>
+<p class="tagline">"Mewujudkan Peserta Didik yang Sehat, Cerdas, dan Berkarakter"</p>
+</div>
+</div>
+<!-- Wave divider kurva indah -->
+<div class="wave-divider" aria-hidden="true">
+<svg viewBox="0 0 1440 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0,15 C180,35 360,0 540,18 C720,36 900,0 1080,18 C1260,36 1380,10 1440,15 L1440,40 L0,40 Z"
+fill="#ffffff" opacity="0.5"/>
+<path d="M0,22 C240,40 480,5 720,22 C960,39 1200,5 1440,22 L1440,40 L0,40 Z"
+fill="#ffffff"/>
+</svg>
+</div>
+</header>
+<!-- NAVIGATION -->
+<nav class="nav-tabs" id="navTabs" role="navigation" aria-label="Menu navigasi">
+<a href="#pengertian">Pengertian</a>
+<a href="#umum">Tujuan Umum</a>
+<a href="#khusus">Tujuan Khusus</a>
+<a href="#siswa">Bagi Peserta Didik</a>
+<a href="#ortu">Bagi Orang Tua</a>
+<a href="#guru">Bagi Guru</a>
+<a href="#sekolah">Bagi Sekolah</a>
+<a href="#indikator">Indikator</a>
+</nav>
+</div>
+<!-- ================= MAIN CONTENT ================= -->
+<main class="container">
+<div class="content">
+<!-- PENGERTIAN -->
+<section class="section" id="pengertian">
+<h2 class="section-title"><span class="icon">📖</span> Pengertian Tujuan Layanan Alih Tangan (Referral)</h2>
+<p>
+<strong>Tujuan Layanan Alih Tangan (Referral)</strong> merupakan arah dan sasaran yang ingin dicapai melalui pelaksanaan layanan alih tangan dalam program Bimbingan dan Konseling di sekolah. Tujuan ini menjadi pedoman bagi guru BK dalam merancang, melaksanakan, dan mengevaluasi proses rujukan agar berjalan efektif, terarah, profesional, dan berdampak positif bagi peserta didik.
+</p>
+<p>
+Secara umum, tujuan layanan alih tangan di <strong>SMP Negeri 56 Jakarta</strong> adalah memastikan setiap peserta didik yang memiliki permasalahan di luar kompetensi konselor sekolah mendapatkan penanganan lanjutan dari pihak ahli yang lebih kompeten — seperti psikolog, psikiater, dokter, atau lembaga layanan khusus — sehingga tercipta proses pemulihan dan perkembangan yang optimal bagi peserta didik.
+</p>
+<div class="highlight-box">
+<strong>📌 Inti Tujuan:</strong><br>
+Tujuan Layanan Alih Tangan adalah menjamin peserta didik memperoleh penanganan profesional yang tepat, akurat, dan bertanggung jawab dari ahli yang kompeten, sekaligus memperkuat kolaborasi antara sekolah, keluarga, dan pihak profesional demi kepentingan terbaik peserta didik.
+</div>
+</section>
+<!-- TUJUAN UMUM -->
+<section class="section" id="umum">
+<h2 class="section-title"><span class="icon">🌐</span> Tujuan Umum Layanan Alih Tangan</h2>
+<p>Tujuan umum layanan alih tangan di SMP Negeri 56 Jakarta meliputi hal-hal berikut:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Menjamin Penanganan yang Tepat</strong><span>Memastikan peserta didik mendapatkan penanganan dari ahli yang kompeten sesuai dengan bidangnya.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Mencegah Penanganan yang Keliru</strong><span>Menghindari penanganan yang tidak tepat yang dapat memperburuk kondisi peserta didik.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Mempercepat Proses Pemulihan</strong><span>Membantu peserta didik pulih lebih cepat melalui intervensi profesional yang sesuai kebutuhan.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Memperoleh Diagnosa Profesional</strong><span>Memastikan peserta didik mendapatkan asesmen dan diagnosa yang akurat dari tenaga berlisensi.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Memperkuat Jejaring Kolaborasi</strong><span>Membangun kerjasama sinergis antara sekolah, orang tua, dan pihak profesional eksternal.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Melindungi Hak Peserta Didik</strong><span>Menjamin setiap peserta didik memperoleh layanan terbaik sesuai kebutuhan khususnya.</span></div></div>
+</div>
+</section>
+<!-- TUJUAN KHUSUS -->
+<section class="section" id="khusus">
+<h2 class="section-title"><span class="icon">🎯</span> Tujuan Khusus Layanan Alih Tangan</h2>
+<p>Selain tujuan umum, layanan alih tangan di SMP Negeri 56 Jakarta juga memiliki tujuan khusus sebagai berikut:</p>
+<div class="steps">
+<div class="step"><strong>Mengidentifikasi Kebutuhan Rujukan</strong><span>Mengenali permasalahan peserta didik yang berada di luar batas kompetensi konselor sekolah.</span></div>
+<div class="step"><strong>Memilih Pihak Ahli yang Kompeten</strong><span>Menentukan psikolog, psikiater, dokter, atau lembaga profesional yang sesuai dengan kasus.</span></div>
+<div class="step"><strong>Memperoleh Persetujuan Orang Tua</strong><span>Menjalin kesepakatan dengan orang tua/wali sebelum proses rujukan dilaksanakan.</span></div>
+<div class="step"><strong>Menyusun Surat Rujukan Resmi</strong><span>Membuat dokumen referral yang berisi ringkasan kasus dan tujuan rujukan secara profesional.</span></div>
+<div class="step"><strong>Mendampingi Proses Awal Rujukan</strong><span>Memberikan pendampingan psikologis kepada peserta didik dan orang tua selama proses alih tangan.</span></div>
+<div class="step"><strong>Monitoring dan Evaluasi Berkala</strong><span>Memantau perkembangan peserta didik setelah dirujuk dan berkoordinasi dengan pihak ahli.</span></div>
+<div class="step"><strong>Mendokumentasikan Seluruh Proses</strong><span>Mencatat seluruh proses referral sebagai bahan evaluasi dan pengembangan program BK.</span></div>
+</div>
+</section>
+<!-- BAGI PESERTA DIDIK -->
+<section class="section" id="siswa">
+<h2 class="section-title"><span class="icon">🎓</span> Tujuan bagi Peserta Didik</h2>
+<p>Layanan alih tangan ditujukan untuk memberikan manfaat langsung bagi peserta didik SMP Negeri 56 Jakarta, antara lain:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Memperoleh Penanganan Profesional</strong><span>Siswa mendapatkan intervensi dari ahli yang kompeten sesuai permasalahan yang dihadapi.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Mendapatkan Diagnosa yang Akurat</strong><span>Siswa memperoleh asesmen profesional sehingga penanganan lebih tepat sasaran.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Mempercepat Pemulihan Kondisi</strong><span>Siswa dapat pulih lebih cepat dari permasalahan psikologis, emosional, atau perilaku.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Meningkatkan Kualitas Belajar</strong><span>Kondisi mental dan emosional yang membaik mendukung prestasi akademik siswa.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Mendapatkan Perlindungan Hak</strong><span>Siswa terlindungi dari penanganan yang keliru dan mendapatkan layanan terbaik.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Membangun Kepercayaan Diri</strong><span>Siswa merasa didukung dan dihargai sehingga tumbuh rasa percaya diri yang sehat.</span></div></div>
+</div>
+</section>
+<!-- BAGI ORANG TUA -->
+<section class="section" id="ortu">
+<h2 class="section-title"><span class="icon">👨‍👩‍👧</span> Tujuan bagi Orang Tua / Wali</h2>
+<p>Layanan alih tangan juga bertujuan membantu orang tua/wali dalam mendampingi putra-putrinya, yaitu:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Memahami Kondisi Anak secara Utuh</strong><span>Orang tua memperoleh gambaran profesional mengenai kondisi dan kebutuhan khusus anak.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Mendapatkan Akses ke Ahli</strong><span>Orang tua diarahkan ke psikolog, psikiater, atau lembaga profesional yang terpercaya.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Mendapat Panduan Pengasuhan</strong><span>Orang tua menerima arahan profesional tentang pola asuh yang sesuai dengan kondisi anak.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Terlibat Aktif dalam Penanganan</strong><span>Orang tua dilibatkan secara konstruktif dalam proses pemulihan dan pendampingan anak.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Menjalin Kemitraan dengan Sekolah</strong><span>Terbangunnya komunikasi aktif dan sinergis antara orang tua, sekolah, dan pihak ahli.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Menciptakan Rumah yang Kondusif</strong><span>Orang tua mampu menciptakan suasana rumah yang mendukung pemulihan anak secara optimal.</span></div></div>
+</div>
+</section>
+<!-- BAGI GURU -->
+<section class="section" id="guru">
+<h2 class="section-title"><span class="icon">👩‍🏫</span> Tujuan bagi Guru dan Tenaga Kependidikan</h2>
+<p>Bagi guru mata pelajaran, wali kelas, dan tenaga kependidikan, layanan alih tangan bertujuan untuk:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Memperoleh Informasi Profesional</strong><span>Guru mendapat gambaran utuh mengenai kondisi siswa berdasarkan diagnosa ahli.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Menyesuaikan Pendidikan di Kelas</strong><span>Guru dapat menyesuaikan metode pembelajaran dengan kebutuhan khusus siswa.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Mendapat Panduan Penanganan</strong><span>Guru memperoleh arahan profesional dalam mendampingi siswa selama proses pemulihan.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Memperkuat Kolaborasi Tim</strong><span>Terjalinnya kerjasama yang baik antara guru, konselor, dan pihak ahli eksternal.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Mendukung Pengambilan Keputusan</strong><span>Guru mendapat pertimbangan profesional terkait penyesuaian akademik siswa.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Meningkatkan Kompetensi Pedagogik</strong><span>Guru memperoleh wawasan baru dalam menangani siswa dengan kebutuhan khusus.</span></div></div>
+</div>
+</section>
+<!-- BAGI SEKOLAH -->
+<section class="section" id="sekolah">
+<h2 class="section-title"><span class="icon">🏫</span> Tujuan bagi Sekolah</h2>
+<p>Secara institusional, layanan alih tangan di SMP Negeri 56 Jakarta bertujuan untuk:</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Mewujudkan Sekolah Ramah Anak</strong><span>Menciptakan lingkungan sekolah yang aman, inklusif, dan mendukung seluruh peserta didik.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Meningkatkan Mutu Layanan BK</strong><span>Menjamin layanan BK berjalan profesional sesuai standar nasional dan kode etik.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Membangun Budaya Peduli</strong><span>Menanamkan nilai kepedulian, empati, dan tanggung jawab dalam budaya sekolah.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Memperkuat Citra Sekolah</strong><span>Meningkatkan kepercayaan masyarakat terhadap kualitas layanan pendidikan di sekolah.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Memenuhi Standar Nasional Pendidikan</strong><span>Menyelenggarakan layanan BK sesuai Permendikbud No. 111 Tahun 2014 dan regulasi terkait.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Menjalin Kemitraan Strategis</strong><span>Membangun kerjasama dengan psikolog, puskesmas, rumah sakit, dan lembaga profesional lainnya.</span></div></div>
+</div>
+</section>
+<!-- INDIKATOR KEBERHASILAN -->
+<section class="section" id="indikator">
+<h2 class="section-title"><span class="icon">📊</span> Indikator Keberhasilan Tujuan</h2>
+<p>Keberhasilan pencapaian tujuan layanan alih tangan di SMP Negeri 56 Jakarta dapat diukur melalui indikator berikut:</p>
+<table>
+<thead>
+<tr><th>No</th><th>Indikator</th><th>Keterangan</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td><strong>Penanganan Tepat Sasaran</strong></td><td>Peserta didik dirujuk ke ahli yang sesuai dengan jenis permasalahannya.</td></tr>
+<tr><td>2</td><td><strong>Pemulihan Kondisi Peserta Didik</strong></td><td>Adanya perkembangan positif kondisi psikologis/emosional siswa setelah rujukan.</td></tr>
+<tr><td>3</td><td><strong>Kepuasan Orang Tua</strong></td><td>Umpan balik positif dari orang tua terhadap proses dan hasil alih tangan.</td></tr>
+<tr><td>4</td><td><strong>Dokumentasi Layanan Lengkap</strong></td><td>Seluruh proses referral tercatat rapi dalam buku catatan konselor.</td></tr>
+<tr><td>5</td><td><strong>Monitoring Berkala Terpenuhi</strong></td><td>Dilakukan pemantauan dan evaluasi rutin atas tindak lanjut rujukan.</td></tr>
+<tr><td>6</td><td><strong>Jejaring Mitra Aktif</strong></td><td>Terjalinnya kerjasama berkelanjutan dengan psikolog, dokter, dan lembaga profesional.</td></tr>
+<tr><td>7</td><td><strong>Penurunan Kasus Berulang</strong></td><td>Berkurangnya kasus yang memerlukan rujukan berulang pada siswa yang sama.</td></tr>
+<tr><td>8</td><td><strong>Iklim Sekolah Kondusif</strong></td><td>Terwujudnya suasana belajar yang aman, harmonis, dan mendukung pemulihan siswa.</td></tr>
+</tbody>
+</table>
+</section>
+<!-- PENUTUP -->
+<section class="section">
+<div class="highlight-box">
+<strong>💡 Pesan Layanan BK:</strong><br>
+"Tujuan bukan sekadar kata-kata di atas kertas, melainkan komitmen nyata kami untuk mendampingi setiap peserta didik SMP Negeri 56 Jakarta. Ketika kami menyadari suatu masalah memerlukan keahlian yang lebih mendalam, kami dengan penuh tanggung jawab akan mengalih-tangankan kepada pihak yang lebih kompeten — demi kebaikan terbaik bagi peserta didik."
+</div>
+</section>
+</div>
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+<p><strong>UNIT LAYANAN BIMBINGAN DAN KONSELING</strong></p>
+<p>SMP NEGERI 56 JAKARTA</p>
+<p>Jl. Jeruk Purut I, Cilandak Timur, Jakarta Selatan</p>
+<p class="motto">"Cerdas dalam Berpikir, Mulia dalam Bertindak"</p>
+<p style="margin-top: 10px; font-size: 12px; opacity: 0.8;">© 2026 SMP Negeri 56 Jakarta — Dokumen Resmi Tujuan Layanan Alih Tangan (Referral)</p>
+</footer>
+</main>
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" aria-label="Kembali ke atas" title="Kembali ke atas">↑</button>
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+// 1. Sticky wrapper shadow saat scroll
+const stickyWrapper = document.getElementById('stickyWrapper');
+const backToTopBtn = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+if (window.scrollY > 10) {
+stickyWrapper.classList.add('scrolled');
+backToTopBtn.classList.add('show');
+} else {
+stickyWrapper.classList.remove('scrolled');
+backToTopBtn.classList.remove('show');
+}
+});
+// 2. ✅ LANGSUNG JUMP (tanpa smooth scroll) saat klik menu
+const navLinks = document.querySelectorAll('.nav-tabs a');
+navLinks.forEach(link => {
+link.addEventListener('click', function(e) {
+e.preventDefault();
+const targetId = this.getAttribute('href');
+const targetSection = document.querySelector(targetId);
+if (targetSection) {
+// Hitung posisi target dengan offset sticky header
+const stickyHeight = stickyWrapper.offsetHeight;
+const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - stickyHeight - 10;
+// ✅ LANGSUNG JUMP (tanpa behavior: 'smooth')
+window.scrollTo({
+top: targetPosition,
+// behavior tidak diset → default 'auto' = instant jump
+});
+// Update URL hash tanpa reload
+history.pushState(null, null, targetId);
+// ✅ Force highlight menu yang diklik
+navLinks.forEach(l => l.classList.remove('active'));
+this.classList.add('active');
+}
+});
+});
+// 3. Highlight menu aktif saat scroll (tetap berjalan)
+const sections = document.querySelectorAll('.section[id]');
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+const id = entry.target.getAttribute('id');
+navLinks.forEach(link => {
+link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+});
+}
+});
+}, {
+rootMargin: '-150px 0px -70% 0px',
+threshold: 0
+});
+sections.forEach(section => observer.observe(section));
+if (navLinks.length > 0) navLinks[0].classList.add('active');
+// 4. Back to top (langsung jump ke atas)
+backToTopBtn.addEventListener('click', () => {
+window.scrollTo({ top: 0 });
+});
+// 5. Handle hash URL saat halaman dibuka (langsung jump)
+window.addEventListener('load', () => {
+if (window.location.hash) {
+const target = document.querySelector(window.location.hash);
+if (target) {
+setTimeout(() => {
+const stickyHeight = stickyWrapper.offsetHeight;
+const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - stickyHeight - 10;
+window.scrollTo({ top: targetPosition });
+}, 50);
+}
+}
+});
+</script>
+</body>
+</html>
