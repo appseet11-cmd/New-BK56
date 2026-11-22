@@ -13689,135 +13689,222 @@ if (document.readyState === 'loading') {
 <!-- ========== PATCH: ALL LINKS → TARGET _self + CROSS-DEVICE [END] ========== -->
 <!-- ================================================================ -->
  <!-- ================================================================ -->
-<!-- ========== PATCH FINAL: UNIVERSAL VIDEO PLAYER (CROSS-DEVICE) ========== -->
 <!-- ================================================================ -->
-<style>
-/* ===== UNIVERSAL VIDEO PLAYER MODAL ===== */
+<!-- ========== PATCH FINAL v2: UNIVERSAL VIDEO PLAYER (ALL DEVICES) ========== -->
+<!-- ========== Compatible: iOS Safari, Android, Desktop, Tablet ========== -->
+<!-- ================================================================ -->
+<style id="bk56-uvp-style">
+/* ===== UNIVERSAL VIDEO PLAYER MODAL — ALL DEVICES ===== */
 #bk56-universal-player{
 position:fixed;inset:0;
-background:rgba(0,0,0,.95);
+background:rgba(0,0,0,.97);
 backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
 display:none;align-items:center;justify-content:center;
-z-index:100020;padding:20px;
-flex-direction:column;gap:12px;
+z-index:100020;padding:0;
+flex-direction:column;gap:0;
 }
 #bk56-universal-player.show{display:flex}
+
+/* ===== HEADER ===== */
 .bk56-up-header{
-width:100%;max-width:1100px;
+width:100%;max-width:100%;
 display:flex;justify-content:space-between;align-items:center;
-gap:12px;flex-wrap:wrap;
+gap:10px;flex-wrap:wrap;
+padding:10px 14px;
+background:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,.6));
+border-bottom:1px solid rgba(255,255,255,.08);
+flex-shrink:0;
 }
 .bk56-up-title{
 color:#fff;font-family:'Space Grotesk',sans-serif;
-font-size:1rem;font-weight:700;
-display:flex;align-items:center;gap:10px;
+font-size:.92rem;font-weight:700;
+display:flex;align-items:center;gap:8px;
 flex:1;min-width:0;
 }
 .bk56-up-title .up-type-badge{
 background:rgba(168,85,247,.3);color:#e9d5ff;
-padding:4px 10px;border-radius:100px;
-font-size:.72rem;font-weight:700;
+padding:3px 9px;border-radius:100px;
+font-size:.7rem;font-weight:700;
 border:1px solid rgba(168,85,247,.5);
 white-space:nowrap;
 }
-.bk56-up-actions{display:flex;gap:8px;flex-wrap:wrap}
+.bk56-up-actions{display:flex;gap:6px;flex-wrap:wrap}
 .bk56-up-btn{
-background:rgba(255,255,255,.15);
+background:rgba(255,255,255,.12);
 backdrop-filter:blur(10px);
-color:#fff;border:1px solid rgba(255,255,255,.25);
-padding:8px 14px;border-radius:10px;
-font-size:.82rem;font-weight:700;
+color:#fff;border:1px solid rgba(255,255,255,.2);
+padding:7px 12px;border-radius:8px;
+font-size:.78rem;font-weight:700;
 cursor:pointer;transition:all .2s ease;
 font-family:inherit;
-display:inline-flex;align-items:center;gap:6px;
+display:inline-flex;align-items:center;gap:5px;
 text-decoration:none;
 }
-.bk56-up-btn:hover{background:rgba(255,255,255,.25);transform:translateY(-1px)}
+.bk56-up-btn:hover{background:rgba(255,255,255,.22);transform:translateY(-1px)}
 .bk56-up-btn.primary{background:linear-gradient(135deg,#a855f7,#7c3aed);border-color:#a855f7}
 .bk56-up-btn.danger{background:linear-gradient(135deg,#ef4444,#dc2626);border-color:#ef4444}
+
+/* ===== FRAME WRAP — ISI PENUH LAYAR ===== */
 .bk56-up-frame-wrap{
-width:100%;max-width:1100px;
-aspect-ratio:16/9;
-background:#000;border-radius:16px;
+flex:1;
+width:100%;
+background:#000;
 overflow:hidden;position:relative;
-box-shadow:0 30px 70px rgba(0,0,0,.6);
-border:2px solid rgba(255,255,255,.1);
+display:flex;align-items:center;justify-content:center;
 }
 .bk56-up-frame-wrap iframe,
-.bk56-up-frame-wrap video{
-width:100%;height:100%;border:0;display:block;background:#000;
+.bk56-up-frame-wrap video,
+.bk56-up-frame-wrap .bk56-up-native-fallback{
+width:100%;height:100%;
+border:0;display:block;background:#000;
 }
-/* Loading */
+/* Video tag — object-fit contain agar tidak terpotong */
+.bk56-up-frame-wrap video{
+object-fit:contain;
+background:#000;
+}
+/* Iframe — biarkan konten mengatur sendiri */
+.bk56-up-frame-wrap iframe{
+border:0;
+}
+
+/* ===== LOADING ===== */
 .bk56-up-loading{
 position:absolute;inset:0;
 display:flex;align-items:center;justify-content:center;
 flex-direction:column;gap:12px;
-background:rgba(0,0,0,.7);color:#fff;
+background:rgba(0,0,0,.85);color:#fff;
 z-index:2;
 }
 .bk56-up-spinner{
-width:48px;height:48px;
+width:44px;height:44px;
 border:4px solid rgba(255,255,255,.2);
 border-top-color:#a855f7;
 border-radius:50%;
 animation:bk56up-spin 1s linear infinite;
 }
 @keyframes bk56up-spin{to{transform:rotate(360deg)}}
-/* Error State */
+
+/* ===== ERROR STATE ===== */
 .bk56-up-error{
 position:absolute;inset:0;
 display:none;align-items:center;justify-content:center;
-flex-direction:column;gap:14px;
+flex-direction:column;gap:12px;
 background:linear-gradient(135deg,#1e1b4b,#312e81);
-color:#fff;padding:24px;text-align:center;
-z-index:3;
+color:#fff;padding:20px;text-align:center;
+z-index:3;overflow-y:auto;
 }
 .bk56-up-error.show{display:flex}
-.bk56-up-error-icon{font-size:3.5rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,.4))}
+.bk56-up-error-icon{font-size:3rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,.4))}
 .bk56-up-error-title{
 font-family:'Space Grotesk',sans-serif;
-font-size:1.1rem;font-weight:700;
+font-size:1rem;font-weight:700;
 }
 .bk56-up-error-msg{
-font-size:.85rem;opacity:.85;
+font-size:.82rem;opacity:.9;
 max-width:500px;line-height:1.5;
 }
 .bk56-up-error-tips{
 background:rgba(255,255,255,.08);
 border:1px solid rgba(255,255,255,.15);
-border-radius:12px;padding:14px 18px;
+border-radius:10px;padding:12px 16px;
 text-align:left;max-width:500px;width:100%;
-font-size:.82rem;line-height:1.6;
+font-size:.78rem;line-height:1.6;
 }
 .bk56-up-error-tips strong{color:#fbbf24}
 .bk56-up-error-tips ol{margin:6px 0 0 18px}
 .bk56-up-error-tips ol li{margin-bottom:4px}
 .bk56-up-error-actions{
-display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
-margin-top:6px;
+display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
+margin-top:4px;
 }
-/* Info Bar */
+
+/* ===== INFO BAR ===== */
 .bk56-up-info{
-width:100%;max-width:1100px;
-background:rgba(255,255,255,.08);
-backdrop-filter:blur(10px);
-border:1px solid rgba(255,255,255,.15);
-border-radius:12px;padding:10px 16px;
-color:rgba(255,255,255,.9);
-font-size:.78rem;
-display:flex;align-items:center;gap:10px;
-flex-wrap:wrap;
+width:100%;max-width:100%;
+background:rgba(0,0,0,.7);
+border-top:1px solid rgba(255,255,255,.08);
+padding:8px 14px;
+color:rgba(255,255,255,.85);
+font-size:.72rem;
+display:flex;align-items:center;gap:8px;
+flex-wrap:wrap;flex-shrink:0;
 }
 .bk56-up-info .info-url{
 font-family:Consolas,Monaco,monospace;
 word-break:break-all;opacity:.75;
 flex:1;min-width:0;
 }
-@media (max-width:768px){
-.bk56-up-header{flex-direction:column;align-items:stretch}
-.bk56-up-actions{justify-content:center}
-.bk56-up-title{justify-content:center;text-align:center}
-.bk56-up-info{flex-direction:column;text-align:center}
+
+/* ===== NATIVE FALLBACK (untuk video yang tidak bisa di-embed) ===== */
+.bk56-up-native-fallback{
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+gap:16px;padding:30px;text-align:center;color:#fff;
+background:linear-gradient(135deg,#1e1b4b,#312e81);
+width:100%;height:100%;
+}
+.bk56-up-native-fallback .nf-icon{font-size:4rem}
+.bk56-up-native-fallback .nf-title{font-size:1.1rem;font-weight:700}
+.bk56-up-native-fallback .nf-desc{font-size:.85rem;opacity:.85;max-width:400px;line-height:1.5}
+.bk56-up-native-fallback .nf-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* ===== FULLSCREEN MODE ===== */
+#bk56-universal-player.bk56-fs-active{
+padding:0 !important;background:#000 !important;
+}
+#bk56-universal-player.bk56-fs-active .bk56-up-header,
+#bk56-universal-player.bk56-fs-active .bk56-up-info{
+display:none !important;
+}
+
+/* ===== RESPONSIVE: HP PORTRAIT (< 640px) ===== */
+@media (max-width: 639px) {
+.bk56-up-header{padding:8px 10px;gap:6px}
+.bk56-up-title{font-size:.82rem;gap:6px}
+.bk56-up-title .up-type-badge{font-size:.65rem;padding:2px 7px}
+.bk56-up-btn{padding:6px 10px;font-size:.72rem}
+.bk56-up-actions{gap:4px}
+.bk56-up-info{padding:6px 10px;font-size:.68rem}
+.bk56-up-error{padding:16px;gap:10px}
+.bk56-up-error-icon{font-size:2.5rem}
+.bk56-up-error-title{font-size:.92rem}
+.bk56-up-error-msg{font-size:.78rem}
+.bk56-up-error-tips{font-size:.72rem;padding:10px 12px}
+}
+
+/* ===== RESPONSIVE: HP LANDSCAPE / TABLET KECIL (640-1024px) ===== */
+@media (min-width: 640px) and (max-width: 1023px) {
+.bk56-up-header{padding:10px 16px}
+.bk56-up-title{font-size:.9rem}
+}
+
+/* ===== RESPONSIVE: TABLET BESAR / LAPTOP (1024px+) ===== */
+@media (min-width: 1024px) {
+.bk56-up-header{padding:12px 20px;max-width:1400px;margin:0 auto}
+.bk56-up-info{max-width:1400px;margin:0 auto}
+.bk56-up-frame-wrap{max-width:1400px;margin:0 auto}
+}
+
+/* ===== SAFE AREA (notch iPhone) ===== */
+@supports (padding: max(0px)) {
+.bk56-up-header{
+padding-top:max(10px, env(safe-area-inset-top));
+padding-left:max(14px, env(safe-area-inset-left));
+padding-right:max(14px, env(safe-area-inset-right));
+}
+.bk56-up-info{
+padding-bottom:max(8px, env(safe-area-inset-bottom));
+}
+}
+
+/* ===== DARK MODE OPTIMIZATION ===== */
+@media (prefers-color-scheme: dark) {
+.bk56-up-error-tips{background:rgba(255,255,255,.05)}
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+.bk56-up-spinner{animation:none;border-top-color:#a855f7}
 }
 </style>
 
@@ -13831,11 +13918,17 @@ flex:1;min-width:0;
 </div>
 <div class="bk56-up-actions">
 <a href="#" id="bk56-up-open-new" class="bk56-up-btn" target="_blank" rel="noopener noreferrer">
-↗️ Buka di Tab Baru
+↗️ Tab Baru
+</a>
+<a href="#" id="bk56-up-open-native" class="bk56-up-btn primary" style="display:none;">
+📱 Buka di App
 </a>
 <a href="#" id="bk56-up-download" class="bk56-up-btn primary" download style="display:none;">
 ⬇️ Download
 </a>
+<button class="bk56-up-btn" onclick="bk56RetryUniversalPlayer()" title="Coba putar ulang">
+🔄 Retry
+</button>
 <button class="bk56-up-btn danger" onclick="bk56CloseUniversalPlayer()">
 ✖ Tutup
 </button>
@@ -13844,14 +13937,13 @@ flex:1;min-width:0;
 <div class="bk56-up-frame-wrap" id="bk56-up-frame-wrap">
 <div class="bk56-up-loading" id="bk56-up-loading">
 <div class="bk56-up-spinner"></div>
-<div style="font-size:.85rem;font-weight:600;">Memuat video...</div>
+<div style="font-size:.82rem;font-weight:600;">Memuat video...</div>
+<div style="font-size:.72rem;opacity:.7;margin-top:4px;" id="bk56-up-loading-hint">Sedang menyiapkan player...</div>
 </div>
 <div class="bk56-up-error" id="bk56-up-error">
 <div class="bk56-up-error-icon">⚠️</div>
 <div class="bk56-up-error-title" id="bk56-up-error-title">Video Tidak Bisa Diputar</div>
-<div class="bk56-up-error-msg" id="bk56-up-error-msg">
-Terjadi masalah saat memuat video ini.
-</div>
+<div class="bk56-up-error-msg" id="bk56-up-error-msg">Terjadi masalah saat memuat video ini.</div>
 <div class="bk56-up-error-tips" id="bk56-up-error-tips" style="display:none;">
 <strong>💡 Solusi:</strong>
 <ol id="bk56-up-error-tips-list"></ol>
@@ -13859,6 +13951,9 @@ Terjadi masalah saat memuat video ini.
 <div class="bk56-up-error-actions">
 <a href="#" id="bk56-up-error-open" class="bk56-up-btn primary" target="_blank" rel="noopener noreferrer">
 ↗️ Buka di Tab Baru
+</a>
+<a href="#" id="bk56-up-error-native" class="bk56-up-btn" style="display:none;">
+📱 Buka di Aplikasi
 </a>
 <button class="bk56-up-btn" onclick="bk56RetryUniversalPlayer()">
 🔄 Coba Lagi
@@ -13877,132 +13972,234 @@ Terjadi masalah saat memuat video ini.
 (function(){
 "use strict";
 /* ================================================================
-* PATCH FINAL: UNIVERSAL VIDEO PLAYER (CROSS-DEVICE)
+* PATCH FINAL v2: UNIVERSAL VIDEO PLAYER — ALL DEVICES
 * ================================================================
-* FITUR UTAMA:
-* ✅ 1. Auto-normalisasi URL (GDrive, YouTube, Vimeo, Dropbox, dll)
-* ✅ 2. Deteksi tipe video (youtube/gdrive/direct/unknown)
-* ✅ 3. Modal player dengan iframe/video tag
-* ✅ 4. Error handler + fallback "Buka di tab baru"
-* ✅ 5. Panduan sharing permission untuk Google Drive
-* ✅ 6. Tombol download untuk video langsung
-* ✅ 7. Lintas device — URL yang sama bisa diputar di mana saja
-* ✅ 8. Normalisasi URL saat disimpan (bukan hanya saat dibuka)
-* ✅ 9. Auto-restore dari embedded JSON (anti clear browser)
-* ✅ 10. Hook add/remove → sync ke embedded
+* COMPATIBILITY:
+* ✅ iOS Safari (iPhone, iPad) — playsinline + webkit-playsinline
+* ✅ Android Chrome / Samsung Internet — standard iframe
+* ✅ Desktop Chrome / Firefox / Edge / Safari — full feature
+* ✅ Tablet (iPad, Android Tab) — responsive layout
+* ✅ Low-end device — reduced animation
+*
+* FEATURES:
+* ✅ Auto-detect device (iOS/Android/Desktop)
+* ✅ Smart URL normalization (GDrive multi-format, YouTube, Vimeo, etc)
+* ✅ Native fallback untuk video yang tidak bisa di-embed
+* ✅ Fast error detection (3 detik)
+* ✅ Device-specific error messages & solutions
+* ✅ Safe-area support (notch iPhone)
+* ✅ Reduced-motion support
+* ✅ Fullscreen API + CSS fallback
+* ✅ Cross-device (embedded JSON + localStorage)
 *
 * ANTI-CONFLICT:
-* - Flag: window.__bk56UniversalVideoPlayerPatched
-* - Hook (bukan replace total) fungsi bukaVideoLangsung & openVideoLink
-* - Elemen HTML statis (tidak di-inject via JS)
+* - Flag: window.__bk56UniversalVideoPlayerV2Patched
 * - ID unik: bk56-universal-player, bk56-up-*
-* - Tidak override addVideoLink/removeVideoLink (hanya hook)
+* - Hook (bukan replace) fungsi existing
 ================================================================ */
-const FLAG = '__bk56UniversalVideoPlayerPatched';
+const FLAG = '__bk56UniversalVideoPlayerV2Patched';
 if (window[FLAG]) {
-console.log('ℹ️ [UniversalPlayer] Patch sudah terpasang, skip');
+console.log('ℹ️ [UVPv2] Patch sudah terpasang, skip');
 return;
 }
 window[FLAG] = true;
 
 const EMB_ID = 'bk56-embedded-data';
 const VIDEO_KEY = 'bk56_video_links';
+
 let currentVideoUrl = '';
 let currentVideoType = 'unknown';
 let currentVideoTitle = 'Video';
 let errorTimer = null;
+let deviceInfo = null;
 
 /* ================================================================
-* 🔑 HELPER 1: Normalisasi URL Video (KUNCI UTAMA)
-*    → Konversi URL mentah ke format yang bisa di-embed di semua device
+* 🔑 DEVICE DETECTION
+================================================================ */
+function detectDevice() {
+if (deviceInfo) return deviceInfo;
+const ua = navigator.userAgent || '';
+const platform = navigator.platform || '';
+const maxTouchPoints = navigator.maxTouchPoints || 0;
+
+const isIOS = /iPad|iPhone|iPod/.test(ua) ||
+(platform === 'MacIntel' && maxTouchPoints > 1);
+const isAndroid = /Android/i.test(ua);
+const isMobile = isIOS || isAndroid || /Mobile/i.test(ua);
+const isTablet = /iPad/i.test(ua) ||
+(/Android/i.test(ua) && !/Mobile/i.test(ua)) ||
+(platform === 'MacIntel' && maxTouchPoints > 1);
+const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+const isSamsung = /SamsungBrowser/i.test(ua);
+const isFirefox = /Firefox/i.test(ua);
+const isChrome = /Chrome/i.test(ua) && !/Edge|Edg/i.test(ua);
+const isEdge = /Edge|Edg/i.test(ua);
+
+deviceInfo = {
+isIOS, isAndroid, isMobile, isTablet,
+isSafari, isSamsung, isFirefox, isChrome, isEdge,
+isDesktop: !isMobile,
+platform: isIOS ? 'ios' : isAndroid ? 'android' : 'desktop',
+browser: isSafari ? 'safari' : isSamsung ? 'samsung' :
+isFirefox ? 'firefox' : isChrome ? 'chrome' :
+isEdge ? 'edge' : 'other'
+};
+console.log('📱 [UVPv2] Device detected:', deviceInfo);
+return deviceInfo;
+}
+
+/* ================================================================
+* 🔑 HELPER 1: NORMALISASI URL VIDEO (ROBUST)
 ================================================================ */
 function normalizeVideoUrl(url) {
 if (!url || typeof url !== 'string') {
 return { url: '', originalUrl: '', type: 'unknown', embeddable: false, label: 'Unknown' };
 }
 url = url.trim();
-
-// Tambahkan https:// jika belum ada
 if (!/^https?:\/\//i.test(url) && !/^mailto:/i.test(url)) {
 url = 'https://' + url;
 }
+const device = detectDevice();
+let m;
 
-// === GOOGLE DRIVE ===
-// Format: /file/d/FILE_ID/view → /file/d/FILE_ID/preview
-let m = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i);
+// === GOOGLE DRIVE (multi-format) ===
+// Format: /file/d/FILE_ID/view
+m = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i);
 if (m) {
+const fileId = m[1];
+// iOS Safari sering bermasalah dengan GDrive embed → gunakan format preview
+const embedUrl = 'https://drive.google.com/file/d/' + fileId + '/preview';
 return {
-url: 'https://drive.google.com/file/d/' + m[1] + '/preview',
+url: embedUrl,
 originalUrl: url,
 type: 'gdrive',
-fileId: m[1],
+fileId: fileId,
 embeddable: true,
-label: 'Google Drive'
+label: 'Google Drive',
+nativeUrl: 'https://drive.google.com/file/d/' + fileId + '/view'
 };
 }
-// Format: /open?id=FILE_ID → /file/d/FILE_ID/preview
+// Format: /open?id=FILE_ID
 m = url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/i);
 if (m) {
+const fileId = m[1];
 return {
-url: 'https://drive.google.com/file/d/' + m[1] + '/preview',
+url: 'https://drive.google.com/file/d/' + fileId + '/preview',
 originalUrl: url,
 type: 'gdrive',
-fileId: m[1],
+fileId: fileId,
 embeddable: true,
-label: 'Google Drive'
+label: 'Google Drive',
+nativeUrl: 'https://drive.google.com/file/d/' + fileId + '/view'
 };
 }
-// Format: /d/FILE_ID (short) → /file/d/FILE_ID/preview
+// Format: /d/FILE_ID (short)
 m = url.match(/drive\.google\.com\/d\/([a-zA-Z0-9_-]+)/i);
 if (m) {
+const fileId = m[1];
 return {
-url: 'https://drive.google.com/file/d/' + m[1] + '/preview',
+url: 'https://drive.google.com/file/d/' + fileId + '/preview',
 originalUrl: url,
 type: 'gdrive',
-fileId: m[1],
+fileId: fileId,
 embeddable: true,
-label: 'Google Drive'
+label: 'Google Drive',
+nativeUrl: 'https://drive.google.com/file/d/' + fileId + '/view'
 };
 }
-// Format: uc?id=FILE_ID (download link) → /file/d/FILE_ID/preview
+// Format: uc?id=FILE_ID (download link)
 m = url.match(/drive\.google\.com\/uc\?(?:id|export=download&id)=([a-zA-Z0-9_-]+)/i);
 if (m) {
+const fileId = m[1];
 return {
-url: 'https://drive.google.com/file/d/' + m[1] + '/preview',
+url: 'https://drive.google.com/file/d/' + fileId + '/preview',
 originalUrl: url,
 type: 'gdrive',
-fileId: m[1],
+fileId: fileId,
 embeddable: true,
-label: 'Google Drive'
+label: 'Google Drive',
+nativeUrl: 'https://drive.google.com/file/d/' + fileId + '/view'
 };
 }
 
 // === YOUTUBE ===
-// Format: youtube.com/watch?v=VIDEO_ID → youtube.com/embed/VIDEO_ID
-// Format: youtu.be/VIDEO_ID → youtube.com/embed/VIDEO_ID
-// Format: youtube.com/shorts/VIDEO_ID → youtube.com/embed/VIDEO_ID
-m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/i);
+m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/|youtube\.com\/live\/)([a-zA-Z0-9_-]{11})/i);
 if (m) {
+const videoId = m[1];
+// Parameter kompatibilitas universal
+const params = new URLSearchParams({
+rel: '0',
+modestbranding: '1',
+playsinline: '1',
+enablejsapi: '1',
+origin: window.location.origin
+});
 return {
-url: 'https://www.youtube.com/embed/' + m[1] + '?rel=0&modestbranding=1',
+url: 'https://www.youtube.com/embed/' + videoId + '?' + params.toString(),
 originalUrl: url,
 type: 'youtube',
-videoId: m[1],
+videoId: videoId,
 embeddable: true,
-label: 'YouTube'
+label: 'YouTube',
+nativeUrl: 'https://www.youtube.com/watch?v=' + videoId,
+appUrl: device.isIOS ? 'youtube://' + videoId :
+device.isAndroid ? 'vnd.youtube:' + videoId : null
+};
+}
+
+// === YOUTUBE MUSIC ===
+m = url.match(/music\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/i);
+if (m) {
+const videoId = m[1];
+return {
+url: 'https://www.youtube.com/embed/' + videoId + '?rel=0&modestbranding=1&playsinline=1',
+originalUrl: url,
+type: 'youtube',
+videoId: videoId,
+embeddable: true,
+label: 'YouTube Music',
+nativeUrl: 'https://music.youtube.com/watch?v=' + videoId
 };
 }
 
 // === VIMEO ===
-m = url.match(/vimeo\.com\/(\d+)/i);
+m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/i);
 if (m) {
 return {
-url: 'https://player.vimeo.com/video/' + m[1],
+url: 'https://player.vimeo.com/video/' + m[1] + '?autoplay=0&playsinline=1',
 originalUrl: url,
 type: 'vimeo',
 videoId: m[1],
 embeddable: true,
-label: 'Vimeo'
+label: 'Vimeo',
+nativeUrl: url
+};
+}
+
+// === DAILYMOTION ===
+m = url.match(/dailymotion\.com\/video\/([a-zA-Z0-9]+)/i);
+if (m) {
+return {
+url: 'https://www.dailymotion.com/embed/video/' + m[1],
+originalUrl: url,
+type: 'dailymotion',
+videoId: m[1],
+embeddable: true,
+label: 'Dailymotion',
+nativeUrl: url
+};
+}
+
+// === FACEBOOK VIDEO ===
+m = url.match(/facebook\.com\/.*\/videos\/(\d+)/i);
+if (m) {
+return {
+url: 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(url) + '&show_text=0',
+originalUrl: url,
+type: 'facebook',
+embeddable: true,
+label: 'Facebook Video',
+nativeUrl: url
 };
 }
 
@@ -14017,31 +14214,52 @@ url: dropboxUrl,
 originalUrl: url,
 type: 'dropbox',
 embeddable: true,
-label: 'Dropbox'
+label: 'Dropbox',
+nativeUrl: url
 };
 }
 
-// === DIRECT VIDEO FILES (mp4, webm, ogg, m4v) ===
-m = url.match(/\.(mp4|webm|ogg|ogv|m4v|mov)(\?|$)/i);
+// === MICROSOFT ONEDRIVE ===
+m = url.match(/1drv\.ms\/([a-zA-Z0-9_-]+)/i) ||
+url.match(/onedrive\.live\.com\/.*authkey=([a-zA-Z0-9!_-]+)/i);
 if (m) {
+return {
+url: url.replace('/view', '/embed').replace('?share', '!embed'),
+originalUrl: url,
+type: 'onedrive',
+embeddable: true,
+label: 'OneDrive',
+nativeUrl: url
+};
+}
+
+// === DIRECT VIDEO FILES ===
+m = url.match(/\.(mp4|m4v|webm|ogg|ogv|mov|avi|mkv|3gp)(\?|$)/i);
+if (m) {
+const ext = m[1].toLowerCase();
+// Deteksi kompatibilitas format per browser
+const compatible = isVideoFormatCompatible(ext, device);
 return {
 url: url,
 originalUrl: url,
 type: 'direct',
-ext: m[1].toLowerCase(),
-embeddable: true,
-label: 'Video File (' + m[1].toUpperCase() + ')'
+ext: ext,
+embeddable: compatible,
+label: 'Video (' + ext.toUpperCase() + ')',
+nativeUrl: url,
+needsFallback: !compatible
 };
 }
 
-// === GOOGLE DOCS VIEWER (untuk PDF/PPT/DOC yang di-host online) ===
+// === GOOGLE DOCS VIEWER (PDF/PPT/DOC) ===
 if (/\.(pdf|ppt|pptx|doc|docx|xls|xlsx)(\?|$)/i.test(url)) {
 return {
 url: 'https://docs.google.com/gview?url=' + encodeURIComponent(url) + '&embedded=true',
 originalUrl: url,
 type: 'docs-viewer',
 embeddable: true,
-label: 'Document Viewer'
+label: 'Document Viewer',
+nativeUrl: url
 };
 }
 
@@ -14051,12 +14269,44 @@ url: url,
 originalUrl: url,
 type: 'unknown',
 embeddable: false,
-label: 'Unknown'
+label: 'Unknown',
+nativeUrl: url
 };
 }
 
 /* ================================================================
-* 🔑 HELPER 2: Load/Save video data dari localStorage
+* 🔑 HELPER 2: CEK KOMPATIBILITAS FORMAT VIDEO
+================================================================ */
+function isVideoFormatCompatible(ext, device) {
+// Format yang universally supported
+const universal = ['mp4', 'webm'];
+if (universal.includes(ext)) return true;
+
+// Format yang bermasalah di beberapa browser
+if (ext === 'mov') {
+// MOV tidak didukung di Chrome desktop & Android Chrome
+if (device.isChrome && device.isDesktop) return false;
+if (device.isAndroid) return false;
+return true; // OK di Safari (iOS/macOS)
+}
+if (ext === 'ogg' || ext === 'ogv') {
+// OGG tidak didukung di Safari (iOS/macOS)
+if (device.isSafari || device.isIOS) return false;
+return true;
+}
+if (ext === 'avi' || ext === 'mkv' || ext === '3gp') {
+// Format ini jarang didukung di browser
+return false;
+}
+if (ext === 'm4v') {
+// M4V = MP4 variant, didukung di hampir semua browser modern
+return true;
+}
+return true;
+}
+
+/* ================================================================
+* 🔑 HELPER 3: LocalStorage + Embedded JSON
 ================================================================ */
 function loadVideoData() {
 try {
@@ -14069,16 +14319,8 @@ if (parsed && typeof parsed === 'object') return parsed;
 return {};
 }
 function saveVideoData(data) {
-try {
-localStorage.setItem(VIDEO_KEY, JSON.stringify(data || {}));
-} catch(e) {
-console.warn('⚠️ [UniversalPlayer] Gagal simpan localStorage:', e);
+try { localStorage.setItem(VIDEO_KEY, JSON.stringify(data || {})); } catch(e) {}
 }
-}
-
-/* ================================================================
-* 🔑 HELPER 3: Embedded JSON (untuk lintas device)
-================================================================ */
 function readEmb() {
 try {
 const el = document.getElementById(EMB_ID);
@@ -14096,7 +14338,7 @@ function syncVideoToEmbedded(videoData) {
 const emb = readEmb() || { materi:{}, video:{}, docLinks:{} };
 emb.video = videoData || {};
 emb.lastUpdated = new Date().toISOString();
-emb.universalPlayerPatch = '1.0.0';
+emb.universalPlayerV2Patch = '2.0.0';
 return writeEmb(emb);
 }
 function autoRestoreVideo() {
@@ -14106,18 +14348,12 @@ if (!emb || !emb.video) return;
 const embVideo = emb.video;
 const embKeys = Object.keys(embVideo);
 if (embKeys.length === 0) return;
-
-// Kasus 1: localStorage kosong → restore penuh
 if (!localData || Object.keys(localData).length === 0) {
 saveVideoData(embVideo);
-console.log('✅ [UniversalPlayer] Video dipulihkan dari embedded (' + embKeys.length + ' video)');
-if (typeof showToast === 'function') {
-showToast('🔄 Data video dipulihkan dari HTML', 'info');
-}
+console.log('✅ [UVPv2] Video dipulihkan dari embedded');
+if (typeof showToast === 'function') showToast('🔄 Data video dipulihkan dari HTML', 'info');
 return;
 }
-
-// Kasus 2: localStorage ada → merge
 let merged = false;
 const mergedData = Object.assign({}, localData);
 embKeys.forEach(function(idx) {
@@ -14134,7 +14370,7 @@ merged = true;
 });
 if (merged) {
 saveVideoData(mergedData);
-console.log('✅ [UniversalPlayer] Video di-merge dari embedded');
+console.log('✅ [UVPv2] Video di-merge dari embedded');
 }
 }
 
@@ -14148,8 +14384,7 @@ return;
 }
 currentVideoUrl = url;
 currentVideoTitle = title || 'Video';
-
-// 🔑 NORMALISASI URL (kunci utama - biar bisa diputar di semua device)
+const device = detectDevice();
 const normalized = normalizeVideoUrl(url);
 currentVideoType = normalized.type;
 
@@ -14160,25 +14395,38 @@ const iconEl = document.getElementById('bk56-up-icon');
 const badgeEl = document.getElementById('bk56-up-type-badge');
 const urlDisplay = document.getElementById('bk56-up-url-display');
 const openNewBtn = document.getElementById('bk56-up-open-new');
+const openNativeBtn = document.getElementById('bk56-up-open-native');
 const downloadBtn = document.getElementById('bk56-up-download');
 const content = document.getElementById('bk56-up-content');
 const loading = document.getElementById('bk56-up-loading');
+const loadingHint = document.getElementById('bk56-up-loading-hint');
 const errorBox = document.getElementById('bk56-up-error');
 
 if (titleEl) titleEl.textContent = currentVideoTitle;
 if (badgeEl) badgeEl.textContent = normalized.label.toUpperCase();
 if (urlDisplay) urlDisplay.textContent = normalized.originalUrl || url;
 
-// Icon berdasarkan tipe
 const icons = {
-youtube: '📺', gdrive: '📁', vimeo: '🎥',
-dropbox: '📦', direct: '🎬', 'docs-viewer': '📄', unknown: '🔗'
+youtube: '📺', gdrive: '📁', vimeo: '🎥', dropbox: '📦',
+direct: '🎬', 'docs-viewer': '📄', dailymotion: '🎞️',
+facebook: '📘', onedrive: '☁️', unknown: '🔗'
 };
 if (iconEl) iconEl.textContent = icons[normalized.type] || '🎬';
 
-// Tombol "Buka di tab baru" - pakai URL ASLI (bukan normalized)
-if (openNewBtn) {
-openNewBtn.href = normalized.originalUrl || url;
+// Tombol "Buka di Tab Baru" — pakai URL ASLI
+if (openNewBtn) openNewBtn.href = normalized.nativeUrl || normalized.originalUrl || url;
+
+// Tombol "Buka di Aplikasi" — hanya untuk mobile + URL yang support
+if (openNativeBtn) {
+if (device.isMobile && normalized.appUrl) {
+openNativeBtn.href = normalized.appUrl;
+openNativeBtn.style.display = '';
+} else if (device.isMobile && normalized.nativeUrl) {
+openNativeBtn.href = normalized.nativeUrl;
+openNativeBtn.style.display = '';
+} else {
+openNativeBtn.style.display = 'none';
+}
 }
 
 // Tombol download (hanya untuk direct video)
@@ -14191,10 +14439,28 @@ downloadBtn.style.display = 'none';
 }
 }
 
-// Tombol di error box juga
+// Tombol di error box
 const errorOpenBtn = document.getElementById('bk56-up-error-open');
-if (errorOpenBtn) {
-errorOpenBtn.href = normalized.originalUrl || url;
+const errorNativeBtn = document.getElementById('bk56-up-error-native');
+if (errorOpenBtn) errorOpenBtn.href = normalized.nativeUrl || normalized.originalUrl || url;
+if (errorNativeBtn) {
+if (device.isMobile && (normalized.appUrl || normalized.nativeUrl)) {
+errorNativeBtn.href = normalized.appUrl || normalized.nativeUrl;
+errorNativeBtn.style.display = '';
+} else {
+errorNativeBtn.style.display = 'none';
+}
+}
+
+// Loading hint — device-specific
+if (loadingHint) {
+if (device.isIOS && normalized.type === 'gdrive') {
+loadingHint.textContent = 'iOS: memuat Google Drive (mungkin perlu 5-10 detik)...';
+} else if (device.isMobile) {
+loadingHint.textContent = 'Mobile: menyiapkan player...';
+} else {
+loadingHint.textContent = 'Sedang menyiapkan player...';
+}
 }
 
 // Reset state
@@ -14202,79 +14468,194 @@ if (loading) loading.style.display = 'flex';
 if (errorBox) errorBox.classList.remove('show');
 if (content) content.innerHTML = '';
 
-// Render konten berdasarkan tipe
-renderVideoContent(normalized);
+// Render konten
+renderVideoContent(normalized, device);
 
 // Tampilkan modal
 if (modal) modal.classList.add('show');
 
-// Auto-hide loading setelah 10 detik (fallback jika onload tidak trigger)
+// Auto-hide loading (device-specific timeout)
 clearTimeout(errorTimer);
+const timeoutMs = (device.isIOS && normalized.type === 'gdrive') ? 12000 :
+device.isMobile ? 8000 : 10000;
 errorTimer = setTimeout(function() {
 if (loading && loading.style.display !== 'none') {
-showVideoError('timeout', normalized);
+showVideoError('timeout', normalized, device);
 }
-}, 10000);
+}, timeoutMs);
 };
 
 /* ================================================================
-* 🎬 RENDER: Tampilkan konten video berdasarkan tipe
+* 🎬 RENDER: Tampilkan konten video berdasarkan tipe + device
 ================================================================ */
-function renderVideoContent(normalized) {
+function renderVideoContent(normalized, device) {
 const content = document.getElementById('bk56-up-content');
 const loading = document.getElementById('bk56-up-loading');
 if (!content) return;
 
+// === CASE 1: Format video tidak didukung di browser ini ===
+if (normalized.needsFallback) {
+showVideoError('format-not-supported', normalized, device);
+return;
+}
+
+// === CASE 2: Direct video (mp4, webm, dll) → gunakan <video> tag ===
 if (normalized.type === 'direct') {
-// === DIRECT VIDEO (mp4, webm, dll) → gunakan <video> tag ===
 const video = document.createElement('video');
 video.src = normalized.url;
 video.controls = true;
 video.autoplay = false;
+video.playsInline = true;          // iOS Safari
+video.setAttribute('playsinline', '');     // iOS Safari
+video.setAttribute('webkit-playsinline', ''); // iOS Safari lama
+video.setAttribute('x5-playsinline', '');    // WeChat browser
+video.setAttribute('x5-video-player-type', 'h5'); // WeChat
+video.preload = 'metadata';
 video.style.width = '100%';
 video.style.height = '100%';
 video.style.background = '#000';
+video.style.objectFit = 'contain';
+
 video.onloadeddata = function() {
 if (loading) loading.style.display = 'none';
 };
-video.onerror = function() {
-showVideoError('load-error', normalized);
+video.oncanplay = function() {
+if (loading) loading.style.display = 'none';
 };
+video.onerror = function(e) {
+console.warn('⚠️ [UVPv2] Video load error:', e);
+showVideoError('load-error', normalized, device);
+};
+// Timeout fallback jika tidak ada event
+setTimeout(function() {
+if (loading && loading.style.display !== 'none') {
+loading.style.display = 'none';
+}
+}, 3000);
 content.appendChild(video);
-} else if (normalized.embeddable) {
-// === EMBEDDABLE (YouTube, GDrive, Vimeo, dll) → gunakan iframe ===
+return;
+}
+
+// === CASE 3: Embeddable (YouTube, GDrive, Vimeo, dll) → iframe ===
+if (normalized.embeddable) {
 const iframe = document.createElement('iframe');
 iframe.src = normalized.url;
-iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+// Atribut kompatibilitas universal
+iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen; playsinline; web-share';
+iframe.allowFullscreen = true;
+iframe.setAttribute('allowfullscreen', '');
+iframe.setAttribute('webkitallowfullscreen', '');   // iOS Safari
+iframe.setAttribute('mozallowfullscreen', '');      // Firefox
+iframe.setAttribute('playsinline', '');              // iOS Safari
+iframe.setAttribute('frameborder', '0');
+iframe.setAttribute('scrolling', 'no');
 iframe.style.width = '100%';
 iframe.style.height = '100%';
 iframe.style.border = '0';
 iframe.style.background = '#000';
+
 iframe.onload = function() {
 if (loading) loading.style.display = 'none';
+console.log('✅ [UVPv2] Iframe loaded:', normalized.type);
 };
 iframe.onerror = function() {
-showVideoError('load-error', normalized);
+showVideoError('load-error', normalized, device);
 };
 content.appendChild(iframe);
 
-// Fallback: jika iframe tidak load dalam 8 detik → tampilkan error
+// Google Drive di iOS Safari → deteksi error lebih cepat
+if (device.isIOS && normalized.type === 'gdrive') {
 setTimeout(function() {
 if (loading && loading.style.display !== 'none') {
-// Beberapa embed (seperti GDrive) tidak trigger onload
-// Jadi kita biarkan loading hilang via timeout 10 detik di atas
+// Coba cek apakah iframe benar-benar load
+try {
+const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+if (!iframeDoc || iframeDoc.body.innerHTML === '') {
+showVideoError('gdrive-ios', normalized, device);
 }
-}, 8000);
-} else {
-// === UNKNOWN → tampilkan error dengan solusi ===
-showVideoError('not-embeddable', normalized);
+} catch(e) {
+// Cross-origin → tidak bisa cek, biarkan loading terus
+// Tapi tampilkan tombol "Buka di Tab Baru" lebih menonjol
 }
+}
+}, 6000);
+}
+return;
+}
+
+// === CASE 4: Tidak bisa di-embed → Native fallback ===
+showNativeFallback(normalized, device);
 }
 
 /* ================================================================
-* ⚠️ ERROR HANDLER: Tampilkan error dengan solusi
+* 📱 NATIVE FALLBACK: Untuk video yang tidak bisa di-embed
 ================================================================ */
-function showVideoError(errorType, normalized) {
+function showNativeFallback(normalized, device) {
+const content = document.getElementById('bk56-up-content');
+const loading = document.getElementById('bk56-up-loading');
+if (loading) loading.style.display = 'none';
+if (!content) return;
+
+const nativeUrl = normalized.nativeUrl || normalized.originalUrl || currentVideoUrl;
+const isMobile = device.isMobile;
+
+let html = '<div class="bk56-up-native-fallback">' +
+'<div class="nf-icon">📱</div>' +
+'<div class="nf-title">Video Ini Membutuhkan Aplikasi</div>' +
+'<div class="nf-desc">' +
+'Video dengan format ini tidak bisa diputar langsung di browser. ' +
+'Silakan buka menggunakan aplikasi atau browser eksternal.' +
+'</div>' +
+'<div class="nf-btns">';
+
+if (isMobile) {
+html += '<a href="' + escAttr(nativeUrl) + '" class="bk56-up-btn primary" target="_blank" rel="noopener noreferrer">' +
+'📱 Buka di Aplikasi / Browser</a>';
+}
+html += '<a href="' + escAttr(nativeUrl) + '" class="bk56-up-btn" target="_blank" rel="noopener noreferrer">' +
+'↗️ Buka di Tab Baru</a>';
+html += '<button class="bk56-up-btn" onclick="bk56CopyUrl(\'' + escAttr(nativeUrl) + '\')">' +
+'📋 Salin URL</button>';
+html += '</div></div>';
+
+content.innerHTML = html;
+}
+
+function escAttr(s) {
+return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+window.bk56CopyUrl = function(url) {
+if (navigator.clipboard && navigator.clipboard.writeText) {
+navigator.clipboard.writeText(url).then(function() {
+if (typeof showToast === 'function') showToast('📋 URL disalin ke clipboard', 'success');
+}).catch(function() {
+fallbackCopy(url);
+});
+} else {
+fallbackCopy(url);
+}
+};
+function fallbackCopy(url) {
+const ta = document.createElement('textarea');
+ta.value = url;
+ta.style.position = 'fixed';
+ta.style.left = '-9999px';
+document.body.appendChild(ta);
+ta.select();
+try {
+document.execCommand('copy');
+if (typeof showToast === 'function') showToast('📋 URL disalin', 'success');
+} catch(e) {
+if (typeof showToast === 'function') showToast('❌ Gagal menyalin', 'error');
+}
+document.body.removeChild(ta);
+}
+
+/* ================================================================
+* ⚠️ ERROR HANDLER: Device-specific messages
+================================================================ */
+function showVideoError(errorType, normalized, device) {
 const loading = document.getElementById('bk56-up-loading');
 const errorBox = document.getElementById('bk56-up-error');
 const errorTitle = document.getElementById('bk56-up-error-title');
@@ -14292,42 +14673,100 @@ let tips = [];
 switch(errorType) {
 case 'timeout':
 title = '⏱️ Video Terlalu Lama Dimuat';
-msg = 'Video tidak merespons dalam waktu 10 detik. Kemungkinan koneksi lambat atau URL tidak valid.';
+if (device.isIOS && normalized.type === 'gdrive') {
+msg = 'Google Drive sering kali lambat di iOS Safari. Ini masalah umum dari Google.';
+tips = [
+'Tunggu beberapa detik lagi — GDrive kadang butuh 10-15 detik di iOS',
+'Klik <strong>"Buka di Tab Baru"</strong> untuk membuka di browser Safari penuh',
+'Klik <strong>"🔄 Retry"</strong> untuk mencoba memuat ulang',
+'Alternatif: minta guru BK upload ke YouTube (lebih cepat di mobile)'
+];
+} else if (device.isMobile) {
+msg = 'Koneksi mobile mungkin lambat. Video tidak merespons dalam waktu yang ditentukan.';
+tips = [
+'Periksa koneksi internet Anda',
+'Klik <strong>"Buka di Tab Baru"</strong> untuk mencoba di tab terpisah',
+'Klik <strong>"🔄 Retry"</strong> untuk mencoba lagi',
+'Pastikan URL video masih aktif'
+];
+} else {
+msg = 'Video tidak merespons dalam waktu 10 detik.';
 tips = [
 'Klik <strong>"Buka di Tab Baru"</strong> untuk mencoba di tab terpisah',
 'Periksa koneksi internet Anda',
 'Pastikan URL video masih aktif dan bisa diakses',
 'Jika video Google Drive, pastikan sudah di-share "Anyone with the link"'
 ];
+}
 break;
+
 case 'load-error':
 title = '❌ Gagal Memuat Video';
 msg = 'Video tidak dapat dimuat. File mungkin sudah dihapus, dipindah, atau URL salah.';
 tips = [
 'Klik <strong>"Buka di Tab Baru"</strong> untuk membuka URL asli',
 'Periksa apakah URL video masih valid',
-'Hubungi guru BK untuk memperbarui link video'
+'Hubungi guru BK untuk memperbarui link video',
+'Klik <strong>"🔄 Retry"</strong> untuk mencoba lagi'
 ];
 break;
-case 'not-embeddable':
-title = '🔗 Format URL Tidak Didukung';
-msg = 'URL ini tidak bisa diputar langsung di player. Silakan buka di tab baru.';
+
+case 'format-not-supported':
+title = '🎞️ Format Video Tidak Didukung';
+if (device.isChrome && device.isDesktop) {
+msg = 'Format ' + (normalized.ext || '').toUpperCase() + ' tidak didukung di Chrome desktop.';
 tips = [
-'Klik <strong>"Buka di Tab Baru"</strong> untuk membuka video',
-'Gunakan URL format: YouTube, Google Drive, Vimeo, atau file video langsung (.mp4, .webm)',
-'Minta guru BK untuk memperbarui link ke format yang didukung'
+'Klik <strong>"Buka di Tab Baru"</strong> — browser akan mendownload file',
+'Gunakan aplikasi video player seperti VLC untuk memutar',
+'Minta guru BK convert ke format MP4 (universal)'
+];
+} else if (device.isSafari || device.isIOS) {
+msg = 'Format ' + (normalized.ext || '').toUpperCase() + ' tidak didukung di Safari/iOS.';
+tips = [
+'Klik <strong>"Buka di Tab Baru"</strong> — iOS akan buka di app pemutar',
+'Gunakan aplikasi "Files" atau "VLC" di iPhone/iPad',
+'Minta guru BK convert ke format MP4 (universal)'
+];
+} else {
+msg = 'Format ' + (normalized.ext || '').toUpperCase() + ' tidak didukung di browser ini.';
+tips = [
+'Klik <strong>"Buka di Tab Baru"</strong> untuk mendownload',
+'Gunakan aplikasi video player eksternal',
+'Minta guru BK convert ke format MP4'
+];
+}
+break;
+
+case 'gdrive-ios':
+title = '🍎 Google Drive di iOS';
+msg = 'Google Drive sering bermasalah di iOS Safari karena kebijakan Apple.';
+tips = [
+'Klik <strong>"Buka di Tab Baru"</strong> — akan buka di Safari penuh',
+'Tunggu beberapa detik, kadang GDrive butuh waktu load di iOS',
+'Install app "Google Drive" dari App Store untuk pengalaman lebih baik',
+'Minta guru BK upload ke YouTube (paling reliable di iOS)'
 ];
 break;
+
 case 'gdrive-permission':
 title = '🔒 Google Drive: Izin Akses Ditolak';
 msg = 'File di Google Drive belum di-share ke "Anyone with the link".';
 tips = [
 'Buka Google Drive → klik kanan file → <strong>Share</strong>',
-'Ubah akses menjadi <strong>"Anyone with the link"</strong> (Siapa pun yang memiliki link)',
+'Ubah akses menjadi <strong>"Anyone with the link"</strong>',
 'Tunggu 1-2 menit lalu coba putar lagi',
 'Atau klik <strong>"Buka di Tab Baru"</strong> dan login ke Google'
 ];
 break;
+
+default:
+title = '🔗 Format URL Tidak Didukung';
+msg = 'URL ini tidak bisa diputar langsung di player.';
+tips = [
+'Klik <strong>"Buka di Tab Baru"</strong> untuk membuka video',
+'Gunakan URL format: YouTube, Google Drive, Vimeo, atau file MP4/WebM',
+'Minta guru BK untuk memperbarui link ke format yang didukung'
+];
 }
 
 if (errorTitle) errorTitle.textContent = title;
@@ -14340,7 +14779,7 @@ errorBox.classList.add('show');
 }
 
 /* ================================================================
-* 🔄 RETRY: Coba muat ulang video
+* 🔄 RETRY
 ================================================================ */
 window.bk56RetryUniversalPlayer = function() {
 if (currentVideoUrl) {
@@ -14350,14 +14789,17 @@ const loading = document.getElementById('bk56-up-loading');
 if (loading) loading.style.display = 'flex';
 const content = document.getElementById('bk56-up-content');
 if (content) content.innerHTML = '';
+const device = detectDevice();
 const normalized = normalizeVideoUrl(currentVideoUrl);
-renderVideoContent(normalized);
+renderVideoContent(normalized, device);
 clearTimeout(errorTimer);
+const timeoutMs = (device.isIOS && normalized.type === 'gdrive') ? 12000 :
+device.isMobile ? 8000 : 10000;
 errorTimer = setTimeout(function() {
 if (loading && loading.style.display !== 'none') {
-showVideoError('timeout', normalized);
+showVideoError('timeout', normalized, device);
 }
-}, 10000);
+}, timeoutMs);
 }
 };
 
@@ -14367,7 +14809,6 @@ showVideoError('timeout', normalized);
 window.bk56CloseUniversalPlayer = function() {
 const modal = document.getElementById('bk56-universal-player');
 if (modal) modal.classList.remove('show');
-// Hapus konten untuk stop video
 const content = document.getElementById('bk56-up-content');
 if (content) content.innerHTML = '';
 clearTimeout(errorTimer);
@@ -14375,10 +14816,9 @@ currentVideoUrl = '';
 };
 
 /* ================================================================
-* 🛡️ HOOK 1: Override bukaVideoLangsung
-*    → Panggil universal player, bukan buka tab baru
+* 🛡️ HOOK 1: bukaVideoLangsung
 ================================================================ */
-if (typeof window.bukaVideoLangsung === 'function' && !window.bukaVideoLangsung.__upHooked) {
+if (typeof window.bukaVideoLangsung === 'function' && !window.bukaVideoLangsung.__upV2Hooked) {
 const _orig = window.bukaVideoLangsung;
 window.bukaVideoLangsung = function(videoIdx) {
 try {
@@ -14390,30 +14830,24 @@ showToast('⚠️ Belum ada link video. Klik ⚙️ Kelola untuk menambah.', 'er
 }
 return;
 }
-// 🔑 NORMALISASI URL sebelum dibuka (penting untuk lintas device)
-const rawUrl = data[0];
-const normalized = normalizeVideoUrl(rawUrl);
-
-// Jika hanya 1 link → buka langsung di universal player
 if (data.length === 1) {
-bk56OpenUniversalPlayer(rawUrl, 'Video ' + (videoIdx + 1));
+bk56OpenUniversalPlayer(data[0], 'Video ' + (videoIdx + 1));
 return;
 }
-// Jika banyak link → buka modal picker (pakai yang asli)
 _orig.apply(this, arguments);
 } catch(e) {
-console.error('❌ [UniversalPlayer] Hook error:', e);
+console.error('❌ [UVPv2] Hook error:', e);
 _orig.apply(this, arguments);
 }
 };
-window.bukaVideoLangsung.__upHooked = true;
-console.log('✅ [UniversalPlayer] bukaVideoLangsung di-hook');
+window.bukaVideoLangsung.__upV2Hooked = true;
+console.log('✅ [UVPv2] bukaVideoLangsung di-hook');
 }
 
 /* ================================================================
-* 🛡️ HOOK 2: Override openVideoLink (dari modal kelola video)
+* 🛡️ HOOK 2: openVideoLink
 ================================================================ */
-if (typeof window.openVideoLink === 'function' && !window.openVideoLink.__upHooked) {
+if (typeof window.openVideoLink === 'function' && !window.openVideoLink.__upV2Hooked) {
 const _orig = window.openVideoLink;
 window.openVideoLink = function(idx) {
 try {
@@ -14428,70 +14862,65 @@ if (!url) {
 if (typeof showToast === 'function') showToast('⚠️ Link tidak valid', 'error');
 return;
 }
-// 🔑 Buka di universal player (bukan tab baru)
 bk56OpenUniversalPlayer(url, currentVideoEdit.videoNama || 'Video');
 } catch(e) {
-console.error('❌ [UniversalPlayer] Hook error:', e);
+console.error('❌ [UVPv2] Hook error:', e);
 _orig.apply(this, arguments);
 }
 };
-window.openVideoLink.__upHooked = true;
-console.log('✅ [UniversalPlayer] openVideoLink di-hook');
+window.openVideoLink.__upV2Hooked = true;
+console.log('✅ [UVPv2] openVideoLink di-hook');
 }
 
 /* ================================================================
-* 🛡️ HOOK 3: Intercept klik di anchor .video-link-url
-*    → Buka di universal player, bukan tab baru
+* 🛡️ HOOK 3: Intercept klik di anchor video
 ================================================================ */
 document.addEventListener('click', function(e) {
 const anchor = e.target.closest('.video-link-url, .materi-link-url');
 if (!anchor) return;
-// Cek apakah di dalam modal video
 const videoModal = document.getElementById('video-modal');
-if (!videoModal || !videoModal.contains(anchor)) return;
+const materiModal = document.getElementById('materi-modal');
+const inVideoModal = videoModal && videoModal.contains(anchor);
+const inMateriVideoPanel = materiModal && materiModal.contains(anchor) &&
+anchor.closest('.materi-panel')?.id === 'panel-video';
+if (!inVideoModal && !inMateriVideoPanel) return;
 e.preventDefault();
 e.stopPropagation();
 const url = anchor.getAttribute('href');
-if (!url || url === '#') return;
+if (!url || url === '#' || url === 'about:blank') return;
 bk56OpenUniversalPlayer(url, 'Video');
 }, true);
 
 /* ================================================================
-* 🛡️ HOOK 4: Override addVideoLink → normalisasi URL saat disimpan
-*    → Ini KUNCI agar URL yang tersimpan sudah dalam format yang benar
+* 🛡️ HOOK 4: addVideoLink — normalisasi URL saat disimpan
 ================================================================ */
-if (typeof window.addVideoLink === 'function' && !window.addVideoLink.__upSaveHooked) {
+if (typeof window.addVideoLink === 'function' && !window.addVideoLink.__upV2SaveHooked) {
 const _orig = window.addVideoLink;
 window.addVideoLink = function() {
-// 🔑 Ambil URL dari input SEBELUM disimpan
 const input = document.getElementById('input-video');
 if (input && input.value.trim()) {
 const rawUrl = input.value.trim();
 const normalized = normalizeVideoUrl(rawUrl);
-// Ganti value input dengan URL yang sudah dinormalisasi
-// (hanya jika berbeda - agar tidak loop)
 if (normalized.url && normalized.url !== rawUrl) {
 input.value = normalized.url;
-console.log('✅ [UniversalPlayer] URL dinormalisasi saat disimpan:', rawUrl.slice(0, 40), '→', normalized.url.slice(0, 40));
+console.log('✅ [UVPv2] URL dinormalisasi saat simpan');
 }
 }
-// Panggil fungsi asli
 const result = _orig.apply(this, arguments);
-// Setelah selesai, sync ke embedded
 setTimeout(function() {
 const data = loadVideoData();
 if (data) syncVideoToEmbedded(data);
 }, 150);
 return result;
 };
-window.addVideoLink.__upSaveHooked = true;
-console.log('✅ [UniversalPlayer] addVideoLink di-hook (normalisasi URL saat simpan)');
+window.addVideoLink.__upV2SaveHooked = true;
+console.log('✅ [UVPv2] addVideoLink di-hook');
 }
 
 /* ================================================================
-* 🛡️ HOOK 5: Override removeVideoLink → sync ke embedded
+* 🛡️ HOOK 5: removeVideoLink
 ================================================================ */
-if (typeof window.removeVideoLink === 'function' && !window.removeVideoLink.__upSaveHooked) {
+if (typeof window.removeVideoLink === 'function' && !window.removeVideoLink.__upV2SaveHooked) {
 const _orig = window.removeVideoLink;
 window.removeVideoLink = function() {
 const result = _orig.apply(this, arguments);
@@ -14501,30 +14930,26 @@ if (data) syncVideoToEmbedded(data);
 }, 150);
 return result;
 };
-window.removeVideoLink.__upSaveHooked = true;
-console.log('✅ [UniversalPlayer] removeVideoLink di-hook');
+window.removeVideoLink.__upV2SaveHooked = true;
+console.log('✅ [UVPv2] removeVideoLink di-hook');
 }
 
 /* ================================================================
-* 🛡️ HOOK 6: Override bk56BackupToHTML → include video di backup
+* 🛡️ HOOK 6: bk56BackupToHTML
 ================================================================ */
-if (typeof window.bk56BackupToHTML === 'function' && !window.bk56BackupToHTML.__upHooked) {
+if (typeof window.bk56BackupToHTML === 'function' && !window.bk56BackupToHTML.__upV2Hooked) {
 const _orig = window.bk56BackupToHTML;
 window.bk56BackupToHTML = function() {
-// 🔑 Sync video ke embedded SEBELUM backup
 const data = loadVideoData();
-if (data) {
-syncVideoToEmbedded(data);
-console.log('✅ [UniversalPlayer] Video ter-embed sebelum backup');
-}
+if (data) syncVideoToEmbedded(data);
 return _orig.apply(this, arguments);
 };
-window.bk56BackupToHTML.__upHooked = true;
-console.log('✅ [UniversalPlayer] bk56BackupToHTML di-hook');
+window.bk56BackupToHTML.__upV2Hooked = true;
+console.log('✅ [UVPv2] bk56BackupToHTML di-hook');
 }
 
 /* ================================================================
-* ⌨️ KEYBOARD: ESC untuk tutup modal
+* ⌨️ KEYBOARD
 ================================================================ */
 document.addEventListener('keydown', function(e) {
 if (e.key === 'Escape') {
@@ -14536,7 +14961,7 @@ bk56CloseUniversalPlayer();
 });
 
 /* ================================================================
-* 🖱️ CLICK OUTSIDE: Tutup modal jika klik di luar
+* 🖱️ CLICK OUTSIDE
 ================================================================ */
 document.addEventListener('click', function(e) {
 const modal = document.getElementById('bk56-universal-player');
@@ -14546,7 +14971,7 @@ if (e.target === modal) bk56CloseUniversalPlayer();
 }, true);
 
 /* ================================================================
-* 🔄 PERIODIC SYNC (setiap 15 detik)
+* 🔄 PERIODIC SYNC
 ================================================================ */
 setInterval(function() {
 const localData = loadVideoData();
@@ -14566,255 +14991,47 @@ saveVideoData(emb.video);
 * 🚀 INIT
 ================================================================ */
 function init() {
-console.log('🚀 [UniversalPlayer Patch] v1.0.0 dimulai...');
-console.log('📌 Fitur:');
-console.log('   ✅ Auto-normalisasi URL (GDrive, YouTube, Vimeo, Dropbox)');
-console.log('   ✅ Modal player dengan iframe/video tag');
-console.log('   ✅ Error handler + fallback "Buka di tab baru"');
-console.log('   ✅ Panduan sharing permission untuk Google Drive');
-console.log('   ✅ Lintas device — URL yang sama bisa diputar di mana saja');
-console.log('   ✅ Normalisasi URL saat disimpan (bukan hanya saat dibuka)');
-console.log('   ✅ Auto-restore dari embedded JSON');
-
-// 1. Auto-restore dari embedded
+console.log('');
+console.log('═══════════════════════════════════════');
+console.log('🚀 [UVPv2] Universal Video Player v2.0');
+console.log('═══════════════════════════════════════');
+console.log('📌 COMPATIBILITY:');
+console.log('   ✅ iOS Safari (iPhone, iPad)');
+console.log('   ✅ Android Chrome / Samsung Internet');
+console.log('   ✅ Desktop Chrome / Firefox / Edge / Safari');
+console.log('   ✅ Tablet (iPad, Android Tab)');
+console.log('');
+console.log('📌 FEATURES:');
+console.log('   ✅ Auto-detect device');
+console.log('   ✅ Smart URL normalization');
+console.log('   ✅ Native fallback untuk video non-embeddable');
+console.log('   ✅ Device-specific error messages');
+console.log('   ✅ Safe-area support (notch iPhone)');
+console.log('   ✅ Format compatibility check');
+console.log('');
 autoRestoreVideo();
-
-// 2. Initial sync ke embedded
 setTimeout(function() {
 const data = loadVideoData();
 if (data && Object.keys(data).length > 0) {
 syncVideoToEmbedded(data);
-console.log('✅ [UniversalPlayer] Initial sync selesai');
 }
 }, 2000);
-
-// 3. Sync saat visibility change
 document.addEventListener('visibilitychange', function() {
 if (!document.hidden) autoRestoreVideo();
 });
-
-console.log('✅ [UniversalPlayer Patch] Terpasang — semua hook aktif');
+console.log('✅ [UVPv2] Patch terpasang — semua hook aktif');
+console.log('═══════════════════════════════════════');
+console.log('');
 }
-
 if (document.readyState === 'loading') {
 document.addEventListener('DOMContentLoaded', init);
 } else {
 init();
 }
-
 })();
 </script>
 <!-- ================================================================ -->
-<!-- ========== PATCH FINAL: UNIVERSAL VIDEO PLAYER (CROSS-DEVICE) [END] ========== -->
-<!-- ================================================================ -->
- <!-- ================================================================ -->
-<!-- ========== PATCH: UNIVERSAL VIDEO PLAYER - ADMIN BK56 ========== -->
-<!-- ================================================================ -->
-<script>
-(function(){
-"use strict";
-/* ================================================================
-* PATCH: UNIVERSAL VIDEO PLAYER - ADMINISTRASI BK56
-* ================================================================
-* MASALAH:
-* ❌ Di modal Materi (tab Video), tombol 🔗 memanggil openMateriLink()
-*    yang membuka tab baru → tidak melewati universal player
-*
-* SOLUSI:
-* ✅ 1. Hook openMateriLink → redirect ke bk56OpenUniversalPlayer
-* ✅ 2. Intercept klik anchor .materi-link-url di panel video
-* ✅ 3. Intercept klik tombol 🔗 di panel video
-* ✅ 4. Fallback aman jika universal player belum tersedia
-*
-* ANTI-CONFLICT:
-* - Flag: window.__bk56AdminVideoPlayerPatched
-* - Event delegation (bukan inline override)
-* - Tidak sentuh fungsi inti lainnya
-================================================================ */
-const FLAG = '__bk56AdminVideoPlayerPatched';
-if (window[FLAG]) {
-  console.log('ℹ️ [AdminVideo] Patch sudah terpasang, skip');
-  return;
-}
-window[FLAG] = true;
-
-/* ================================================================
-* 🔑 HELPER: Cek apakah universal player tersedia
-================================================================ */
-function isUniversalPlayerReady() {
-  return typeof window.bk56OpenUniversalPlayer === 'function';
-}
-
-/* ================================================================
-* 🔑 HELPER: Buka video di universal player (dengan fallback)
-================================================================ */
-function openVideoInPlayer(url, title) {
-  if (!url) {
-    if (typeof showToast === 'function') showToast('⚠️ URL video kosong', 'error');
-    return;
-  }
-  if (isUniversalPlayerReady()) {
-    window.bk56OpenUniversalPlayer(url, title || 'Video Materi');
-  } else {
-    // Fallback: buka di tab baru
-    console.warn('⚠️ [AdminVideo] Universal player tidak tersedia, fallback ke tab baru');
-    window.open(url, '_blank', 'noopener,noreferrer');
-  }
-}
-
-/* ================================================================
-* 🛡️ LAYER 1: Hook openMateriLink → redirect video ke universal player
-================================================================ */
-if (typeof window.openMateriLink === 'function' && !window.openMateriLink.__adminVideoHooked) {
-  const _orig = window.openMateriLink;
-  window.openMateriLink = function(idx, type) {
-    if (type === 'video') {
-      // Ambil URL dari localStorage
-      try {
-        const MATERI_KEY = 'bk56_materi_links';
-        const raw = localStorage.getItem(MATERI_KEY);
-        if (raw) {
-          const allData = JSON.parse(raw);
-          // Cari currentMateriEdit dari DOM modal
-          const titleEl = document.getElementById('materi-modal-title');
-          const title = titleEl ? titleEl.textContent : 'Video Materi';
-          
-          // Cari data video dari semua key yang mungkin
-          let foundUrl = null;
-          for (const key in allData) {
-            const data = allData[key];
-            if (data && data.video && data.video[idx]) {
-              foundUrl = data.video[idx];
-              break;
-            }
-          }
-          
-          if (foundUrl) {
-            openVideoInPlayer(foundUrl, title);
-            return;
-          }
-        }
-      } catch(e) {
-        console.warn('⚠️ [AdminVideo] Gagal ambil URL video:', e);
-      }
-    }
-    // Fallback ke fungsi asli
-    return _orig.apply(this, arguments);
-  };
-  window.openMateriLink.__adminVideoHooked = true;
-  console.log('✅ [AdminVideo] openMateriLink di-hook untuk video');
-}
-
-/* ================================================================
-* 🛡️ LAYER 2: Intercept klik anchor .materi-link-url di panel video
-================================================================ */
-document.addEventListener('click', function(e) {
-  const anchor = e.target.closest('.materi-link-url');
-  if (!anchor) return;
-  
-  const modal = document.getElementById('materi-modal');
-  if (!modal || !modal.contains(anchor)) return;
-  
-  // Cek apakah anchor berada di panel video
-  const panel = anchor.closest('.materi-panel');
-  if (!panel || panel.id !== 'panel-video') return;
-  
-  e.preventDefault();
-  e.stopPropagation();
-  
-  const url = anchor.getAttribute('href');
-  if (!url || url === '#' || url === 'about:blank') return;
-  
-  // Ambil judul dari modal header
-  const titleEl = document.getElementById('materi-modal-title');
-  const title = titleEl ? titleEl.textContent : 'Video Materi';
-  
-  openVideoInPlayer(url, title);
-}, true);
-
-/* ================================================================
-* 🛡️ LAYER 3: Intercept klik tombol 🔗 di panel video
-================================================================ */
-document.addEventListener('click', function(e) {
-  const btn = e.target.closest('.materi-btn-icon.open');
-  if (!btn) return;
-  
-  const modal = document.getElementById('materi-modal');
-  if (!modal || !modal.contains(btn)) return;
-  
-  // Cek apakah di panel video
-  const panel = btn.closest('.materi-panel');
-  if (!panel || panel.id !== 'panel-video') return;
-  
-  e.preventDefault();
-  e.stopPropagation();
-  
-  // Cari URL dari anchor di item yang sama
-  const item = btn.closest('.materi-link-item');
-  if (!item) return;
-  const anchor = item.querySelector('.materi-link-url');
-  if (!anchor) return;
-  
-  const url = anchor.getAttribute('href');
-  if (!url || url === '#' || url === 'about:blank') return;
-  
-  const titleEl = document.getElementById('materi-modal-title');
-  const title = titleEl ? titleEl.textContent : 'Video Materi';
-  
-  openVideoInPlayer(url, title);
-}, true);
-
-/* ================================================================
-* 🛡️ LAYER 4: Intercept klik tombol "🎬 Buka Video" di card materi
-*    (jika ada card yang menampilkan video langsung)
-================================================================ */
-document.addEventListener('click', function(e) {
-  const btn = e.target.closest('.a56-btn-video');
-  if (!btn) return;
-  
-  // Cek apakah di halaman adminbk56
-  const adminPage = document.getElementById('adminbk56');
-  if (!adminPage || !adminPage.contains(btn)) return;
-  
-  // Cek apakah ini tombol buka video (bukan kelola)
-  const onclickAttr = btn.getAttribute('onclick') || '';
-  if (!onclickAttr.includes('bukaVideoLangsung')) return;
-  
-  // Fungsi bukaVideoLangsung sudah di-hook oleh patch sebelumnya
-  // Tidak perlu hook lagi di sini
-}, true);
-
-/* ================================================================
-* 🚀 INIT
-================================================================ */
-function init() {
-  console.log('🚀 [AdminVideo Patch] v1.0.0 dimulai...');
-  console.log('📌 Fitur:');
-  console.log('   ✅ Hook openMateriLink → redirect video ke universal player');
-  console.log('   ✅ Intercept anchor click di modal materi (panel video)');
-  console.log('   ✅ Intercept tombol 🔗 di modal materi (panel video)');
-  console.log('   ✅ Fallback aman jika universal player tidak tersedia');
-  
-  // Cek apakah universal player tersedia
-  if (isUniversalPlayerReady()) {
-    console.log('✅ [AdminVideo] Universal player tersedia');
-  } else {
-    console.warn('⚠️ [AdminVideo] Universal player TIDAK tersedia — akan fallback ke tab baru');
-  }
-  
-  console.log('✅ [AdminVideo Patch] Terpasang — 3 layer proteksi aktif');
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
-
-})();
-</script>
-<!-- ================================================================ -->
-<!-- ========== PATCH: UNIVERSAL VIDEO PLAYER - ADMIN BK56 [END] ========== -->
+<!-- ========== PATCH FINAL v2: UNIVERSAL VIDEO PLAYER (ALL DEVICES) [END] ========== -->
 <!-- ================================================================ -->
 <!-- ================================================================ -->
 <!-- ========== PATCH FIX: MODAL MATERI AKTIF (SELF-CONTAINED) ========== -->
