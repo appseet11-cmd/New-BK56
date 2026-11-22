@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- SEO META TAGS -->
+<title>Langkah Pelaksanaan Layanan Konferensi Kasus Standar BK Nasional - SMP Negeri 56 Jakarta</title>
+<meta name="description" content="Langkah-langkah lengkap pelaksanaan Layanan Konferensi Kasus Bimbingan dan Konseling Standar Nasional Tingkat SMP di SMP Negeri 56 Jakarta. Mencakup persiapan, pelaksanaan diskusi, tindak lanjut, evaluasi, dokumentasi, dan pelaporan.">
+<meta name="keywords" content="langkah pelaksanaan konferensi kasus, prosedur case conference, SOP konferensi kasus, BK SMP, SMP Negeri 56 Jakarta, layanan bimbingan konseling, standar nasional">
+<meta name="author" content="Unit BK SMP Negeri 56 Jakarta">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://smpn56jakarta.sch.id/langkah-pelaksanaan-konferensi-kasus">
+<!-- OPEN GRAPH / FACEBOOK -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://smpn56jakarta.sch.id/langkah-pelaksanaan-konferensi-kasus">
+<meta property="og:title" content="Langkah Pelaksanaan Layanan Konferensi Kasus Standar BK Nasional - SMP Negeri 56 Jakarta">
+<meta property="og:description" content="Langkah-langkah Pelaksanaan Layanan Konferensi Kasus Bimbingan dan Konseling Standar Nasional Tingkat SMP di SMP Negeri 56 Jakarta.">
+<meta property="og:image" content="https://smpn56jakarta.sch.id/assets/og-bk-langkah-konferensi-kasus.jpg">
+<meta property="og:locale" content="id_ID">
+<!-- TWITTER CARD -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Langkah Pelaksanaan Layanan Konferensi Kasus Standar BK Nasional - SMP Negeri 56 Jakarta">
+<meta name="twitter:description" content="Langkah-langkah Pelaksanaan Layanan Konferensi Kasus Bimbingan dan Konseling Standar Nasional Tingkat SMP di SMP Negeri 56 Jakarta.">
+<!-- STRUCTURED DATA (JSON-LD) -->
+<script type="application/ld+json">
+{
+"@context": "https://schema.org",
+"@type": "EducationalOrganization",
+"name": "SMP Negeri 56 Jakarta",
+"url": "https://smpn56jakarta.sch.id",
+"address": {
+"@type": "PostalAddress",
+"streetAddress": "Jl. Jeruk Purut I",
+"addressLocality": "Cilandak Timur, Jakarta Selatan",
+"addressRegion": "DKI Jakarta",
+"addressCountry": "ID"
+},
+"department": {
+"@type": "EducationalOrganization",
+"name": "Unit Bimbingan dan Konseling",
+"description": "Langkah-langkah Pelaksanaan Layanan Konferensi Kasus Standar Nasional Tingkat SMP untuk peserta didik."
+}
+}
+</script>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Segoe UI', 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+}
+html {
+scroll-padding-top: 140px;
+}
+body {
+background: #f0fdfd;
+color: #333;
+line-height: 1.7;
+overflow-x: hidden;
+}
+/* ================= STICKY WRAPPER ================= */
+.sticky-wrapper {
+position: sticky;
+top: 0;
+z-index: 1000;
+background: #fff;
+box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+transition: box-shadow 0.3s ease;
+}
+.sticky-wrapper.scrolled {
+box-shadow: 0 6px 25px rgba(64,224,208,0.25);
+}
+/* ================= HEADER TURQUOISE ================= */
+.header {
+position: relative;
+background: linear-gradient(135deg, #004D40 0%, #00695C 25%, #008B8B 55%, #20B2AA 85%, #40E0D0 100%);
+color: #fff;
+padding: 25px 30px 55px;
+text-align: center;
+overflow: hidden;
+}
+.header::before {
+content: '';
+position: absolute;
+inset: 0;
+background: radial-gradient(circle at 20% 30%, rgba(64,224,208,0.30) 0%, transparent 50%),
+radial-gradient(circle at 80% 70%, rgba(32,178,170,0.25) 0%, transparent 50%);
+animation: floatBg 15s ease-in-out infinite alternate;
+}
+@keyframes floatBg {
+0%   { transform: translate(0, 0) scale(1); }
+100% { transform: translate(-30px, 20px) scale(1.1); }
+}
+.blob {
+position: absolute;
+border-radius: 50%;
+filter: blur(50px);
+opacity: 0.45;
+z-index: 0;
+}
+.blob-1 {
+width: 180px; height: 180px;
+background: #40E0D0;
+top: -50px; left: -50px;
+animation: blobMove 12s ease-in-out infinite alternate;
+}
+.blob-2 {
+width: 150px; height: 150px;
+background: #7FFFD4;
+bottom: -40px; right: -40px;
+animation: blobMove 10s ease-in-out infinite alternate-reverse;
+}
+@keyframes blobMove {
+0%   { transform: translate(0, 0); }
+100% { transform: translate(30px, -20px); }
+}
+.header-content {
+position: relative;
+z-index: 2;
+max-width: 1100px;
+margin: 0 auto;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 20px;
+flex-wrap: wrap;
+animation: fadeUp 0.9s ease-out;
+}
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(20px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+.logo-wrapper {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+.logo {
+width: 62px;
+height: 62px;
+background: linear-gradient(135deg, #7FFFD4, #40E0D0);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 24px;
+color: #004D40;
+font-weight: 800;
+box-shadow: 0 6px 20px rgba(32,178,170,0.6), inset 0 0 12px rgba(255,255,255,0.4);
+position: relative;
+flex-shrink: 0;
+}
+/* Lingkaran bergerak */
+.logo::after {
+content: '';
+position: absolute;
+inset: -4px;
+border-radius: 50%;
+border: 2px dashed rgba(255,255,255,0.6);
+animation: spin 15s linear infinite;
+}
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+.header-text {
+text-align: left;
+}
+.header-text h1 {
+font-size: clamp(16px, 2.5vw, 22px);
+font-weight: 700;
+letter-spacing: 0.5px;
+line-height: 1.2;
+margin-bottom: 2px;
+text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+.header-text h2 {
+font-size: clamp(11px, 1.6vw, 13px);
+font-weight: 400;
+opacity: 0.95;
+letter-spacing: 0.3px;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+}
+.header-right {
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 5px;
+}
+.badge {
+display: inline-block;
+background: rgba(255,255,255,0.20);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+border: 1px solid rgba(255,255,255,0.35);
+padding: 4px 14px;
+border-radius: 20px;
+font-size: 11px;
+letter-spacing: 1px;
+text-transform: uppercase;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+}
+.tagline {
+font-size: 11px;
+font-style: italic;
+opacity: 0.95;
+font-weight: 300;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+}
+/* Wave divider - kurva indah 2 layer */
+.wave-divider {
+position: absolute;
+bottom: -1px;
+left: 0;
+width: 100%;
+line-height: 0;
+z-index: 1;
+}
+.wave-divider svg {
+display: block;
+width: 100%;
+height: 40px;
+}
+/* ================= NAVIGATION ================= */
+.nav-tabs {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 4px;
+background: rgba(255,255,255,0.98);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+padding: 8px 15px;
+border-top: 1px solid #E0F2F1;
+transition: all 0.3s ease;
+}
+.nav-tabs a {
+padding: 7px 14px;
+text-decoration: none;
+color: #555;
+font-weight: 500;
+font-size: 13px;
+border-radius: 20px;
+transition: all 0.3s ease;
+white-space: nowrap;
+cursor: pointer;
+}
+.nav-tabs a:hover {
+color: #008B8B;
+background: #E0F7FA;
+transform: translateY(-1px);
+}
+.nav-tabs a.active {
+color: #fff;
+background: linear-gradient(135deg, #008B8B, #20B2AA);
+box-shadow: 0 4px 12px rgba(0,139,139,0.4);
+text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+/* ================= CONTAINER ================= */
+.container {
+max-width: 1100px;
+margin: 0 auto;
+background: #fff;
+box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+overflow: hidden;
+}
+.content {
+padding: 40px 50px;
+}
+.section {
+margin-bottom: 45px;
+padding-bottom: 35px;
+border-bottom: 1px dashed #e0e8e8;
+scroll-margin-top: 150px;
+animation: fadeIn 0.6s ease-out;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(15px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+.section:last-of-type {
+border-bottom: none;
+margin-bottom: 0;
+}
+.section-title {
+color: #004D40;
+font-size: 22px;
+margin-bottom: 18px;
+padding-left: 18px;
+border-left: 5px solid #20B2AA;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+.section-title .icon {
+font-size: 26px;
+}
+.section p {
+text-align: justify;
+margin-bottom: 15px;
+color: #444;
+font-size: 15px;
+}
+.highlight-box {
+background: linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 100%);
+border-left: 5px solid #20B2AA;
+padding: 20px 24px;
+border-radius: 10px;
+margin: 20px 0;
+box-shadow: 0 2px 10px rgba(32,178,170,0.15);
+}
+.highlight-box strong { color: #008B8B; }
+/* LIST */
+.list-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 15px;
+margin-top: 18px;
+}
+.list-item {
+background: #F5FCFD;
+padding: 16px 18px;
+border-radius: 12px;
+border-left: 4px solid #008B8B;
+transition: all 0.3s ease;
+display: flex;
+align-items: flex-start;
+gap: 12px;
+}
+.list-item:hover {
+transform: translateY(-3px);
+box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+background: #E0F7FA;
+border-left-color: #20B2AA;
+}
+.list-item .num {
+background: linear-gradient(135deg, #008B8B, #20B2AA);
+color: #fff;
+width: 28px; height: 28px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+font-size: 12px;
+flex-shrink: 0;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+.list-item .text strong {
+color: #004D40;
+display: block;
+margin-bottom: 4px;
+font-size: 14px;
+}
+.list-item .text span {
+font-size: 13px;
+color: #666;
+}
+/* STEPS */
+.steps {
+counter-reset: step;
+margin-top: 20px;
+}
+.step {
+position: relative;
+padding: 18px 20px 18px 70px;
+margin-bottom: 12px;
+background: #fff;
+border: 2px solid #E0F7FA;
+border-radius: 12px;
+transition: all 0.3s ease;
+}
+.step:hover {
+border-color: #20B2AA;
+box-shadow: 0 6px 18px rgba(32,178,170,0.15);
+transform: translateX(5px);
+}
+.step::before {
+counter-increment: step;
+content: counter(step);
+position: absolute;
+left: 18px;
+top: 50%;
+transform: translateY(-50%);
+width: 36px; height: 36px;
+background: linear-gradient(135deg, #008B8B, #20B2AA);
+color: #fff;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+font-size: 15px;
+box-shadow: 0 3px 10px rgba(0,139,139,0.4);
+text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+.step strong {
+color: #004D40;
+display: block;
+margin-bottom: 4px;
+font-size: 14px;
+}
+.step span { color: #555; font-size: 13.5px; }
+/* TABLE */
+table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 18px;
+background: #fff;
+border-radius: 10px;
+overflow: hidden;
+box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+table thead {
+background: linear-gradient(135deg, #008B8B, #20B2AA);
+color: #fff;
+}
+table th, table td {
+padding: 12px 15px;
+text-align: left;
+border-bottom: 1px solid #eee;
+font-size: 14px;
+}
+table th { text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+table tbody tr:hover { background: #E0F7FA; }
+/* BACK TO TOP */
+.back-to-top {
+position: fixed;
+bottom: 25px;
+right: 25px;
+width: 46px;
+height: 46px;
+background: linear-gradient(135deg, #008B8B, #20B2AA);
+color: #fff;
+border: none;
+border-radius: 50%;
+cursor: pointer;
+font-size: 20px;
+box-shadow: 0 4px 15px rgba(0,139,139,0.5);
+opacity: 0;
+visibility: hidden;
+transform: translateY(20px);
+transition: all 0.3s ease;
+z-index: 999;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+.back-to-top.show {
+opacity: 1;
+visibility: visible;
+transform: translateY(0);
+}
+.back-to-top:hover {
+background: linear-gradient(135deg, #20B2AA, #40E0D0);
+color: #004D40;
+transform: translateY(-3px);
+}
+/* FOOTER */
+.footer {
+background: linear-gradient(135deg, #004D40, #00695C);
+color: #fff;
+padding: 25px 30px;
+text-align: center;
+}
+.footer p { margin: 5px 0; font-size: 14px; }
+.footer .motto {
+font-style: italic;
+color: #7FFFD4;
+margin-top: 10px;
+}
+/* RESPONSIVE */
+@media (max-width: 768px) {
+html { scroll-padding-top: 130px; }
+.header { padding: 18px 20px 45px; }
+.header-content { justify-content: center; text-align: center; }
+.logo { width: 52px; height: 52px; font-size: 20px; }
+.header-right { align-items: center; }
+.content { padding: 25px 20px; }
+.nav-tabs a { padding: 6px 11px; font-size: 12px; }
+.section-title { font-size: 18px; }
+.step { padding-left: 60px; }
+.section { scroll-margin-top: 140px; }
+.wave-divider svg { height: 30px; }
+}
+@media print {
+body { background: #fff; }
+.sticky-wrapper { position: static; box-shadow: none; }
+.nav-tabs { display: none; }
+.back-to-top { display: none; }
+.container { box-shadow: none; }
+.header { background: #008B8B !important; }
+}
+</style>
+</head>
+<body>
+<!-- ================= STICKY WRAPPER ================= -->
+<div class="sticky-wrapper" id="stickyWrapper">
+<!-- HEADER COMPACT - TURQUOISE -->
+<header class="header" role="banner">
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="header-content">
+<div class="logo-wrapper">
+<div class="logo" aria-label="Logo SMP Negeri 56 Jakarta">56</div>
+<div class="header-text">
+<h1>SMP NEGERI 56 JAKARTA</h1>
+<h2>Unit Layanan Bimbingan dan Konseling</h2>
+</div>
+</div>
+<div class="header-right">
+<div class="badge">🤝 Langkah Pelaksanaan Konferensi Kasus Standar Nasional</div>
+<p class="tagline">"Kolaborasi Profesional, Solusi Komprehensif"</p>
+</div>
+</div>
+<!-- Wave divider kurva indah 2 layer -->
+<div class="wave-divider" aria-hidden="true">
+<svg viewBox="0 0 1440 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0,15 C180,35 360,0 540,18 C720,36 900,0 1080,18 C1260,36 1380,10 1440,15 L1440,40 L0,40 Z"
+fill="#ffffff" opacity="0.5"/>
+<path d="M0,22 C240,40 480,5 720,22 C960,39 1200,5 1440,22 L1440,40 L0,40 Z"
+fill="#ffffff"/>
+</svg>
+</div>
+</header>
+<!-- NAVIGATION -->
+<nav class="nav-tabs" id="navTabs" role="navigation" aria-label="Menu navigasi langkah pelaksanaan konferensi kasus">
+<a href="#pengantar">Pengantar</a>
+<a href="#persiapan">Persiapan</a>
+<a href="#pelaksanaan">Pelaksanaan</a>
+<a href="#tindak-lanjut">Tindak Lanjut</a>
+<a href="#evaluasi">Evaluasi</a>
+<a href="#dokumentasi">Dokumentasi</a>
+<a href="#pelaporan">Pelaporan</a>
+<a href="#prinsip">Prinsip</a>
+<a href="#sop">SOP</a>
+</nav>
+</div>
+<!-- ================= MAIN CONTENT ================= -->
+<main class="container">
+<div class="content">
+<!-- PENGANTAR -->
+<section class="section" id="pengantar">
+<h2 class="section-title"><span class="icon">📖</span> Pengantar Langkah Pelaksanaan Konferensi Kasus</h2>
+<p>
+<strong>Langkah-langkah Pelaksanaan Layanan Konferensi Kasus</strong> merupakan rangkaian prosedur sistematis yang harus ditempuh oleh guru Bimbingan dan Konseling (BK) sebagai fasilitator dalam menyelenggarakan forum diskusi profesional multi-stakeholder. Prosedur ini dirancang berdasarkan <strong>Permendikbud No. 111 Tahun 2014</strong> tentang Bimbingan dan Konseling pada Pendidikan Dasar dan Menengah serta <strong>Panduan Operasional Penyelenggaraan (POP) BK</strong>.
+</p>
+<p>
+Di <strong>SMP Negeri 56 Jakarta</strong>, konferensi kasus dilaksanakan sebagai layanan pendukung yang bersifat kolaboratif dan komprehensif. Setiap langkah dilakukan dengan prinsip kerahasiaan, kemitraan setara, objektivitas, dan keberpihakan mutlak pada kepentingan terbaik peserta didik sesuai Standar Nasional Tingkat SMP.
+</p>
+<div class="highlight-box">
+<strong>📌 Tujuan Prosedur:</strong><br>
+Menjamin konsistensi, keamanan psikologis, efektivitas dinamika kelompok profesional, dan akuntabilitas pelaksanaan konferensi kasus sehingga menghasilkan rencana intervensi terpadu yang berdampak positif bagi peserta didik.
+</div>
+</section>
+<!-- TAHAP PERSIAPAN -->
+<section class="section" id="persiapan">
+<h2 class="section-title"><span class="icon">📋</span> Tahap 1: Persiapan Konferensi Kasus</h2>
+<p>
+Tahap persiapan adalah fondasi kritis yang menentukan kualitas dan keamanan proses konferensi. Persiapan yang matang memastikan forum berjalan produktif, etis, dan berfokus pada solusi.
+</p>
+<div class="steps">
+<div class="step"><strong>Identifikasi & Seleksi Kasus</strong><span>Konselor/guru/wali kelas mengidentifikasi siswa yang memerlukan konferensi kasus berdasarkan kriteria kompleksitas, stagnasi intervensi, atau urgensi. Melakukan asesmen awal untuk memastikan kelayakan.</span></div>
+<div class="step"><strong>Penentuan Komposisi Peserta</strong><span>Memilih pihak yang relevan dan diperlukan: konselor, wali kelas, guru mapel, orang tua, kepala sekolah, dan/atau mitra eksternal. Menghindari kehadiran pihak yang tidak berkontribusi langsung.</span></div>
+<div class="step"><strong>Penyusunan Agenda & Materi</strong><span>Mempersiapkan ringkasan kasus (anonim jika perlu), data asesmen, riwayat intervensi sebelumnya, dan pertanyaan panduan diskusi. Menyusun alokasi waktu per segmen.</span></div>
+<div class="step"><strong>Pengiriman Undangan & Kontrak Kerahasiaan</strong><span>Mengirim undangan resmi minimal H-3 beserta agenda. Memastikan semua peserta menandatangani kontrak kerahasiaan sebelum forum dimulai.</span></div>
+<div class="step"><strong>Penyiapan Ruang & Fasilitas</strong><span>Menata ruang dengan formasi melingkar/U-shape untuk kesetaraan. Menyediakan notulensi, alat tulis, air minum, dan memastikan privasi serta kenyamanan.</span></div>
+<div class="step"><strong>Koordinasi Pra-Konferensi</strong><span>Berkomunikasi singkat dengan peserta kunci untuk menyamakan persepsi, mengklarifikasi peran, dan memastikan kesiapan mental/emotional (terutama orang tua/siswa).</span></div>
+</div>
+</section>
+<!-- TAHAP PELAKSANAAN -->
+<section class="section" id="pelaksanaan">
+<h2 class="section-title"><span class="icon">🎯</span> Tahap 2: Pelaksanaan Diskusi Konferensi Kasus</h2>
+<p>
+Tahap pelaksanaan adalah inti dari layanan, di mana dinamika kelompok profesional difasilitasi untuk menghasilkan pemahaman kolektif dan rencana aksi terpadu.
+</p>
+<div class="steps">
+<div class="step"><strong>Pembukaan & Kesepakatan Forum</strong><span>Fasilitator membuka sesi, memperkenalkan peserta, menjelaskan tujuan, membacakan ulang asas kerahasiaan, dan menyepakati aturan dasar (tidak menyela, saling menghormati, fokus solusi).</span></div>
+<div class="step"><strong>Paparan Data & Kronologi Kasus</strong><span>Konselor memaparkan fakta objektif, data asesmen, riwayat intervensi, dan hambatan yang dihadapi. Peserta lain dapat menambahkan informasi dari perspektifnya tanpa asumsi/subjektivitas.</span></div>
+<div class="step"><strong>Eksplorasi Multi-Perspektif</strong><span>Setiap peserta memberikan analisis berdasarkan peran/keahliannya. Fasilitator mendorong pertanyaan terbuka, refleksi perasaan, dan penghindaran labeling/stigmatisasi.</span></div>
+<div class="step"><strong>Perumusan Diagnosis Kolektif</strong><span>Forum menyepakati akar masalah dan faktor penyebab berdasarkan triangulasi data. Menghindari kesimpulan prematur atau blaming.</span></div>
+<div class="step"><strong>Brainstorming Rencana Intervensi</strong><span>Menghasilkan alternatif solusi konkret, terukur, dan realistis. Membagi peran dan tanggung jawab jelas antar pihak. Menetapkan timeline dan indikator keberhasilan.</span></div>
+<div class="step"><strong>Kesepakatan & Komitmen Bersama</strong><span>Membacakan ulang rencana aksi. Memastikan semua pihak memahami dan berkomitmen. Menandatangani notula kesepakatan (jika diperlukan).</span></div>
+<div class="step"><strong>Penutupan & Apresiasi</strong><span>Fasilitator merangkum hasil, mengucapkan terima kasih atas kontribusi, dan menegaskan mekanisme monitoring/tindak lanjut. Menutup sesi secara positif.</span></div>
+</div>
+</section>
+<!-- TAHAP TINDAK LANJUT -->
+<section class="section" id="tindak-lanjut">
+<h2 class="section-title"><span class="icon">🔄</span> Tahap 3: Tindak Lanjut Pasca-Konferensi</h2>
+<p>
+Tindak lanjut memastikan bahwa kesepakatan konferensi tidak hanya menjadi dokumen mati, tetapi benar-benar diimplementasikan dan memberikan dampak nyata bagi siswa.
+</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Distribusi Notula & Rencana Aksi</strong><span>Menyampaikan salinan notula dan rencana tindak lanjut kepada seluruh peserta dalam 1x24 jam pasca-konferensi.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Implementasi Peran Masing-Masing</strong><span>Setiap pihak melaksanakan tugas sesuai kesepakatan: guru menyesuaikan metode, ortu menerapkan pola asuh, konselor melakukan pendampingan, dll.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Monitoring Berkala</strong><span>Konselor memantau progress melalui observasi, komunikasi singkat, atau check-in terjadwal dengan pihak terkait.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Koordinasi Antar Pihak</strong><span>Memastikan tidak ada kontradiksi atau duplikasi intervensi. Komunikasi intensif bila ditemukan hambatan implementasi.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Sesi Review/Evaluasi Tengah</strong><span>Jika diperlukan, mengadakan pertemuan singkat untuk menilai progress, mengatasi kendala, atau menyesuaikan rencana.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Rujukan Lanjutan (Jika Perlu)</strong><span>Bila kasus memerlukan penanganan spesialis di luar kapasitas tim, segera koordinasikan rujukan ke ahli eksternal sesuai prosedur.</span></div></div>
+<div class="list-item"><div class="num">7</div><div class="text"><strong>Dukungan Emosional Siswa</strong><span>Memastikan siswa merasa didukung, tidak distigmatisasi, dan aman selama proses implementasi rencana konferensi.</span></div></div>
+</div>
+</section>
+<!-- TAHAP EVALUASI -->
+<section class="section" id="evaluasi">
+<h2 class="section-title"><span class="icon">📊</span> Tahap 4: Evaluasi Konferensi Kasus</h2>
+<p>
+Evaluasi dilakukan untuk mengukur efektivitas proses dan hasil konferensi sebagai bahan perbaikan berkelanjutan dan akuntabilitas profesional.
+</p>
+<table>
+<thead>
+<tr><th>Aspek Evaluasi</th><th>Indikator</th><th>Teknik</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Evaluasi Proses</strong></td><td>Kepatuhan terhadap asas, kualitas fasilitasi, partisipasi aktif, keamanan psikologis, manajemen waktu.</td><td>Observasi, catatan lapangan, feedback peserta.</td></tr>
+<tr><td><strong>Evaluasi Hasil Langsung</strong></td><td>Kejelasan rencana aksi, kesepakatan kolektif, pembagian peran yang adil.</td><td>Notula, checklist kelengkapan rencana.</td></tr>
+<tr><td><strong>Evaluasi Dampak Jangka Pendek</strong></td><td>Kepatuhan implementasi, perubahan perilaku/sikap siswa dalam 1-4 minggu.</td><td>Monitoring, laporan wali kelas/guru/ortu.</td></tr>
+<tr><td><strong>Evaluasi Dampak Jangka Panjang</strong></td><td>Perbaikan fungsi akademik/sosial, penurunan gejala masalah, kesejahteraan psikologis (3-6 bulan).</td><td>Tracking data, wawancara follow-up, studi dokumentasi.</td></tr>
+<tr><td><strong>Evaluasi Kepuasan Stakeholder</strong></td><td>Persepsi keadilan, manfaat, dan profesionalisme proses konferensi.</td><td>Angket kepuasan anonim, umpan balik lisan/tertulis.</td></tr>
+<tr><td><strong>Evaluasi Diri Fasilitator</strong></td><td>Refleksi kompetensi fasilitasi, manajemen dinamika kelompok, area pengembangan.</td><td>Jurnal refleksi, supervisi klinis.</td></tr>
+</tbody>
+</table>
+</section>
+<!-- TAHAP DOKUMENTASI -->
+<section class="section" id="dokumentasi">
+<h2 class="section-title"><span class="icon">🗂️</span> Tahap 5: Dokumentasi</h2>
+<p>
+Dokumentasi yang rapi dan rahasia merupakan kewajiban profesional sekaligus perlindungan hukum bagi semua pihak yang terlibat dalam konferensi kasus.
+</p>
+<div class="steps">
+<div class="step"><strong>Catatan Pra-Konferensi (PK-01)</strong><span>Dokumentasi identifikasi kasus, seleksi peserta, undangan, kontrak kerahasiaan, dan materi persiapan.</span></div>
+<div class="step"><strong>Notula Konferensi Kasus (NK-01)</strong><span>Catatan resmi jalannya diskusi: tanggal, peserta, paparan data, analisis kolektif, rencana aksi, pembagian peran, dan kesepakatan. Ditandatangani fasilitator dan perwakilan peserta.</span></div>
+<div class="step"><strong>Lembar Monitoring Tindak Lanjut (MTL-01)</strong><span>Log berkala implementasi rencana aksi, progress, hambatan, dan penyesuaian yang dilakukan.</span></div>
+<div class="step"><strong>Lembar Evaluasi Konferensi (EK-01)</strong><span>Hasil evaluasi proses, hasil, dampak, dan kepuasan stakeholder.</span></div>
+<div class="step"><strong>Laporan Penutupan/Rujukan (LPK-01)</strong><span>Dokumen formal penutupan kasus atau rujukan lanjutan dengan ringkasan capaian dan rekomendasi.</span></div>
+<div class="step"><strong>Penyimpanan Aman & Terenkripsi</strong><span>Seluruh dokumen disimpan dalam lemari terkunci ganda atau sistem digital terenkripsi. Akses terbatas hanya untuk pihak berwenang sesuai asas kerahasiaan.</span></div>
+</div>
+</section>
+<!-- TAHAP PELAPORAN -->
+<section class="section" id="pelaporan">
+<h2 class="section-title"><span class="icon">📝</span> Tahap 6: Pelaporan</h2>
+<p>
+Pelaporan dilakukan secara selektif dan agregat untuk menjaga kerahasiaan identitas siswa, kecuali dalam situasi darurat yang mengancam keselamatan.
+</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Laporan Bulanan Agregat</strong><span>Jumlah konferensi kasus, jenis permasalahan (kategori umum), status tindak lanjut — TANPA identitas. Disampaikan tanggal 5 bulan berikutnya.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Laporan Semesteran/Tahunan</strong><span>Analisis tren kasus kompleks, efektivitas model konferensi, rekomendasi perbaikan sistem/SOP, dan kebutuhan pelatihan staf.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Laporan Kasus Krisis (Terbatas)</strong><span>Hanya untuk kasus yang mengancam nyawa/keselamatan atau memerlukan intervensi lintas sektor. Disampaikan kepada Kepala Sekolah/Dinas dengan protokol kerahasiaan ketat.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Diseminasi Best Practice (Anonim)</strong><span>Berbagi pola kolaborasi efektif dan lessons learned dalam forum MGMP BK atau rapat dewan guru tanpa menyebut identitas.</span></div></div>
+</div>
+</section>
+<!-- PRINSIP PELAKSANAAN -->
+<section class="section" id="prinsip">
+<h2 class="section-title"><span class="icon">⚖️</span> Prinsip Pelaksanaan Konferensi Kasus</h2>
+<p>
+Seluruh langkah pelaksanaan konferensi kasus di SMP Negeri 56 Jakarta berlandaskan prinsip-prinsip berikut yang wajib dipatuhi oleh fasilitator dan seluruh peserta:
+</p>
+<div class="list-grid">
+<div class="list-item"><div class="num">1</div><div class="text"><strong>Kerahasiaan Mutlak (Confidentiality)</strong><span>Seluruh informasi dalam forum bersifat RAHASIA. Tidak boleh disebarluaskan kepada pihak yang tidak berkepentingan langsung. Pelanggaran dikenai sanksi etik/administratif.</span></div></div>
+<div class="list-item"><div class="num">2</div><div class="text"><strong>Kemitraan Setara (Partnership)</strong><span>Semua peserta berkedudukan setara sebagai mitra profesional. Tidak ada hierarki yang menghambat kontribusi gagasan.</span></div></div>
+<div class="list-item"><div class="num">3</div><div class="text"><strong>Objektivitas & Berbasis Data</strong><span>Pembahasan didasarkan pada fakta, data asesmen, dan observasi objektif — bukan asumsi, prasangka, atau label stigmatisasi.</span></div></div>
+<div class="list-item"><div class="num">4</div><div class="text"><strong>Kepentingan Terbaik Anak (Best Interest)</strong><span>Seluruh keputusan dan rekomendasi harus bermuara pada kesejahteraan, keamanan, dan perkembangan optimal peserta didik.</span></div></div>
+<div class="list-item"><div class="num">5</div><div class="text"><strong>Berorientasi Solusi (Solution-Focused)</strong><span>Fokus pada pencarian solusi konstruktif dan rencana aksi nyata, bukan menyalahkan atau mencari kambing hitam.</span></div></div>
+<div class="list-item"><div class="num">6</div><div class="text"><strong>Keahlian & Kompetensi</strong><span>Fasilitator memiliki keterampilan khusus dalam manajemen dinamika kelompok profesional dan teknik konferensi kasus.</span></div></div>
+<div class="list-item"><div class="num">7</div><div class="text"><strong>Keamanan Psikologis</strong><span>Proses dijaga agar tetap aman, tidak retraumatisasi, dan menghormati martabat semua pihak termasuk siswa yang dibahas.</span></div></div>
+<div class="list-item"><div class="num">8</div><div class="text"><strong>Akuntabilitas Profesional</strong><span>Setiap tahap didokumentasikan dan dapat dipertanggungjawabkan secara etis dan administratif.</span></div></div>
+</div>
+</section>
+<!-- SOP -->
+<section class="section" id="sop">
+<h2 class="section-title"><span class="icon">📑</span> Standar Operasional Prosedur (SOP)</h2>
+<p>
+Untuk menjamin konsistensi dan kualitas layanan sesuai Standar Nasional Tingkat SMP, SMP Negeri 56 Jakarta menetapkan <strong>SOP Pelaksanaan Konferensi Kasus</strong> sebagai berikut:
+</p>
+<table>
+<thead>
+<tr><th>No</th><th>Tahapan</th><th>Waktu Maks.</th><th>Output</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>Identifikasi & Seleksi Kasus</td><td>1-3 hari setelah rujukan/asemen</td><td>Formulir PK-01, daftar peserta</td></tr>
+<tr><td>2</td><td>Persiapan & Undangan</td><td>Minimal H-3 sebelum konferensi</td><td>Undangan, kontrak kerahasiaan, materi</td></tr>
+<tr><td>3</td><td>Pelaksanaan Konferensi</td><td>60-90 menit (sesuai kompleksitas)</td><td>Notula NK-01 tertandatangani</td></tr>
+<tr><td>4</td><td>Distribusi Notula & RTL</td><td>1x24 jam pasca-konferensi</td><td>Salinan notula ke semua peserta</td></tr>
+<tr><td>5</td><td>Monitoring Tindak Lanjut</td><td>Mingguan/Bulanan s.d. 3 bulan</td><td>Catatan MTL-01</td></tr>
+<tr><td>6</td><td>Evaluasi & Penutupan/Rujukan</td><td>Setelah monitoring selesai</td><td>Lembar EK-01, LPK-01</td></tr>
+<tr><td>7</td><td>Pengarsipan & Pelaporan Agregat</td><td>Maks. 1 minggu pasca-evaluasi</td><td>Arsip aman, laporan bulanan</td></tr>
+</tbody>
+</table>
+</section>
+<!-- PENUTUP -->
+<section class="section">
+<div class="highlight-box">
+<strong>💡 Pesan Layanan BK:</strong><br>
+"Dalam konferensi kasus, kekuatan terletak pada kebersamaan pikiran dan hati yang tulus untuk anak-anak kita. Setiap langkah prosedur yang kami jalankan dirancang untuk memastikan bahwa kolaborasi profesional benar-benar menghadirkan solusi yang manusiawi, adil, dan berkelanjutan. Di SMP Negeri 56 Jakarta, kami percaya bahwa tidak ada masalah yang terlalu rumit ketika dihadapi bersama dengan integritas dan kasih sayang sesuai Standar Nasional Tingkat SMP."
+</div>
+</section>
+</div>
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+<p><strong>UNIT LAYANAN BIMBINGAN DAN KONSELING</strong></p>
+<p>SMP NEGERI 56 JAKARTA</p>
+<p>Jl. Jeruk Purut I, Cilandak Timur, Jakarta Selatan</p>
+<p class="motto">"Cerdas dalam Berpikir, Mulia dalam Bertindak"</p>
+<p style="margin-top: 10px; font-size: 12px; opacity: 0.8;">© 2026 SMP Negeri 56 Jakarta — Dokumen Resmi Langkah Pelaksanaan Layanan Konferensi Kasus Standar Nasional Tingkat SMP</p>
+</footer>
+</main>
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" aria-label="Kembali ke atas" title="Kembali ke atas">↑</button>
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+// 1. Sticky wrapper shadow saat scroll
+const stickyWrapper = document.getElementById('stickyWrapper');
+const backToTopBtn = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+if (window.scrollY > 10) {
+stickyWrapper.classList.add('scrolled');
+backToTopBtn.classList.add('show');
+} else {
+stickyWrapper.classList.remove('scrolled');
+backToTopBtn.classList.remove('show');
+}
+});
+// 2. LANGSUNG JUMP (tanpa smooth scroll) saat klik menu
+const navLinks = document.querySelectorAll('.nav-tabs a');
+navLinks.forEach(link => {
+link.addEventListener('click', function(e) {
+e.preventDefault();
+const targetId = this.getAttribute('href');
+const targetSection = document.querySelector(targetId);
+if (targetSection) {
+const stickyHeight = stickyWrapper.offsetHeight;
+const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - stickyHeight - 10;
+window.scrollTo({
+top: targetPosition
+});
+history.pushState(null, null, targetId);
+navLinks.forEach(l => l.classList.remove('active'));
+this.classList.add('active');
+}
+});
+});
+// 3. Highlight menu aktif saat scroll
+const sections = document.querySelectorAll('.section[id]');
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+const id = entry.target.getAttribute('id');
+navLinks.forEach(link => {
+link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+});
+}
+});
+}, {
+rootMargin: '-150px 0px -70% 0px',
+threshold: 0
+});
+sections.forEach(section => observer.observe(section));
+if (navLinks.length > 0) navLinks[0].classList.add('active');
+// 4. Back to top
+backToTopBtn.addEventListener('click', () => {
+window.scrollTo({ top: 0 });
+});
+// 5. Handle hash URL
+window.addEventListener('load', () => {
+if (window.location.hash) {
+const target = document.querySelector(window.location.hash);
+if (target) {
+setTimeout(() => {
+const stickyHeight = stickyWrapper.offsetHeight;
+const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - stickyHeight - 10;
+window.scrollTo({ top: targetPosition });
+}, 50);
+}
+}
+});
+</script>
+</body>
+</html>
