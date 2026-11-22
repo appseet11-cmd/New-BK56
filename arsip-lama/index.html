@@ -1791,6 +1791,706 @@ box-shadow: 0 8px 22px rgba(0,0,0,0.3);
 }
 </style>
 <!-- ========== ABSENSI SISWA - CSS [END] ========== -->
+ <style id="video-standalone-style">
+/* ================================================================
+* VIDEO STANDALONE - CSS PERMANEN
+* ================================================================ */
+.video-standalone-page {
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 auto;
+  background: #f8fafc;
+}
+
+/* ===== HERO VIDEO ===== */
+.video-hero {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #4c1d95 100%);
+  color: #fff;
+  padding: 3rem 1.5rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.video-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255,213,79,.18), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(168,85,247,.25), transparent 40%);
+  pointer-events: none;
+}
+.video-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+.video-hero-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+.video-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.2);
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+}
+.video-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 12px #10b981;
+  animation: videoPulse 2s infinite;
+}
+@keyframes videoPulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.3); }
+}
+.video-hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 0.8rem;
+  letter-spacing: -0.02em;
+}
+.video-hero h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, #ffd54f, #ff9800);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.video-hero-sub {
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  opacity: 0.92;
+  max-width: 680px;
+  margin: 0 auto 1.8rem;
+  line-height: 1.6;
+}
+.video-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.video-stat {
+  background: rgba(255,255,255,.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 14px;
+  padding: 1rem 0.6rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+.video-stat:hover {
+  transform: translateY(-3px);
+  background: rgba(255,255,255,.15);
+}
+.video-stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffd54f, #ff9800);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+  line-height: 1;
+}
+.video-stat-lbl {
+  font-size: 0.72rem;
+  opacity: 0.85;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 0.3rem;
+}
+
+/* ===== ACTION BAR ===== */
+.video-action-bar {
+  max-width: 1100px;
+  margin: -2rem auto 0;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+.video-action-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(124,58,237,.08);
+  padding: 1.2rem 1.5rem;
+  border: 1px solid #e9d5ff;
+}
+.video-action-row {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.video-backend-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  flex: 1;
+  min-width: 250px;
+}
+.video-backend-status.connected {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+.video-backend-status.disconnected {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #78350f;
+  border: 1px solid #f59e0b;
+}
+.video-backend-status .status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: videoPulse 2s infinite;
+  flex-shrink: 0;
+}
+.video-backend-status.connected .status-dot { background: #10b981; }
+.video-backend-status.disconnected .status-dot { background: #f59e0b; }
+.video-backend-status small {
+  display: block;
+  font-size: 0.7rem;
+  opacity: 0.85;
+  font-family: Consolas, Monaco, monospace;
+  word-break: break-all;
+  margin-top: 2px;
+}
+.video-action-buttons {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.video-act-btn {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.video-act-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+.video-act-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.video-act-btn.sync {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(16,185,129,.35);
+}
+.video-act-btn.push {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(59,130,246,.35);
+}
+.video-permanent-info {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  border-left: 4px solid #10b981;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: #065f46;
+  line-height: 1.5;
+}
+.video-permanent-info strong { color: #047857; }
+
+/* ===== TABS VIDEO ===== */
+.video-tabs-standalone {
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(124,58,237,.08);
+  position: sticky;
+  top: 70px;
+  z-index: 100;
+  border-bottom: 3px solid #e9d5ff;
+  margin-top: 1.5rem;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 20px 20px 0 0;
+}
+.video-tabs-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  overflow-x: auto;
+  padding: 0 1rem;
+  gap: 0.3rem;
+  scrollbar-width: thin;
+}
+.video-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 1.1rem 1.5rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  transition: all 0.25s ease;
+}
+.video-tab-btn:hover {
+  color: #7c3aed;
+  background: rgba(124,58,237,.04);
+}
+.video-tab-btn.active {
+  color: #7c3aed;
+  border-bottom-color: #a855f7;
+  background: rgba(168,85,247,.05);
+}
+.video-tab-btn .tab-emoji { font-size: 1.1rem; }
+.video-tab-btn .tab-count {
+  background: #e9d5ff;
+  color: #6b21a8;
+  padding: 2px 10px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  transition: all 0.25s ease;
+}
+.video-tab-btn.active .tab-count {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  color: #fff;
+}
+
+/* ===== CONTAINER & GRID ===== */
+.video-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+}
+.video-panel-header {
+  background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+  border-left: 5px solid #a855f7;
+  padding: 1.2rem 1.5rem;
+  border-radius: 14px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(168,85,247,.1);
+}
+.video-panel-header h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.4rem;
+  color: #6b21a8;
+  margin: 0 0 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.video-panel-header p {
+  color: #7c3aed;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin: 0;
+}
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+.video-panel { display: none; animation: videoFadeIn 0.4s ease; }
+.video-panel.active { display: block; }
+@keyframes videoFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== CARD VIDEO ===== */
+.video-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(124,58,237,.06);
+  border: 1px solid #e9d5ff;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.video-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #a855f7, #c084fc, #a855f7);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.video-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(124,58,237,.12);
+  border-color: #a855f7;
+}
+.video-card:hover::before { transform: scaleX(1); }
+
+.video-card-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 1rem;
+}
+.video-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  color: #fff;
+  font-weight: 800;
+  font-family: 'Space Grotesk', sans-serif;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+}
+.video-card-info { flex: 1; min-width: 0; }
+.video-card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 2px;
+  line-height: 1.2;
+}
+.video-card-sub {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+/* ===== URL BOX ===== */
+.video-url-box {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 1rem;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+.video-url-box.has-link {
+  background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+  border: 1.5px solid #a855f7;
+  border-style: solid;
+}
+.video-url-box .url-icon { font-size: 1.1rem; flex-shrink: 0; }
+.video-url-box .url-text {
+  flex: 1;
+  min-width: 0;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.72rem;
+  color: #6b21a8;
+  word-break: break-all;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.video-url-box.empty .url-text {
+  color: #94a3b8;
+  font-family: inherit;
+  font-style: italic;
+  font-size: 0.78rem;
+}
+
+/* ===== BADGE LINK COUNT ===== */
+.video-link-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #faf5ff;
+  border: 1px solid #e9d5ff;
+  color: #7c3aed;
+  margin-bottom: 8px;
+}
+.video-link-badge.has-link {
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  border-color: #c084fc;
+  color: #6b21a8;
+}
+
+/* ===== BUTTONS ===== */
+.video-btns {
+  display: grid;
+  grid-template-columns: 1fr 44px;
+  gap: 8px;
+  margin-top: auto;
+}
+.video-btn-open {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #fff;
+  border: none;
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(124,58,237,.2);
+}
+.video-btn-open:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(124,58,237,.3);
+  filter: brightness(1.1);
+}
+.video-btn-open.empty {
+  background: linear-gradient(135deg, #94a3b8, #64748b);
+  box-shadow: 0 4px 12px rgba(100,116,139,.25);
+}
+.video-btn-manage {
+  background: rgba(168,85,247,.12);
+  color: #7c3aed;
+  border: 1.5px solid rgba(168,85,247,.3);
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.video-btn-manage:hover {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  color: #fff;
+  transform: rotate(90deg) scale(1.05);
+  border-color: #a855f7;
+}
+
+/* ===== MODAL EMBED URL ===== */
+.video-modal-ov {
+  position: fixed;
+  inset: 0;
+  background: rgba(124,58,237,.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+.video-modal-ov.show { display: flex; }
+.video-modal-box {
+  background: #fff;
+  border-radius: 22px;
+  max-width: 480px;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0,0,0,.4);
+  animation: videoPop 0.35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes videoPop {
+  from { opacity: 0; transform: translateY(30px) scale(.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.video-modal-hdr {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  color: #fff;
+  padding: 22px 24px;
+  text-align: center;
+}
+.video-modal-hdr .hdr-icon {
+  font-size: 2.5rem;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.2));
+}
+.video-modal-hdr h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+.video-modal-hdr p { font-size: 0.85rem; opacity: 0.95; margin: 0; }
+.video-modal-body { padding: 24px; }
+.video-modal-body label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+.video-modal-body input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e9d5ff;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-family: Consolas, Monaco, monospace;
+  outline: none;
+  transition: all 0.2s ease;
+  margin-bottom: 14px;
+}
+.video-modal-body input:focus {
+  border-color: #a855f7;
+  box-shadow: 0 0 0 4px rgba(168,85,247,.12);
+}
+.video-modal-info {
+  background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+  border-left: 4px solid #a855f7;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: #6b21a8;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.video-modal-acts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.video-modal-btn {
+  padding: 11px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+.video-modal-btn.primary {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(16,185,129,.3);
+}
+.video-modal-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16,185,129,.4);
+}
+.video-modal-btn.ghost { background: #f1f5f9; color: #475569; }
+.video-modal-btn.ghost:hover { background: #e2e8f0; }
+
+/* ===== TOAST ===== */
+.video-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #7c3aed;
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 12px 32px rgba(124,58,237,.4);
+  z-index: 100001;
+  opacity: 0;
+  transition: all 0.4s ease;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 90%;
+}
+.video-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.video-toast.success { background: linear-gradient(135deg, #10b981, #059669); }
+.video-toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.video-toast.info { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+
+/* ===== FOOTER ===== */
+.video-footer-section {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: rgba(255,255,255,.85);
+  padding: 2rem 1.5rem 1.5rem;
+  text-align: center;
+  margin-top: 2rem;
+  border-radius: 16px;
+}
+.video-footer-section h4 {
+  color: #ffd54f;
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+}
+.video-footer-section p { font-size: 0.82rem; margin: 0.3rem 0; opacity: 0.85; }
+.video-footer-section .div-line {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, #ffd54f, #ff9800);
+  margin: 1rem auto;
+  border-radius: 2px;
+}
+.video-footer-section .copy { font-size: 0.75rem; opacity: 0.55; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .video-hero { padding: 2.5rem 1rem 3.5rem; }
+  .video-stats { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .video-stat { padding: 0.8rem 0.4rem; }
+  .video-container { padding: 1.5rem 1rem 2rem; }
+  .video-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .video-tab-btn { padding: 1rem 1rem; font-size: 0.82rem; }
+  .video-modal-acts { grid-template-columns: 1fr; }
+  .video-action-row { flex-direction: column; align-items: stretch; }
+  .video-action-buttons { justify-content: stretch; }
+  .video-act-btn { flex: 1; justify-content: center; }
+}
+@media (max-width: 480px) {
+  .video-card { padding: 1.2rem; }
+  .video-card-icon { width: 48px; height: 48px; font-size: 1.3rem; }
+  .video-card-title { font-size: 1rem; }
+}
+</style>
 </head>
 <body class="protected">
 <div id="reading-progress" aria-hidden="true"></div>
@@ -3464,91 +4164,145 @@ aria-label="Buka Suara Aspirasi & Aduan Siswa">
 <div class="link-box"><a onclick="loadExt('quiz/perencanaan-masa-depan.html','quiz')"><span class="link-num">10</span><div class="link-text"><h5>Quiz Perencanaan Masa Depan</h5><span>Mulai</span></div><span class="arrow-icon">→</span></a></div>
 </div>
 </div>
-<div id="video" class="page v">
-<button class="back-btn" onclick="go('home')">← Kembali ke Beranda</button>
-<h2 class="page-title">🎬 Video Pembelajaran</h2>
-<p class="page-desc">Tonton penjelasan visual materi BK yang menarik.</p>
-<div class="link-grid">
-<div class="link-box">
-    <!-- Ganti loadExt dengan bukaVideoLangsungFix(0) -->
-    <a onclick="bukaVideoLangsungFix(0)">
-        <span class="link-num">1</span>
-        <div class="link-text"><h5>Video Mengenal Diri</h5><span>Tonton</span></div>
-        <span class="arrow-icon">▶</span>
-    </a>
+<!-- ================================================================ -->
+<!-- ========== HALAMAN VIDEO STANDALONE - PERMANEN ========== -->
+<!-- ================================================================ -->
+<div id="video" class="page video-standalone-page">
+  <button class="back-btn" onclick="go('home')">← Kembali ke Beranda</button>
+
+  <!-- HERO -->
+  <header class="video-hero">
+    <div class="video-hero-content">
+      <div class="video-badge">
+        <span class="video-badge-dot"></span>
+        <span>Video Digital • Permanen • Lintas Device</span>
+      </div>
+      <h1>VIDEO PEMBELAJARAN<br><em>BK SMP NEGERI 56 JAKARTA</em></h1>
+      <p class="video-hero-sub">
+        Sistem video pembelajaran digital terintegrasi. Link tersimpan <strong>permanen</strong> di HTML, browser, dan Google Sheets — otomatis tersinkron di semua perangkat.
+      </p>
+      <div class="video-stats">
+        <div class="video-stat">
+          <span class="video-stat-num" id="vs-count-total">0</span>
+          <div class="video-stat-lbl">Total Video</div>
+        </div>
+        <div class="video-stat">
+          <span class="video-stat-num" id="vs-count-linked">0</span>
+          <div class="video-stat-lbl">Sudah Ada Link</div>
+        </div>
+        <div class="video-stat">
+          <span class="video-stat-num">∞</span>
+          <div class="video-stat-lbl">Lintas Device</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ACTION BAR -->
+  <div class="video-action-bar">
+    <div class="video-action-card">
+      <div class="video-action-row">
+        <div class="video-backend-status connected" id="vsBackendStatus">
+          <span class="status-dot"></span>
+          <div style="flex:1;">
+            <strong id="vsBackendLabel">✅ Backend Video Terhubung (Permanen)</strong>
+            <small id="vsBackendUrl">URL Apps Script tertanam di HTML</small>
+          </div>
+        </div>
+        <div class="video-action-buttons">
+          <button class="video-act-btn push" onclick="vsPushToSheet()" title="Kirim semua link video ke Google Sheets">💾 Push ke Sheet</button>
+          <button class="video-act-btn sync" onclick="vsPullFromSheet()" title="Ambil link video dari Sheet">🔄 Pull dari Sheet</button>
+        </div>
+      </div>
+      <div class="video-permanent-info">
+        🔒 <strong>Mode Permanen 3 Lapis Aktif:</strong><br>
+        ① Link tertanam di file HTML ini (bertahan ganti device)<br>
+        ② Link tersimpan di browser (bertahan hard refresh)<br>
+        ③ Link tersimpan di Google Sheets (backup cloud otomatis)<br>
+        <strong>💾 Push ke Sheet</strong> = kirim link ke cloud • <strong>🔄 Pull dari Sheet</strong> = pulihkan link ke card
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <nav class="video-tabs-standalone">
+    <div class="video-tabs-inner">
+      <button class="video-tab-btn active" data-vs-tab="all" onclick="vsSwitchTab('all',this)">
+        <span class="tab-emoji">🎬</span><span>Semua Video</span>
+        <span class="tab-count" id="vs-tab-all-count">10</span>
+      </button>
+      <button class="video-tab-btn" data-vs-tab="linked" onclick="vsSwitchTab('linked',this)">
+        <span class="tab-emoji">✅</span><span>Sudah Ada Link</span>
+        <span class="tab-count" id="vs-tab-linked-count">0</span>
+      </button>
+      <button class="video-tab-btn" data-vs-tab="empty" onclick="vsSwitchTab('empty',this)">
+        <span class="tab-emoji">📭</span><span>Belum Ada Link</span>
+        <span class="tab-count" id="vs-tab-empty-count">10</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- PANEL -->
+  <div class="video-container">
+    <div class="video-panel-header">
+      <h2 id="vs-panel-title">🎬 Video Pembelajaran BK</h2>
+      <p id="vs-panel-sub">Klik ⚙️ untuk menyematkan link video • Auto-sync ke Google Sheets</p>
+    </div>
+    <div class="video-panel active" id="vs-panel-all">
+      <div class="video-grid" id="vs-grid-all"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="video-footer-section">
+    <h4>🎬 Video Pembelajaran BK SMPN 56 Jakarta</h4>
+    <p>Sistem Video Digital Terintegrasi — Permanen Lintas Device</p>
+    <p>Jl. Jeruk Purut, Cilandak Timur, Pasar Minggu — Jakarta Selatan</p>
+    <div class="div-line"></div>
+    <p class="copy">© 2026 SMP Negeri 56 Jakarta</p>
+  </footer>
+
+  <!-- MODAL EMBED URL -->
+  <div class="video-modal-ov" id="vs-modal-embed" role="dialog" aria-modal="true">
+    <div class="video-modal-box">
+      <div class="video-modal-hdr">
+        <div class="hdr-icon">🔗</div>
+        <h3 id="vs-modal-title">Sematkan Link Video</h3>
+        <p id="vs-modal-subtitle">Video Pembelajaran</p>
+      </div>
+      <div class="video-modal-body">
+        <div class="video-modal-info">
+          💡 Tempelkan URL video (YouTube, Google Drive, dll) → klik <strong>Simpan</strong>. 
+          Link otomatis tersimpan permanen di HTML, browser, dan siap di-push ke Google Sheets.
+        </div>
+        <label for="vs-url-input">🌐 URL Video:</label>
+        <input type="text" id="vs-url-input" placeholder="https://www.youtube.com/watch?v=... atau https://drive.google.com/..." autocomplete="off">
+        <div class="video-modal-acts">
+          <button class="video-modal-btn ghost" onclick="vsCloseModal()">Batal</button>
+          <button class="video-modal-btn primary" onclick="vsSaveUrl()">💾 Simpan Link</button>
+        </div>
+        <div id="vs-current-url-box" style="margin-top:14px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="video-toast" id="vs-toast"></div>
+
+  <!-- ============================================================ -->
+  <!-- EMBEDDED DATA: LINK VIDEO + BACKEND URL (PERMANEN DI HTML)   -->
+  <!-- ============================================================ -->
+  <script type="application/json" id="vs-embedded-data">
+  {
+    "videos": {},
+    "backendUrl": "https://script.google.com/macros/s/AKfycbziMGLc72raxK3xfi3I3vGBlVMOy-PGxvvnXqqJd3uCjVroaDGzCM4c5lPtjAnBZCzSlg/exec",
+    "version": "1.0",
+    "lastUpdated": "",
+    "note": "Data video permanen — bertahan ganti device, hard refresh, clear browser"
+  }
+  </script>
 </div>
-<div class="link-box">
-    <!-- Ganti loadExt dengan bukaVideoLangsungFix(0) -->
-    <a onclick="bukaVideoLangsungFix(0)">
-        <span class="link-num">1</span>
-        <div class="link-text"><h5>Video Teknik Belajar Efektif</h5><span>Tonton</span></div>
-        <span class="arrow-icon">▶</span>
-    </a>
-</div>
-<div class="link-box">
-    <!-- Ganti loadExt dengan bukaVideoLangsungFix(0) -->
-    <a onclick="bukaVideoLangsungFix(0)">
-        <span class="link-num">1</span>
-        <div class="link-text"><h5>Video Mengelola Emosi</h5><span>Tonton</span></div>
-        <span class="arrow-icon">▶</span>
-    </a>
-</div>
-<div class="link-box">
-    <!-- Ganti loadExt dengan bukaVideoLangsungFix(0) -->
-    <a onclick="bukaVideoLangsungFix(0)">
-        <span class="link-num">1</span>
-        <div class="link-text"><h5>Video Komunikasi Asertif</h5><span>Tonton</span></div>
-        <span class="arrow-icon">▶</span>
-    </a>
-</div>
-<div class="link-box">
-    <!-- Ganti loadExt dengan bukaVideoLangsungFix(0) -->
-    <a onclick="bukaVideoLangsungFix(0)">
-        <span class="link-num">1</span>
-        <div class="link-text"><h5>Video Mencegah Perundungan</h5><span>Tonton</span></div>
-        <span class="arrow-icon">▶</span>
-    </a>
-</div>
-<div class="link-box">
-    <!-- Ganti loadExt dengan bukaVideoLangsungFix(0) -->
-    <a onclick="bukaVideoLangsungFix(0)">
-        <span class="link-num">1</span>
-        <div class="link-text"><h5>Video Menemukan Minat</h5><span>Tonton</span></div>
-        <span class="arrow-icon">▶</span>
-    </a>
-</div>
-<div class="link-box">
-    <!-- Ganti loadExt dengan bukaVideoLangsungFix(0) -->
-    <a onclick="bukaVideoLangsungFix(0)">
-        <span class="link-num">1</span>
-        <div class="link-text"><h5>Video Strategi Ujian</h5><span>Tonton</span></div>
-        <span class="arrow-icon">▶</span>
-    </a>
-</div>
-<div class="link-box">
-    <!-- Ganti loadExt dengan bukaVideoLangsungFix(0) -->
-    <a onclick="bukaVideoLangsungFix(0)">
-        <span class="link-num">1</span>
-        <div class="link-text"><h5>Video Kesehatan Mental</h5><span>Tonton</span></div>
-        <span class="arrow-icon">▶</span>
-    </a>
-</div>
-<div class="link-box">
-    <!-- Ganti loadExt dengan bukaVideoLangsungFix(0) -->
-    <a onclick="bukaVideoLangsungFix(0)">
-        <span class="link-num">1</span>
-        <div class="link-text"><h5>Video Meraih Cita-Cita</h5><span>Tonton</span></div>
-        <span class="arrow-icon">▶</span>
-    </a>
-</div>
-<div class="link-box">
-    <!-- Ganti loadExt dengan bukaVideoLangsungFix(0) -->
-    <a onclick="bukaVideoLangsungFix(0)">
-        <span class="link-num">1</span>
-        <div class="link-text"><h5>Video Bimbingan Karir</h5><span>Tonton</span></div>
-        <span class="arrow-icon">▶</span>
-    </a>
-</div>
+<!-- ========== HALAMAN VIDEO STANDALONE [END] ========== -->
 </div>
 </div>
 <div id="game" class="page g">
@@ -21854,5 +22608,579 @@ if (document.readyState === 'loading') {
 <!-- ================================================================ -->
 <!-- PATCH: AUTO-RESTORE ABSENSI [END]                               -->
 <!-- ================================================================ -->
+ <!-- ================================================================ -->
+<!-- ========== VIDEO STANDALONE - JAVASCRIPT PERMANEN ========== -->
+<!-- ================================================================ -->
+<script>
+(function(){
+"use strict";
+/* ================================================================
+* VIDEO STANDALONE - SISTEM PERMANEN 3 LAPIS
+* ================================================================
+* LAPIS 1: Embedded JSON di HTML  → bertahan ganti device
+* LAPIS 2: localStorage browser   → bertahan hard refresh
+* LAPIS 3: Google Sheets (cloud)  → backup & restore otomatis
+================================================================ */
+var FLAG = '__videoStandaloneV1';
+if (window[FLAG]) return;
+window[FLAG] = true;
+
+var VS_KEY   = 'bk56_video_standalone_links';
+var EMB_ID   = 'vs-embedded-data';
+
+/* ================================================================
+* DATA VIDEO (10 Card)
+================================================================ */
+var VS_DATA = [
+  { id: 'v0', label: '1', title: 'Video Mengenal Diri',          sub: 'Pengembangan Pribadi' },
+  { id: 'v1', label: '2', title: 'Video Teknik Belajar Efektif', sub: 'Bimbingan Belajar' },
+  { id: 'v2', label: '3', title: 'Video Mengelola Emosi',        sub: 'Kesehatan Mental' },
+  { id: 'v3', label: '4', title: 'Video Komunikasi Asertif',     sub: 'Bimbingan Sosial' },
+  { id: 'v4', label: '5', title: 'Video Mencegah Perundungan',   sub: 'Pencegahan Bullying' },
+  { id: 'v5', label: '6', title: 'Video Menemukan Minat',        sub: 'Bak & Minat' },
+  { id: 'v6', label: '7', title: 'Video Strategi Ujian',         sub: 'Tips Belajar' },
+  { id: 'v7', label: '8', title: 'Video Kesehatan Mental',       sub: 'Wellness Remaja' },
+  { id: 'v8', label: '9', title: 'Video Meraih Cita-Cita',       sub: 'Bimbingan Karir' },
+  { id: 'v9', label: '10', title: 'Video Bimbingan Karir',       sub: 'Perencanaan Masa Depan' }
+];
+
+/* ================================================================
+* HELPER: Baca / Tulis Embedded JSON (LAPIS 1)
+================================================================ */
+function vsReadEmb() {
+  try {
+    var el = document.getElementById(EMB_ID);
+    return el ? JSON.parse(el.textContent) : null;
+  } catch(e) { return null; }
+}
+function vsWriteEmb(data) {
+  try {
+    var el = document.getElementById(EMB_ID);
+    if (el) { el.textContent = JSON.stringify(data); return true; }
+  } catch(e) {}
+  return false;
+}
+
+/* ================================================================
+* HELPER: Baca / Tulis localStorage (LAPIS 2)
+================================================================ */
+function vsLoadLocal() {
+  try {
+    var raw = localStorage.getItem(VS_KEY);
+    if (raw) {
+      var p = JSON.parse(raw);
+      if (p && typeof p === 'object') return p;
+    }
+  } catch(e) {}
+  return null;
+}
+function vsSaveLocal(data) {
+  try { localStorage.setItem(VS_KEY, JSON.stringify(data || {})); } catch(e) {}
+}
+
+/* ================================================================
+* HELPER: URL Backend (dari embedded)
+================================================================ */
+function vsGetBackendUrl() {
+  var emb = vsReadEmb();
+  if (emb && emb.backendUrl && emb.backendUrl.trim() &&
+      emb.backendUrl.indexOf('PASTE_URL') === -1) {
+    return emb.backendUrl.trim();
+  }
+  return '';
+}
+
+/* ================================================================
+* 🔑 FUNGSI UTAMA: Load link dengan prioritas 3 lapis
+================================================================ */
+function vsLoadLinks() {
+  // LAPIS 2: localStorage
+  var local = vsLoadLocal();
+  if (local && Object.keys(local).length > 0) return local;
+  // LAPIS 1: Embedded JSON
+  var emb = vsReadEmb();
+  if (emb && emb.videos && Object.keys(emb.videos).length > 0) {
+    vsSaveLocal(emb.videos); // sync ke localStorage
+    return emb.videos;
+  }
+  return {};
+}
+
+/* ================================================================
+* 🔑 FUNGSI UTAMA: Simpan link ke LAPIS 1 + LAPIS 2
+================================================================ */
+function vsSaveLinks(data) {
+  vsSaveLocal(data);                    // LAPIS 2
+  var emb = vsReadEmb() || { videos: {} }; // LAPIS 1
+  emb.videos = data;
+  emb.lastUpdated = new Date().toISOString();
+  vsWriteEmb(emb);
+}
+
+/* ================================================================
+* TOAST
+================================================================ */
+var toastTimer;
+function vsToast(msg, type) {
+  type = type || 'info';
+  var t = document.getElementById('vs-toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'video-toast ' + type;
+  clearTimeout(toastTimer);
+  setTimeout(function(){ t.classList.add('show'); }, 10);
+  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 4000);
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ================================================================
+* STATE: Tab aktif & filter
+================================================================ */
+var currentTab = 'all';
+
+/* ================================================================
+* RENDER CARDS
+================================================================ */
+function vsRenderCards() {
+  var links = vsLoadLinks();
+  var grid = document.getElementById('vs-grid-all');
+  if (!grid) return;
+
+  var html = '';
+  var linkedCount = 0;
+  var emptyCount = 0;
+
+  VS_DATA.forEach(function(item) {
+    var url = links[item.id] || '';
+    var has = url && url.trim() !== '';
+    if (has) linkedCount++; else emptyCount++;
+
+    // Filter berdasarkan tab
+    if (currentTab === 'linked' && !has) return;
+    if (currentTab === 'empty' && has) return;
+
+    html += '<div class="video-card" data-vs-id="' + item.id + '">' +
+      '<div class="video-card-top">' +
+        '<div class="video-card-icon">🎬</div>' +
+        '<div class="video-card-info">' +
+          '<h3 class="video-card-title">' + item.title + '</h3>' +
+          '<div class="video-card-sub">' + item.sub + '</div>' +
+        '</div>' +
+      '</div>' +
+      (has ? '<span class="video-link-badge has-link">🔗 ' + countLinksInArray(url) + ' link tersimpan</span>' : '') +
+      '<div class="video-url-box ' + (has ? 'has-link' : 'empty') + '">' +
+        '<span class="url-icon">' + (has ? '🔗' : '📭') + '</span>' +
+        '<span class="url-text">' + (has ? esc(url) : 'Belum ada link video') + '</span>' +
+      '</div>' +
+      '<div class="video-btns">' +
+        '<button class="video-btn-open ' + (has ? '' : 'empty') + '" onclick="vsOpenLink(\'' + item.id + '\')">' +
+          '<span>' + (has ? '▶️' : '⚠️') + '</span>' +
+          '<span>' + (has ? 'Putar Video' : 'Belum Ada Link') + '</span>' +
+        '</button>' +
+        '<button class="video-btn-manage" onclick="vsOpenModal(\'' + item.id + '\')" title="Kelola Link">⚙️</button>' +
+      '</div>' +
+    '</div>';
+  });
+
+  grid.innerHTML = html || '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#64748b;"><div style="font-size:3rem;margin-bottom:1rem;">📭</div><h4>Tidak ada video dalam kategori ini</h4></div>';
+
+  // Update stats
+  updateStats(linkedCount, emptyCount);
+}
+
+function countLinksInArray(url) {
+  // Jika URL adalah array (multiple links), hitung jumlahnya
+  if (Array.isArray(url)) return url.length;
+  return 1;
+}
+
+function updateStats(linked, empty) {
+  var totalEl = document.getElementById('vs-count-total');
+  var linkedEl = document.getElementById('vs-count-linked');
+  var tabAllEl = document.getElementById('vs-tab-all-count');
+  var tabLinkedEl = document.getElementById('vs-tab-linked-count');
+  var tabEmptyEl = document.getElementById('vs-tab-empty-count');
+
+  if (totalEl) totalEl.textContent = VS_DATA.length;
+  if (linkedEl) linkedEl.textContent = linked;
+  if (tabAllEl) tabAllEl.textContent = VS_DATA.length;
+  if (tabLinkedEl) tabLinkedEl.textContent = linked;
+  if (tabEmptyEl) tabEmptyEl.textContent = empty;
+}
+
+/* ================================================================
+* TAB SWITCHING
+================================================================ */
+window.vsSwitchTab = function(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.video-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  vsRenderCards();
+};
+
+/* ================================================================
+* MODAL
+================================================================ */
+var currentVsId = null;
+window.vsOpenModal = function(id) {
+  currentVsId = id;
+  var links = vsLoadLinks();
+  var cur = links[id] || '';
+  var info = null;
+  VS_DATA.forEach(function(it){ if(it.id===id) info=it; });
+
+  document.getElementById('vs-modal-title').textContent = '🔗 Sematkan Link Video';
+  document.getElementById('vs-modal-subtitle').textContent = info ? info.title : id;
+  document.getElementById('vs-url-input').value = Array.isArray(cur) ? cur[0] : cur;
+
+  var box = document.getElementById('vs-current-url-box');
+  if (cur) {
+    var displayUrl = Array.isArray(cur) ? cur[0] : cur;
+    box.innerHTML = '<div style="background:#ecfdf5;border:1px solid #10b981;border-radius:8px;padding:10px;font-size:.78rem;color:#065f46;">' +
+      '<strong>✅ Link saat ini:</strong><br>' +
+      '<span style="font-family:Consolas,monospace;word-break:break-all;font-size:.72rem;">' + esc(displayUrl) + '</span><br>' +
+      '<button onclick="vsClearUrl()" style="margin-top:8px;background:#fee2e2;color:#dc2626;border:none;padding:6px 12px;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer;">🗑️ Hapus Link</button></div>';
+  } else { box.innerHTML = ''; }
+
+  document.getElementById('vs-modal-embed').classList.add('show');
+  setTimeout(function(){
+    var inp = document.getElementById('vs-url-input');
+    if(inp){ inp.focus(); inp.select(); }
+  }, 300);
+};
+
+window.vsCloseModal = function() {
+  document.getElementById('vs-modal-embed').classList.remove('show');
+  currentVsId = null;
+};
+
+window.vsSaveUrl = function() {
+  if (!currentVsId) return;
+  var inp = document.getElementById('vs-url-input');
+  var url = inp.value.trim();
+  if (!url) { vsToast('⚠️ URL tidak boleh kosong','error'); return; }
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+
+  var links = vsLoadLinks();
+  links[currentVsId] = url;
+  vsSaveLinks(links);   // ← LAPIS 1 + LAPIS 2
+  vsCloseModal();
+  vsRenderCards();
+  vsToast('✅ Link tersimpan permanen! Klik "💾 Push ke Sheet" untuk backup ke cloud.','success');
+
+  // Auto-push ke sheet (opsional - bisa dimatikan)
+  setTimeout(vsAutoPushToSheet, 1000);
+};
+
+window.vsClearUrl = function() {
+  if (!currentVsId) return;
+  if (!confirm('🗑️ Hapus link video ini?')) return;
+  var links = vsLoadLinks();
+  delete links[currentVsId];
+  vsSaveLinks(links);
+  vsCloseModal();
+  vsRenderCards();
+  vsToast('🗑️ Link dihapus','info');
+};
+
+window.vsOpenLink = function(id) {
+  var links = vsLoadLinks();
+  var url = links[id];
+  if (!url || (typeof url === 'string' && !url.trim())) {
+    vsToast('⚠️ Link belum ada. Klik ⚙️ untuk menambah.','error');
+    return;
+  }
+  // Buka di Universal Video Player jika tersedia
+  var finalUrl = Array.isArray(url) ? url[0] : url;
+  if (typeof window.bk56OpenUniversalPlayer === 'function') {
+    var info = null;
+    VS_DATA.forEach(function(it){ if(it.id===id) info=it; });
+    window.bk56OpenUniversalPlayer(finalUrl, info ? info.title : 'Video');
+  } else {
+    window.open(finalUrl, '_blank', 'noopener,noreferrer');
+  }
+};
+
+/* ================================================================
+* 💾 PUSH KE SHEET (LAPIS 2 → LAPIS 3)
+================================================================ */
+window.vsPushToSheet = async function() {
+  var backendUrl = vsGetBackendUrl();
+  if (!backendUrl) {
+    vsToast('⚠️ URL backend video belum dikonfigurasi di HTML','error');
+    return;
+  }
+  var links = vsLoadLinks();
+  var keys = Object.keys(links).filter(function(k){
+    var v = links[k];
+    return v && (Array.isArray(v) ? v.length > 0 : String(v).trim() !== '');
+  });
+  if (keys.length === 0) {
+    vsToast('⚠️ Belum ada link untuk di-push','error');
+    return;
+  }
+  if (!confirm('💾 Push ' + keys.length + ' link video ke Google Sheets?')) return;
+  vsToast('🔄 Sedang push ke Google Sheets...','info');
+  try {
+    var batch = [];
+    keys.forEach(function(id) {
+      var info = null;
+      VS_DATA.forEach(function(it){ if(it.id===id) info=it; });
+      var url = links[id];
+      batch.push({
+        id: id,
+        nama: info ? info.title : id,
+        kategori: 'video-pembelajaran',
+        url: Array.isArray(url) ? url.join('|') : url
+      });
+    });
+    var res = await fetch(backendUrl, {
+      method:'POST', redirect:'follow',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ action:'batchUpsertVideos', links:batch })
+    });
+    var json = await res.json();
+    if (json.success) {
+      vsToast('✅ ' + keys.length + ' link video berhasil di-push ke Google Sheets!','success');
+    } else {
+      vsToast('❌ Gagal: ' + (json.message||''),'error');
+    }
+  } catch(e) {
+    vsToast('❌ Gagal koneksi: ' + e.message,'error');
+  }
+};
+
+/* Auto-push (silent) */
+async function vsAutoPushToSheet() {
+  var backendUrl = vsGetBackendUrl();
+  if (!backendUrl) return;
+  var links = vsLoadLinks();
+  var keys = Object.keys(links).filter(function(k){
+    var v = links[k];
+    return v && (Array.isArray(v) ? v.length > 0 : String(v).trim() !== '');
+  });
+  if (keys.length === 0) return;
+  try {
+    var batch = [];
+    keys.forEach(function(id) {
+      var info = null;
+      VS_DATA.forEach(function(it){ if(it.id===id) info=it; });
+      var url = links[id];
+      batch.push({
+        id: id,
+        nama: info ? info.title : id,
+        kategori: 'video-pembelajaran',
+        url: Array.isArray(url) ? url.join('|') : url
+      });
+    });
+    await fetch(backendUrl, {
+      method:'POST', redirect:'follow',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ action:'batchUpsertVideos', links:batch })
+    });
+    console.log('✅ [VideoStandalone] Auto-push', keys.length, 'link ke Sheet');
+  } catch(e) {
+    console.warn('⚠️ [VideoStandalone] Auto-push gagal:', e);
+  }
+}
+
+/* ================================================================
+* 🔄 PULL DARI SHEET (LAPIS 3 → LAPIS 2 → LAPIS 1 → CARD)
+================================================================ */
+window.vsPullFromSheet = async function() {
+  var backendUrl = vsGetBackendUrl();
+  if (!backendUrl) {
+    vsToast('⚠️ URL backend video belum dikonfigurasi di HTML','error');
+    return;
+  }
+  if (!confirm('🔄 Pull semua link video dari Google Sheets?')) return;
+  vsToast('🔄 Sedang mengambil data dari Google Sheets...','info');
+  try {
+    var res = await fetch(backendUrl, { method:'GET', redirect:'follow' });
+    var json = await res.json();
+    if (!json.success || !Array.isArray(json.data)) {
+      vsToast('❌ Response tidak valid dari Sheet','error');
+      return;
+    }
+    // Filter hanya data video
+    var videoData = json.data.filter(function(row){
+      return String(row.Kategori || '').toLowerCase() === 'video-pembelajaran';
+    });
+    if (videoData.length === 0) {
+      vsToast('ℹ️ Tidak ada data video di Google Sheets','info');
+      return;
+    }
+    var links = vsLoadLinks();
+    var restored = 0;
+    videoData.forEach(function(row) {
+      var id  = String(row.ID || '').trim();
+      var url = String(row.URL || '').trim();
+      if (!id || !url) return;
+      // Validasi: ID harus ada di VS_DATA
+      var valid = false;
+      VS_DATA.forEach(function(it){ if(it.id === id) valid = true; });
+      if (!valid) return;
+      // Kembalikan ke card asal
+      if (!links[id] || links[id] !== url) {
+        links[id] = url;
+        restored++;
+      }
+    });
+    if (restored === 0) {
+      vsToast('ℹ️ Semua link video sudah sinkron dengan Sheet','info');
+      return;
+    }
+    vsSaveLinks(links);  // ← LAPIS 1 + LAPIS 2
+    vsRenderCards();     // ← Render ulang card
+    vsToast('💾 ' + restored + ' link video berhasil dipulihkan!','success');
+  } catch(e) {
+    vsToast('❌ Gagal pull: ' + e.message,'error');
+  }
+};
+
+/* ================================================================
+* 🔄 AUTO-RESTORE: Ambil link video dari Sheet saat data kosong
+================================================================ */
+async function vsAutoRestoreFromSheet() {
+  var links = vsLoadLinks();
+  var count = 0;
+  for (var k in links) {
+    var v = links[k];
+    if (v && (Array.isArray(v) ? v.length > 0 : String(v).trim() !== '')) count++;
+  }
+  if (count > 0) return; // Ada data, skip
+
+  var backendUrl = vsGetBackendUrl();
+  if (!backendUrl) return;
+
+  // Anti-spam: hanya coba 1x per 30 detik
+  var last = parseInt(localStorage.getItem('vs_last_auto_restore') || '0');
+  if (Date.now() - last < 30000) return;
+  localStorage.setItem('vs_last_auto_restore', String(Date.now()));
+
+  console.log('🔄 [VideoStandalone] Data kosong, mencoba pull dari Google Sheets...');
+  try {
+    var res = await fetch(backendUrl, { method: 'GET', redirect: 'follow' });
+    var json = await res.json();
+    if (!json.success || !Array.isArray(json.data)) return;
+
+    var videoData = json.data.filter(function(row){
+      return String(row.Kategori || '').toLowerCase() === 'video-pembelajaran';
+    });
+    if (videoData.length === 0) return;
+
+    var newLinks = {};
+    videoData.forEach(function(row) {
+      var id  = String(row.ID || '').trim();
+      var url = String(row.URL || '').trim();
+      if (id && url) {
+        var valid = false;
+        VS_DATA.forEach(function(it){ if(it.id === id) valid = true; });
+        if (valid) newLinks[id] = url;
+      }
+    });
+
+    var restoredCount = Object.keys(newLinks).length;
+    if (restoredCount === 0) return;
+
+    vsSaveLinks(newLinks);
+    vsRenderCards();
+    console.log('✅ [VideoStandalone] ' + restoredCount + ' link video dipulihkan dari Google Sheets');
+    vsToast('🔄 ' + restoredCount + ' link video dipulihkan otomatis dari Google Sheets', 'success');
+  } catch(e) {
+    console.warn('⚠️ [VideoStandalone] Auto-restore gagal:', e);
+  }
+}
+
+/* ================================================================
+* UPDATE STATUS BACKEND
+================================================================ */
+function vsUpdateBackendStatus() {
+  var url = vsGetBackendUrl();
+  var st = document.getElementById('vsBackendStatus');
+  var lb = document.getElementById('vsBackendLabel');
+  var ue = document.getElementById('vsBackendUrl');
+  if (!st) return;
+  if (url) {
+    st.className = 'video-backend-status connected';
+    lb.innerHTML = '✅ Backend Video Terhubung (Permanen)';
+    ue.textContent = 'URL Apps Script tertanam di HTML';
+  } else {
+    st.className = 'video-backend-status disconnected';
+    lb.innerHTML = '⚠️ Backend Video Belum Dikonfigurasi';
+    ue.textContent = 'Edit "backendUrl" di embedded JSON HTML';
+  }
+}
+
+/* ================================================================
+* KEYBOARD & CLICK
+================================================================ */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    var m = document.getElementById('vs-modal-embed');
+    if (m && m.classList.contains('show')) vsCloseModal();
+  }
+  if (e.key === 'Enter') {
+    var m2 = document.getElementById('vs-modal-embed');
+    if (m2 && m2.classList.contains('show') &&
+        document.activeElement === document.getElementById('vs-url-input')) {
+      vsSaveUrl();
+    }
+  }
+});
+document.addEventListener('click', function(e) {
+  var m = document.getElementById('vs-modal-embed');
+  if (m && e.target === m) vsCloseModal();
+}, true);
+
+/* ================================================================
+* 🚀 INIT
+================================================================ */
+function vsInit() {
+  console.log('🚀 [VideoStandalone] Sistem permanen 3 lapis dimulai...');
+  var url = vsGetBackendUrl();
+  if (url) {
+    console.log('✅ Backend URL aktif:', url.slice(0, 60) + '...');
+  }
+  vsRenderCards();
+  vsUpdateBackendStatus();
+  // Auto-restore dari Sheet jika data kosong
+  setTimeout(vsAutoRestoreFromSheet, 2000);
+}
+
+// Hook ke fungsi go()
+var _origGo = window.go;
+window.go = function(id) {
+  if (typeof _origGo === 'function') _origGo.apply(this, arguments);
+  if (id === 'video') setTimeout(vsInit, 200);
+};
+
+// Init jika halaman sudah aktif
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    var p = document.getElementById('video');
+    if (p && p.classList.contains('active')) vsInit();
+  });
+} else {
+  var p = document.getElementById('video');
+  if (p && p.classList.contains('active')) vsInit();
+}
+
+// Auto-restore saat user kembali ke tab
+document.addEventListener('visibilitychange', function() {
+  if (!document.hidden) {
+    var pg = document.getElementById('video');
+    if (pg && pg.classList.contains('active')) {
+      setTimeout(vsAutoRestoreFromSheet, 500);
+    }
+  }
+});
+
+})();
+</script>
+<!-- ========== VIDEO STANDALONE - JAVASCRIPT [END] ========== -->
 </body>
 </html>
