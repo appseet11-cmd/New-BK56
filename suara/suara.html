@@ -164,7 +164,9 @@ a{text-decoration:none;color:inherit}
 .auth-field label .req{color:var(--danger)}
 .auth-input-wrap{position:relative}
 .auth-input-wrap .auth-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--text-muted);pointer-events:none}
-.auth-input{width:100%;padding:12px 14px 12px 42px;border:2px solid var(--border);border-radius:12px;font-family:inherit;font-size:14px;background:#fff;transition:all .3s ease}
+.auth-input,.auth-select{width:100%;padding:12px 14px 12px 42px;border:2px solid var(--border);border-radius:12px;font-family:inherit;font-size:14px;background:#fff;transition:all .3s ease;appearance:none;-webkit-appearance:none;-moz-appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 12px center;background-size:18px;padding-right:40px}
+.auth-select{cursor:pointer;font-weight:600}
+.auth-select:focus{outline:none;border-color:var(--primary-light);box-shadow:0 0 0 4px rgba(124,58,237,.12)}
 .auth-input:focus{outline:none;border-color:var(--primary-light);box-shadow:0 0 0 4px rgba(124,58,237,.12)}
 .auth-input.error{border-color:var(--danger)}
 .auth-input.success{border-color:var(--success)}
@@ -191,6 +193,12 @@ a{text-decoration:none;color:inherit}
 .auth-switch a{color:var(--primary-light);font-weight:700;cursor:pointer;text-decoration:underline}
 .guru-signin-info{background:linear-gradient(135deg,#fff7ed 0%,#ffedd5 100%);border:1px solid #fb923c;border-left:4px solid #f59e0b;border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:13px;color:#9a3412}
 .guru-signin-info strong{color:#c2410c}
+.guru-signin-info ul{margin:8px 0 0 20px;font-size:12px;line-height:1.7}
+.guru-accounts-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:10px}
+.guru-account-item{background:#fff;border:2px solid #fed7aa;border-radius:10px;padding:10px;text-align:center;font-size:11px;font-weight:600;color:#9a3412}
+.guru-account-item .guru-id{font-size:13px;font-weight:700;color:#c2410c;margin-bottom:2px}
+.guru-account-item.ks-item{border-color:#fbbf24;background:linear-gradient(135deg,#fef3c7 0%,#fde68a 100%)}
+.guru-account-item.ks-item .guru-id{color:#92400e}
 #pwd-access-modal{position:fixed;inset:0;background:rgba(30,27,75,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:10001;padding:20px}
 #pwd-access-modal.show{display:flex}
 .pwd-access-box{background:#fff;border-radius:24px;max-width:440px;width:100%;padding:32px 28px;text-align:center;box-shadow:0 32px 64px rgba(76,29,149,.3);animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
@@ -268,6 +276,7 @@ a{text-decoration:none;color:inherit}
 .guru-action-btn.primary{background:var(--gradient-hero);color:#fff}
 .guru-action-btn.secondary{background:#fff;color:var(--primary);border:2px solid var(--primary)}
 .guru-action-btn.danger{background:#fee2e2;color:#dc2626}
+.guru-action-btn.success{background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#fff}
 .guru-action-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
 .guru-entries-list{display:flex;flex-direction:column;gap:10px}
 .guru-entry-item{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;border-left:4px solid var(--primary-light)}
@@ -281,6 +290,22 @@ a{text-decoration:none;color:inherit}
 .guru-arsip-item{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:12px}
 .guru-empty{text-align:center;padding:30px 20px;color:var(--text-muted)}
 .guru-empty-icon{font-size:48px;display:block;margin-bottom:8px}
+.guru-spreadsheet-panel{background:linear-gradient(135deg,#dbeafe 0%,#bfdbfe 100%);border:2px solid #3b82f6;border-radius:14px;padding:16px;margin-bottom:16px}
+.guru-spreadsheet-panel h4{color:#1e40af;font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.guru-spreadsheet-panel p{color:#1e3a8a;font-size:12px;margin-bottom:12px;line-height:1.5}
+.guru-spreadsheet-panel .ss-btns{display:flex;gap:8px;flex-wrap:wrap}
+.guru-spreadsheet-panel .ss-btn{padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.guru-spreadsheet-panel .ss-btn.main{background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#fff}
+.guru-spreadsheet-panel .ss-btn.kelas{background:#fff;color:#1e40af;border:2px solid #3b82f6}
+.guru-spreadsheet-panel .ss-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.guru-inline-edit{background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px;margin-top:12px}
+.guru-inline-edit h5{color:var(--primary);font-size:13px;margin-bottom:8px}
+.guru-inline-edit textarea{width:100%;min-height:60px;padding:8px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:12px;resize:vertical}
+.guru-inline-edit textarea:focus{outline:none;border-color:var(--primary-light)}
+.guru-inline-edit .edit-actions{display:flex;gap:8px;margin-top:8px}
+.guru-inline-edit .edit-btn{padding:6px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none}
+.guru-inline-edit .edit-btn.save{background:var(--success);color:#fff}
+.guru-inline-edit .edit-btn.cancel{background:#e5e7eb;color:var(--text)}
 #preview-laporan-modal{position:fixed;inset:0;background:rgba(30,27,75,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:10004;padding:20px}
 #preview-laporan-modal.show{display:flex}
 .preview-container{background:#fff;border-radius:20px;max-width:900px;width:100%;max-height:92vh;overflow:hidden;box-shadow:0 32px 64px rgba(76,29,149,.3);display:flex;flex-direction:column}
@@ -340,49 +365,16 @@ a{text-decoration:none;color:inherit}
 .preview-header{padding:16px}
 .preview-header h2{font-size:16px}
 .preview-action-btn{padding:6px 12px;font-size:12px}
+.guru-accounts-list{grid-template-columns:repeat(2,1fr)}
 }
-/* === PERINGATAN CURANG & BANNED === */
-.auth-curang-alert {
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border: 2px solid #f59e0b;
-  border-left: 5px solid #f59e0b;
-  border-radius: 12px;
-  padding: 14px;
-  margin-bottom: 14px;
-  text-align: center;
-  color: #92400e;
-  animation: shake 0.5s ease;
-}
-
-.auth-banned-alert {
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-  border: 2px solid #dc2626;
-  border-left: 5px solid #dc2626;
-  border-radius: 12px;
-  padding: 18px;
-  margin-bottom: 14px;
-  text-align: center;
-  color: #991b1b;
-}
-
-.auth-input.auto-filled {
-  background: #d1fae5 !important;
-  border-color: #10b981 !important;
-}
-
-.auth-input.invalid {
-  background: #fee2e2 !important;
-  border-color: #dc2626 !important;
-}
-
-#auth-kelas-grid.disabled-grid {
-  opacity: 0.5;
-  pointer-events: none;
-}
+.auth-curang-alert{background:linear-gradient(135deg,#fef3c7 0%,#fde68a 100%);border:2px solid #f59e0b;border-left:5px solid #f59e0b;border-radius:12px;padding:14px;margin-bottom:14px;text-align:center;color:#92400e;animation:shake .5s ease}
+.auth-banned-alert{background:linear-gradient(135deg,#fee2e2 0%,#fecaca 100%);border:2px solid #dc2626;border-left:5px solid #dc2626;border-radius:12px;padding:18px;margin-bottom:14px;text-align:center;color:#991b1b}
+.auth-input.auto-filled{background:#d1fae5!important;border-color:#10b981!important}
+.auth-input.invalid{background:#fee2e2!important;border-color:#dc2626!important}
+#auth-kelas-grid.disabled-grid{opacity:.5;pointer-events:none}
 </style>
 </head>
 <body>
-
 <!-- AUTH OVERLAY -->
 <div id="auth-overlay">
 <div class="auth-container">
@@ -394,7 +386,7 @@ a{text-decoration:none;color:inherit}
 <div class="auth-tabs">
 <button class="auth-tab active" onclick="switchAuthTab('signin')">🔐 Siswa</button>
 <button class="auth-tab" onclick="switchAuthTab('signup')">📝 Daftar</button>
-<button class="auth-tab guru-tab" onclick="switchAuthTab('guru')">👨‍🏫 Guru BK</button>
+<button class="auth-tab guru-tab" onclick="switchAuthTab('guru')">👨‍🏫 Guru/Kepsek</button>
 </div>
 <div class="auth-body">
 <form class="auth-form active" id="form-signin" onsubmit="handleSignIn(event)">
@@ -481,33 +473,41 @@ a{text-decoration:none;color:inherit}
 </form>
 <form class="auth-form" id="form-guru" onsubmit="handleGuruSignIn(event)">
 <div class="guru-signin-info">
-<strong>👨‍🏫 Akses Guru BK</strong><br>
-Khusus untuk Guru Bimbingan Konseling. Setelah login, Anda akan masuk ke <strong>Platform Suara Siswa</strong> dan dapat mengakses dashboard laporan melalui tombol floating "Guru BK" di pojok kanan bawah.
+<strong>👨‍🏫 Akses Guru BK & Kepala Sekolah</strong><br>
+Pilih akun Anda. Setelah login, Anda dapat:
+<ul>
+<li>✅ Mengisi form Isian Suara Siswa (data langsung ke spreadsheet)</li>
+<li>✅ Mengakses Dashboard Rekap Laporan per Kelas</li>
+<li>✅ <strong>Mengedit data langsung di Google Spreadsheet</strong></li>
+<li>✅ Preview & Download PDF laporan</li>
+</ul>
+<div class="guru-accounts-list" id="guru-accounts-list"></div>
 </div>
 <div class="auth-error" id="guru-error"></div>
 <div class="auth-field">
-<label>Nama Guru <span class="req">*</span></label>
+<label>Pilih Akun <span class="req">*</span></label>
 <div class="auth-input-wrap">
 <span class="auth-icon">👤</span>
-<input type="text" class="auth-input" id="guru-name" placeholder="Nama Anda (misal: Bu Palupi)" required autocomplete="name">
+<select class="auth-select" id="guru-select" required>
+<option value="">-- Pilih Akun --</option>
+</select>
 </div>
 </div>
 <div class="auth-field">
-<label>Password Guru BK <span class="req">*</span></label>
+<label>Password <span class="req">*</span></label>
 <div class="auth-input-wrap">
 <span class="auth-icon">🔒</span>
-<input type="password" class="auth-input" id="guru-password" placeholder="Password Guru BK" required autocomplete="current-password">
+<input type="password" class="auth-input" id="guru-password" placeholder="Masukkan password" required autocomplete="current-password">
 <button type="button" class="auth-toggle-pwd" onclick="togglePwdVisibility('guru-password',this)">👁️</button>
 </div>
 </div>
-<button type="submit" class="auth-submit" id="guru-btn" style="background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%);">🎓 Masuk Platform Suara Siswa</button>
+<button type="submit" class="auth-submit" id="guru-btn" style="background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%);">🎓 Masuk Platform</button>
 <div class="auth-divider">atau</div>
 <div class="auth-switch">Anda siswa? <a onclick="switchAuthTab('signin')">Sign In Siswa</a></div>
 </form>
 </div>
 </div>
 </div>
-
 <!-- PASSWORD ACCESS MODAL -->
 <div id="pwd-access-modal">
 <div class="pwd-access-box">
@@ -522,7 +522,6 @@ Khusus untuk Guru Bimbingan Konseling. Setelah login, Anda akan masuk ke <strong
 <button class="pwd-access-btn" onclick="proceedToPlatform()">🚀 Masuk Platform</button>
 </div>
 </div>
-
 <!-- LOGIN OVERLAY -->
 <div id="login-overlay" style="display:none;">
 <div class="login-box">
@@ -534,10 +533,7 @@ Khusus untuk Guru Bimbingan Konseling. Setelah login, Anda akan masuk ke <strong
 <p id="login-error" style="color:#ef4444;font-size:13px;margin-top:12px;display:none;font-weight:600;">❌ Password salah!</p>
 </div>
 </div>
-
 <div class="toast" id="toast"></div>
-
-<!-- HEADER -->
 <header class="header" style="position:relative;">
 <div class="user-info-badge" id="user-info-badge" onclick="showUserMenu()">
 <span class="user-avatar">👤</span>
@@ -546,14 +542,10 @@ Khusus untuk Guru Bimbingan Konseling. Setelah login, Anda akan masuk ke <strong
 <h1>Suara Siswa</h1>
 <h2>Platform Aspirasi & Refleksi</h2>
 </header>
-
-<!-- HERO -->
 <section class="hero" id="home-section">
 <h2 class="hero-title">Ceritakan, Aspirasikan,<br>Tumbuh Bersama</h2>
 <p class="hero-subtitle">Platform digital yang menyediakan ruang aman bagi siswa untuk menyampaikan aspirasi, berbagi refleksi, menuliskan harapan, dan memberi umpan balik.</p>
 </section>
-
-<!-- FEATURES -->
 <section class="features" id="features">
 <div class="features-grid">
 <article class="feature-card fc-asp" onclick="navigateTo('aspirasi-aduan','asp','kirim')">
@@ -578,8 +570,6 @@ Khusus untuk Guru Bimbingan Konseling. Setelah login, Anda akan masuk ke <strong
 </article>
 </div>
 </section>
-
-<!-- NAVBAR -->
 <nav class="navbar">
 <div class="nav-wrap" id="navWrap">
 <div style="position:relative;">
@@ -624,9 +614,7 @@ Khusus untuk Guru Bimbingan Konseling. Setelah login, Anda akan masuk ke <strong
 </div>
 </div>
 </nav>
-
 <main id="main-content">
-<!-- HALAMAN 1: ASPIRASI & ADUAN -->
 <div id="aspirasi-aduan" class="page suara-page">
 <button class="back-btn-sp" onclick="goHome()">← Kembali ke Beranda</button>
 <header class="sp-header asp">
@@ -802,8 +790,6 @@ Khusus untuk Guru Bimbingan Konseling. Setelah login, Anda akan masuk ke <strong
 </div>
 </div>
 </div>
-
-<!-- HALAMAN 2: REFLEKSI & CERITA -->
 <div id="refleksi-cerita" class="page suara-page">
 <button class="back-btn-sp" onclick="goHome()">← Kembali ke Beranda</button>
 <header class="sp-header ref">
@@ -966,8 +952,6 @@ Khusus untuk Guru Bimbingan Konseling. Setelah login, Anda akan masuk ke <strong
 </div>
 </div>
 </div>
-
-<!-- HALAMAN 3: HARAPAN & SARAN -->
 <div id="harapan-saran" class="page suara-page">
 <button class="back-btn-sp" onclick="goHome()">← Kembali ke Beranda</button>
 <header class="sp-header har">
@@ -1134,8 +1118,6 @@ Khusus untuk Guru Bimbingan Konseling. Setelah login, Anda akan masuk ke <strong
 </div>
 </div>
 </div>
-
-<!-- HALAMAN 4: TESTIMONI & UMPAN BALIK -->
 <div id="testimoni-feedback" class="page suara-page">
 <button class="back-btn-sp" onclick="goHome()">← Kembali ke Beranda</button>
 <header class="sp-header tes">
@@ -1312,14 +1294,11 @@ Khusus untuk Guru Bimbingan Konseling. Setelah login, Anda akan masuk ke <strong
 </div>
 </div>
 </main>
-
 <footer class="footer">
 <div class="footer-brand">💜 Suara Siswa — Platform Aspirasi & Refleksi</div>
 <p style="font-size:14px;opacity:.85;margin-bottom:24px;">Ruang Aman untuk Bercerita, Beraspirasi, & Bertumbuh Bersama</p>
 <p style="font-size:12px;opacity:.6;">© 2026 Platform Suara Siswa</p>
 </footer>
-
-<!-- POST-SUBMIT MODAL -->
 <div id="post-submit-modal">
 <div class="post-submit-box">
 <div class="post-submit-icon">✓</div>
@@ -1335,12 +1314,10 @@ Auto-lanjut dalam <strong id="countdown-num">15</strong> detik...
 </div>
 </div>
 </div>
-
-<!-- GURU BK MODAL -->
 <div id="guru-overlay">
 <div class="guru-modal">
 <div class="guru-modal-header">
-<h2>👨‍🏫 Dashboard Guru BK — Laporan Suara Siswa</h2>
+<h2 id="guru-modal-title">👨‍🏫 Dashboard Guru BK — Laporan Suara Siswa</h2>
 <button class="guru-close-btn" onclick="closeGuruBK()">✕</button>
 </div>
 <div class="guru-modal-body">
@@ -1354,6 +1331,27 @@ Auto-lanjut dalam <strong id="countdown-num">15</strong> detik...
 <div id="guru-login-error" class="guru-login-error">❌ Password salah!</div>
 </div>
 <div id="guru-dashboard-state" class="guru-dashboard">
+<!-- PANEL EDIT SPREADSHEET - DIPERBAIKI -->
+<div class="guru-spreadsheet-panel" id="guru-spreadsheet-panel">
+<h4>📊 Edit Data Langsung di Google Spreadsheet</h4>
+<p>Semua data yang diinput dari platform ini tersimpan di Google Spreadsheet. Anda dapat <strong>mengedit, menambah, atau menghapus data</strong> langsung dari spreadsheet tanpa perlu deploy ulang.</p>
+<div class="ss-btns">
+<a href="#" class="ss-btn main" id="ss-btn-main" onclick="openMainSpreadsheet(event)" target="_blank">📗 Buka Spreadsheet Utama</a>
+<a href="#" class="ss-btn kelas" id="ss-btn-kelas" onclick="openKelasSheet(event)" target="_blank" style="display:none;">📋 Buka Sheet Kelas Ini</a>
+</div>
+<div style="margin-top:10px;padding:8px 10px;background:rgba(255,255,255,.6);border-radius:6px;font-size:11px;color:#1e3a8a;">
+💡 <strong>Tips:</strong> Edit data di kolom yang sesuai. Perubahan akan otomatis tersimpan di spreadsheet dan dapat dilihat di dashboard ini setelah refresh.
+</div>
+</div>
+<div style="margin-bottom:16px;padding:12px 16px;background:linear-gradient(135deg,#fff7ed 0%,#ffedd5 100%);border:1px solid #fb923c;border-radius:12px;">
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+<span style="font-size:24px;" id="guru-dashboard-icon">👨‍🏫</span>
+<div style="flex:1;min-width:200px;">
+<div style="font-size:14px;font-weight:700;color:#c2410c;" id="guru-dashboard-name">Guru BK</div>
+<div style="font-size:11px;color:#9a3412;" id="guru-dashboard-role">Login sebagai Guru BK • Akses penuh ke dashboard rekap</div>
+</div>
+</div>
+</div>
 <div style="margin-bottom:16px;">
 <h3 style="color:var(--primary);font-size:16px;margin-bottom:6px;">📊 Rekap Laporan Aktif per Kelas</h3>
 <p style="font-size:12px;color:var(--text-muted);">Klik kelas untuk melihat detail laporan.</p>
@@ -1369,8 +1367,19 @@ Auto-lanjut dalam <strong id="countdown-num">15</strong> detik...
 </div>
 <div class="guru-action-btns">
 <button class="guru-action-btn primary" onclick="previewLaporanAktif()">👁️ Preview Laporan</button>
+<button class="guru-action-btn success" onclick="openKelasSheetForEdit()">📊 Edit di Spreadsheet</button>
 <button class="guru-action-btn secondary" onclick="refreshLaporanKelas()">🔄 Refresh</button>
 <button class="guru-action-btn danger" onclick="toggleArsip()">📦 Lihat Arsip</button>
+</div>
+<!-- INLINE EDIT CATATAN TINDAK LANJUT -->
+<div class="guru-inline-edit" id="guru-inline-edit">
+<h5>📝 Catatan Tindak Lanjut (untuk kelas <span id="inline-edit-kelas">-</span>)</h5>
+<textarea id="inline-edit-textarea" placeholder="Tulis catatan tindak lanjut, rekomendasi, atau follow-up untuk kelas ini..."></textarea>
+<div class="edit-actions">
+<button class="edit-btn save" onclick="saveInlineEdit()">💾 Simpan Catatan</button>
+<button class="edit-btn cancel" onclick="cancelInlineEdit()">Batal</button>
+</div>
+<div style="font-size:10px;color:var(--text-muted);margin-top:6px;">💡 Catatan ini akan tersimpan di spreadsheet dan dapat diedit kapan saja.</div>
 </div>
 <div id="guru-entries-container"></div>
 <div id="guru-arsip-section" class="guru-arsip-section" style="display:none;">
@@ -1382,8 +1391,6 @@ Auto-lanjut dalam <strong id="countdown-num">15</strong> detik...
 </div>
 </div>
 </div>
-
-<!-- PREVIEW LAPORAN MODAL -->
 <div id="preview-laporan-modal">
 <div class="preview-container">
 <div class="preview-header">
@@ -1399,8 +1406,6 @@ Auto-lanjut dalam <strong id="countdown-num">15</strong> detik...
 </div>
 </div>
 </div>
-
-<!-- PDF LOADING OVERLAY -->
 <div class="pdf-loading-overlay" id="pdf-loading-overlay">
 <div class="pdf-loading-spinner"></div>
 <div class="pdf-loading-text" id="pdf-loading-text">⏳ Menyiapkan PDF...</div>
@@ -1408,21 +1413,27 @@ Auto-lanjut dalam <strong id="countdown-num">15</strong> detik...
 <div class="pdf-loading-progress-bar" id="pdf-loading-bar"></div>
 </div>
 </div>
-
-<!-- FLOATING GURU BK BUTTON -->
 <button class="guru-bk-floating" onclick="openGuruBK()" aria-label="Dashboard Guru BK" title="Dashboard Guru BK">
 <span class="guru-badge-dot"></span>
 <span class="guru-icon">👨‍🏫</span>
 <span>Guru BK</span>
 </button>
-
 <script>
 /* ================================================================ */
 /* KONFIGURASI */
 /* ================================================================ */
 const BACKEND_URL='https://script.google.com/macros/s/AKfycbyN3cKYdA4BmYEKWg7YxfqMZk5pqLSJebLRkTKf4zL9fvsGtqplwLrlbY29trOoYG-nRg/exec';
+// GANTI DENGAN URL SPREADSHEET ANDA YANG SESUNGGUHNYA
+const SPREADSHEET_URL='https://docs.google.com/spreadsheets/d/1yzjRQompTfv9AzdDW1PggB9WFcF1oZ03i9wKjVVkMpE/edit';
 const PASSWORD_ACCESS="@suara2026#";
-const GURU_PASSWORD="@guruBK56#";
+// === DAFTAR AKUN GURU BK + KEPALA SEKOLAH ===
+const GURU_BK_LIST=[
+{id:'Sotya Palupi, S.Pd,MM',name:'palupi',icon:'👨‍🏫',password:'palupi6676',role:'guru_bk'},
+{id:'Halaliah, S.Pd',name:'halaliah',icon:'👩‍🏫',password:'halaliah67',role:'guru_bk'},
+{id:'Siti Wahyuni, S.Pd',name:'wahyuni',icon:'🧑‍🏫',password:'wahyuni80',role:'guru_bk'},
+{id:'Rizqi Putri Sholihain, S.Pd',name:'putri',icon:'👨‍🏫',password:'putri96',role:'guru_bk'},
+{id:'Karjo, S.Pd',name:'kepsek',icon:'👨‍💼',password:'kepsek1356',role:'kepala_sekolah'}
+];
 const SESSION_ACCESS="suara_access";
 const SESSION_USER="suara_user";
 const SESSION_GURU="guru_bk_session";
@@ -1442,7 +1453,26 @@ let currentLookupData=null;
 let lookupNISTimer=null;
 let isBanned=false;
 let curangCount=0;
-
+/* ================================================================ */
+/* INIT GURU ACCOUNTS LIST (FORM LOGIN) */
+/* ================================================================ */
+function initGuruAccountsList(){
+const list=document.getElementById('guru-accounts-list');
+const select=document.getElementById('guru-select');
+if(!list||!select)return;
+let listHTML='';
+let optionsHTML='<option value="">-- Pilih Akun --</option>';
+GURU_BK_LIST.forEach(g=>{
+const isKS=g.role==='kepala_sekolah';
+listHTML+=`<div class="guru-account-item ${isKS?'ks-item':''}">
+<div class="guru-id">${g.icon} ${g.name}</div>
+<div>ID: ${g.id}</div>
+</div>`;
+optionsHTML+=`<option value="${g.id}">${g.icon} ${g.name} (${g.id})</option>`;
+});
+list.innerHTML=listHTML;
+select.innerHTML=optionsHTML;
+}
 /* ================================================================ */
 /* AUTH SYSTEM */
 /* ================================================================ */
@@ -1522,10 +1552,6 @@ else{status.textContent='✅ Email tersedia';status.style.color='var(--success)'
 }catch(err){status.textContent='';}
 },600);
 }
-
-/* ================================================================ */
-/* LOOKUP NIS (AUTO-FILL NAMA & KELAS) */
-/* ================================================================ */
 function lookupNIS(nis){
 const nisInput=document.getElementById('signup-nis');
 const namaInput=document.getElementById('signup-nama');
@@ -1580,10 +1606,6 @@ nisStatus.style.color='var(--danger)';
 }
 },500);
 }
-
-/* ================================================================ */
-/* HANDLE SIGN UP (DENGAN VERIFIKASI NIS) */
-/* ================================================================ */
 async function handleSignUp(event){
 event.preventDefault();
 if(isBanned){showToast('🚫 Anda telah diblokir dari pendaftaran','error');return;}
@@ -1617,7 +1639,8 @@ curangCount=result.curang_count||(curangCount+1);
 const remaining=result.remaining_attempts||(3-curangCount);
 if(remaining<=0){
 isBanned=true;
-document.getElementById('signup-banned-alert').style.display='block';
+const bannedAlert=document.getElementById('signup-banned-alert');
+if(bannedAlert)bannedAlert.style.display='block';
 btn.disabled=true;
 btn.innerHTML='🚫 Anda Diblokir';
 }
@@ -1628,7 +1651,6 @@ errBox.classList.add('show');
 }catch(err){errBox.textContent='❌ Gagal terhubung ke server: '+err.message;errBox.classList.add('show');}
 finally{if(!isBanned){btn.disabled=false;btn.innerHTML='📝 Daftar Sekarang';}}
 }
-
 async function handleSignIn(event){
 event.preventDefault();
 const errBox=document.getElementById('signin-error');
@@ -1648,43 +1670,65 @@ showPwdAccessModal('signin',result.email,result.kelas);
 }catch(err){errBox.textContent='❌ Gagal terhubung ke server: '+err.message;errBox.classList.add('show');}
 finally{btn.disabled=false;btn.innerHTML='🔓 Sign In';}
 }
-
+/* ================================================================ */
+/* HANDLE GURU/KEPSEK SIGN IN */
+/* ================================================================ */
 async function handleGuruSignIn(event){
 event.preventDefault();
 const errBox=document.getElementById('guru-error');
 errBox.classList.remove('show');
-const name=document.getElementById('guru-name').value.trim();
-const password=document.getElementById('guru-password').value;
+const guruSelect=document.getElementById('guru-select');
+const passwordInput=document.getElementById('guru-password');
+const guruId=guruSelect.value;
+const password=passwordInput.value;
 const btn=document.getElementById('guru-btn');
+if(!guruId){
+errBox.textContent='⚠️ Silakan pilih akun terlebih dahulu!';
+errBox.classList.add('show');
+return;
+}
+const selectedGuru=GURU_BK_LIST.find(g=>g.id===guruId);
+if(!selectedGuru){
+errBox.textContent='❌ Akun tidak valid!';
+errBox.classList.add('show');
+return;
+}
 btn.disabled=true;btn.innerHTML='⏳ Memverifikasi...';
 try{
 let isValid=false;
-if(password===GURU_PASSWORD){isValid=true;}
-else{
+if(password===selectedGuru.password){
+isValid=true;
+}else{
 try{
-const res=await fetch(BACKEND_URL+'?action=get_guru_config',{method:'GET',redirect:'follow'});
+const res=await fetch(BACKEND_URL+'?action=get_guru_config&guru_id='+encodeURIComponent(guruId),{method:'GET',redirect:'follow'});
 const result=await res.json();
 if(result.success&&result.password===password){isValid=true;}
 }catch(e){}
 }
 if(isValid){
-sessionStorage.setItem(SESSION_GURU,JSON.stringify({name:name,loginTime:new Date().toISOString(),role:'guru_bk'}));
+sessionStorage.setItem(SESSION_GURU,JSON.stringify({
+id:selectedGuru.id,
+name:selectedGuru.name,
+icon:selectedGuru.icon,
+role:selectedGuru.role,
+loginTime:new Date().toISOString()
+}));
 sessionStorage.setItem(SESSION_ACCESS,'granted');
 document.getElementById('auth-overlay').style.display='none';
 document.getElementById('auth-overlay').classList.add('hidden');
 updateUserBadge();
-showToast(`✅ Selamat datang, ${name}! Anda masuk ke Platform Suara Siswa.`,'success',3500);
+const roleLabel=selectedGuru.role==='kepala_sekolah'?'Kepala Sekolah':'Guru BK';
+showToast(`✅ Selamat datang, ${selectedGuru.icon} ${selectedGuru.name}!\nRole: ${roleLabel}`,'success',3500);
 window.scrollTo(0,0);
 }else{
-errBox.textContent='❌ Password Guru BK salah!';
+errBox.textContent=`❌ Password salah untuk ${selectedGuru.name}!`;
 errBox.classList.add('show');
-document.getElementById('guru-password').value='';
-document.getElementById('guru-password').focus();
+passwordInput.value='';
+passwordInput.focus();
 }
 }catch(err){errBox.textContent='❌ Gagal terhubung: '+err.message;errBox.classList.add('show');}
-finally{btn.disabled=false;btn.innerHTML='🎓 Masuk Platform Suara Siswa';}
+finally{btn.disabled=false;btn.innerHTML='🎓 Masuk Platform';}
 }
-
 function showPwdAccessModal(mode,email,kelas){
 const modal=document.getElementById('pwd-access-modal');
 const title=document.getElementById('pwd-access-title');
@@ -1723,7 +1767,14 @@ const guru=getGuruSession();
 const badge=document.getElementById('user-info-badge');
 const text=document.getElementById('user-info-text');
 if(!badge||!text)return;
-if(guru){text.textContent=`👨‍🏫 ${guru.name} (Guru BK)`;badge.classList.add('show');badge.style.background='rgba(245,158,11,0.25)';badge.style.borderColor='rgba(245,158,11,0.5)';}
+if(guru){
+const icon=guru.icon||'👨‍🏫';
+const roleLabel=guru.role==='kepala_sekolah'?'Kepsek':'Guru BK';
+text.textContent=`${icon} ${guru.name} (${roleLabel})`;
+badge.classList.add('show');
+badge.style.background=guru.role==='kepala_sekolah'?'rgba(245,158,11,0.35)':'rgba(245,158,11,0.25)';
+badge.style.borderColor='rgba(245,158,11,0.5)';
+}
 else if(user){text.textContent=`${user.email} • ${user.kelas}`;badge.classList.add('show');badge.style.background='rgba(255,255,255,0.15)';badge.style.borderColor='rgba(255,255,255,0.25)';}
 else{badge.classList.remove('show');}
 }
@@ -1731,29 +1782,46 @@ function showUserMenu(){
 const user=getCurrentUser();
 const guru=getGuruSession();
 let message='';
-if(guru){message=`👨‍🏫 ${guru.name}\n🎓 Role: Guru BK\n\nApakah Anda ingin logout?`;}
-else if(user){message=`👤 ${user.email}\n🏫 Kelas: ${user.kelas}\n\nApakah Anda ingin logout?`;}
+if(guru){
+const roleLabel=guru.role==='kepala_sekolah'?'Kepala Sekolah':'Guru BK';
+message=`${guru.icon} ${guru.name}
+🎓 Role: ${roleLabel} (${guru.id})
+📊 Akses: Dashboard Rekap + Form Isian + Edit Spreadsheet
+Apakah Anda ingin logout?`;
+}
+else if(user){message=`👤 ${user.email}
+🏫 Kelas: ${user.kelas}
+Apakah Anda ingin logout?`;}
 else{return;}
 if(confirm(message)){sessionStorage.removeItem(SESSION_USER);sessionStorage.removeItem(SESSION_ACCESS);sessionStorage.removeItem(SESSION_GURU);location.reload();}
 }
-
-/* ================================================================ */
-/* KELAS GRIDS */
-/* ================================================================ */
 function initKelasGrids(){
 const user=getCurrentUser();
+const guru=getGuruSession();
 const userKelas=user?user.kelas:null;
+const isGuru=!!guru;
 ['asp','aduan','ref','cerita','har','saran','tes','fb'].forEach(type=>{
 const grid=document.getElementById(type+'-kelas-grid');
 const kelasBox=document.getElementById(type+'-kelas-box');
 if(!grid)return;
 let html='',currentGrade='';
-if(userKelas&&kelasBox){
+if(userKelas&&kelasBox&&!isGuru){
 kelasBox.classList.add('user-locked');
 if(!kelasBox.querySelector('.sp-kelas-user-info')){
 const infoDiv=document.createElement('div');
 infoDiv.className='sp-kelas-user-info';
 infoDiv.innerHTML=`<span style="font-size:18px;">🔒</span><span>Kelas Anda: <strong>${userKelas}</strong> — terkunci sesuai akun</span>`;
+kelasBox.insertBefore(infoDiv,grid);
+}
+}else if(isGuru&&kelasBox){
+if(!kelasBox.querySelector('.sp-kelas-user-info')){
+const infoDiv=document.createElement('div');
+infoDiv.className='sp-kelas-user-info';
+infoDiv.style.background='linear-gradient(135deg,#fef3c7 0%,#fde68a 100%)';
+infoDiv.style.borderColor='#f59e0b';
+infoDiv.style.color='#92400e';
+const roleLabel=guru.role==='kepala_sekolah'?'Kepala Sekolah':'Guru BK';
+infoDiv.innerHTML=`<span style="font-size:18px;">${guru.icon||'👨‍🏫'}</span><span>Mode ${roleLabel} — Anda dapat memilih kelas manapun untuk diisi</span>`;
 kelasBox.insertBefore(infoDiv,grid);
 }
 }
@@ -1762,7 +1830,7 @@ const grade=kelas.split('-')[0];
 if(grade!==currentGrade){currentGrade=grade;html+=`<div class="sp-kelas-group-label">📚 Kelas ${grade}</div>`;}
 let itemClass='sp-kelas-item';
 let onclickAttr=`onclick="selectKelas(this,'${type}-kelas-grid')"`;
-if(userKelas){
+if(userKelas&&!isGuru){
 if(kelas===userKelas){itemClass+=' selected user-kelas';}
 else{itemClass+=' disabled';onclickAttr='';}
 }
@@ -1776,7 +1844,8 @@ if(el.classList.contains('disabled'))return;
 const grid=document.getElementById(gridId);
 if(!grid)return;
 const user=getCurrentUser();
-if(user&&el.dataset.value!==user.kelas){showToast(`⚠️ Kelas ${el.dataset.value} tidak sesuai dengan akun Anda (${user.kelas})`,'error',3000);return;}
+const guru=getGuruSession();
+if(user&&!guru&&el.dataset.value!==user.kelas){showToast(`⚠️ Kelas ${el.dataset.value} tidak sesuai dengan akun Anda (${user.kelas})`,'error',3000);return;}
 grid.querySelectorAll('.sp-kelas-item').forEach(i=>i.classList.remove('selected'));
 el.classList.add('selected');
 }
@@ -1788,16 +1857,13 @@ return sel?sel.dataset.value:'';
 }
 function validateUserKelas(type){
 const user=getCurrentUser();
-if(!user)return true;
+const guru=getGuruSession();
+if(!user||guru)return true;
 const selectedKelas=getSelectedKelas(type+'-kelas-grid');
 if(!selectedKelas)return true;
 if(selectedKelas!==user.kelas){showToast(`⚠️ Kelas yang dipilih (${selectedKelas}) tidak sesuai dengan kelas terdaftar Anda (${user.kelas})!`,'error',4000);return false;}
 return true;
 }
-
-/* ================================================================ */
-/* AUTO-COMPRESS IMAGE */
-/* ================================================================ */
 function formatFileSize(bytes){
 if(bytes<1024)return bytes+' B';
 if(bytes<1024*1024)return(bytes/1024).toFixed(1)+' KB';
@@ -1887,29 +1953,24 @@ if(compressInfo)compressInfo.style.display='none';
 if(input)input.value='';
 delete uploadStorage[type];
 }
-
-/* ================================================================ */
-/* NAVIGASI */
-/* ================================================================ */
-function navigateTo(pageId, pageCode, tabCode) {
-  closeAllDD();
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const target = document.getElementById(pageId);
-  if (target) target.classList.add('active');
-  if (pageCode && tabCode) {
-    setTimeout(() => {
-      activateTab(pageCode, tabCode);
-      // Scroll ke panel aktif, bukan ke top
-      const panel = document.getElementById(pageCode + '-' + tabCode);
-      if (panel) {
-        const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 0;
-        const panelTop = panel.getBoundingClientRect().top + window.scrollY - navbarHeight;
-        window.scrollTo({ top: panelTop, behavior: 'instant' });
-      }
-    }, 100);
-  } else {
-    window.scrollTo(0, 0);
-  }
+function navigateTo(pageId,pageCode,tabCode){
+closeAllDD();
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+const target=document.getElementById(pageId);
+if(target)target.classList.add('active');
+if(pageCode&&tabCode){
+setTimeout(()=>{
+activateTab(pageCode,tabCode);
+const panel=document.getElementById(pageCode+'-'+tabCode);
+if(panel){
+const navbarHeight=document.querySelector('.navbar')?.offsetHeight||0;
+const panelTop=panel.getBoundingClientRect().top+window.scrollY-navbarHeight;
+window.scrollTo({top:panelTop,behavior:'instant'});
+}
+},100);
+}else{
+window.scrollTo(0,0);
+}
 }
 function activateTab(pageCode,tabCode){
 const pageMap={'asp':'aspirasi-aduan','ref':'refleksi-cerita','har':'harapan-saran','tes':'testimoni-feedback'};
@@ -1933,20 +1994,13 @@ const panel=document.getElementById(page+'-'+tab);
 if(panel)panel.classList.add('active');
 if(tab==='koleksi')renderCollection(page);
 }
-function goHome() {
-  closeAllDD();
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const hero = document.getElementById('home-section');
-  if (hero) {
-    hero.scrollIntoView({ behavior: 'instant', block: 'start' });
-  } else {
-    window.scrollTo(0, 0);
-  }
+function goHome(){
+closeAllDD();
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+const hero=document.getElementById('home-section');
+if(hero){hero.scrollIntoView({behavior:'instant',block:'start'});}
+else{window.scrollTo(0,0);}
 }
-
-/* ================================================================ */
-/* FORM HANDLERS */
-/* ================================================================ */
 function selectCategory(el,groupId){
 const group=document.getElementById(groupId);
 if(!group)return;
@@ -1969,10 +2023,6 @@ function getAnonId(type){
 const map={'asp':'asp-anon','aduan':'aduan-anon','ref':'ref-anon','cerita':'cerita-anon','har':'har-anon','saran':'saran-anon','tes':'tes-anon','fb':'fb-anon'};
 return map[type];
 }
-
-/* ================================================================ */
-/* SUBMIT SUARA */
-/* ================================================================ */
 async function submitSuara(event,type){
 event.preventDefault();
 const form=event.target;
@@ -1986,7 +2036,8 @@ try{
 const data=new FormData(form);
 const nisInput=document.getElementById(type+'-nis');
 const nis=nisInput?nisInput.value.trim():'';
-const payload={action:ACTION_MAP[type],_menu:MENU_MAP[type].menu,_subMenu:MENU_MAP[type].subMenu,_userAgent:navigator.userAgent,anon:document.getElementById(getAnonId(type))?.checked??true,kelas:kelas,nis:nis?"'"+nis:''};
+const guru=getGuruSession();
+const payload={action:ACTION_MAP[type],_menu:MENU_MAP[type].menu,_subMenu:MENU_MAP[type].subMenu,_userAgent:navigator.userAgent,anon:document.getElementById(getAnonId(type))?.checked??true,kelas:kelas,nis:nis?"'"+nis:'',_submitted_by:guru?guru.id+'-'+guru.name:null};
 switch(type){
 case'asp':payload.kategori=getSelectedValue('asp-category')||'Lainnya';payload.judul=data.get('judul');payload.isi=data.get('isi');payload.prioritas=data.get('prioritas')||'Sedang';break;
 case'aduan':payload.kategori=getSelectedValue('aduan-category')||'Lainnya';payload.judul=data.get('judul');payload.isi=data.get('isi');payload.mood=getSelectedValue('aduan-mood')||'';break;
@@ -2026,15 +2077,14 @@ entries.unshift({id:Date.now(),type:type,timestamp:new Date().toISOString(),reco
 if(entries.length>500)entries=entries.slice(0,500);
 localStorage.setItem(STORAGE_SUARA,JSON.stringify(entries));
 }
-
-/* ================================================================ */
-/* POST-SUBMIT MODAL */
-/* ================================================================ */
 function showPostSubmitModal(submitInfo){
 lastSubmitInfo=submitInfo;
 const modal=document.getElementById('post-submit-modal');
 const summary=document.getElementById('post-submit-summary');
-if(!modal||!summary){showToast(`✅ Data tersimpan!\n📋 ${submitInfo.record_id}\n🏫 ${submitInfo.kelas}\n🏷️ ${submitInfo.kategori}`,'success',5000);return;}
+if(!modal||!summary){showToast(`✅ Data tersimpan!
+📋 ${submitInfo.record_id}
+🏫 ${submitInfo.kelas}
+🏷️ ${submitInfo.kategori}`,'success',5000);return;}
 summary.innerHTML=`
 <div class="summary-row"><span class="summary-label">📋 Record ID:</span><span class="summary-value">${submitInfo.record_id}</span></div>
 <div class="summary-row"><span class="summary-label">🏫 Kelas:</span><span class="summary-value">${submitInfo.kelas}</span></div>
@@ -2061,7 +2111,7 @@ if(choice==='logout'){logoutUser();}
 else{showToast('✍️ Silakan isi form kembali','info',2500);window.scrollTo({top:0,behavior:'auto'});}
 }
 function logoutUser(){
-if(!confirm('🚪 Apakah Anda yakin ingin logout?\n\nAnda akan kembali ke halaman login.')){if(lastSubmitInfo)showPostSubmitModal(lastSubmitInfo);return;}
+if(!confirm('🚪 Apakah Anda yakin ingin logout?\nAnda akan kembali ke halaman login.')){if(lastSubmitInfo)showPostSubmitModal(lastSubmitInfo);return;}
 sessionStorage.removeItem(SESSION_USER);
 sessionStorage.removeItem(SESSION_ACCESS);
 sessionStorage.removeItem(SESSION_GURU);
@@ -2081,10 +2131,6 @@ document.querySelectorAll('form').forEach(f=>f.reset());
 ['asp','aduan','ref','cerita','har','saran','tes','fb'].forEach(t=>removeUpload(t));
 showToast('👋 Anda telah logout','info',3000);
 }
-
-/* ================================================================ */
-/* RENDER KOLEKSI */
-/* ================================================================ */
 async function renderCollection(page){
 const container=document.getElementById(page+'-collection');
 if(!container)return;
@@ -2151,10 +2197,6 @@ ${e.bukti_link?`<a href="${e.bukti_link}" target="_blank" class="sp-entry-bukti"
 </div>`;
 }).join('');
 }
-
-/* ================================================================ */
-/* LOGIN PLATFORM */
-/* ================================================================ */
 function checkPassword(){
 const input=document.getElementById('password-input').value;
 const errorMsg=document.getElementById('login-error');
@@ -2186,13 +2228,65 @@ clearTimeout(toastTimer);
 setTimeout(()=>toast.classList.add('show'),10);
 toastTimer=setTimeout(()=>toast.classList.remove('show'),duration);
 }
-
+/* ================================================================ */
+/* EDIT SPREADSHEET FUNCTIONS - DIPERBAIKI */
+/* ================================================================ */
+function openMainSpreadsheet(event){
+if(event)event.preventDefault();
+if(SPREADSHEET_URL.includes('YOUR_SPREADSHEET_ID')){
+showToast('⚠️ URL Spreadsheet belum dikonfigurasi.\nSilakan edit SPREADSHEET_URL di script HTML.','error',6000);
+return;
+}
+const guru=getGuruSession();
+window.open(SPREADSHEET_URL,'_blank');
+showToast(`📗 Membuka Spreadsheet Utama...\nLogin sebagai: ${guru?guru.name:'Guest'}`,'success',3000);
+}
+function openKelasSheet(event){
+if(event)event.preventDefault();
+if(!currentGuruKelas){showToast('⚠️ Pilih kelas terlebih dahulu','error');return;}
+openMainSpreadsheet();
+setTimeout(()=>{
+showToast(`📋 Sheet kelas "${currentGuruKelas}" dapat diakses di spreadsheet.\nCari tab/sheet bernama: Laporan_${currentGuruKelas}`,'info',5000);
+},500);
+}
+function openKelasSheetForEdit(){
+if(!currentGuruKelas){showToast('⚠️ Pilih kelas terlebih dahulu','error');return;}
+if(SPREADSHEET_URL.includes('YOUR_SPREADSHEET_ID')){
+showToast('⚠️ URL Spreadsheet belum dikonfigurasi.\nSilakan edit SPREADSHEET_URL di script HTML.','error',6000);
+return;
+}
+const guru=getGuruSession();
+window.open(SPREADSHEET_URL,'_blank');
+showToast(`📊 Membuka Spreadsheet untuk edit kelas ${currentGuruKelas}\n💡 Edit langsung di sheet "Laporan_${currentGuruKelas}" atau sheet "Data_Entri"`,`success`,5000);
+}
 /* ================================================================ */
 /* GURU BK DASHBOARD */
 /* ================================================================ */
 function openGuruBK(){
 const overlay=document.getElementById('guru-overlay');
 if(!overlay)return;
+const guru=getGuruSession();
+if(guru){
+overlay.classList.add('show');
+document.getElementById('guru-login-state').style.display='none';
+document.getElementById('guru-dashboard-state').classList.add('show');
+const guruName=document.getElementById('guru-dashboard-name');
+const guruIcon=document.getElementById('guru-dashboard-icon');
+const guruRole=document.getElementById('guru-dashboard-role');
+const modalTitle=document.getElementById('guru-modal-title');
+if(guruName)guruName.textContent=`${guru.icon||'👨‍🏫'} ${guru.name}`;
+if(guruIcon)guruIcon.textContent=guru.icon||'👨‍🏫';
+if(guruRole){
+const roleLabel=guru.role==='kepala_sekolah'?'Kepala Sekolah':'Guru BK';
+guruRole.textContent=`Login sebagai ${roleLabel} (${guru.id}) • Akses penuh ke dashboard rekap + edit spreadsheet`;
+}
+if(modalTitle){
+const roleLabel=guru.role==='kepala_sekolah'?'Kepala Sekolah':'Guru BK';
+modalTitle.textContent=`${guru.icon||'👨‍🏫'} Dashboard ${roleLabel} — Laporan Suara Siswa`;
+}
+loadRekapKelas();
+return;
+}
 overlay.classList.add('show');
 document.getElementById('guru-login-state').style.display='block';
 document.getElementById('guru-dashboard-state').classList.remove('show');
@@ -2216,10 +2310,36 @@ function checkGuruPassword(){
 const input=document.getElementById('guru-password-input');
 const errorMsg=document.getElementById('guru-login-error');
 if(!input||!errorMsg)return;
-if(input.value===GURU_PASSWORD){
+const matchedGuru=GURU_BK_LIST.find(g=>g.password===input.value);
+if(matchedGuru){
+sessionStorage.setItem(SESSION_GURU,JSON.stringify({
+id:matchedGuru.id,
+name:matchedGuru.name,
+icon:matchedGuru.icon,
+role:matchedGuru.role,
+loginTime:new Date().toISOString()
+}));
+sessionStorage.setItem(SESSION_ACCESS,'granted');
 document.getElementById('guru-login-state').style.display='none';
 document.getElementById('guru-dashboard-state').classList.add('show');
+const guruName=document.getElementById('guru-dashboard-name');
+const guruIcon=document.getElementById('guru-dashboard-icon');
+const guruRole=document.getElementById('guru-dashboard-role');
+const modalTitle=document.getElementById('guru-modal-title');
+if(guruName)guruName.textContent=`${matchedGuru.icon} ${matchedGuru.name}`;
+if(guruIcon)guruIcon.textContent=matchedGuru.icon;
+if(guruRole){
+const roleLabel=matchedGuru.role==='kepala_sekolah'?'Kepala Sekolah':'Guru BK';
+guruRole.textContent=`Login sebagai ${roleLabel} (${matchedGuru.id}) • Akses penuh ke dashboard rekap + edit spreadsheet`;
+}
+if(modalTitle){
+const roleLabel=matchedGuru.role==='kepala_sekolah'?'Kepala Sekolah':'Guru BK';
+modalTitle.textContent=`${matchedGuru.icon} Dashboard ${roleLabel} — Laporan Suara Siswa`;
+}
+updateUserBadge();
 loadRekapKelas();
+const roleLabel=matchedGuru.role==='kepala_sekolah'?'Kepala Sekolah':'Guru BK';
+showToast(`✅ Login berhasil sebagai ${roleLabel}: ${matchedGuru.name}`,'success');
 }else{
 errorMsg.style.display='block';
 input.value='';
@@ -2257,10 +2377,26 @@ document.getElementById('guru-kelas-subtitle').textContent='Memuat laporan...';
 document.getElementById('guru-kelas-meta').innerHTML='';
 document.getElementById('guru-entries-container').innerHTML='<div style="text-align:center;padding:20px;color:var(--text-muted);">⏳ Memuat...</div>';
 document.getElementById('guru-arsip-section').style.display='none';
+// Update inline edit
+document.getElementById('inline-edit-kelas').textContent=kelas;
+document.getElementById('inline-edit-textarea').value='';
+// Show kelas sheet button
+const ssBtnKelas=document.getElementById('ss-btn-kelas');
+if(ssBtnKelas){
+ssBtnKelas.style.display='inline-flex';
+ssBtnKelas.textContent=`📋 Buka Sheet ${kelas}`;
+}
 try{
 const res=await fetch(BACKEND_URL+'?action=get_laporan_kelas&kelas='+encodeURIComponent(kelas),{method:'GET',redirect:'follow'});
 const result=await res.json();
-if(result.success){currentLaporanData=result;renderGuruLaporan(result);}
+if(result.success){
+currentLaporanData=result;
+renderGuruLaporan(result);
+// Load catatan jika ada
+if(result.catatan_tindak_lanjut){
+document.getElementById('inline-edit-textarea').value=result.catatan_tindak_lanjut;
+}
+}
 else throw new Error(result.error||'Gagal memuat');
 }catch(err){
 document.getElementById('guru-kelas-subtitle').textContent='❌ '+err.message;
@@ -2279,7 +2415,10 @@ container.innerHTML=`
 <div style="background:linear-gradient(135deg,#faf5ff 0%,#fff1f2 100%);border:2px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;text-align:center;">
 <div style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:10px;">📊 Laporan Kelas ${laporan.kelas} • ${laporan.versi}</div>
 <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Total ${laporan.jumlah_entri} entri dari siswa kelas ini</div>
-<button class="guru-action-btn primary" onclick='showLaporanPreview(${JSON.stringify(laporan).replace(/'/g,"&apos;")})' style="padding:12px 24px;font-size:14px;">👁️ Preview Laporan Lengkap</button>
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+<button class="guru-action-btn primary" onclick='showLaporanPreview(${JSON.stringify(laporan).replace(/'/g,"&apos;")})' style="padding:10px 18px;font-size:13px;">👁️ Preview Laporan</button>
+<button class="guru-action-btn success" onclick="openKelasSheetForEdit()" style="padding:10px 18px;font-size:13px;">📊 Edit di Spreadsheet</button>
+</div>
 </div>
 <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:10px;">📝 Ringkasan Entri Terbaru:</div>
 <div class="guru-entries-list">
@@ -2302,7 +2441,7 @@ return`<div class="guru-entry-item">
 </div>`;
 }).join('')}
 </div>
-${laporan.data.length>5?`<div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted);">...dan ${laporan.data.length-5} entri lainnya. Klik "Preview Laporan Lengkap" untuk melihat semua.</div>`:''}`;
+${laporan.data.length>5?`<div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted);">...dan ${laporan.data.length-5} entri lainnya. Klik "Preview Laporan" atau "Edit di Spreadsheet" untuk melihat semua.</div>`:''}`;
 }
 async function refreshLaporanKelas(){if(currentGuruKelas)await selectGuruKelas(currentGuruKelas);}
 async function toggleArsip(){
@@ -2325,10 +2464,40 @@ list.innerHTML=result.data.map(arsip=>`<div class="guru-arsip-item">
 }else{list.innerHTML='<div style="text-align:center;padding:12px;color:var(--text-muted);font-size:12px;">📭 Belum ada arsip untuk kelas ini</div>';}
 }catch(err){list.innerHTML='<div style="text-align:center;padding:12px;color:var(--danger);font-size:12px;">❌ Gagal memuat arsip</div>';}
 }
-
 /* ================================================================ */
-/* PREVIEW LAPORAN + PDF */
+/* INLINE EDIT CATATAN TINDAK LANJUT */
 /* ================================================================ */
+async function saveInlineEdit(){
+if(!currentGuruKelas){showToast('⚠️ Pilih kelas terlebih dahulu','error');return;}
+const textarea=document.getElementById('inline-edit-textarea');
+const catatan=textarea.value.trim();
+if(!catatan){showToast('⚠️ Catatan kosong','error');return;}
+try{
+const payload={
+action:'save_catatan_tindak_lanjut',
+kelas:currentGuruKelas,
+catatan:catatan,
+edited_by:getGuruSession()?.name||'Unknown'
+};
+const res=await fetch(BACKEND_URL,{method:'POST',body:JSON.stringify(payload),headers:{'Content-Type':'text/plain;charset=utf-8'},redirect:'follow'});
+const result=await res.json();
+if(result.success){
+showToast(`✅ Catatan untuk kelas ${currentGuruKelas} tersimpan!\n💡 Catatan juga tersimpan di spreadsheet.`,'success',4000);
+}else{
+throw new Error(result.error||'Gagal menyimpan');
+}
+}catch(err){
+showToast('❌ Gagal menyimpan catatan: '+err.message+'\n💡 Anda tetap bisa edit langsung di spreadsheet.','error',5000);
+}
+}
+function cancelInlineEdit(){
+if(currentLaporanData&&currentLaporanData.catatan_tindak_lanjut){
+document.getElementById('inline-edit-textarea').value=currentLaporanData.catatan_tindak_lanjut;
+}else{
+document.getElementById('inline-edit-textarea').value='';
+}
+showToast('❌ Perubahan dibatalkan','info',2000);
+}
 function escapeHTML(str){
 if(!str)return'';
 return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
@@ -2660,11 +2829,11 @@ loadingOverlay.classList.remove('show');
 showToast('❌ Gagal membuat PDF: '+err.message,'error',5000);
 }
 }
-
 /* ================================================================ */
 /* INIT */
 /* ================================================================ */
 window.addEventListener('DOMContentLoaded',async()=>{
+initGuruAccountsList();
 initAuthKelasGrid();
 initKelasGrids();
 const user=getCurrentUser();
