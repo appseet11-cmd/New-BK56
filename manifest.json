@@ -1,0 +1,26 @@
+{
+  "name": "Pelayanan BK | SMP Negeri 56 Jakarta",
+  "short_name": "BK SMPN 56",
+  "description": "Layanan Bimbingan Konseling resmi SMP Negeri 56 Jakarta berbasis Kurikulum Merdeka.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f6fa",
+  "theme_color": "#1a5276",
+  "orientation": "portrait-primary",
+  "lang": "id-ID",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
