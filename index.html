@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="id" dir="ltr">
 <head>
+    <link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="BK SMPN 56">
+<link rel="apple-touch-icon" href="icon-192.png">
+
 <!-- ============ BASIC META ============ -->
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -970,6 +977,11 @@ gap: 20px;
 }
 }
 </style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
 <a href="#main-content" class="skip-link">Langsung ke konten utama</a>
@@ -2028,6 +2040,15 @@ link.classList.add('active');
 }
 window.addEventListener('scroll', updateActiveMenu, { passive: true });
 updateActiveMenu();
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(reg => console.log('PWA siap:', reg))
+        .catch(err => console.log('PWA gagal:', err));
+    });
+  }
 </script>
 </body>
 </html>
