@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="id" dir="ltr">
 <head>
-    <link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="BK SMPN 56">
 <link rel="apple-touch-icon" href="icon-192.png">
-
 <!-- ============ BASIC META ============ -->
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -185,7 +184,260 @@ line-height: 1.7;
 color: #333;
 background-color: #f5f6fa;
 -webkit-font-smoothing: antialiased;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
 }
+input, textarea, select {
+-webkit-user-select: text;
+-moz-user-select: text;
+-ms-user-select: text;
+user-select: text;
+}
+
+/* =========================================================
+⭐ MODAL PROTEKSI ELEGAN (GEMBOK ANIMATIF)
+========================================================= */
+.lock-modal-overlay {
+position: fixed;
+inset: 0;
+background: rgba(26, 82, 118, 0.55);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+z-index: 99999;
+display: flex;
+align-items: center;
+justify-content: center;
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.35s ease, visibility 0.35s ease;
+padding: 20px;
+}
+.lock-modal-overlay.active {
+opacity: 1;
+visibility: visible;
+}
+.lock-modal-card {
+background: linear-gradient(145deg, #ffffff 0%, #f8fbff 100%);
+border-radius: 24px;
+padding: 40px 35px 35px;
+max-width: 420px;
+width: 100%;
+box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255,255,255,0.1) inset;
+position: relative;
+transform: translateY(30px) scale(0.95);
+transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+text-align: center;
+border: 1px solid rgba(41, 128, 185, 0.15);
+}
+.lock-modal-overlay.active .lock-modal-card {
+transform: translateY(0) scale(1);
+}
+.lock-modal-close {
+position: absolute;
+top: 14px;
+right: 14px;
+width: 34px;
+height: 34px;
+border-radius: 50%;
+background: rgba(44, 62, 80, 0.08);
+border: none;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: all 0.25s;
+color: #7f8c8d;
+font-size: 18px;
+}
+.lock-modal-close:hover {
+background: rgba(231, 76, 60, 0.15);
+color: #e74c3c;
+transform: rotate(90deg);
+}
+.lock-icon-wrapper {
+width: 100px;
+height: 100px;
+margin: 0 auto 20px;
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.lock-icon-wrapper::before {
+content: '';
+position: absolute;
+inset: 0;
+background: radial-gradient(circle, rgba(41, 128, 185, 0.15) 0%, transparent 70%);
+border-radius: 50%;
+animation: pulseGlow 2.5s ease-in-out infinite;
+}
+@keyframes pulseGlow {
+0%, 100% { transform: scale(1); opacity: 0.6; }
+50% { transform: scale(1.15); opacity: 1; }
+}
+.lock-svg {
+width: 80px;
+height: 80px;
+position: relative;
+z-index: 2;
+transition: transform 0.4s ease;
+}
+.lock-svg .lock-body {
+fill: #1a5276;
+transition: fill 0.4s ease;
+}
+.lock-svg .lock-shackle {
+fill: none;
+stroke: #1a5276;
+stroke-width: 6;
+stroke-linecap: round;
+transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+transform-origin: 65px 35px;
+}
+.lock-svg .lock-keyhole {
+fill: #ffffff;
+}
+/* Animasi saat password salah */
+.lock-modal-card.shake {
+animation: shakeCard 0.5s ease;
+}
+.lock-modal-card.shake .lock-svg .lock-body {
+fill: #e74c3c;
+}
+.lock-modal-card.shake .lock-svg .lock-shackle {
+stroke: #e74c3c;
+}
+@keyframes shakeCard {
+0%, 100% { transform: translateX(0); }
+20% { transform: translateX(-12px); }
+40% { transform: translateX(12px); }
+60% { transform: translateX(-8px); }
+80% { transform: translateX(8px); }
+}
+/* Animasi saat password benar (unlock) */
+.lock-modal-card.unlocked .lock-svg .lock-shackle {
+transform: translateY(-8px) rotate(25deg);
+stroke: #27ae60;
+}
+.lock-modal-card.unlocked .lock-svg .lock-body {
+fill: #27ae60;
+}
+.lock-modal-card.unlocked .lock-icon-wrapper::before {
+background: radial-gradient(circle, rgba(39, 174, 96, 0.25) 0%, transparent 70%);
+}
+.lock-modal-title {
+font-size: 1.35rem;
+font-weight: 800;
+color: var(--primary);
+margin-bottom: 8px;
+letter-spacing: -0.3px;
+}
+.lock-modal-subtitle {
+font-size: 0.88rem;
+color: #7f8c8d;
+margin-bottom: 22px;
+line-height: 1.5;
+}
+.lock-input-group {
+position: relative;
+margin-bottom: 18px;
+}
+.lock-input {
+width: 100%;
+padding: 14px 48px 14px 18px;
+border: 2px solid #e0e6ed;
+border-radius: 12px;
+font-size: 0.95rem;
+font-family: inherit;
+background: #f8fbff;
+transition: all 0.3s;
+letter-spacing: 2px;
+text-align: center;
+font-weight: 600;
+color: var(--primary);
+}
+.lock-input:focus {
+outline: none;
+border-color: var(--secondary);
+background: #fff;
+box-shadow: 0 0 0 4px rgba(41, 128, 185, 0.12);
+}
+.lock-input.error {
+border-color: #e74c3c;
+background: #fff5f5;
+}
+.lock-input.success {
+border-color: #27ae60;
+background: #f0fdf4;
+}
+.lock-toggle-pwd {
+position: absolute;
+right: 14px;
+top: 50%;
+transform: translateY(-50%);
+background: none;
+border: none;
+cursor: pointer;
+color: #95a5a6;
+padding: 4px;
+transition: color 0.2s;
+}
+.lock-toggle-pwd:hover { color: var(--secondary); }
+.lock-btn {
+width: 100%;
+padding: 14px;
+background: linear-gradient(135deg, var(--primary), var(--secondary));
+color: white;
+border: none;
+border-radius: 12px;
+font-size: 0.95rem;
+font-weight: 700;
+cursor: pointer;
+transition: all 0.3s;
+font-family: inherit;
+letter-spacing: 0.3px;
+box-shadow: 0 4px 15px rgba(26, 82, 118, 0.25);
+}
+.lock-btn:hover {
+transform: translateY(-2px);
+box-shadow: 0 8px 22px rgba(26, 82, 118, 0.35);
+}
+.lock-btn:active {
+transform: translateY(0);
+}
+.lock-error-msg {
+color: #e74c3c;
+font-size: 0.82rem;
+margin-top: 10px;
+min-height: 18px;
+font-weight: 500;
+opacity: 0;
+transition: opacity 0.3s;
+}
+.lock-error-msg.visible {
+opacity: 1;
+}
+.lock-success-msg {
+color: #27ae60;
+font-size: 0.88rem;
+margin-top: 10px;
+font-weight: 600;
+}
+.lock-footer-hint {
+margin-top: 18px;
+padding-top: 16px;
+border-top: 1px dashed #e0e6ed;
+font-size: 0.75rem;
+color: #95a5a6;
+line-height: 1.5;
+}
+.lock-footer-hint strong {
+color: var(--primary);
+}
+
+/* === STYLES LAINNYA (TIDAK BERUBAH) === */
 .skip-link {
 position: absolute;
 top: -40px;
@@ -831,6 +1083,12 @@ font-size: 0.84rem;
 .bidang-header .subtitle {
 font-size: 0.9rem;
 }
+.lock-modal-card {
+padding: 30px 22px 25px;
+}
+.lock-modal-title { font-size: 1.15rem; }
+.lock-icon-wrapper { width: 80px; height: 80px; }
+.lock-svg { width: 65px; height: 65px; }
 }
 a:focus-visible, button:focus-visible, input:focus-visible,
 select:focus-visible, textarea:focus-visible, summary:focus-visible {
@@ -868,13 +1126,9 @@ line-height: 1.6;
 .bidang-header.kinerja-vii   { background: linear-gradient(135deg, #8e44ad, #6c3483); }
 .bidang-header.kinerja-viii  { background: linear-gradient(135deg, #16a085, #0e6655); }
 .bidang-header.kinerja-ix    { background: linear-gradient(135deg, #c0392b, #922b21); }
-/* =========================================================
-⭐ STYLE BARU: ABSENSI REAL TIME
-========================================================= */
 .bidang-header.absensi-vii { background: linear-gradient(135deg, #2c3e50, #34495e); }
 .bidang-header.absensi-viii { background: linear-gradient(135deg, #2980b9, #3498db); }
 .bidang-header.absensi-ix { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
-/* Style khusus untuk link judul di header absensi agar terlihat seperti tombol */
 .bidang-header a.header-link {
 color: white;
 text-decoration: none;
@@ -895,10 +1149,6 @@ font-size: 2rem;
 display: block;
 margin-bottom: 5px;
 }
-/* =========================================================
-⭐ STYLE BARU: 13 JENIS LAYANAN BK (CARD GRID)
-- 13 warna gradient berbeda untuk setiap layanan
-========================================================= */
 .bidang-header.layanan-01 { background: linear-gradient(135deg, #3498db, #2980b9); }
 .bidang-header.layanan-02 { background: linear-gradient(135deg, #27ae60, #229954); }
 .bidang-header.layanan-03 { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
@@ -912,9 +1162,6 @@ margin-bottom: 5px;
 .bidang-header.layanan-11 { background: linear-gradient(135deg, #d32f2f, #b71c1c); }
 .bidang-header.layanan-12 { background: linear-gradient(135deg, #455a64, #37474f); }
 .bidang-header.layanan-13 { background: linear-gradient(135deg, #00acc1, #0097a7); }
-/* =========================================================
-⭐ MODIFIKASI: LAPORAN KINERJA — 5 CARD SEJAJAR
-========================================================= */
 #laporan-kinerja .bidang-grid {
 grid-template-columns: repeat(5, 1fr);
 gap: 14px;
@@ -958,7 +1205,6 @@ gap: 6px;
 #laporan-kinerja .bidang-body ul li a.layanan-btn::after {
 font-size: 0.78rem;
 }
-/* Tablet: 3 kolom */
 @media (max-width: 1100px) {
 #laporan-kinerja .bidang-grid {
 grid-template-columns: repeat(3, 1fr);
@@ -969,7 +1215,6 @@ gap: 18px;
 #laporan-kinerja .bidang-body ul li { font-size: 0.85rem; }
 #laporan-kinerja .bidang-body ul li a.layanan-btn { font-size: 0.85rem; }
 }
-/* Mobile: 1 kolom */
 @media (max-width: 700px) {
 #laporan-kinerja .bidang-grid {
 grid-template-columns: 1fr;
@@ -984,6 +1229,44 @@ gap: 20px;
 <link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
+
+<!-- ========================================== -->
+<!-- ⭐ MODAL PROTEKSI ELEGAN (GEMBOK ANIMATIF) -->
+<!-- ========================================== -->
+<div class="lock-modal-overlay" id="lockModal" role="dialog" aria-modal="true" aria-labelledby="lockModalTitle">
+<div class="lock-modal-card" id="lockCard">
+<button class="lock-modal-close" id="lockClose" aria-label="Tutup" title="Tutup">✕</button>
+<div class="lock-icon-wrapper">
+<svg class="lock-svg" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<!-- Shackle (pengait gembok) -->
+<path class="lock-shackle" d="M 30 50 V 35 A 20 20 0 0 1 70 35 V 50" />
+<!-- Body (badan gembok) -->
+<rect class="lock-body" x="20" y="50" width="60" height="50" rx="8" ry="8" />
+<!-- Keyhole (lubang kunci) -->
+<circle class="lock-keyhole" cx="50" cy="70" r="5" />
+<rect class="lock-keyhole" x="48" y="72" width="4" height="12" rx="1" />
+</svg>
+</div>
+<h3 class="lock-modal-title" id="lockModalTitle">Area Terproteksi</h3>
+<p class="lock-modal-subtitle" id="lockModalSubtitle">Konten halaman ini dilindungi. Masukkan password admin untuk melanjutkan.</p>
+<div class="lock-input-group">
+<input type="password" class="lock-input" id="lockPassword" placeholder="••••••••" autocomplete="off" aria-label="Password Admin">
+<button type="button" class="lock-toggle-pwd" id="lockTogglePwd" aria-label="Tampilkan password" title="Tampilkan password">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+<circle cx="12" cy="12" r="3"></circle>
+</svg>
+</button>
+</div>
+<button class="lock-btn" id="lockSubmit">🔓 Buka Proteksi</button>
+<div class="lock-error-msg" id="lockError">❌ Password salah. Silakan coba lagi.</div>
+<div class="lock-footer-hint">
+💡 <strong>Hanya untuk Admin/Konselor.</strong><br>
+Pengunjung tidak memerlukan password untuk mengakses halaman.
+</div>
+</div>
+</div>
+
 <a href="#main-content" class="skip-link">Langsung ke konten utama</a>
 <div class="top-bar-disdik" role="complementary" aria-label="Afiliasi Pendidikan">
 <span>
@@ -1114,7 +1397,7 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 <div class="card-icon" aria-hidden="true">💬</div>
 <h3>Kotak Suara Siswa</h3>
 <p>Sampaikan aspirasi, saran, dan keluhan secara anonim.</p>
-<a href=" https://appseet11-cmd.github.io/New-BK56/arsip-lama/suara-siswa/" style="color:var(--secondary);font-weight:600;">Kirim Suara →</a>
+<a href="https://appseet11-cmd.github.io/New-BK56/arsip-lama/suara-siswa/" style="color:var(--secondary);font-weight:600;">Kirim Suara →</a>
 </article>
 </div>
 </section>
@@ -1187,7 +1470,7 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </header>
 <div class="bidang-body">
 <ul>
-<li><a class="layanan-btn" href=" https://appseet11-cmd.github.io/Pengenalan-dan-Penerimaan-Diri/" target="_self">Pengenalan &amp; penerimaan diri</a></li>
+<li><a class="layanan-btn" href="https://appseet11-cmd.github.io/Pengenalan-dan-Penerimaan-Diri/" target="_self">Pengenalan &amp; penerimaan diri</a></li>
 <li><a class="layanan-btn" href="pribadi/pengembangan-sikap-kebiasaan.html" target="_self">Pengembangan sikap &amp; kebiasaan baik</a></li>
 <li><a class="layanan-btn" href="pribadi/kesadaran-tanggung-jawab.html" target="_self">Kesadaran &amp; tanggung jawab</a></li>
 <li><a class="layanan-btn" href="pribadi/kemampuan-ambil-keputusan.html" target="_self">Kemampuan mengambil keputusan</a></li>
@@ -1246,11 +1529,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </article>
 </div>
 </section>
-
-<!-- ========================================== -->
-<!-- SECTION DIUBAH: 13 JENIS LAYANAN BK        -->
-<!-- Dari tabel → Grid Cards dengan sub-template -->
-<!-- ========================================== -->
 <section class="section" id="jenis-layanan" style="background: var(--white);" aria-labelledby="jenis-title">
 <header class="section-title">
 <h2 id="jenis-title">13 Jenis Layanan BK</h2>
@@ -1261,8 +1539,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 <p>Setiap jenis layanan di bawah ini memiliki <strong>6 sub-template dokumen</strong> (Deskripsi, Tujuan, Sasaran, Langkah Pelaksanaan, Instrumen, dan Evaluasi). Klik pada judul layanan untuk mengakses dokumen lengkap masing-masing layanan.</p>
 </div>
 <div class="bidang-grid">
-
-<!-- 1. ORIENTASI -->
 <article class="bidang-card">
 <header class="bidang-header layanan-01">
 <div class="icon" aria-hidden="true">🧭</div>
@@ -1279,8 +1555,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
-<!-- 2. INFORMASI -->
 <article class="bidang-card">
 <header class="bidang-header layanan-02">
 <div class="icon" aria-hidden="true">ℹ️</div>
@@ -1293,12 +1567,10 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 <li><a class="layanan-btn" href="https://appseet11-cmd.github.io/New-BK56/definisi-layanan-informasi/sasaran/" target="_self">Sasaran &amp; Penerima Layanan</a></li>
 <li><a class="layanan-btn" href="https://appseet11-cmd.github.io/New-BK56/definisi-layanan-informasi/langkah/" target="_self">Langkah-langkah Pelaksanaan</a></li>
 <li><a class="layanan-btn" href="https://appseet11-cmd.github.io/New-BK56/definisi-layanan-informasi/instrumen/" target="_self">Instrumen &amp; Format Dokumen</a></li>
-<li><a class="layanan-btn" href="https://appseet11-cmd.github.io/New-BK56/definisi-layanan-informasi/evaluasi/" tahttps://appseet11-cmd.github.io/New-BK56/definisi-layanan-informasi/rget="_self">Evaluasi &amp; Tindak Lanjut</a></li>
+<li><a class="layanan-btn" href="https://appseet11-cmd.github.io/New-BK56/definisi-layanan-informasi/evaluasi/" target="_self">Evaluasi &amp; Tindak Lanjut</a></li>
 </ul>
 </div>
 </article>
-
-<!-- 3. PENEMPATAN & PENYALURAN -->
 <article class="bidang-card">
 <header class="bidang-header layanan-03">
 <div class="icon" aria-hidden="true">🎯</div>
@@ -1315,8 +1587,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
-<!-- 4. PENGUASAAN KONTEN -->
 <article class="bidang-card">
 <header class="bidang-header layanan-04">
 <div class="icon" aria-hidden="true">📖</div>
@@ -1333,8 +1603,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
-<!-- 5. KONSELING PERORANGAN -->
 <article class="bidang-card">
 <header class="bidang-header layanan-05">
 <div class="icon" aria-hidden="true">👤</div>
@@ -1351,8 +1619,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
-<!-- 6. BIMBINGAN KELOMPOK -->
 <article class="bidang-card">
 <header class="bidang-header layanan-06">
 <div class="icon" aria-hidden="true">👥</div>
@@ -1369,8 +1635,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
-<!-- 7. KONSELING KELOMPOK -->
 <article class="bidang-card">
 <header class="bidang-header layanan-07">
 <div class="icon" aria-hidden="true">🗣️</div>
@@ -1387,8 +1651,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
-<!-- 8. KONSULTASI -->
 <article class="bidang-card">
 <header class="bidang-header layanan-08">
 <div class="icon" aria-hidden="true">💬</div>
@@ -1405,8 +1667,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
-<!-- 9. MEDIASI -->
 <article class="bidang-card">
 <header class="bidang-header layanan-09">
 <div class="icon" aria-hidden="true">🤝</div>
@@ -1423,8 +1683,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
-<!-- 10. ADVOKASI -->
 <article class="bidang-card">
 <header class="bidang-header layanan-10">
 <div class="icon" aria-hidden="true">⚖️</div>
@@ -1441,8 +1699,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
-<!-- 11. ALIH TANGAN (REFERAL) -->
 <article class="bidang-card">
 <header class="bidang-header layanan-11">
 <div class="icon" aria-hidden="true">🔄</div>
@@ -1459,8 +1715,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
-<!-- 12. KONFERENSI KASUS -->
 <article class="bidang-card">
 <header class="bidang-header layanan-12">
 <div class="icon" aria-hidden="true">📋</div>
@@ -1477,8 +1731,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
-<!-- 13. KUNJUNGAN RUMAH -->
 <article class="bidang-card">
 <header class="bidang-header layanan-13">
 <div class="icon" aria-hidden="true">🏠</div>
@@ -1495,15 +1747,12 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-
 </div>
 <div class="info-box" style="margin-top: 30px;">
 <h4>📋 Keterangan</h4>
 <p>Seluruh 13 jenis layanan BK di atas disusun berdasarkan <strong>Permendikbud No. 111 Tahun 2014</strong> tentang Bimbingan dan Konseling pada Pendidikan Dasar dan Menengah. Setiap layanan memiliki dokumen template yang dapat diunduh dan digunakan oleh tim konselor SMP Negeri 56 Jakarta.</p>
 </div>
 </section>
-<!-- AKHIR SECTION 13 JENIS LAYANAN BK -->
-
 <section class="section" id="program" aria-labelledby="program-title">
 <header class="section-title">
 <h2 id="program-title">4 Komponen Program BK</h2>
@@ -1696,19 +1945,15 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </form>
 </div>
 </section>
-<!-- ========================================== -->
-<!-- SECTION BARU: ABSENSI REAL TIME            -->
-<!-- ========================================== -->
 <section class="section" id="absensi-realtime" aria-labelledby="absensi-title">
 <header class="section-title">
 <h2 id="absensi-title">Absensi Real Time</h2>
 <p>Monitoring kehadiran siswa secara langsung per tingkat kelas</p>
 </header>
 <div class="bidang-grid">
-<!-- TEMPLATE KELAS VII -->
 <article class="bidang-card">
 <header class="bidang-header absensi-vii">
-<a href=" https://appseet11-cmd.github.io/New-BK56/rekapdigitalabsensi7/" class="header-link" target="_self">
+<a href="https://appseet11-cmd.github.io/New-BK56/rekapdigitalabsensi7/" class="header-link" target="_self">
 <div class="icon" aria-hidden="true">🕒</div>
 <h3>Absensi Real Time Kelas VII</h3>
 </a>
@@ -1728,10 +1973,9 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-<!-- TEMPLATE KELAS VIII -->
 <article class="bidang-card">
 <header class="bidang-header absensi-viii">
-<a href=" https://appseet11-cmd.github.io/New-BK56/rekapdigitalabsensi8/" class="header-link" target="_self">
+<a href="https://appseet11-cmd.github.io/New-BK56/rekapdigitalabsensi8/" class="header-link" target="_self">
 <div class="icon" aria-hidden="true">🕒</div>
 <h3>Absensi Real Time Kelas VIII</h3>
 </a>
@@ -1750,7 +1994,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </ul>
 </div>
 </article>
-<!-- TEMPLATE KELAS IX -->
 <article class="bidang-card">
 <header class="bidang-header absensi-ix">
 <a href="https://appseet11-cmd.github.io/New-BK56/rekapdigitalabsensi9/" class="header-link" target="_self">
@@ -1774,7 +2017,6 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </article>
 </div>
 </section>
-<!-- AKHIR SECTION ABSENSI REAL TIME -->
 <section class="section" id="laporan-kinerja" aria-labelledby="laporan-kinerja-title">
 <header class="section-title">
 <h2 id="laporan-kinerja-title">Bidang Laporan Kinerja BK</h2>
@@ -1994,6 +2236,214 @@ Mendampingi perkembangan peserta didik secara holistik — Pribadi, Sosial, Bela
 </p>
 </div>
 </footer>
+
+<!-- ========================================== -->
+<!-- ⭐ SCRIPT PROTEKSI ELEGAN (GEMBOK ANIMATIF) -->
+<!-- ========================================== -->
+<script>
+(function() {
+    'use strict';
+    const ADMIN_PASSWORD = "AdminBK56";
+    let isUnlocked = false;
+    let pendingAction = null;
+
+    // Elemen Modal
+    const modal = document.getElementById('lockModal');
+    const card = document.getElementById('lockCard');
+    const pwdInput = document.getElementById('lockPassword');
+    const submitBtn = document.getElementById('lockSubmit');
+    const closeBtn = document.getElementById('lockClose');
+    const toggleBtn = document.getElementById('lockTogglePwd');
+    const errorMsg = document.getElementById('lockError');
+    const modalTitle = document.getElementById('lockModalTitle');
+    const modalSubtitle = document.getElementById('lockModalSubtitle');
+
+    // Buka modal dengan konteks aksi
+    function openLockModal(actionType) {
+        if (isUnlocked) {
+            // Jika sudah unlocked, jalankan aksinya langsung
+            if (pendingAction) {
+                pendingAction();
+                pendingAction = null;
+            }
+            return true;
+        }
+
+        // Set judul & subtitle sesuai konteks
+        const contexts = {
+            'rightclick': {
+                title: 'Klik Kanan Dinonaktifkan',
+                subtitle: 'Area ini dilindungi. Masukkan password admin untuk mengaktifkan menu klik kanan.'
+            },
+            'copy': {
+                title: 'Penyalinan Diblokir',
+                subtitle: 'Konten halaman ini tidak dapat disalin. Masukkan password admin untuk membuka blokir.'
+            },
+            'shortcut': {
+                title: 'Akses Dibatasi',
+                subtitle: 'Shortcut keyboard ini dilindungi. Masukkan password admin untuk melanjutkan.'
+            },
+            'default': {
+                title: 'Area Terproteksi',
+                subtitle: 'Konten halaman ini dilindungi. Masukkan password admin untuk melanjutkan.'
+            }
+        };
+        const ctx = contexts[actionType] || contexts['default'];
+        modalTitle.textContent = ctx.title;
+        modalSubtitle.textContent = ctx.subtitle;
+
+        // Reset state modal
+        card.classList.remove('shake', 'unlocked');
+        pwdInput.value = '';
+        pwdInput.classList.remove('error', 'success');
+        errorMsg.classList.remove('visible');
+
+        // Tampilkan modal
+        modal.classList.add('active');
+        setTimeout(() => pwdInput.focus(), 350);
+        return false;
+    }
+
+    // Tutup modal
+    function closeLockModal() {
+        modal.classList.remove('active');
+        card.classList.remove('shake', 'unlocked');
+        pwdInput.value = '';
+        pwdInput.classList.remove('error', 'success');
+        errorMsg.classList.remove('visible');
+        pendingAction = null;
+    }
+
+    // Verifikasi password
+    function verifyPassword() {
+        const pwd = pwdInput.value;
+        if (pwd === ADMIN_PASSWORD) {
+            // SUKSES
+            isUnlocked = true;
+            pwdInput.classList.remove('error');
+            pwdInput.classList.add('success');
+            card.classList.add('unlocked');
+            errorMsg.textContent = '✅ Password benar! Proteksi dibuka...';
+            errorMsg.style.color = '#27ae60';
+            errorMsg.classList.add('visible');
+
+            setTimeout(() => {
+                closeLockModal();
+                // Jalankan aksi yang tertunda jika ada
+                if (pendingAction) {
+                    pendingAction();
+                    pendingAction = null;
+                }
+            }, 900);
+        } else {
+            // GAGAL
+            pwdInput.classList.remove('success');
+            pwdInput.classList.add('error');
+            card.classList.remove('unlocked');
+            card.classList.add('shake');
+            errorMsg.textContent = '❌ Password salah. Silakan coba lagi.';
+            errorMsg.style.color = '#e74c3c';
+            errorMsg.classList.add('visible');
+
+            setTimeout(() => {
+                card.classList.remove('shake');
+                pwdInput.select();
+            }, 500);
+        }
+    }
+
+    // Event Listeners Modal
+    submitBtn.addEventListener('click', verifyPassword);
+    pwdInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            verifyPassword();
+        }
+        if (e.key === 'Escape') {
+            closeLockModal();
+        }
+    });
+    closeBtn.addEventListener('click', closeLockModal);
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) closeLockModal();
+    });
+    toggleBtn.addEventListener('click', function() {
+        const type = pwdInput.type === 'password' ? 'text' : 'password';
+        pwdInput.type = type;
+        this.innerHTML = type === 'password' 
+            ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
+            : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+    });
+
+    // 1. Proteksi Klik Kanan
+    document.addEventListener('contextmenu', function(e) {
+        if (isUnlocked) return true;
+        e.preventDefault();
+        openLockModal('rightclick');
+        return false;
+    });
+
+    // 2. Proteksi Copy
+    document.addEventListener('copy', function(e) {
+        if (isUnlocked) return;
+        if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+        e.preventDefault();
+        openLockModal('copy');
+    });
+
+    document.addEventListener('cut', function(e) {
+        if (isUnlocked) return;
+        if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+        e.preventDefault();
+    });
+
+    // 3. Proteksi Select
+    document.addEventListener('selectstart', function(e) {
+        if (isUnlocked) return;
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+        e.preventDefault();
+    });
+
+    // 4. Proteksi Shortcut Keyboard
+    document.addEventListener('keydown', function(e) {
+        if (isUnlocked) return;
+
+        // F12
+        if (e.keyCode === 123) {
+            e.preventDefault();
+            openLockModal('shortcut');
+            return false;
+        }
+        // Ctrl+Shift+I / J / C
+        if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+            e.preventDefault();
+            openLockModal('shortcut');
+            return false;
+        }
+        // Ctrl+U
+        if (e.ctrlKey && e.keyCode === 85) {
+            e.preventDefault();
+            openLockModal('shortcut');
+            return false;
+        }
+        // Ctrl+S
+        if (e.ctrlKey && e.keyCode === 83) {
+            e.preventDefault();
+            openLockModal('shortcut');
+            return false;
+        }
+        // Ctrl+C / Ctrl+X (di luar form)
+        if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 88)) {
+            if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                openLockModal('copy');
+                return false;
+            }
+        }
+    });
+})();
+</script>
+
 <script defer>
 document.getElementById('konselingForm').addEventListener('submit', function(e) {
 e.preventDefault();
@@ -2042,13 +2492,13 @@ window.addEventListener('scroll', updateActiveMenu, { passive: true });
 updateActiveMenu();
 </script>
 <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then(reg => console.log('PWA siap:', reg))
-        .catch(err => console.log('PWA gagal:', err));
-    });
-  }
+if ('serviceWorker' in navigator) {
+window.addEventListener('load', () => {
+navigator.serviceWorker.register('./service-worker.js')
+.then(reg => console.log('PWA siap:', reg))
+.catch(err => console.log('PWA gagal:', err));
+});
+}
 </script>
 </body>
 </html>
