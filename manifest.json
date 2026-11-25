@@ -1,6 +1,6 @@
 {
   "name": "Pelayanan BK | SMP Negeri 56 Jakarta",
-  "short_name": "BK SMPN 56",
+  "short_name": "BK56",
   "description": "Layanan Bimbingan Konseling resmi SMP Negeri 56 Jakarta berbasis Kurikulum Merdeka.",
   "start_url": "./index.html",
   "scope": "./",
