@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Player Universal</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #000;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+.player-header {
+    background: linear-gradient(135deg, #059669 0%, #065F46 100%);
+    color: white;
+    padding: 12px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+    flex-wrap: wrap;
+    gap: 10px;
+    z-index: 100;
+}
+.player-header .title-section { display: flex; align-items: center; gap: 12px; }
+.player-header .icon { font-size: 1.8rem; }
+.player-header h1 { font-size: 1.1rem; font-weight: 600; }
+.player-header .file-info { font-size: 0.75rem; opacity: 0.9; }
+.player-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ctrl-btn {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+.ctrl-btn:hover { background: rgba(255,255,255,0.35); transform: translateY(-2px); }
+.ctrl-btn.primary { background: rgba(255,255,255,0.95); color: #065F46; font-weight: 600; }
+.ctrl-btn.primary:hover { background: white; }
+.ctrl-btn.fullscreen-btn {
+    background: #059669;
+    border-color: #059669;
+}
+.ctrl-btn.fullscreen-btn:hover { background: #047857; }
+.ctrl-btn.normal-btn {
+    background: #D97706;
+    border-color: #D97706;
+}
+.ctrl-btn.normal-btn:hover { background: #B45309; }
+
+/* ========== VIDEO CONTAINER ========== */
+.player-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.player-container.fullscreen-mode {
+    padding: 0;
+    background: #000;
+}
+.video-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    position: relative;
+    transition: all 0.3s ease;
+}
+.player-container.fullscreen-mode .video-wrapper {
+    max-width: 100%;
+    width: 100vw;
+    height: 100vh;
+    aspect-ratio: auto;
+    border-radius: 0;
+    box-shadow: none;
+}
+.video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+/* ========== CUSTOM CONTROLS OVERLAY ========== */
+.custom-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.85));
+    padding: 30px 20px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+.video-wrapper:hover .custom-controls,
+.custom-controls.show { opacity: 1; }
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.progress-bar:hover { height: 8px; }
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #059669, #10B981);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.1s linear;
+}
+.controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.controls-left, .controls-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.ctrl-icon-btn {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+.ctrl-icon-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.1); }
+.ctrl-icon-btn.play-btn {
+    width: 48px;
+    height: 48px;
+    background: #059669;
+    font-size: 1.3rem;
+}
+.ctrl-icon-btn.play-btn:hover { background: #047857; }
+.time-display {
+    color: white;
+    font-size: 0.8rem;
+    font-family: 'Courier New', monospace;
+    min-width: 100px;
+}
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.volume-slider {
+    width: 80px;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+}
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    background: #10B981;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.speed-select {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+.speed-select option { background: #1F2937; color: white; }
+
+/* ========== CENTER PLAY OVERLAY ========== */
+.center-play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: rgba(5, 150, 105, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 5;
+    opacity: 0;
+}
+.center-play-overlay.show { opacity: 1; }
+.center-play-overlay:hover { transform: translate(-50%, -50%) scale(1.1); background: rgba(5, 150, 105, 1); }
+
+/* ========== LOADING & ERROR ========== */
+.loading-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    transition: opacity 0.5s ease;
+}
+.loading-overlay.hidden { opacity: 0; pointer-events: none; }
+.loading-spinner {
+    width: 50px; height: 50px;
+    border: 4px solid rgba(255,255,255,0.2);
+    border-top-color: #10B981;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { color: #10B981; font-weight: 500; font-size: 0.95rem; }
+.error-state { text-align: center; padding: 40px; color: white; }
+.error-state .icon { font-size: 4rem; margin-bottom: 15px; }
+.error-state h2 { margin-bottom: 10px; }
+.error-state p { opacity: 0.8; margin-bottom: 20px; }
+.error-state .btn-retry {
+    background: #059669;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+/* ========== FULLSCREEN FLOATING BUTTONS ========== */
+.floating-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: none;
+    gap: 10px;
+    z-index: 1000;
+}
+.floating-controls.show { display: flex; }
+.floating-btn {
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+.floating-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+.floating-btn.fullscreen { background: rgba(5, 150, 105, 0.9); border-color: #059669; }
+.floating-btn.fullscreen:hover { background: #059669; }
+.floating-btn.normal { background: rgba(217, 119, 6, 0.9); border-color: #D97706; }
+.floating-btn.normal:hover { background: #D97706; }
+.floating-btn.back { background: rgba(99, 102, 241, 0.9); border-color: #6366F1; }
+.floating-btn.back:hover { background: #6366F1; }
+
+@media (max-width: 768px) {
+    .player-header { padding: 10px 15px; }
+    .player-header h1 { font-size: 0.95rem; }
+    .ctrl-btn { padding: 6px 10px; font-size: 0.72rem; }
+    .player-container { padding: 10px; }
+    .video-wrapper { border-radius: 12px; }
+    .time-display { font-size: 0.7rem; min-width: 80px; }
+    .volume-slider { width: 60px; }
+    .ctrl-icon-btn { width: 34px; height: 34px; font-size: 1rem; }
+    .ctrl-icon-btn.play-btn { width: 42px; height: 42px; font-size: 1.2rem; }
+    .floating-btn { padding: 10px 16px; font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+<div class="player-header" id="playerHeader">
+    <div class="title-section">
+        <span class="icon">🎬</span>
+        <div>
+            <h1 id="playerTitle">Video Player</h1>
+            <div class="file-info" id="fileInfo">Memuat video...</div>
+        </div>
+    </div>
+    <div class="player-controls">
+        <button class="ctrl-btn fullscreen-btn" id="btnFullscreen" onclick="enterFullscreen()" title="Mode Fullscreen">
+            ⛶ Fullscreen
+        </button>
+        <button class="ctrl-btn normal-btn" id="btnNormal" onclick="exitFullscreen()" title="Kembali Normal" style="display:none;">
+            ⊡ Normal
+        </button>
+        <button class="ctrl-btn" onclick="downloadVideo()" title="Download Video">⬇️ Download</button>
+        <button class="ctrl-btn primary" onclick="goBack()" title="Kembali">← Kembali</button>
+    </div>
+</div>
+
+<div class="player-container" id="playerContainer">
+    <div class="video-wrapper" id="videoWrapper">
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Memuat video...</div>
+        </div>
+        
+        <video id="videoPlayer" controlsList="nodownload" preload="metadata" playsinline>
+            <source src="" type="video/mp4">
+            Browser Anda tidak mendukung video player.
+        </video>
+        
+        <div class="center-play-overlay" id="centerPlay" onclick="togglePlay()">▶</div>
+        
+        <div class="custom-controls" id="customControls">
+            <div class="progress-bar" id="progressBar" onclick="seekVideo(event)">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="controls-row">
+                <div class="controls-left">
+                    <button class="ctrl-icon-btn play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+                    <button class="ctrl-icon-btn" onclick="skipTime(-10)" title="Mundur 10s">⏪</button>
+                    <button class="ctrl-icon-btn" onclick="skipTime(10)" title="Maju 10s">⏩</button>
+                    <div class="volume-control">
+                        <button class="ctrl-icon-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
+                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1" oninput="changeVolume(this.value)">
+                    </div>
+                    <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
+                </div>
+                <div class="controls-right">
+                    <select class="speed-select" id="speedSelect" onchange="changeSpeed(this.value)">
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2x</option>
+                    </select>
+                    <button class="ctrl-icon-btn" onclick="togglePiP()" title="Picture-in-Picture">🖼️</button>
+                    <button class="ctrl-icon-btn" onclick="enterFullscreen()" title="Fullscreen">⛶</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FLOATING CONTROLS (muncul saat fullscreen) -->
+<div class="floating-controls" id="floatingControls">
+    <button class="floating-btn normal" onclick="exitFullscreen()">
+        ⊡ Kembali Normal
+    </button>
+    <button class="floating-btn back" onclick="goBack()">
+        ← Kembali
+    </button>
+</div>
+
+<script>
+// ============================================================
+// VIDEO PLAYER UNIVERSAL - INJEKSI PARAMETER
+// ============================================================
+const params = new URLSearchParams(window.location.search);
+const fileId = params.get('fileId') || '';
+const title = params.get('title') || 'Video Player';
+
+document.getElementById('playerTitle').textContent = title;
+document.getElementById('fileInfo').textContent = fileId ? `File ID: ${fileId.substring(0, 15)}...` : 'Tidak ada video';
+
+const video = document.getElementById('videoPlayer');
+const playBtn = document.getElementById('playBtn');
+const centerPlay = document.getElementById('centerPlay');
+const progressFill = document.getElementById('progressFill');
+const timeDisplay = document.getElementById('timeDisplay');
+const loadingOverlay = document.getElementById('loadingOverlay');
+const playerContainer = document.getElementById('playerContainer');
+const floatingControls = document.getElementById('floatingControls');
+const btnFullscreen = document.getElementById('btnFullscreen');
+const btnNormal = document.getElementById('btnNormal');
+const playerHeader = document.getElementById('playerHeader');
+
+let isFullscreen = false;
+
+// ============================================================
+// LOAD VIDEO
+// ============================================================
+function loadVideo() {
+    if (!fileId) {
+        loadingOverlay.innerHTML = `
+            <div class="error-state">
+                <div class="icon">⚠️</div>
+                <h2>File ID Tidak Ditemukan</h2>
+                <p>Parameter fileId tidak ada di URL</p>
+                <button class="btn-retry" onclick="goBack()">← Kembali</button>
+            </div>
+        `;
+        return;
+    }
+    
+    // Streaming URL untuk Google Drive video (tanpa UI Google Drive)
+    const videoUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+    const streamUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+    
+    // Coba direct download/streaming
+    video.querySelector('source').src = videoUrl;
+    
+    video.addEventListener('loadeddata', function() {
+        loadingOverlay.classList.add('hidden');
+        centerPlay.classList.add('show');
+    }, { once: true });
+    
+    video.addEventListener('error', function() {
+        // Fallback: gunakan preview embed
+        console.log('Direct stream gagal, menggunakan embed fallback');
+        const wrapper = document.getElementById('videoWrapper');
+        video.style.display = 'none';
+        document.getElementById('customControls').style.display = 'none';
+        centerPlay.style.display = 'none';
+        
+        const iframe = document.createElement('iframe');
+        iframe.src = streamUrl;
+        iframe.allow = 'autoplay; fullscreen';
+        iframe.allowFullscreen = true;
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        wrapper.appendChild(iframe);
+        loadingOverlay.classList.add('hidden');
+    }, { once: true });
+    
+    video.load();
+    
+    // Timeout fallback
+    setTimeout(() => {
+        if (!loadingOverlay.classList.contains('hidden')) {
+            loadingOverlay.classList.add('hidden');
+        }
+    }, 8000);
+}
+
+// ============================================================
+// VIDEO CONTROLS
+// ============================================================
+function togglePlay() {
+    if (video.paused) {
+        video.play();
+        playBtn.textContent = '⏸';
+        centerPlay.classList.remove('show');
+    } else {
+        video.pause();
+        playBtn.textContent = '▶';
+        centerPlay.classList.add('show');
+    }
+}
+
+function skipTime(seconds) {
+    video.currentTime += seconds;
+}
+
+function changeVolume(value) {
+    video.volume = value;
+    document.getElementById('muteBtn').textContent = value == 0 ? '🔇' : value < 0.5 ? '🔉' : '🔊';
+}
+
+function toggleMute() {
+    video.muted = !video.muted;
+    document.getElementById('muteBtn').textContent = video.muted ? '🔇' : '🔊';
+    document.getElementById('volumeSlider').value = video.muted ? 0 : video.volume;
+}
+
+function changeSpeed(value) {
+    video.playbackRate = parseFloat(value);
+}
+
+function seekVideo(event) {
+    const bar = document.getElementById('progressBar');
+    const rect = bar.getBoundingClientRect();
+    const percent = (event.clientX - rect.left) / rect.width;
+    video.currentTime = percent * video.duration;
+}
+
+function formatTime(seconds) {
+    if (isNaN(seconds)) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+// Update progress
+video.addEventListener('timeupdate', function() {
+    const percent = (video.currentTime / video.duration) * 100;
+    progressFill.style.width = percent + '%';
+    timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+});
+
+video.addEventListener('ended', function() {
+    playBtn.textContent = '▶';
+    centerPlay.classList.add('show');
+});
+
+video.addEventListener('play', function() {
+    centerPlay.classList.remove('show');
+});
+
+video.addEventListener('pause', function() {
+    centerPlay.classList.add('show');
+});
+
+// ============================================================
+// FULLSCREEN MODE (Custom - bukan browser fullscreen)
+// ============================================================
+function enterFullscreen() {
+    isFullscreen = true;
+    playerContainer.classList.add('fullscreen-mode');
+    floatingControls.classList.add('show');
+    playerHeader.style.display = 'none';
+    btnFullscreen.style.display = 'none';
+    btnNormal.style.display = 'flex';
+    
+    // Also try native fullscreen for video
+    const wrapper = document.getElementById('videoWrapper');
+    if (wrapper.requestFullscreen) wrapper.requestFullscreen();
+    else if (wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen();
+    else if (wrapper.msRequestFullscreen) wrapper.msRequestFullscreen();
+    
+    document.getElementById('customControls').classList.add('show');
+}
+
+function exitFullscreen() {
+    isFullscreen = false;
+    playerContainer.classList.remove('fullscreen-mode');
+    floatingControls.classList.remove('show');
+    playerHeader.style.display = 'flex';
+    btnFullscreen.style.display = 'flex';
+    btnNormal.style.display = 'none';
+    
+    // Exit native fullscreen
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    else if (document.msExitFullscreen) document.msExitFullscreen();
+}
+
+// Listen fullscreen change
+document.addEventListener('fullscreenchange', function() {
+    if (!document.fullscreenElement && isFullscreen) {
+        // User keluar fullscreen via ESC
+        exitFullscreen();
+    }
+});
+
+// ============================================================
+// PICTURE IN PICTURE
+// ============================================================
+async function togglePiP() {
+    try {
+        if (document.pictureInPictureElement) {
+            await document.exitPictureInPicture();
+        } else if (video.requestPictureInPicture) {
+            await video.requestPictureInPicture();
+        }
+    } catch (err) {
+        console.log('PiP not supported:', err);
+    }
+}
+
+// ============================================================
+// DOWNLOAD & NAVIGATION
+// ============================================================
+function downloadVideo() {
+    if (!fileId) return;
+    window.open(`https://drive.google.com/uc?export=download&id=${fileId}`, '_blank');
+}
+
+function goBack() {
+    if (isFullscreen) exitFullscreen();
+    if (document.referrer && document.referrer !== window.location.href) {
+        window.history.back();
+    } else {
+        window.close();
+    }
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+    
+    switch(e.key) {
+        case ' ':
+        case 'k':
+            e.preventDefault();
+            togglePlay();
+            break;
+        case 'ArrowLeft':
+            e.preventDefault();
+            skipTime(-5);
+            break;
+        case 'ArrowRight':
+            e.preventDefault();
+            skipTime(5);
+            break;
+        case 'ArrowUp':
+            e.preventDefault();
+            video.volume = Math.min(1, video.volume + 0.1);
+            document.getElementById('volumeSlider').value = video.volume;
+            break;
+        case 'ArrowDown':
+            e.preventDefault();
+            video.volume = Math.max(0, video.volume - 0.1);
+            document.getElementById('volumeSlider').value = video.volume;
+            break;
+        case 'f':
+            e.preventDefault();
+            isFullscreen ? exitFullscreen() : enterFullscreen();
+            break;
+        case 'Escape':
+            if (isFullscreen) exitFullscreen();
+            break;
+        case 'm':
+            e.preventDefault();
+            toggleMute();
+            break;
+    }
+});
+
+// Double click to fullscreen
+document.getElementById('videoWrapper').addEventListener('dblclick', function(e) {
+    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+    isFullscreen ? exitFullscreen() : enterFullscreen();
+});
+
+// Load video
+window.addEventListener('DOMContentLoaded', loadVideo);
+</script>
+</body>
+</html>
