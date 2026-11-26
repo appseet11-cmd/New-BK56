@@ -1,15 +1,40 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>PPT Viewer</title>
-<style>body{margin:0;background:#1a1a2e;color:white;font-family:sans-serif;display:flex;flex-direction:column;height:100vh}header{padding:12px;background:#16213e;display:flex;justify-content:space-between;align-items:center}h1{font-size:16px;margin:0}.btn{background:#e94560;color:white;border:none;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:12px}#container{flex:1;display:flex;justify-content:center;align-items:center}iframe{width:100%;height:100%;border:none;background:white}.error{text-align:center;padding:20px;color:#ff6b6b}</style>
-</head><body>
-<header><h1>📊 PPT Viewer</h1><a href="#" id="driveLink" class="btn" target="_blank">Buka di Drive</a></header>
-<div id="container"><div class="error">Memuat...</div></div>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PPT Viewer</title>
+<style>
+body { margin: 0; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }
+header { background: #d97706; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; }
+h1 { margin: 0; font-size: 16px; }
+.btn { background: white; color: #d97706; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-left: 5px; }
+#viewer { flex: 1; }
+iframe { width: 100%; height: 100%; border: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>📊 PPT Viewer</h1>
+  <div>
+    <button class="btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    <button class="btn" onclick="window.close()">✕ Tutup</button>
+  </div>
+</header>
+<div id="viewer"></div>
 <script>
 const fileId = new URLSearchParams(window.location.search).get('fileId');
 if (fileId) {
-  document.getElementById('driveLink').href = 'https://drive.google.com/file/d/' + fileId + '/view';
-  document.getElementById('container').innerHTML = '<iframe src="https://docs.google.com/presentation/d/' + fileId + '/embed?start=false&loop=false&delayms=3000" allowfullscreen></iframe>';
+  document.getElementById('viewer').innerHTML = '<iframe src="https://docs.google.com/presentation/d/' + fileId + '/embed?start=false&loop=false&delayms=3000" allowfullscreen></iframe>';
 } else {
-  document.getElementById('container').innerHTML = '<div class="error">❌ File ID tidak ditemukan</div>';
+  document.getElementById('viewer').innerHTML = '<div style="text-align:center; padding:50px; color:red;">❌ File ID tidak ditemukan</div>';
 }
-</script></body></html>
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+</script>
+</body>
+</html>
