@@ -79,110 +79,116 @@ body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #
 // ==========================================
 // KONFIGURASI (GANTI URL INI DENGAN URL LANGKAH 1!)
 // ==========================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbyqIp4C8weFTtOn22YnNP_o4Yq27ffHerJPfHud2FCZJ_Xwx-y35nXvPucSALiE3is7fQ/exec'; 
+const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbyqIp4C8weFTtOn22YnNP_o4Yq27ffHerJPfHud2FCZJ_Xwx-y35nXvPucSALiE3is7fQ/exec'; 
 const PAGE_ID = 'kelas9_topik5_literasi';
-// ==========================================
-
 const types = ['ppt', 'doc', 'pdf', 'mp4'];
 const typeLabels = { ppt: 'PPT', doc: 'DOC', pdf: 'PDF', mp4: 'MP4' };
 const typeIcons = { ppt: '📊', doc: '📄', pdf: '📕', mp4: '🎬' };
 
-// 1. Generate Slots
-types.forEach(type => {
-  const container = document.getElementById(`inputs-${type}`);
-  if (!container) return;
-  let html = '';
-  for (let i = 1; i <= 4; i++) {
-    html += `<div class="input-slot" id="slot-${type}-${i}">
-      <div class="slot-label"><span>${typeIcons[type]} Slot ${i}</span></div>
-      <input type="text" id="input-${type}-${i}" placeholder="Tempel link Google Drive...">
-      <div class="slot-actions">
-        <button class="btn-embed" onclick="saveFile('${type}', ${i})">💾 Simpan</button>
-      </div>
-    </div>`;
-  }
-  container.innerHTML = html;
-});
+// FUNGSI PINDAH TAB (FIXED - PASTI BERFUNGSI)
+function switchTab(type, element) {
+    document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.file-panel').forEach(p => p.classList.remove('show'));
+    element.classList.add('active');
+    document.getElementById('panel-' + type).classList.add('show');
+}
 
-function showToast(msg, type='success') {
-  const toast = document.getElementById('toast');
-  if(!toast) return alert(msg);
-  toast.className = `toast ${type} show`;
-  toast.innerText = msg;
-  setTimeout(() => toast.classList.remove('show'), 3500);
+function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    if (!toast) return alert(msg);
+    toast.className = 'toast ' + type + ' show';
+    toast.innerText = msg;
+    setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
 function extractFileId(url) {
-  if (!url) return null;
-  let m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-  if (m) return m[1];
-  m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (m) return m[1];
-  return url;
+    if (!url) return null;
+    let m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (m) return m[1];
+    m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (m) return m[1];
+    return url;
 }
 
-// 2. Fungsi Simpan (FIXED)
-async function saveFile(type, slot) {
-  const input = document.getElementById(`input-${type}-${slot}`);
-  const url = input.value.trim();
-  if (!url) return showToast('Masukkan URL dulu!', 'warning');
-  
-  const fileId = extractFileId(url);
-  const btn = document.querySelector(`#slot-${type}-${slot} .btn-embed`);
-  const oldText = btn.innerText;
-  btn.innerText = 'Menyimpan...';
-  btn.disabled = true;
+async function callBackend(payload) {
+    try {
+        const res = await fetch(BACKEND_URL, {
+            method: 'POST',
+            redirect: 'follow',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+        });
+        const text = await res.text();
+        return JSON.parse(text);
+    } catch (e) {
+        console.error(e);
+        return { success: false, error: e.message };
+    }
+}
 
-  try {
-    const payload = {
-      action: 'saveFile',
-      pageId: PAGE_ID,
-      data: { type: type, slotNum: slot, fileId: fileId, originalUrl: url }
-    };
+async function saveFile(type, slotNum) {
+    const input = document.getElementById('input-' + type + '-' + slotNum);
+    const url = input.value.trim();
+    if (!url) return showToast('Masukkan URL dulu!', 'warning');
+    const fileId = extractFileId(url);
+    if (!fileId) return showToast('URL tidak valid!', 'error');
 
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      redirect: 'follow',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload)
+    const btn = document.querySelector('#slot-' + type + '-' + slotNum + ' .btn-embed');
+    const oldText = btn.innerText;
+    btn.innerText = 'Menyimpan...';
+    btn.disabled = true;
+
+    const result = await callBackend({
+        action: 'saveFile',
+        pageId: PAGE_ID,
+        data: { type: type, slotNum: slotNum, fileId: fileId, originalUrl: url }
     });
 
-    const text = await res.text();
-    const data = JSON.parse(text);
-
-    if (data.success) {
-      document.getElementById(`slot-${type}-${slot}`).classList.add('filled');
-      showToast('✅ Berhasil disimpan!', 'success');
-      // TAMPILKAN URL SPREADSHEET DI CONSOLE AGAR ANDA BISA CEK
-      if (data.ssUrl) console.log('📍 DATA TERSIMPAN DI SPREADSHEET INI: ' + data.ssUrl);
-    } else {
-      showToast('⚠️ Gagal: ' + (data.error || 'Unknown'), 'error');
-      if (data.ssUrl) console.log('📍 Cek Spreadsheet ini: ' + data.ssUrl);
-    }
-  } catch (err) {
-    showToast('❌ Gagal koneksi: ' + err.message, 'error');
-  } finally {
     btn.innerText = oldText;
     btn.disabled = false;
-  }
+
+    if (result && result.success) {
+        document.getElementById('slot-' + type + '-' + slotNum).classList.add('filled');
+        showToast('✅ Berhasil disimpan!', 'success');
+        if (result.ssUrl) console.log('📍 Data ada di: ' + result.ssUrl);
+    } else {
+        showToast('⚠️ Gagal: ' + (result ? result.error : 'Unknown'), 'error');
+    }
 }
 
-// 3. Auto Sync saat halaman dibuka
-window.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const res = await fetch(`${API_URL}?pageId=${PAGE_ID}`);
-    const json = await res.json();
-    if (json.success && json.files) {
-      json.files.forEach(f => {
-        const input = document.getElementById(`input-${f.type}-${f.slot}`);
-        const slot = document.getElementById(`slot-${f.type}-${f.slot}`);
-        if (input) input.value = f.originalUrl;
-        if (slot) slot.classList.add('filled');
-      });
-      showToast(`🔄 Sinkronisasi: ${json.files.length} file`, 'info');
-      if (json.ssUrl) console.log('📍 DATA BERASAL DARI SPREADSHEET INI: ' + json.ssUrl);
-    }
-  } catch(e) { console.log('Sync skipped', e); }
+// GENERATE SLOTS & AUTO SYNC SAAT LOAD
+window.addEventListener('DOMContentLoaded', () => {
+    types.forEach(type => {
+        const container = document.getElementById('inputs-' + type);
+        if (!container) return;
+        let html = '';
+        for (let i = 1; i <= 4; i++) {
+            html += '<div class="input-slot" id="slot-' + type + '-' + i + '">' +
+                '<div class="slot-label"><span>' + typeIcons[type] + ' Slot ' + i + '</span></div>' +
+                '<input type="text" id="input-' + type + '-' + i + '" placeholder="Tempel link Google Drive...">' +
+                '<div class="slot-actions">' +
+                '<button class="btn-embed" onclick="saveFile(\'' + type + '\', ' + i + ')">💾 Simpan</button>' +
+                '</div></div>';
+        }
+        container.innerHTML = html;
+    });
+
+    setTimeout(async () => {
+        try {
+            const res = await fetch(BACKEND_URL + '?pageId=' + PAGE_ID);
+            const json = await res.json();
+            if (json.success && json.files) {
+                json.files.forEach(f => {
+                    const input = document.getElementById('input-' + f.type + '-' + f.slot);
+                    const slot = document.getElementById('slot-' + f.type + '-' + f.slot);
+                    if (input) input.value = f.originalUrl;
+                    if (slot) slot.classList.add('filled');
+                });
+                showToast('🔄 Sync: ' + json.files.length + ' file', 'info');
+                if (json.ssUrl) console.log('📍 Data berasal dari: ' + json.ssUrl);
+            }
+        } catch(e) {}
+    }, 1000);
 });
 </script>
 </body>
