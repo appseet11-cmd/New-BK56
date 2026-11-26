@@ -1396,47 +1396,30 @@ function showToast(message, type = 'success') {
 // ============================================================
 // 🔄 BACKEND COMMUNICATION (PERBAIKAN - TANPA no-cors)
 // ============================================================
-async function callBackend(action, data = {}) {
-    if (!BACKEND_URL || BACKEND_URL.includes('xxxxx')) {
-        console.warn('⚠️ BACKEND_URL belum dikonfigurasi!');
-        showToast('⚠️ Backend belum dikonfigurasi. Hubungi admin.', 'warning');
-        return { success: false, error: 'Backend belum dikonfigurasi' };
-    }
+async function callBackend(payload) {
+  const API_URL = "https://script.google.com/macros/s/AKfycbyqIp4C8weFTtOn22YnNP_o4Yq27ffHerJPfHud2FCZJ_Xwx-y35nXvPucSALiE3is7fQ/exec"; // GANTI DENGAN URL ANDA
+  
+  try {
+    console.log('📤 Sending to backend:', payload.action, payload);
     
-    try {
-        const payload = {
-            action: action,
-            pageId: PAGE_ID,
-            pageTitle: PAGE_TITLE,
-            deviceId: DEVICE_ID,
-            timestamp: new Date().toISOString(),
-            data: data
-        };
-        
-        console.log('📤 Sending to backend:', action, data);
-        
-        // PERBAIKAN: Gunakan FormData agar tidak ada CORS preflight
-        const formData = new FormData();
-        formData.append('payload', JSON.stringify(payload));
-        
-        const response = await fetch(BACKEND_URL, {
-            method: 'POST',
-            body: formData
-        });
-        
-        const result = await response.json();
-        console.log('✅ Backend response:', result);
-        
-        if (result.success) {
-            return { success: true, data: result.data };
-        } else {
-            throw new Error(result.error || 'Unknown error');
-        }
-    } catch (error) {
-        console.error('❌ Backend error:', error);
-        showToast('❌ Gagal menyimpan ke server: ' + error.message, 'error');
-        return { success: false, error: error.message };
-    }
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    const text = await response.text();
+    console.log('✅ Backend response:', text);
+    
+    const data = JSON.parse(text);
+    return data;
+  } catch (error) {
+    console.error('❌ Backend error:', error);
+    throw error;
+  }
 }
 
 async function saveFileToBackend(type, slotNum, fileId, originalUrl) {
