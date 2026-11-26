@@ -131,5 +131,36 @@ footer .school-name { font-weight: 600; opacity: 1; font-size: 1rem; margin-top:
 <span>🏠</span><span>Back</span>
 </a>
 </div>
+
+<script>
+// ============================================================
+// 🎯 PAKSA SCROLL KE ATAS SAAT HALAMAN DIMUAT
+// ============================================================
+(function() {
+if ('scrollRestoration' in history) {
+history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
+document.documentElement.scrollTop = 0;
+document.body.scrollTop = 0;
+window.addEventListener('DOMContentLoaded', function() {
+window.scrollTo(0, 0);
+document.documentElement.scrollTop = 0;
+document.body.scrollTop = 0;
+});
+window.addEventListener('pageshow', function() {
+window.scrollTo(0, 0);
+document.documentElement.scrollTop = 0;
+document.body.scrollTop = 0;
+});
+window.addEventListener('load', function() {
+window.scrollTo(0, 0);
+document.documentElement.scrollTop = 0;
+document.body.scrollTop = 0;
+});
+})();
+</script>
+</body>
+</html>
 </body>
 </html>
