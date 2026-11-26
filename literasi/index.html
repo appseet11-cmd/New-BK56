@@ -1291,7 +1291,7 @@ Website: Nama Penulis. (Tanggal). Judul artikel. Nama Website. URL
 // ============================================================
 // 🔧 KONFIGURASI BACKEND — GANTI URL DI BAWAH INI
 // ============================================================
-const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbyyZm22Dv8BG_SXP74N9offp8OfP2fP9N2-aqj9X2R5Qidk884tPdIkHgCnYvfULYNvag/exec';
+const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbyqIp4C8weFTtOn22YnNP_o4Yq27ffHerJPfHud2FCZJ_Xwx-y35nXvPucSALiE3is7fQ/exec';
 
 // URL Viewer
 const VIEWER_BASE_URL = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
@@ -1419,28 +1419,25 @@ async function callBackend(action, data = {}) {
         const formData = new FormData();
         formData.append('payload', JSON.stringify(payload));
         
-       fetch(API_URL, {
-  method: 'POST',
-  redirect: 'follow',   // ← WAJIB, agar ikut 302 ke echo
-  headers: {
-    'Content-Type': 'text/plain;charset=utf-8'  // ← INI KUNCINYA (jangan application/json)
-  },
-  body: JSON.stringify(payload)
-})
-.then(res => res.text())          // ← baca sebagai TEKS dulu
-.then(text => {
-  try {
-    const data = JSON.parse(text);
-    if (data.success) {
-      // ✅ SUKSES
-    } else {
-      // ⚠ error dari server
+        const response = await fetch(BACKEND_URL, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        console.log('✅ Backend response:', result);
+        
+        if (result.success) {
+            return { success: true, data: result.data };
+        } else {
+            throw new Error(result.error || 'Unknown error');
+        }
+    } catch (error) {
+        console.error('❌ Backend error:', error);
+        showToast('❌ Gagal menyimpan ke server: ' + error.message, 'error');
+        return { success: false, error: error.message };
     }
-  } catch (e) {
-    console.log('RAW:', text);   // ← debug: lihat isi sebenarnya
-  }
-})
-.catch(err => console.log('NET:', err));
+}
 
 async function saveFileToBackend(type, slotNum, fileId, originalUrl) {
     const slot = document.getElementById(`slot-${type}-${slotNum}`);
