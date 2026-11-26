@@ -8,6 +8,14 @@
 <style>
 :root { --primary: #1E40AF; --primary-dark: #1E3A8A; --secondary: #7C3AED; --accent: #F59E0B; --belajar: #10B981; --belajar-light: #D1FAE5; --belajar-dark: #065F46; --pribadi: #6366F1; --pribadi-light: #E0E7FF; --pribadi-dark: #4338CA; --dark: #1F2937; --gray: #6B7280; --light: #F9FAFB; --white: #FFFFFF; --shadow: 0 10px 30px rgba(0,0,0,0.08); --research: #1E40AF; --research-light: #DBEAFE; --research-dark: #1E3A8A; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
+html {
+scroll-behavior: auto !important;
+}
+#top {
+scroll-margin-top: 0;
+position: absolute;
+top: 0;
+}
 body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #F3F4F6 0%, #D1FAE5 100%); color: var(--dark); line-height: 1.7; min-height: 100vh; }
 .hero { background: linear-gradient(135deg, var(--belajar) 0%, var(--primary) 50%, var(--secondary) 100%); color: var(--white); padding: 50px 20px 60px; text-align: center; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px); background-size: 30px 30px; animation: float 20s linear infinite; }
@@ -87,17 +95,17 @@ footer .school-name { font-weight: 600; opacity: 1; font-size: 1rem; margin-top:
 <nav class="nav-bar">
 <div class="nav-container">
 <span class="nav-label">📑 Navigasi:</span>
-<a href="index.html" class="nav-btn" data-color="trust"><span class="acronym">TTT</span><span class="label">Tentang Topik</span></a>
-<a href="7-langkah.html" class="nav-btn active" data-color="research"><span class="acronym">7LPR</span><span class="label">7 Langkah Riset</span></a>
-<a href="sumber.html" class="nav-btn" data-color="trust"><span class="acronym">STTT</span><span class="label">Sumber Terpercaya</span></a>
-<a href="search-operators.html" class="nav-btn" data-color="accent"><span class="acronym">TPC</span><span class="label">Teknik Pencarian</span></a>
-<a href="sift.html" class="nav-btn" data-color="secondary"><span class="acronym">SIFT</span><span class="label">Metode SIFT</span></a>
-<a href="tools.html" class="nav-btn" data-color="pribadi"><span class="acronym">TRD</span><span class="label">Tools Riset</span></a>
-<a href="plagiarisme.html" class="nav-btn" data-color="warning"><span class="acronym">PIA</span><span class="label">Plagiarisme</span></a>
-<a href="sintesis.html" class="nav-btn" data-color="trust"><span class="acronym">SINT</span><span class="label">Sintesis</span></a>
-<a href="skenario.html" class="nav-btn" data-color="accent"><span class="acronym">SKRM</span><span class="label">Skenario</span></a>
-<a href="cara-embed.html" class="nav-btn" data-color="dark"><span class="acronym">CSFD</span><span class="label">Cara Semat</span></a>
-<a href="file-section.html" class="nav-btn" data-color="trust"><span class="acronym">MFP</span><span class="label">Materi & File</span></a>
+<a href="index.html#top" class="nav-btn" data-color="trust"><span class="acronym">TTT</span><span class="label">Tentang Topik</span></a>
+<a href="7-langkah.html#top" class="nav-btn" data-color="research"><span class="acronym">7LPR</span><span class="label">7 Langkah Riset</span></a>
+<a href="sumber.html#top" class="nav-btn" data-color="trust"><span class="acronym">STTT</span><span class="label">Sumber Terpercaya</span></a>
+<a href="search-operators.html#top" class="nav-btn" data-color="accent"><span class="acronym">TPC</span><span class="label">Teknik Pencarian</span></a>
+<a href="sift.html#top" class="nav-btn" data-color="secondary"><span class="acronym">SIFT</span><span class="label">Metode SIFT</span></a>
+<a href="tools.html#top" class="nav-btn" data-color="pribadi"><span class="acronym">TRD</span><span class="label">Tools Riset</span></a>
+<a href="plagiarisme.html#top" class="nav-btn" data-color="warning"><span class="acronym">PIA</span><span class="label">Plagiarisme</span></a>
+<a href="sintesis.html#top" class="nav-btn" data-color="trust"><span class="acronym">SINT</span><span class="label">Sintesis</span></a>
+<a href="skenario.html#top" class="nav-btn" data-color="accent"><span class="acronym">SKRM</span><span class="label">Skenario</span></a>
+<a href="cara-embed.html#top" class="nav-btn" data-color="dark"><span class="acronym">CSFD</span><span class="label">Cara Semat</span></a>
+<a href="file-section.html#top" class="nav-btn" data-color="trust"><span class="acronym">MFP</span><span class="label">Materi & File</span></a>
 </div>
 </nav>
 
