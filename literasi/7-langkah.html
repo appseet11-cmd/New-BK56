@@ -135,33 +135,50 @@ footer .school-name { font-weight: 600; opacity: 1; font-size: 1rem; margin-top:
 
 <script>
 // ============================================================
-// 🎯 PAKSA SCROLL KE ATAS SAAT HALAMAN DIMUAT
+// 🎯 PAKSA SCROLL KE ATAS - INSTANT JUMP (TANPA ANIMASI)
 // ============================================================
 (function() {
+// 1. Cegah browser restore posisi scroll sebelumnya
 if ('scrollRestoration' in history) {
 history.scrollRestoration = 'manual';
 }
-window.scrollTo(0, 0);
+
+// 2. Function untuk scroll instant ke atas
+function scrollToTopInstant() {
+window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 document.documentElement.scrollTop = 0;
 document.body.scrollTop = 0;
-window.addEventListener('DOMContentLoaded', function() {
-window.scrollTo(0, 0);
-document.documentElement.scrollTop = 0;
-document.body.scrollTop = 0;
-});
-window.addEventListener('pageshow', function() {
-window.scrollTo(0, 0);
-document.documentElement.scrollTop = 0;
-document.body.scrollTop = 0;
-});
+}
+
+// 3. Scroll segera saat script dijalankan
+scrollToTopInstant();
+
+// 4. Scroll lagi setelah DOM siap
+if (document.readyState === 'loading') {
+document.addEventListener('DOMContentLoaded', scrollToTopInstant);
+} else {
+scrollToTopInstant();
+}
+
+// 5. Scroll saat halaman selesai load
 window.addEventListener('load', function() {
-window.scrollTo(0, 0);
-document.documentElement.scrollTop = 0;
-document.body.scrollTop = 0;
+scrollToTopInstant();
+// Scroll sekali lagi setelah 100ms untuk memastikan
+setTimeout(scrollToTopInstant, 100);
+});
+
+// 6. Scroll saat halaman ditampilkan (termasuk back/forward)
+window.addEventListener('pageshow', function(event) {
+scrollToTopInstant();
+setTimeout(scrollToTopInstant, 50);
+});
+
+// 7. Gunakan requestAnimationFrame untuk memastikan setelah layout
+requestAnimationFrame(function() {
+scrollToTopInstant();
+requestAnimationFrame(scrollToTopInstant);
 });
 })();
 </script>
-</body>
-</html>
 </body>
 </html>
