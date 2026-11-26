@@ -76,44 +76,37 @@ body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #
 <div class="toast" id="toast"></div>
 
 <script>
-// ============================================================
-// 🔧 KONFIGURASI - GANTI URL INI DENGAN URL DEPLOY ANDA
-// ============================================================
-const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbyqIp4C8weFTtOn22YnNP_o4Yq27ffHerJPfHud2FCZJ_Xwx-y35nXvPucSALiE3is7fQ/exec';
+// ==========================================
+// KONFIGURASI (GANTI URL INI DENGAN URL LANGKAH 1!)
+// ==========================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbyqIp4C8weFTtOn22YnNP_o4Yq27ffHerJPfHud2FCZJ_Xwx-y35nXvPucSALiE3is7fQ/exec'; 
 const PAGE_ID = 'kelas9_topik5_literasi';
+// ==========================================
 
 const types = ['ppt', 'doc', 'pdf', 'mp4'];
 const typeLabels = { ppt: 'PPT', doc: 'DOC', pdf: 'PDF', mp4: 'MP4' };
 const typeIcons = { ppt: '📊', doc: '📄', pdf: '📕', mp4: '🎬' };
 
-// Generate Slots
+// 1. Generate Slots
 types.forEach(type => {
   const container = document.getElementById(`inputs-${type}`);
   if (!container) return;
   let html = '';
   for (let i = 1; i <= 4; i++) {
     html += `<div class="input-slot" id="slot-${type}-${i}">
-      <div style="font-weight:600; margin-bottom:10px;">${typeIcons[type]} Slot ${i}</div>
-      <input type="text" id="input-${type}-${i}" placeholder="Tempel link Google Drive..." onkeypress="if(event.key==='Enter') embedFile('${type}', ${i})">
+      <div class="slot-label"><span>${typeIcons[type]} Slot ${i}</span></div>
+      <input type="text" id="input-${type}-${i}" placeholder="Tempel link Google Drive...">
       <div class="slot-actions">
-        <button class="btn-embed" onclick="embedFile('${type}', ${i})">💾 Simpan</button>
-        <button class="btn-open-viewer" onclick="openViewer('${type}', ${i})">👁 Viewer</button>
-        <button class="btn-clear" onclick="clearFile('${type}', ${i})">🗑 Hapus</button>
+        <button class="btn-embed" onclick="saveFile('${type}', ${i})">💾 Simpan</button>
       </div>
     </div>`;
   }
   container.innerHTML = html;
 });
 
-function switchTab(type, el) {
-  document.querySelectorAll('.file-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.file-panel').forEach(p => p.classList.remove('show'));
-  el.classList.add('active');
-  document.getElementById(`panel-${type}`).classList.add('show');
-}
-
-function showToast(msg, type = 'success') {
+function showToast(msg, type='success') {
   const toast = document.getElementById('toast');
+  if(!toast) return alert(msg);
   toast.className = `toast ${type} show`;
   toast.innerText = msg;
   setTimeout(() => toast.classList.remove('show'), 3500);
@@ -121,153 +114,75 @@ function showToast(msg, type = 'success') {
 
 function extractFileId(url) {
   if (!url) return null;
-  let match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-  if (match) return match[1];
-  match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (match) return match[1];
-  if (/^[a-zA-Z0-9_-]{20,}$/.test(url)) return url;
-  return null;
+  let m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) return m[1];
+  m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (m) return m[1];
+  return url;
 }
 
-// ============================================================
-// 🔄 BACKEND COMMUNICATION
-// ============================================================
-async function callBackend(payload) {
+// 2. Fungsi Simpan (FIXED)
+async function saveFile(type, slot) {
+  const input = document.getElementById(`input-${type}-${slot}`);
+  const url = input.value.trim();
+  if (!url) return showToast('Masukkan URL dulu!', 'warning');
+  
+  const fileId = extractFileId(url);
+  const btn = document.querySelector(`#slot-${type}-${slot} .btn-embed`);
+  const oldText = btn.innerText;
+  btn.innerText = 'Menyimpan...';
+  btn.disabled = true;
+
   try {
-    console.log('📤 Sending:', payload);
-    const response = await fetch(BACKEND_URL, {
+    const payload = {
+      action: 'saveFile',
+      pageId: PAGE_ID,
+      data: { type: type, slotNum: slot, fileId: fileId, originalUrl: url }
+    };
+
+    const res = await fetch(API_URL, {
       method: 'POST',
       redirect: 'follow',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
     });
-    const text = await response.text();
-    console.log('✅ Response:', text);
-    return JSON.parse(text);
-  } catch (error) {
-    console.error('❌ Error:', error);
-    return { success: false, error: error.message };
-  }
-}
 
-async function embedFile(type, slotNum) {
-  const input = document.getElementById(`input-${type}-${slotNum}`);
-  const url = input.value.trim();
-  if (!url) return showToast('Tempel link Google Drive dulu!', 'warning');
-  
-  const fileId = extractFileId(url);
-  if (!fileId) return showToast('Link tidak valid!', 'error');
+    const text = await res.text();
+    const data = JSON.parse(text);
 
-  const slot = document.getElementById(`slot-${type}-${slotNum}`);
-  slot.classList.add('saving');
-
-  const result = await callBackend({
-    action: 'saveFile',
-    pageId: PAGE_ID,
-    data: { type: type, slotNum: slotNum, fileId: fileId, originalUrl: url }
-  });
-
-  slot.classList.remove('saving');
-
-  if (result && result.success) {
-    slot.classList.add('filled');
-    showToast('✓ File berhasil disimpan ke server!', 'success');
-    renderEmbeddedItem(type, slotNum, fileId, url);
-  } else {
-    showToast('⚠ Gagal simpan: ' + (result ? result.error : 'Unknown'), 'error');
-  }
-}
-
-function renderEmbeddedItem(type, slotNum, fileId, url) {
-  const container = document.getElementById(`embed-${type}`);
-  const existing = container.querySelector(`[data-slot="${slotNum}"]`);
-  if (existing) existing.remove();
-  
-  const item = document.createElement('div');
-  item.className = 'embedded-item';
-  item.dataset.slot = slotNum;
-  item.dataset.fileId = fileId;
-  item.innerHTML = `
-    <div class="embedded-item-header">
-      <span>${typeIcons[type]} ${typeLabels[type]} #${slotNum}</span>
-      <button class="btn-clear" style="flex:0; padding:5px 10px;" onclick="clearFile('${type}', ${slotNum})">✕</button>
-    </div>
-    <div style="padding:20px; text-align:center; background:#f9fafb;">
-      <div style="font-size:3rem;">${typeIcons[type]}</div>
-      <div style="font-weight:600; margin-top:10px;">File Tersimpan</div>
-      <div style="font-size:0.8rem; color:#6B7280; word-break:break-all; margin-top:5px;">${fileId}</div>
-    </div>
-  `;
-  container.appendChild(item);
-}
-
-async function clearFile(type, slotNum) {
-  const input = document.getElementById(`input-${type}-${slotNum}`);
-  const slot = document.getElementById(`slot-${type}-${slotNum}`);
-  input.value = '';
-  slot.classList.remove('filled');
-  
-  await callBackend({
-    action: 'deleteFile',
-    pageId: PAGE_ID,
-    data: { type: type, slotNum: slotNum }
-  });
-  
-  const container = document.getElementById(`embed-${type}`);
-  const item = container.querySelector(`[data-slot="${slotNum}"]`);
-  if (item) item.remove();
-  showToast('Slot direset.', 'warning');
-}
-
-function openViewer(type, slotNum) {
-  const input = document.getElementById(`input-${type}-${slotNum}`);
-  const url = input ? input.value.trim() : '';
-  const fileId = extractFileId(url);
-  if (!fileId) {
-    const container = document.getElementById(`embed-${type}`);
-    const item = container.querySelector(`[data-slot="${slotNum}"]`);
-    if (item && item.dataset.fileId) {
-      window.open(`viewer-${type}.html?fileId=${item.dataset.fileId}`, '_blank');
-      return;
-    }
-    return showToast('Tidak ada file!', 'warning');
-  }
-  window.open(`viewer-${type}.html?fileId=${fileId}`, '_blank');
-}
-
-async function syncFromServer() {
-  const btn = document.getElementById('btnSync');
-  const text = document.getElementById('syncText');
-  btn.disabled = true;
-  text.innerText = 'Menyinkronkan...';
-  
-  try {
-    const response = await fetch(`${BACKEND_URL}?pageId=${PAGE_ID}`);
-    const result = await response.json();
-    
-    if (result.success && result.files) {
-      result.files.forEach(f => {
-        const input = document.getElementById(`input-${f.type}-${f.slot}`);
-        const slot = document.getElementById(`slot-${f.type}-${f.slot}`);
-        if (input) input.value = f.originalUrl;
-        if (slot) slot.classList.add('filled');
-        renderEmbeddedItem(f.type, f.slot, f.fileId, f.originalUrl);
-      });
-      text.innerText = `✓ Tersinkron (${result.files.length} file)`;
-      showToast('✓ Data berhasil disinkronkan!', 'success');
+    if (data.success) {
+      document.getElementById(`slot-${type}-${slot}`).classList.add('filled');
+      showToast('✅ Berhasil disimpan!', 'success');
+      // TAMPILKAN URL SPREADSHEET DI CONSOLE AGAR ANDA BISA CEK
+      if (data.ssUrl) console.log('📍 DATA TERSIMPAN DI SPREADSHEET INI: ' + data.ssUrl);
     } else {
-      throw new Error('Response tidak valid');
+      showToast('⚠️ Gagal: ' + (data.error || 'Unknown'), 'error');
+      if (data.ssUrl) console.log('📍 Cek Spreadsheet ini: ' + data.ssUrl);
     }
-  } catch (e) {
-    text.innerText = '⚠ Gagal sync';
-    showToast('Gagal sinkronisasi: ' + e.message, 'error');
+  } catch (err) {
+    showToast('❌ Gagal koneksi: ' + err.message, 'error');
   } finally {
+    btn.innerText = oldText;
     btn.disabled = false;
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  setTimeout(syncFromServer, 1000);
+// 3. Auto Sync saat halaman dibuka
+window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const res = await fetch(`${API_URL}?pageId=${PAGE_ID}`);
+    const json = await res.json();
+    if (json.success && json.files) {
+      json.files.forEach(f => {
+        const input = document.getElementById(`input-${f.type}-${f.slot}`);
+        const slot = document.getElementById(`slot-${f.type}-${f.slot}`);
+        if (input) input.value = f.originalUrl;
+        if (slot) slot.classList.add('filled');
+      });
+      showToast(`🔄 Sinkronisasi: ${json.files.length} file`, 'info');
+      if (json.ssUrl) console.log('📍 DATA BERASAL DARI SPREADSHEET INI: ' + json.ssUrl);
+    }
+  } catch(e) { console.log('Sync skipped', e); }
 });
 </script>
 </body>
