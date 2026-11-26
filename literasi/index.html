@@ -1914,5 +1914,71 @@ window.addEventListener('offline', function() {
     showToast('⚠ Koneksi terputus.', 'warning');
 });
 </script>
+<script>
+  // ============================================================
+  // KONFIGURASI BACKEND
+  // ============================================================
+  // GANTI URL INI DENGAN URL WEB APP ANDA YANG BERAKHIRAN /exec
+  const API_URL = "https://script.google.com/macros/s/AKfycbyyZm22Dv8BG_SXP74N9offp8OfP2fP9N2-aqj9X2R5Qidk884tPdIkHgCnYvfULYNvag/exec"; 
+  
+  const PAGE_ID = "kelas9_topik5_literasi";
+  const PAGE_TITLE = "Literasi Digital & Riset Mandiri - Kelas IX";
+  const DEVICE_ID = navigator.userAgent || "unknown_device";
+
+  // ============================================================
+  // FUNGSI KIRIM DATA KE BACKEND (FIXED)
+  // ============================================================
+  async function saveFileToBackend(type, slotNum, fileId, originalUrl, fileType) {
+    try {
+      console.log("📤 Menyimpan ke backend...", { type, slotNum, fileId });
+
+      // ✅ INI KUNCINYA: Payload HARUS memiliki 'action: saveFile'
+      const payload = {
+        action: 'saveFile',          // ← WAJIB ADA
+        pageId: PAGE_ID,
+        pageTitle: PAGE_TITLE,
+        deviceId: DEVICE_ID,
+        data: {
+          type: type,
+          slotNum: slotNum,
+          fileId: fileId,
+          originalUrl: originalUrl,
+          fileType: fileType
+        }
+      };
+
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        redirect: 'follow',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8' // ← WAJIB text/plain agar tidak diblokir CORS
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const text = await response.text();
+      console.log("✅ Respons mentah dari server:", text);
+
+      const data = JSON.parse(text);
+      
+      if (data.success) {
+        alert("✅ Berhasil! File berhasil disimpan ke server.");
+        // Opsional: Refresh halaman atau update UI di sini
+      } else {
+        alert("⚠️ Gagal: " + (data.error || "Respons tidak valid"));
+        console.error("❌ Error dari server:", data);
+      }
+    } catch (error) {
+      console.error("❌ Gagal koneksi ke backend:", error);
+      alert("⚠️ File ditampilkan, tapi gagal disimpan ke server. Cek konsol (F12) untuk detail.");
+    }
+  }
+
+  // ============================================================
+  // CONTOH CARA MEMANGGIL FUNGSI DI ATAS
+  // ============================================================
+  // Panggil fungsi ini saat tombol "Sematkan" diklik.
+  // Contoh: saveFileToBackend('pdf', 1, '12345ABCDE', 'https://drive.google.com/...', 'PDF');
+</script>
 </body>
 </html>
