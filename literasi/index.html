@@ -98,6 +98,7 @@ function getDeviceId() {
 }
 const DEVICE_ID = getDeviceId();
 let lastSyncTimestamp = localStorage.getItem('lastSyncTimestamp') || '0';
+let hasAutoSynced = false; // ✅ TAMBAH BARIS INI
 
 const types = ['ppt', 'doc', 'pdf', 'mp4'];
 const typeLabels = { ppt: 'PPT', doc: 'DOC', pdf: 'PDF', mp4: 'MP4' };
@@ -239,32 +240,42 @@ async function deleteFileFromBackend(type, slotNum) {
 // SYNC FROM SERVER
 // ============================================================
 async function syncFromServer() {
+  // ✅ CEGAH SYNC BERULANG - HANYA JALAN 1x
+  if (hasAutoSynced) {
+    console.log('⏭️ Auto-sync sudah pernah berjalan, dilewati');
+    return;
+  }
+  
   const syncDot = document.getElementById('syncDot');
   const syncText = document.getElementById('syncText');
   const btnSync = document.getElementById('btnSync');
   syncDot.className = 'sync-dot syncing';
-  syncText.textContent = 'Menyinkronkan data...';
+  syncText.textContent = 'Menyinkronkan data otomatis...';
   btnSync.classList.add('loading');
   btnSync.disabled = true;
 
   try {
-    const url = BACKEND_URL + '?action=getAllFiles&pageId=' + PAGE_ID;
+    if (!BACKEND_URL || BACKEND_URL.includes('xxxxx')) {
+      throw new Error('Backend belum dikonfigurasi');
+    }
+    const url = `${BACKEND_URL}?action=getAllFiles&pageId=${PAGE_ID}`;
     const response = await fetch(url, { method: 'GET' });
     const result = await response.json();
     if (result.success && result.files) {
       loadFilesToUI(result.files);
       syncDot.className = 'sync-dot online';
-      syncText.textContent = '✓ Tersinkron — ' + result.files.length + ' file — ' + new Date().toLocaleTimeString('id-ID');
+      syncText.textContent = `✓ Tersinkron otomatis — ${result.files.length} file — ${new Date().toLocaleTimeString('id-ID')}`;
       lastSyncTimestamp = Date.now().toString();
       localStorage.setItem('lastSyncTimestamp', lastSyncTimestamp);
-      showToast('✓ ' + result.files.length + ' file berhasil disinkronkan!', 'success');
+      hasAutoSynced = true; // ✅ TANDAI SUDAH SYNC
+      showToast(`✓ ${result.files.length} file berhasil disinkronkan otomatis!`, 'success');
     } else {
       throw new Error('Response tidak valid');
     }
   } catch (error) {
     syncDot.className = 'sync-dot offline';
-    syncText.textContent = '⚠ Gagal sync';
-    showToast('⚠ Gagal sinkronisasi: ' + error.message, 'error');
+    syncText.textContent = '⚠ Gagal sync otomatis';
+    showToast('⚠ Gagal sinkronisasi otomatis: ' + error.message, 'error');
   } finally {
     btnSync.classList.remove('loading');
     btnSync.disabled = false;
