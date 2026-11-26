@@ -1397,7 +1397,7 @@ function showToast(message, type = 'success') {
 // 🔄 BACKEND COMMUNICATION (PERBAIKAN - TANPA no-cors)
 // ============================================================
 async function callBackend(payload) {
-  const API_URL = "https://script.google.com/macros/s/AKfycbyyZm22Dv8BG_SXP74N9offp8OfP2fP9N2-aqj9X2R5Qidk884tPdIkHgCnYvfULYNvag/exec"; // GANTI DENGAN URL ANDA
+  const API_URL = "https://script.google.com/macros/s/AKfycbyqIp4C8weFTtOn22YnNP_o4Yq27ffHerJPfHud2FCZJ_Xwx-y35nXvPucSALiE3is7fQ/exec"; // GANTI DENGAN URL ANDA
   
   try {
     console.log('📤 Sending to backend:', payload.action, payload);
@@ -1914,6 +1914,49 @@ window.addEventListener('offline', function() {
     showToast('⚠ Koneksi terputus.', 'warning');
 });
 </script>
+<script>
+  // GANTI URL DI BAWAH INI DENGAN URL /exec YANG BARU ANDA SALIN DI LANGKAH 2
+  const API_URL = "https://script.google.com/macros/s/AKfycbyqIp4C8weFTtOn22YnNP_o4Yq27ffHerJPfHud2FCZJ_Xwx-y35nXvPucSALiE3is7fQ/exec"; 
+  
+  async function saveFileToBackend(type, slotNum, fileId, originalUrl, fileType) {
+    try {
+      console.log("📤 Mengirim ke backend...", { type, slotNum, fileId });
+      
+      const payload = {
+        action: 'saveFile', // ✅ WAJIB ADA
+        pageId: "kelas9_topik5_literasi",
+        pageTitle: "Literasi Digital & Riset Mandiri",
+        deviceId: navigator.userAgent || "unknown",
+        data: {
+          type: type,
+          slotNum: slotNum,
+          fileId: fileId,
+          originalUrl: originalUrl,
+          fileType: fileType
+        }
+      };
 
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+
+      const text = await response.text();
+      console.log("✅ Respons server:", text);
+
+      const data = JSON.parse(text);
+      if (data.success) {
+        alert("✅ BERHASIL! File tersimpan ke server.");
+      } else {
+        alert("⚠️ GAGAL: " + (data.error || "Respons tidak valid"));
+      }
+    } catch (error) {
+      console.error("❌ Error koneksi:", error);
+      alert("⚠️ Gagal terhubung ke server. Cek konsol (F12).");
+    }
+  }
+</script>
 </body>
 </html>
