@@ -1291,9 +1291,9 @@ Website: Nama Penulis. (Tanggal). Judul artikel. Nama Website. URL
 // ============================================================
 // 🔧 KONFIGURASI BACKEND — GANTI URL DI BAWAH INI
 // ============================================================
-const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbwEt01UiBCh1p-MsjN0cj-JopUM27E8LUqylyQ5j9F5nsxWvDlEcMwYVNHdfCX9-25QZQ/exec';
+const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbyqIp4C8weFTtOn22YnNP_o4Yq27ffHerJPfHud2FCZJ_Xwx-y35nXvPucSALiE3is7fQ/exec';
 
-// URL Viewer (sesuaikan dengan lokasi hosting viewer Anda)
+// URL Viewer
 const VIEWER_BASE_URL = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
 const VIEWER_URLS = {
     ppt: VIEWER_BASE_URL + 'viewer-ppt.html',
@@ -1302,14 +1302,12 @@ const VIEWER_URLS = {
     mp4: VIEWER_BASE_URL + 'viewer-video.html'
 };
 
-// ============================================================
-// 🆔 IDENTIFIKASI HALAMAN (untuk backend tracking)
-// ============================================================
+// Identifikasi Halaman
 const PAGE_ID = 'kelas9_topik5_literasi_digital';
 const PAGE_TITLE = 'Literasi Digital & Riset Mandiri - Kelas IX';
 
 // ============================================================
-// 📱 DEVICE FINGERPRINT (untuk deteksi perpindahan perangkat)
+// 🆔 DEVICE FINGERPRINT
 // ============================================================
 function getDeviceId() {
     let deviceId = localStorage.getItem('deviceId');
@@ -1396,13 +1394,15 @@ function showToast(message, type = 'success') {
 }
 
 // ============================================================
-// 🔄 BACKEND COMMUNICATION
+// 🔄 BACKEND COMMUNICATION (PERBAIKAN - TANPA no-cors)
 // ============================================================
 async function callBackend(action, data = {}) {
-    if (!BACKEND_URL || BACKEND_URL.includes('EXAMPLE')) {
+    if (!BACKEND_URL || BACKEND_URL.includes('xxxxx')) {
         console.warn('⚠️ BACKEND_URL belum dikonfigurasi!');
+        showToast('⚠️ Backend belum dikonfigurasi. Hubungi admin.', 'warning');
         return { success: false, error: 'Backend belum dikonfigurasi' };
     }
+    
     try {
         const payload = {
             action: action,
@@ -1412,15 +1412,29 @@ async function callBackend(action, data = {}) {
             timestamp: new Date().toISOString(),
             data: data
         };
+        
+        console.log('📤 Sending to backend:', action, data);
+        
+        // PERBAIKAN: Gunakan FormData agar tidak ada CORS preflight
+        const formData = new FormData();
+        formData.append('payload', JSON.stringify(payload));
+        
         const response = await fetch(BACKEND_URL, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
+            body: formData
         });
-        return { success: true };
+        
+        const result = await response.json();
+        console.log('✅ Backend response:', result);
+        
+        if (result.success) {
+            return { success: true, data: result.data };
+        } else {
+            throw new Error(result.error || 'Unknown error');
+        }
     } catch (error) {
-        console.error('Backend error:', error);
+        console.error('❌ Backend error:', error);
+        showToast('❌ Gagal menyimpan ke server: ' + error.message, 'error');
         return { success: false, error: error.message };
     }
 }
@@ -1442,6 +1456,7 @@ async function saveFileToBackend(type, slotNum, fileId, originalUrl) {
     if (result.success) {
         slot.classList.add('saved');
         setTimeout(() => slot.classList.remove('saved'), 3000);
+        showToast(`✓ File tersimpan di Spreadsheet!`, 'success');
     }
     return result;
 }
@@ -1454,7 +1469,7 @@ async function deleteFileFromBackend(type, slotNum) {
 }
 
 // ============================================================
-// 🔄 SYNC FROM SERVER (saat berpindah perangkat)
+// 🔄 SYNC FROM SERVER
 // ============================================================
 async function syncFromServer() {
     const syncDot = document.getElementById('syncDot');
@@ -1467,30 +1482,101 @@ async function syncFromServer() {
     btnSync.disabled = true;
     
     try {
-        if (!BACKEND_URL || BACKEND_URL.includes('EXAMPLE')) {
+        if (!BACKEND_URL || BACKEND_URL.includes('xxxxx')) {
             throw new Error('Backend belum dikonfigurasi');
         }
         
-        const url = `${BACKEND_URL}?action=getFiles&pageId=${PAGE_ID}&deviceId=${DEVICE_ID}&lastSync=${lastSyncTimestamp}`;
+        const url = `${BACKEND_URL}?action=getAllFiles&pageId=${PAGE_ID}`;
         const response = await fetch(url, { method: 'GET' });
+        const result = await response.json();
         
-        // Karena mode no-cors, kita parse dari localStorage fallback
-        // Untuk implementasi real, backend harus return data via ContentService
-        
-        syncDot.className = 'sync-dot online';
-        syncText.textContent = `✓ Tersinkronisasi — ${new Date().toLocaleTimeString('id-ID')}`;
-        lastSyncTimestamp = Date.now().toString();
-        localStorage.setItem('lastSyncTimestamp', lastSyncTimestamp);
-        
-        showToast('Data berhasil disinkronkan dari server!', 'success');
+        if (result.success && result.files) {
+            // Load files ke UI
+            loadFilesToUI(result.files);
+            syncDot.className = 'sync-dot online';
+            syncText.textContent = `✓ Tersinkron — ${result.files.length} file — ${new Date().toLocaleTimeString('id-ID')}`;
+            lastSyncTimestamp = Date.now().toString();
+            localStorage.setItem('lastSyncTimestamp', lastSyncTimestamp);
+            showToast(`✓ ${result.files.length} file berhasil disinkronkan!`, 'success');
+        } else {
+            throw new Error('Response tidak valid');
+        }
     } catch (error) {
         syncDot.className = 'sync-dot offline';
-        syncText.textContent = '⚠ Gagal sync — menggunakan data lokal';
-        showToast('Gagal sinkronisasi: ' + error.message, 'error');
+        syncText.textContent = '⚠ Gagal sync';
+        showToast('⚠ Gagal sinkronisasi: ' + error.message, 'error');
     } finally {
         btnSync.classList.remove('loading');
         btnSync.disabled = false;
     }
+}
+
+function loadFilesToUI(files) {
+    files.forEach(file => {
+        const type = file.type;
+        const slotNum = file.slot;
+        const fileId = file.fileId;
+        const originalUrl = file.originalUrl;
+        
+        // Update input
+        const input = document.getElementById(`input-${type}-${slotNum}`);
+        if (input) input.value = originalUrl;
+        
+        // Update slot
+        const slot = document.getElementById(`slot-${type}-${slotNum}`);
+        if (slot) slot.classList.add('filled');
+        
+        // Create embedded item
+        const container = document.getElementById(`embed-${type}`);
+        if (!container) return;
+        
+        const existingItem = container.querySelector(`[data-slot="${slotNum}"]`);
+        if (existingItem) existingItem.remove();
+        
+        const emptyState = container.querySelector('.empty-state');
+        if (emptyState) emptyState.remove();
+        
+        const item = document.createElement('div');
+        item.className = 'embedded-item';
+        item.dataset.slot = slotNum;
+        item.dataset.fileId = fileId;
+        item.dataset.type = type;
+        
+        let previewContent = '';
+        if (type === 'mp4') {
+            previewContent = `
+                <div class="preview-area" onclick="openVideoPlayer('${fileId}')">
+                    <div class="play-overlay">▶</div>
+                    <span class="preview-icon">🎬</span>
+                    <span class="preview-text">Video MP4 Siap Diputar</span>
+                    <span class="preview-sub">Klik untuk membuka Video Player</span>
+                </div>
+            `;
+        } else {
+            previewContent = `
+                <div class="preview-area" onclick="openViewer('${type}', ${slotNum})">
+                    <span class="preview-icon">${typeIcons[type]}</span>
+                    <span class="preview-text">${typeLabels[type]} File Tersimpan</span>
+                    <span class="preview-sub">Klik untuk membuka di Viewer</span>
+                </div>
+            `;
+        }
+        
+        item.innerHTML = `
+            <div class="embedded-item-header">
+                <span>${typeIcons[type]} ${typeLabels[type]} #${slotNum}</span>
+                <div class="header-actions">
+                    <button class="btn-viewer" onclick="openViewer('${type}', ${slotNum})" title="Buka di Viewer">
+                        👁 Buka Viewer
+                    </button>
+                    <button class="close-embed" onclick="removeEmbedded('${type}', ${slotNum})" title="Hapus">✕</button>
+                </div>
+            </div>
+            ${previewContent}
+        `;
+        
+        container.appendChild(item);
+    });
 }
 
 function manualSync() {
@@ -1503,16 +1589,15 @@ function manualSync() {
 function checkDeviceChange() {
     const savedDeviceId = localStorage.getItem('lastActiveDeviceId');
     if (savedDeviceId && savedDeviceId !== DEVICE_ID) {
-        // Perangkat berubah! Lakukan sync otomatis
         console.log('🔄 Perangkat berubah, melakukan sync otomatis...');
-        showToast('Perangkat terdeteksi berubah. Menyinkronkan data...', 'info');
+        showToast('🔄 Perangkat terdeteksi berubah. Menyinkronkan data...', 'info');
         setTimeout(() => syncFromServer(), 1000);
     }
     localStorage.setItem('lastActiveDeviceId', DEVICE_ID);
 }
 
 // ============================================================
-// EMBED FILE (MODIFIED - with backend save)
+// EMBED FILE (PERBAIKAN)
 // ============================================================
 async function embedFile(type, slotNum) {
     const slot = document.getElementById(`slot-${type}-${slotNum}`);
@@ -1531,15 +1616,14 @@ async function embedFile(type, slotNum) {
         return;
     }
     
-    // Simpan ke backend (spreadsheet)
-    await saveFileToBackend(type, slotNum, fileId, url);
+    // Simpan ke backend
+    const saveResult = await saveFileToBackend(type, slotNum, fileId, url);
     
-    // Tampilkan preview di halaman
+    // Tampilkan preview di halaman (tetap jalankan meski save gagal)
     const container = document.getElementById(`embed-${type}`);
     const existingItem = container.querySelector(`[data-slot="${slotNum}"]`);
     if (existingItem) existingItem.remove();
     
-    // Hapus empty state jika ada
     const emptyState = container.querySelector('.empty-state');
     if (emptyState) emptyState.remove();
     
@@ -1549,7 +1633,6 @@ async function embedFile(type, slotNum) {
     item.dataset.fileId = fileId;
     item.dataset.type = type;
     
-    // Preview area (bukan langsung embed Google Drive)
     let previewContent = '';
     if (type === 'mp4') {
         previewContent = `
@@ -1561,7 +1644,6 @@ async function embedFile(type, slotNum) {
             </div>
         `;
     } else {
-        const viewerType = type;
         previewContent = `
             <div class="preview-area" onclick="openViewer('${type}', ${slotNum})">
                 <span class="preview-icon">${typeIcons[type]}</span>
@@ -1586,7 +1668,12 @@ async function embedFile(type, slotNum) {
     
     container.appendChild(item);
     slot.classList.add('filled');
-    showToast(`File ${typeLabels[type]} #${slotNum} berhasil disematkan & disimpan!`, 'success');
+    
+    if (saveResult.success) {
+        showToast(`✓ File ${typeLabels[type]} #${slotNum} berhasil disematkan & disimpan!`, 'success');
+    } else {
+        showToast(`⚠ File ditampilkan, tapi gagal disimpan ke server`, 'warning');
+    }
     
     setTimeout(() => {
         item.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1594,7 +1681,7 @@ async function embedFile(type, slotNum) {
 }
 
 // ============================================================
-// OPEN VIEWER (buka file di viewer universal)
+// OPEN VIEWER
 // ============================================================
 function openViewer(type, slotNum) {
     const input = document.getElementById(`input-${type}-${slotNum}`);
@@ -1602,7 +1689,6 @@ function openViewer(type, slotNum) {
     const fileId = extractFileId(url);
     
     if (!fileId) {
-        // Cek dari embedded item
         const container = document.getElementById(`embed-${type}`);
         const item = container.querySelector(`[data-slot="${slotNum}"]`);
         if (item && item.dataset.fileId) {
@@ -1720,7 +1806,7 @@ document.querySelectorAll('.process-step, .search-item, .sift-item, .tool-item, 
 });
 
 // ============================================================
-// FLOATING HOME BUTTON
+// FLOATING HOME BUTTON (kode tetap sama seperti sebelumnya)
 // ============================================================
 const HOME_LINK_KEY = 'floatingHomeLink_pribadi9_topik5';
 function loadHomeLink() {
@@ -1773,7 +1859,7 @@ function resetHomeLink() {
     if (input) input.value = defaultLink;
     if (btn) btn.dataset.activeLink = defaultLink;
     if (currentDisplay) currentDisplay.style.display = 'none';
-    showToast('Link dikembalikan ke default (permanen di HTML).', 'success');
+    showToast('Link dikembalikan ke default.', 'success');
     toggleHomePanel(null, true);
 }
 function toggleHomePanel(event, forceClose = false) {
@@ -1802,34 +1888,25 @@ document.addEventListener('click', function(e) {
 });
 
 // ============================================================
-// INISIALISASI SAAT HALAMAN DIMUAT
+// INISIALISASI
 // ============================================================
 window.addEventListener('DOMContentLoaded', function() {
     loadHomeLink();
-    
-    // Cek perpindahan perangkat
     checkDeviceChange();
     
-    // Update status koneksi
     const syncDot = document.getElementById('syncDot');
     const syncText = document.getElementById('syncText');
     
     if (navigator.onLine) {
         syncDot.className = 'sync-dot online';
-        syncText.textContent = '✓ Online — Data tersinkronisasi';
+        syncText.textContent = '✓ Online — Klik "Sync" untuk memuat data';
+        // Auto sync saat load
+        setTimeout(() => syncFromServer(), 2000);
     } else {
         syncDot.className = 'sync-dot offline';
         syncText.textContent = '⚠ Offline — Mode lokal aktif';
     }
     
-    // Auto sync setiap 5 menit jika online
-    if (navigator.onLine) {
-        setInterval(() => {
-            if (navigator.onLine) syncFromServer();
-        }, 300000); // 5 menit
-    }
-    
-    // Sync saat halaman kembali aktif (tab switch)
     document.addEventListener('visibilitychange', function() {
         if (!document.hidden && navigator.onLine) {
             checkDeviceChange();
@@ -1837,13 +1914,12 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Listen online/offline events
 window.addEventListener('online', function() {
     const syncDot = document.getElementById('syncDot');
     const syncText = document.getElementById('syncText');
     syncDot.className = 'sync-dot online';
     syncText.textContent = '✓ Online — Menyinkronkan...';
-    showToast('Koneksi kembali! Menyinkronkan data...', 'info');
+    showToast('✓ Koneksi kembali! Menyinkronkan data...', 'info');
     syncFromServer();
 });
 
@@ -1852,7 +1928,7 @@ window.addEventListener('offline', function() {
     const syncText = document.getElementById('syncText');
     syncDot.className = 'sync-dot offline';
     syncText.textContent = '⚠ Offline — Mode lokal aktif';
-    showToast('Koneksi terputus. Data tersimpan lokal.', 'warning');
+    showToast('⚠ Koneksi terputus.', 'warning');
 });
 </script>
 </body>
