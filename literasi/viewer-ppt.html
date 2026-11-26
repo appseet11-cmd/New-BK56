@@ -3,254 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PPT Viewer Universal</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>PPT Viewer</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-.viewer-header {
-    background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
-    color: white;
-    padding: 15px 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
-    flex-wrap: wrap;
-    gap: 10px;
-}
-.viewer-header .title-section {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-.viewer-header .icon { font-size: 1.8rem; }
-.viewer-header h1 { font-size: 1.1rem; font-weight: 600; }
-.viewer-header .file-info { font-size: 0.75rem; opacity: 0.9; }
-.viewer-controls {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-.ctrl-btn {
-    background: rgba(255,255,255,0.2);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: white;
-    padding: 8px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-.ctrl-btn:hover { background: rgba(255,255,255,0.35); transform: translateY(-2px); }
-.ctrl-btn.primary { background: rgba(255,255,255,0.95); color: #B45309; font-weight: 600; }
-.ctrl-btn.primary:hover { background: white; }
-.viewer-container {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-.viewer-frame {
-    width: 100%;
-    max-width: 1200px;
-    height: calc(100vh - 140px);
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-    position: relative;
-}
-.viewer-frame iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-.loading-overlay {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    transition: opacity 0.5s ease;
-}
-.loading-overlay.hidden { opacity: 0; pointer-events: none; }
-.loading-spinner {
-    width: 50px; height: 50px;
-    border: 4px solid #FDE68A;
-    border-top-color: #D97706;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
-}
+body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: white; min-height: 100vh; display: flex; flex-direction: column; }
+.header { background: rgba(0,0,0,0.4); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(10px); }
+.header h1 { font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+.btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s; }
+.btn:hover { background: rgba(255,255,255,0.25); }
+.btn-primary { background: #f59e0b; border-color: #f59e0b; }
+.viewer { flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px; }
+.viewer iframe { width: 100%; height: calc(100vh - 70px); border: none; border-radius: 8px; background: white; }
+.loading { text-align: center; padding: 40px; }
+.loading .spinner { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.2); border-top-color: #f59e0b; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.loading-text { color: #92400E; font-weight: 500; font-size: 0.95rem; }
-.error-state {
-    text-align: center;
-    padding: 40px;
-    color: #92400E;
-}
-.error-state .icon { font-size: 4rem; margin-bottom: 15px; }
-.error-state h2 { margin-bottom: 10px; }
-.error-state p { opacity: 0.8; margin-bottom: 20px; }
-.error-state .btn-retry {
-    background: #D97706;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-}
-.footer-info {
-    text-align: center;
-    padding: 10px;
-    font-size: 0.75rem;
-    color: #92400E;
-    opacity: 0.7;
-}
-@media (max-width: 768px) {
-    .viewer-header { padding: 12px 15px; }
-    .viewer-header h1 { font-size: 0.95rem; }
-    .ctrl-btn { padding: 6px 10px; font-size: 0.72rem; }
-    .viewer-container { padding: 10px; }
-    .viewer-frame { height: calc(100vh - 120px); border-radius: 12px; }
-}
+.error { text-align: center; padding: 40px; color: #ef4444; }
 </style>
 </head>
 <body>
-<div class="viewer-header">
-    <div class="title-section">
-        <span class="icon">📊</span>
-        <div>
-            <h1 id="viewerTitle">PPT Viewer</h1>
-            <div class="file-info" id="fileInfo">Memuat file...</div>
-        </div>
-    </div>
-    <div class="viewer-controls">
-        <button class="ctrl-btn" onclick="refreshViewer()" title="Refresh">🔄 Refresh</button>
-        <button class="ctrl-btn" onclick="openInNewTab()" title="Buka di Tab Baru">🔗 Tab Baru</button>
-        <button class="ctrl-btn primary" onclick="goBack()" title="Kembali">← Kembali</button>
-    </div>
+<div class="header">
+  <h1>📊 PPT Viewer</h1>
+  <div style="display:flex; gap:8px;">
+    <a href="#" class="btn btn-primary" id="btnDrive" target="_blank">🔗 Drive</a>
+    <button class="btn" onclick="location.reload()">🔄</button>
+    <button class="btn" onclick="window.close()">✕</button>
+  </div>
 </div>
-
-<div class="viewer-container">
-    <div class="viewer-frame" id="viewerFrame">
-        <div class="loading-overlay" id="loadingOverlay">
-            <div class="loading-spinner"></div>
-            <div class="loading-text">Memuat presentasi...</div>
-        </div>
-    </div>
+<div class="viewer" id="viewer">
+  <div class="loading"><div class="spinner"></div><p>Memuat presentasi...</p></div>
 </div>
-
-<div class="footer-info">
-    📊 PPT Viewer Universal • File ditampilkan langsung tanpa Google Drive interface
-</div>
-
 <script>
-// ============================================================
-// PPT VIEWER UNIVERSAL - INJEKSI PARAMETER
-// ============================================================
 const params = new URLSearchParams(window.location.search);
-const fileId = params.get('fileId') || '';
+const fileId = params.get('fileId');
 const title = params.get('title') || 'PPT Viewer';
-
-document.getElementById('viewerTitle').textContent = title;
-document.getElementById('fileInfo').textContent = fileId ? `File ID: ${fileId.substring(0, 15)}...` : 'Tidak ada file';
-
-function loadViewer() {
-    const frame = document.getElementById('viewerFrame');
-    const loading = document.getElementById('loadingOverlay');
-    
-    if (!fileId) {
-        loading.innerHTML = `
-            <div class="error-state">
-                <div class="icon">⚠️</div>
-                <h2>File ID Tidak Ditemukan</h2>
-                <p>Parameter fileId tidak ada di URL</p>
-                <button class="btn-retry" onclick="goBack()">← Kembali</button>
-            </div>
-        `;
-        return;
-    }
-    
-    // Gunakan Google Docs Viewer untuk PPT (render tanpa Google Drive UI)
-    const fileUrl = `https://docs.google.com/presentation/d/${fileId}/embed?start=true&loop=false&delayms=3000`;
-    const fallbackUrl = `https://drive.google.com/file/d/${fileId}/preview`;
-    
-    const iframe = document.createElement('iframe');
-    iframe.src = fileUrl;
-    iframe.allow = 'autoplay; fullscreen';
-    iframe.allowFullscreen = true;
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.border = 'none';
-    
-    iframe.onload = function() {
-        loading.classList.add('hidden');
-    };
-    
-    iframe.onerror = function() {
-        // Fallback ke preview URL
-        iframe.src = fallbackUrl;
-    };
-    
-    frame.appendChild(iframe);
-    
-    // Timeout fallback
-    setTimeout(() => {
-        if (!loading.classList.contains('hidden')) {
-            loading.classList.add('hidden');
-        }
-    }, 5000);
+document.title = title;
+if (fileId) {
+  document.getElementById('btnDrive').href = 'https://drive.google.com/file/d/' + fileId + '/view';
+  const viewer = document.getElementById('viewer');
+  viewer.innerHTML = '<iframe src="https://docs.google.com/presentation/d/' + fileId + '/embed?start=false&loop=false&delayms=3000" allowfullscreen></iframe>';
+} else {
+  document.getElementById('viewer').innerHTML = '<div class="error">❌ Tidak ada fileId di URL</div>';
 }
-
-function refreshViewer() {
-    const frame = document.getElementById('viewerFrame');
-    const iframe = frame.querySelector('iframe');
-    if (iframe) {
-        iframe.src = iframe.src;
-    } else {
-        loadViewer();
-    }
-}
-
-function openInNewTab() {
-    if (!fileId) return;
-    const url = `https://docs.google.com/presentation/d/${fileId}/edit?usp=sharing`;
-    window.open(url, '_blank');
-}
-
-function goBack() {
-    if (document.referrer && document.referrer !== window.location.href) {
-        window.history.back();
-    } else {
-        window.close();
-    }
-}
-
-// Load saat halaman siap
-window.addEventListener('DOMContentLoaded', loadViewer);
 </script>
 </body>
 </html>
